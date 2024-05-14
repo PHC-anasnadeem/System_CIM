@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+  <LinearLayout
+      android:id="@+id/namelayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/listheader"
+      android:orientation="horizontal"
+      android:padding="10dp"
+      >
+    <TextView
+        android:id="@+id/distTeh_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:textSize="14dp"
+        android:textColor="#408ade" />
+
+  </LinearLayout>
+<!--    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:background="@drawable/listheader"
+        android:id="@+id/HCSstatus_layout">
+      <TextView
+          android:id="@+id/hcestatuslabel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:text="Visit Date: "
+          android:textColor="#000" />
+      &lt;!&ndash; HCE Status Label &ndash;&gt;
+      <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+
+
+          >
+        <Spinner
+            android:id="@+id/date_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            android:textColor="#000"
+            android:theme="@style/ThemeSpinner"
+            android:hint="Select Date"/>
+      </android.support.design.widget.TextInputLayout>
+    </LinearLayout>-->
+
+  <LinearLayout
+      android:id="@+id/listlayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="70dp"
+      android:orientation="horizontal">
+<ListView
+    android:id="@+id/list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbarThumbVertical="@color/colorGreen"
+    android:dividerHeight="1dp"
+    android:scrollbarSize="6dp"
+    >
+  <!--  android:divider="#336699"-->
+
+</ListView>
+  </LinearLayout>
+</LinearLayout>

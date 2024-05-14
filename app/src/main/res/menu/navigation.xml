@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!--
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/design_search"
+
+        android:title="Search" />-->
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/location_icon_bottom"
+        android:title="Route" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/edit"
+        android:title="Update" />
+    <item
+        android:id="@+id/navigation_attachement"
+        android:icon="@drawable/attachmentimage"
+        android:title="Attachment" />
+    <item
+        android:id="@+id/navigation_camera"
+        android:icon="@drawable/camera"
+        android:title="Camera" />
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/action_history"
+        android:title="Action History" />
+
+</menu>

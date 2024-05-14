@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/nav_home" />
+
+        <item
+            android:id="@+id/nav_actionsummary"
+            android:icon="@drawable/individualsumry"
+            android:title="@string/nav_action_summary" />
+
+        <item
+            android:id="@+id/nav_actiondesc"
+            android:icon="@drawable/action_reports"
+            android:title="@string/nav_action_status" />
+        <item
+            android:id="@+id/nav_reportquack"
+            android:icon="@drawable/report"
+            android:title="@string/title_report_quack" />
+        <item
+            android:id="@+id/nav_pwssearch"
+            android:icon="@drawable/search"
+            android:title="@string/title_pws_search" />
+        <item
+            android:id="@+id/nav_resetPassword"
+            android:icon="@drawable/icon_change_password"
+            android:title="@string/nav_reset_password" />
+
+        <item
+            android:id="@+id/nav_about_us"
+            android:icon="@drawable/about"
+            android:title="@string/nav_about_us" />
+        <item
+            android:id="@+id/nav_Logout"
+            android:icon="@drawable/icon_logout"
+            android:title="@string/action_logout" />
+
+
+    </group>
+    <item android:title="Other">
+        <menu>
+          <!--  <item
+                android:id="@+id/nav_settings"
+                android:title="@string/nav_location" />
+                &lt;!&ndash;android:icon="@drawable/ic_settings_black_24dp"&ndash;&gt;-->
+       <!--     <item
+                android:id="@+id/nav_resetPassword"
+                android:title="@string/nav_reset_password" />
+
+            <item
+                android:id="@+id/nav_about_us"
+                android:title="@string/nav_about_us" />
+            <item
+                android:id="@+id/nav_Logout"
+                android:title="@string/action_logout" />-->
+
+        </menu>
+    </item>
+
+</menu>

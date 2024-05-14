@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+
+
+    <ScrollView xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="60dp"
+        >
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="100dp"
+            android:paddingTop="5dp">
+
+
+         <!--       <ImageView
+                    android:id="@+id/logo"
+                    android:src="@drawable/app_screen_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal" />-->
+     <!--       <TextView
+                android:id="@+id/text_view"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:paddingTop="50dp"
+                android:gravity="center"
+                android:text="@string/no_data_found"
+                android:textColor="#000000"
+
+                />-->
+      <!--      <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:paddingTop="20dp">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/EditButton"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/colorPrimary"
+                    android:text="Edit"
+                    android:textColor="#FFFFFF" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/Draw_route"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#229954"
+                    android:text="Route"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>-->
+            <!-- HCE Name Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/hce_name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:textColorHint="#000000"
+
+
+                >
+
+                <EditText
+                    android:id="@+id/hce_name"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="HCE Name"
+                    android:textColor="#000000"
+
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Address Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Address_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/Address"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Address"
+                    android:inputType="textMultiLine"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--  District Label -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/district_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/district"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="District"
+                    android:inputType="textMultiLine"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">-->
+            <!--  Sector Type Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Sector_Type_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/Sector_Type"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Sector Type"
+                    android:inputType="textMultiLine"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--  HCE Type Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/hcetype_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/hcetype"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="HCE Type"
+                    android:inputType="textMultiLine"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--  HCSP Type Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/HCSPType_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/HCSPType"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Service Provider Type"
+                    android:inputType="textMultiLine"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- </LinearLayout>-->
+            <!-- HCSP Name Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/HCSP_Name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/HCSP_Name"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Service Provider Name"
+                    android:inputType="textCapWords"
+                    android:textColor="#000000"
+                    android:tooltipText="Healthcare Service Provider" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- CNIC Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/CNIC_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/CNIC"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Service Provider CNIC"
+                    android:inputType="number"
+                    android:textColor="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Mobile Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Mobile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/Mobile"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Service Provider Mobile"
+                    android:inputType="phone"
+                    android:textColor="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Council type Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/counclType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/counType"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Council Name"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Council No Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/council"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/council_no"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Council No"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Reg No Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/reg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/reg_no"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Registration No"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Reg Date Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/reg_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/reg_dateEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Registration Date"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Reg DeReg Date Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dereg_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/dereg_dateEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="De-Registration Date"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- DEReg Date Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dereg_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/dereg_noEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="De-Registration No"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- PL Date Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pl_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/pl_dateEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Provisional License Date"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- pl no Date Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pl_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/pl_noEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Provisional License No"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- RL Date Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/rl_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/rl_dateEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Regular License Date"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- rl NO Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/rl_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/rl_noEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Regular License No"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Fee Recived Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/feerecvd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/fee_rcvdEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Fee Received"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- RegistrationCertificateIssued Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/regcertissu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/regcertissuEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Registration Certificate Issued"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Reason Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/reason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/reasonEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Reason"
+                    android:inputType="textMultiLine"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Total Beds Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/totalbeds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/total_bedsEdit"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Total Beds"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Find Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="24dp"
+                android:background="@color/red"
+                android:textColor="#ffffff"
+                android:textAllCaps="false"
+                android:layout_gravity="right"
+                android:text="Close"/>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+</RelativeLayout>
+<include
+layout="@layout/navdrawer_main"
+android:layout_width="match_parent"
+android:layout_height="match_parent" />
+
+<com.google.android.material.navigation.NavigationView
+android:id="@+id/nav_view"
+android:layout_width="wrap_content"
+android:layout_height="match_parent"
+android:layout_gravity="start"
+android:fitsSystemWindows="true"
+app:headerLayout="@layout/navheader"
+app:menu="@menu/activity_main_drawer"
+    />
+
+    </androidx.drawerlayout.widget.DrawerLayout>

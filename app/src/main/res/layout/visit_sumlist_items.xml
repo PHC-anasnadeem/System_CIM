@@ -1,0 +1,225 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#EBEBEB">
+
+ <!--   <TextView
+        android:id="@+id/duatitlelabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:paddingTop="1dp"
+        android:textColor="#000000"
+        android:text="HCE Name: "/>-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/white_background"
+        android:padding="@dimen/activity_horizontal_margin">
+        <TextView
+            android:id="@+id/hce_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="#408ade"
+            />
+   <!--     <ImageView
+            android:src="@drawable/location_icon_bottom"
+            android:id="@+id/loctionicon"
+            android:paddingTop="10dp"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:id="@+id/plamIDlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/hcenametext"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#408ade"
+                android:inputType="textMultiLine"
+                />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/districtlayouut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/districttext"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:text="District:"
+                    android:layout_height="wrap_content"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/subactionlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/subaction"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quack Type"
+                    android:inputType="textMultiLine"
+
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/comlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/totalpic"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Images uploaded:"
+                    android:inputType="textMultiLine"
+
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/firlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/firtext"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FIR Registered: "
+                    android:inputType="textMultiLine"
+
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/visitdate"
+                    android:layout_marginLeft="20dp"
+                    android:text="Visit Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/transectiondate"
+                    android:layout_marginLeft="20dp"
+                    android:text="Last Updated Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+                <!--    <TextView
+                        android:id="@+id/regstatusLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:textSize="12dp"
+                        android:paddingLeft="5dp"
+                        android:text="Status: "/>-->
+                <TextView
+                    android:id="@+id/visitby"
+                    android:layout_marginLeft="20dp"
+                    android:text="Visited By"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/Addresstext"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:text="Address:"
+                    android:layout_height="wrap_content"
+
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/comntlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/comnttext"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comments: "
+                    android:inputType="textMultiLine"
+
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

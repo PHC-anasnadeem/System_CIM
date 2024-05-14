@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/splash_screen"
+        tools:context="com.phc.cim.Activities.Common.MainActivity">
+
+<!--
+            <ImageView
+                android:id="@+id/logoImage"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:paddingTop="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/app_screen_logo" />
+    <ImageView
+        android:id="@+id/cimImage"
+        android:layout_width="150dp"
+        android:layout_height="80dp"
+        android:paddingTop="10dp"
+        android:layout_gravity="center"
+        android:src="@drawable/cim_icon" />-->
+
+        <!--    <ProgressBar
+                android:id="@+id/login_progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone" />-->
+    <com.trncic.library.DottedProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="30dp"
+        app:activeDot="@drawable/blue_circle"
+        app:dotSize="15dp"
+        app:inactiveDot="@drawable/white_circle"
+        app:jumpingSpeed="300"
+        app:spacing="20dp" />
+    <TextView
+        android:id="@+id/connection"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:paddingTop="30dp"
+        android:textColor="#000"
+        android:text="Internet connection unavailable"
+        android:layout_centerHorizontal="true"
+
+        android:gravity="center_horizontal" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/pass_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:textColor="#000"
+        android:layout_centerHorizontal="true"
+        android:text="TRY AGAIN"/>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:textSize="10dp"
+        android:text="@string/splash_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal" />
+
+
+   </RelativeLayout>

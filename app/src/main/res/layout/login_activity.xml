@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.phc.cim.Activities.Common.Login_Activity">
+<!--
+<FrameLayout
+    android:id="@+id/content2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:paddingTop="20dp"
+  >-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+       <!-- <ImageView
+            android:id="@+id/cimImage"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:paddingTop="10dp"
+            android:layout_gravity="center"
+            android:src="@drawable/cim_icon" />&ndash;&gt;-->
+    <ImageView
+        android:src="@drawable/app_screen_logo"
+        android:layout_width="wrap_content"
+        android:id="@+id/logo"
+        android:layout_height="130dp"
+        android:layout_gravity="center_horizontal" />
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" />
+
+<!--
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/pages_border"
+        app:menu="@menu/navigation"
+        app:itemTextColor="#ffffff"
+        app:itemIconTint="#ffffff"
+        />-->
+        <TextView
+            android:id="@+id/start_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:layout_below="@+id/logo"
+            android:text="Sign in to your account "
+            android:textColor="#005FAB" />
+
+        <LinearLayout
+
+            android:id="@+id/rolelayout"
+            android:layout_width="250dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/rolelabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:textSize="15dp"
+                android:text="Role "
+                android:textColor="#000000" />
+            <!-- District Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+
+                >
+                <Spinner
+                    android:id="@+id/roleSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:hint="Select Role"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColorHint="#000000"
+        >
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/prompt_email"
+                android:textColor="#000"
+                android:textColorHint="#000"
+                android:singleLine="true"
+                android:ems="10" />
+     <!--   <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_email"
+            android:textColor="#000"
+            android:textColorHint="#000"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true" />-->
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColorHint="#000000"
+        >
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_password"
+            android:textColorHint="#000"
+            android:textColor="#000"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"
+
+            />
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/map_next_btn_full" />
+
+    <TextView
+        android:id="@+id/Next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:text="Next"
+        android:textColor="#000" />
+
+<!--</FrameLayout>-->
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registration"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.phc.cim.Extra.RegistrationFragment">
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true">
+
+
+        <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="-10dp"
+            android:paddingTop="40dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            >
+
+            <ImageView android:src="@drawable/phc_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginBottom="8dp"
+                android:layout_gravity="center_horizontal" />
+
+            <!-- HCE Name Label -->
+            <com.google.android.material.textfield.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColorHint="#000000"
+
+                >
+                <EditText android:id="@+id/hce_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="#000000"
+                    android:hint="Healthcare Establishment Name"
+
+                 />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Address Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColorHint="#000000"
+                >
+                <EditText android:id="@+id/Address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:hint="Address"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000"
+                   />
+            </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <!--  Sector Type Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                >
+                <Spinner
+                    android:id="@+id/Sector_Type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--  HCSP Type Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+               >
+                <Spinner
+                    android:id="@+id/HCSP_Typespinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:hint="Select HCSP Type"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+            <!-- HCSP Name Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColorHint="#000000">
+                <EditText android:id="@+id/HCSP_Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="#000000"
+                    android:tooltipText="Healthcare Service Provider"
+                    android:hint="HCSP Name"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- CNIC Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColorHint="#000000">
+                <EditText android:id="@+id/CNIC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="#000000"
+                    android:hint="CNIC"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Mobile Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColorHint="#000000">
+                <EditText android:id="@+id/Mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:textColor="#000000"
+                    android:hint="Mobile"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Signup Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_signup"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="12dp"
+                android:text="Register"/>
+
+           <!-- <TextView android:id="@+id/link_login"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:textColor="#ffffff"
+                android:text="Already Registered? Enter Registration Number"
+                android:gravity="center"
+                android:textSize="16dip"/>-->
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

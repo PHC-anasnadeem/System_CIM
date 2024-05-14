@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/pages_bg_option2"
+
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:layout_height="match_parent">
+
+
+
+
+    <TextView
+
+    android:id="@+id/addreses"
+    android:paddingTop="6dip"
+    android:layout_gravity="top"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="15dp"
+    android:text="TextView"
+        android:textColor="#ffffff"/>
+
+
+
+</LinearLayout>

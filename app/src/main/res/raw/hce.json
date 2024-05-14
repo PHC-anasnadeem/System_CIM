@@ -1,0 +1,66 @@
+{
+  "HCE": {
+    "City": [
+      {
+        "HCE_id": "1",
+        "HCE_name": "Sir Ganga Ram Hospital",
+        "HCE_Address": "Shara-I-Fatima Jinnah، Queen's Road، Lahore",
+        "HCE_latitude":"31.5550364769839",
+        "HCE_longitude":"74.3223474236642",
+        "City_id": "1",
+        "City_name": "Lahore",
+        "PHC_license_status": "Reg/PL"
+      },
+      {
+        "HCE_id": "2",
+        "HCE_name": "Mayo Hospital",
+        "HCE_Address": "Hospital Road,، Lahore 54000",
+        "HCE_latitude":"31.5693587595782",
+        "HCE_longitude":"74.313748318415",
+        "City_id": "1",
+        "City_name": "Lahore",
+        "PHC_license_status": "Reg/PL"
+      },
+      {
+        "HCE_id": "3",
+        "HCE_name": "Fatima Memorial Hospital",
+        "HCE_Address": "725 Shadman Road، Lahore 54000",
+        "HCE_latitude":"31.53571371",
+        "HCE_longitude":"74.32828497",
+        "City_id": "1",
+        "City_name": "Lahore",
+        "PHC_license_status": "Reg/PL"
+      },
+      {
+        "HCE_id": "4",
+        "HCE_name": "Services Hospital",
+        "HCE_Address": "Ghaus-ul-Azam، Jail Road، Lahore 54000",
+        "HCE_latitude":"31.5412882151021",
+        "HCE_longitude":"74.3325659551518",
+        "City_id": "1",
+        "City_name": "Lahore",
+        "PHC_license_status": "Reg/PL"
+      },
+      {
+        "HCE_id": "5",
+        "HCE_name": "Advanced Medical Diagnostic Centre ",
+        "HCE_Address": "86, Shadman 1, Lahore",
+        "HCE_latitude":"31.5412",
+        "HCE_longitude":"74.3302",
+        "City_id": "1",
+        "City_name": "Lahore",
+        "PHC_license_status": "Reg"
+      },
+      {
+        "HCE_id": "6",
+        "HCE_name": "Chughtais Lahore Lab Fatima Memorial Hospital Center ",
+        "HCE_Address": "Opp: Fatima Memorial Hospital Shadman, Lahore",
+        "HCE_latitude":"31.535545",
+        "HCE_longitude":"74.3286516666667",
+        "City_id": "1",
+        "City_name": "Lahore",
+        "PHC_license_status": "Reg"
+      }
+      ]
+  }
+}
