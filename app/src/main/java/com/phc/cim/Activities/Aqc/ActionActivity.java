@@ -57,7 +57,9 @@ import android.widget.Toast;
 
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
+import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
+import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.GalleryActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
@@ -1106,6 +1108,10 @@ public class ActionActivity extends AppCompatActivity {
                         startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_quack:
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_actiondesc:
                         startActivity(new Intent(context, IndReportingActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
@@ -1123,6 +1129,10 @@ public class ActionActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_pwssearch:
                         startActivity(new Intent(context, PWSFilterActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_list:
+                        startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_resetPassword:

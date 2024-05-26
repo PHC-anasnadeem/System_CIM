@@ -1117,6 +1117,10 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                         startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_quack:
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_actionsummary:
                         if (isStat.equals("true")) {
                             startActivity(new Intent(context, DashboardTabs.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
@@ -1136,6 +1140,10 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_pwssearch:
                         startActivity(new Intent(context, PWSFilterActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_list:
+                        startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_about_us:

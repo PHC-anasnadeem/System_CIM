@@ -11,8 +11,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.view.GravityCompat;
@@ -38,8 +40,10 @@ import android.widget.Toast;
 
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
+import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
+import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Activities.Inspection.InspectionFilterActivity;
 import com.phc.cim.Activities.Inspection.InspectionVisitsActivity;
@@ -98,26 +102,26 @@ public class PWSFilterActivity extends AppCompatActivity {
     CurrentLocation gps;
     double cur_latitude;
     double cur_longitude;
-    String searchbytext="";
-    String distancetext="";
-    String sectortypetext="";
-    String counciltypetext="";
-    String hceTypetext="";
-    String hcestatusText="";
-    String hcestatusID="";
-    String districtText="";
-    String tehsilText="";
-    String BfromText="";
-    String BtoText="";
-    String email="";
-    private Boolean userchangesec=true;
-    String lastvisitedText="";
+    String searchbytext = "";
+    String distancetext = "";
+    String sectortypetext = "";
+    String counciltypetext = "";
+    String hceTypetext = "";
+    String hcestatusText = "";
+    String hcestatusID = "";
+    String districtText = "";
+    String tehsilText = "";
+    String BfromText = "";
+    String BtoText = "";
+    String email = "";
+    private Boolean userchangesec = true;
+    String lastvisitedText = "";
     String lastvisitedID;
-    String actionText="";
-    String hcenameText="";
-    String plancodeText="";
-    String RegnoText="";
-    String cnicText="";
+    String actionText = "";
+    String hcenameText = "";
+    String plancodeText = "";
+    String RegnoText = "";
+    String cnicText = "";
     LinearLayout regnoLayout;
     LinearLayout hcenameLayout;
     LinearLayout showlayout;
@@ -136,7 +140,7 @@ public class PWSFilterActivity extends AppCompatActivity {
     DataManager dataManager;
     DatabaseManager databaseManager;
     ArrayList<subActionType> subactionType = null;
-    ArrayList<subActionType> subactionTypeselected=null;
+    ArrayList<subActionType> subactionTypeselected = null;
     String subactionTypeText;
     String subactionTypeID;
     String subactiontseltext;
@@ -197,11 +201,12 @@ public class PWSFilterActivity extends AppCompatActivity {
     ProgressDialog pDialog;
     String jsonStr;
     ArrayAdapter<String> sectortypeadapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pws_activity_filter);
-        context=this;
+        context = this;
         //ImageView imageView = (ImageView) findViewById(R.id.splashImage);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -231,7 +236,7 @@ public class PWSFilterActivity extends AppCompatActivity {
         username = prefs.getString("username", null);//"No name defined" is the default value.
         isEdit = prefs.getString("isEdit", null);//"No name defined" is the default value.
         Roleid = prefs.getString("RoleID", null); //0 is the default value.
-        UserID= prefs.getString("UserID", null); //0 is the default value.
+        UserID = prefs.getString("UserID", null); //0 is the default value.
         loadNavHeader();
 
         // initializing navigation menu
@@ -243,7 +248,7 @@ public class PWSFilterActivity extends AppCompatActivity {
             loadHomeFragment();
         }
         dataManager = new DataManager(context);
-        databaseManager= new DatabaseManager(context);
+        databaseManager = new DatabaseManager(context);
         bed_from = (EditText) findViewById(R.id.bed_from);
         bed_to = (EditText) findViewById(R.id.bed_to);
         hcenameEdit = (EditText) findViewById(R.id.hce_name);
@@ -275,7 +280,7 @@ public class PWSFilterActivity extends AppCompatActivity {
       Action_layout = (LinearLayout) findViewById(R.id.Action_layout);*/
 
 
-        if(Roleid.equals("1")) {
+        if (Roleid.equals("1")) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
             if (isStat.equals("true")) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
@@ -284,8 +289,7 @@ public class PWSFilterActivity extends AppCompatActivity {
             } else {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
             }
-        }
-        else {
+        } else {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
         }
@@ -325,23 +329,23 @@ public class PWSFilterActivity extends AppCompatActivity {
         else {*/
 
         //}
-        Button btn_reset=(Button) findViewById(R.id.btn_reset);
+        Button btn_reset = (Button) findViewById(R.id.btn_reset);
 
         btn_reset.setOnClickListener(new Button.OnClickListener() {
 
-                                        public void onClick(View v) {
-                                            hcetypespinner.setSelection(0);
-                                            district_spinner.setSelection(0);
+            public void onClick(View v) {
+                hcetypespinner.setSelection(0);
+                district_spinner.setSelection(0);
 
-                                           // plancodeEdit.setText("");
-                                            bed_to.setText("");
-                                            bed_from.setText("");
-                                            hcenameEdit.setText("");
-                                            RegnoEdit.setText("");
-                                            cnicEdit.setText("");
-                                           // errortextlayout.setVisibility(View.GONE);
-                                        }
-                                    });
+                // plancodeEdit.setText("");
+                bed_to.setText("");
+                bed_from.setText("");
+                hcenameEdit.setText("");
+                RegnoEdit.setText("");
+                cnicEdit.setText("");
+                // errortextlayout.setVisibility(View.GONE);
+            }
+        });
 
 
         if (gps.canGetLocation()) {
@@ -353,8 +357,7 @@ public class PWSFilterActivity extends AppCompatActivity {
             // latlangListener.onlatlang(cur_latitude, cur_longitude);
             if (cur_latitude != 0.0 && cur_longitude != 0.0) {
 
-            }
-            else {
+            } else {
                 cur_latitude = gps.getLatitude();
                 cur_longitude = gps.getLongitude();
             }
@@ -459,10 +462,7 @@ public class PWSFilterActivity extends AppCompatActivity {
 */
 
 
-
-
-
-         orgTypes= databaseManager.getPWSorgType();
+        orgTypes = databaseManager.getPWSorgType();
         ArrayAdapter<String> hcetypeadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, getOrgTypes()) {
             @Override
             public boolean isEnabled(int position) {
@@ -508,8 +508,8 @@ public class PWSFilterActivity extends AppCompatActivity {
 
 ////////////////////////////////////////////////district////////////////////////////////////////
 
-        String Division="Please Select";
-        districts= databaseManager.getPWSDistrict();
+        String Division = "Please Select";
+        districts = databaseManager.getPWSDistrict();
 
         ArrayAdapter<String> districtadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, getDistrict()) {
             @Override
@@ -552,41 +552,40 @@ public class PWSFilterActivity extends AppCompatActivity {
 
             }
         });
-        Button btn_find=(Button) findViewById(R.id.btn_find);
+        Button btn_find = (Button) findViewById(R.id.btn_find);
 
-        btn_find.setOnClickListener(new Button.OnClickListener(){
+        btn_find.setOnClickListener(new Button.OnClickListener() {
 
-            public void onClick(View v)
-            {int Btonumber=0;
+            public void onClick(View v) {
+                int Btonumber = 0;
                 int Bfromnumber = 0;
-                int count=0;
+                int count = 0;
                 BfromText = bed_from.getText().toString();
                 BtoText = bed_to.getText().toString();
-                RegnoText=RegnoEdit.getText().toString();
-                hcenameText=hcenameEdit.getText().toString();
+                RegnoText = RegnoEdit.getText().toString();
+                hcenameText = hcenameEdit.getText().toString();
                 cnicText = cnicEdit.getText().toString();
 
-                if(!BfromText.equals("")) {
-                     Bfromnumber = Integer.parseInt(BfromText);
+                if (!BfromText.equals("")) {
+                    Bfromnumber = Integer.parseInt(BfromText);
                 }
-                if(!BtoText.equals("")) {
-                     Btonumber = Integer.parseInt(BtoText);
+                if (!BtoText.equals("")) {
+                    Btonumber = Integer.parseInt(BtoText);
                 }
 
 
-                if(Btonumber < Bfromnumber){
+                if (Btonumber < Bfromnumber) {
                     Toast.makeText(context, "Bed Strength: From should always be less than to", Toast.LENGTH_SHORT).show();
-                    count=1;
+                    count = 1;
                 }
-if(count<1) {
-    if (hceTypetext.equals("Please Select")) {
-        hceTypetext = "";
-    }
-    if (districtText.equals("Please Select")) {
-        districtText = "";
-    }
-    else {
- DownloadPWSData downloadPWSData = new DownloadPWSData(context,hceTypetext,districtText,BfromText,BtoText,RegnoText,hcenameText,cnicText) ;
+                if (count < 1) {
+                    if (hceTypetext.equals("Please Select")) {
+                        hceTypetext = "";
+                    }
+                    if (districtText.equals("Please Select")) {
+                        districtText = "";
+                    } else {
+                        DownloadPWSData downloadPWSData = new DownloadPWSData(context, hceTypetext, districtText, BfromText, BtoText, RegnoText, hcenameText, cnicText);
  /*
         Intent firstpage = new Intent(context, PWSDetailListActivity.class);
         firstpage.putExtra("hceTypetext",hceTypetext);
@@ -597,8 +596,8 @@ if(count<1) {
         firstpage.putExtra("hcenameText",hcenameText);
         firstpage.putExtra("cnicText",cnicText);
         context.startActivity(firstpage);*/
-    }
-}
+                    }
+                }
             }
         });
 
@@ -635,48 +634,52 @@ if(count<1) {
             }
         }
     }
+
     private ArrayList<String> getOrgTypes() {
 
         ArrayList<String> orgtypelist = new ArrayList<String>();
-      int i=0;
+        int i = 0;
         for (PWSOrgType orgType : orgTypes) {
-          String orgTypess= orgType.getOrgType();
-            if((!orgTypess.equals("null")) && (!orgTypess.equals("")))
+            String orgTypess = orgType.getOrgType();
+            if ((!orgTypess.equals("null")) && (!orgTypess.equals("")))
                 orgtypelist.add(orgTypess);
-          i++;
+            i++;
         }
         return orgtypelist;
     }
+
     private ArrayList<String> getCouncilTypes() {
 
         ArrayList<String> counciltypelist = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (CouncilType councilType : councilTypes) {
-            String counciltypelists= councilType.getCouncilType();
+            String counciltypelists = councilType.getCouncilType();
             counciltypelist.add(counciltypelists);
             i++;
         }
         return counciltypelist;
     }
+
     private ArrayList<String> getsectorTypes() {
 
         ArrayList<String> sectorTypeList = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (SectorType sectorType : sectorTypes) {
-            String sectortypelists= sectorType.getSectorType();
+            String sectortypelists = sectorType.getSectorType();
             sectorTypeList.add(sectortypelists);
             i++;
         }
         return sectorTypeList;
     }
+
     private ArrayList<String> getDistrict() {
 
         ArrayList<String> districtList = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (PWSDistrict district : districts) {
-            String districtLists= district.getDistrict();
-            if((!districtLists.equals("null")) && (!districtLists.equals("")) && (!districtLists.equals("-Please Select -")) && (!districtLists.equals("-Please Select-")))
-            districtList.add(districtLists);
+            String districtLists = district.getDistrict();
+            if ((!districtLists.equals("null")) && (!districtLists.equals("")) && (!districtLists.equals("-Please Select -")) && (!districtLists.equals("-Please Select-")))
+                districtList.add(districtLists);
             i++;
         }
         return districtList;
@@ -686,21 +689,22 @@ if(count<1) {
 
         ArrayList<String> actiontypelist = new ArrayList<String>();
 
-        int i=0;
+        int i = 0;
         for (ActionType actionType : actionTypeList) {
-            String actiontypelists= actionType.getActionType();
+            String actiontypelists = actionType.getActionType();
             actiontypelist.add(actiontypelists);
             i++;
         }
         actiontypelist.add("Not Visited");
         return actiontypelist;
     }
+
     private ArrayList<String> getsubactionTypes() {
-        subactionType= dataManager.getsubActionstype(lastvisitedID,Roleid);
+        subactionType = dataManager.getsubActionstype(lastvisitedID, Roleid);
         ArrayList<String> subactiontypelist = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (subActionType subActionType : subactionType) {
-            String subactiontype= subActionType.getSubactionType();
+            String subactiontype = subActionType.getSubactionType();
             subactiontypelist.add(subactiontype);
             i++;
         }
@@ -739,7 +743,7 @@ if(count<1) {
                 //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
                 //subactionposition=position;
                 subactionTypeText = parent.getItemAtPosition(position).toString();
-                subactionTypeID=subactionType.get(position).getSubActionType_Id();
+                subactionTypeID = subactionType.get(position).getSubActionType_Id();
 
             }
 
@@ -751,59 +755,64 @@ if(count<1) {
 
         return subactiontypelist;
     }
+
     private ArrayList<String> getUpdateStatus() {
 
         ArrayList<String> updatestatuslist = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (UpdateStatL1 updateStatL1 : updateStatL1s) {
-            String updatedStatL1ss= updateStatL1.getUpdatedStatL1();
+            String updatedStatL1ss = updateStatL1.getUpdatedStatL1();
             updatestatuslist.add(updatedStatL1ss);
             i++;
         }
         return updatestatuslist;
     }
+
     private ArrayList<String> getSubStatus() {
 
         ArrayList<String> substatuslist = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (UpdateStatL2 updateStatL2 : updateStatL2s) {
-            String substatLists= updateStatL2.getUpdatedStatL2();
+            String substatLists = updateStatL2.getUpdatedStatL2();
             substatuslist.add(substatLists);
             i++;
         }
         return substatuslist;
     }
+
     private ArrayList<String> getDistance() {
 
         ArrayList<String> distancelist = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (Distance distance : distances) {
-            String distLists= distance.getDistance();
+            String distLists = distance.getDistance();
             distancelist.add(distLists);
             i++;
         }
         return distancelist;
     }
+
     private ArrayList<String> getRegStatus() {
 
         ArrayList<String> regstatuslist = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (RegStatus regStatus : regStatuses) {
-            String regstatLists= regStatus.getRegStatus();
+            String regstatLists = regStatus.getRegStatus();
             regstatuslist.add(regstatLists);
             i++;
         }
         return regstatuslist;
     }
+
     private ArrayList<String> getTehsil() {
 
-        tehsils= dataManager.getTehsilList(districtText);
+        tehsils = dataManager.getTehsilList(districtText);
         ArrayList<String> TehsilList = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (Tehsil tehsil : tehsils) {
-            String Tehsillists= tehsil.getTehsil();
-            if(!Tehsillists.equals("null"))
-            TehsilList.add(Tehsillists);
+            String Tehsillists = tehsil.getTehsil();
+            if (!Tehsillists.equals("null"))
+                TehsilList.add(Tehsillists);
             i++;
         }
         ArrayAdapter<String> tehsiladapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, TehsilList) {
@@ -848,7 +857,8 @@ if(count<1) {
         });
         return TehsilList;
     }
-    private void setSpinnerError(Spinner spinner, String error){
+
+    private void setSpinnerError(Spinner spinner, String error) {
         View selectedView = spinner.getSelectedView();
         if (selectedView != null && selectedView instanceof TextView) {
             spinner.requestFocus();
@@ -860,11 +870,12 @@ if(count<1) {
 
         }
     }
+
     /*
-   * Load navigation menu header information
-   * like background image, profile image
-   * name, website, notifications action view (dot)
-   */
+     * Load navigation menu header information
+     * like background image, profile image
+     * name, website, notifications action view (dot)
+     */
     private void loadNavHeader() {
         // name, website
 
@@ -898,7 +909,7 @@ if(count<1) {
         selectNavMenu();
 
         // set toolbar title
-              setToolbarTitle();
+        setToolbarTitle();
 
         // if user select the current navigatiokn menu again, don't do anything
         // just close the navigation drawer
@@ -992,54 +1003,59 @@ if(count<1) {
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-               case R.id.nav_home:
-                   if(Roleid.equals("3")){
-                       startActivity(new Intent(context, InspectionFilterActivity.class));
+                    case R.id.nav_home:
+                        if (Roleid.equals("3")) {
+                            startActivity(new Intent(context, InspectionFilterActivity.class));
 
-                   }
-                   else {
-                       startActivity(new Intent(context, FilterActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        } else {
+                            startActivity(new Intent(context, FilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
 
-                   }
-                   drawer.closeDrawers();
-                   return true;
+                        }
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_reportquack:
-                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_quack:
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
                         String UserID = prefs.getString("UserID", null); //0 is the default value.
-                        if(isStat.equals("true")) {
-                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        if (isStat.equals("true")) {
+                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                             drawer.closeDrawers();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
                         }
                         return true;
 
 
                     case R.id.nav_actiondesc:
-                        if(Roleid.equals("3")){
+                        if (Roleid.equals("3")) {
                             startActivity(new Intent(context, InspectionVisitsActivity.class));
 
-                        }
-                        else {
-                            startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        } else {
+                            startActivity(new Intent(context, IndReportingActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
 
                         }
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));
+                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email", email).putExtra("password", password));
                         drawer.closeDrawers();
                         return true;
 
                     case R.id.nav_pwssearch:
                         startActivity(new Intent(context, PWSFilterActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_list:
+                        startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
 
@@ -1069,7 +1085,7 @@ if(count<1) {
                         alert.show();
                         return true;
                     //default:
-                     //   navItemIndex = 0;
+                    //   navItemIndex = 0;
                 }
 
                 //Checking if the item is in checked state or not, if not make it in checked state

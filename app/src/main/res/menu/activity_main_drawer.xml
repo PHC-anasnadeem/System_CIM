@@ -20,9 +20,18 @@
             android:icon="@drawable/report"
             android:title="@string/title_report_quack" />
         <item
+            android:id="@+id/nav_quack"
+            android:icon="@drawable/report"
+            android:title="@string/report_quack" />
+
+        <item
             android:id="@+id/nav_pwssearch"
             android:icon="@drawable/search"
             android:title="@string/title_pws_search" />
+        <item
+            android:id="@+id/nav_list"
+            android:icon="@drawable/baseline_view_list_24"
+            android:title="De-Seal List" />
         <item
             android:id="@+id/nav_resetPassword"
             android:icon="@drawable/icon_change_password"

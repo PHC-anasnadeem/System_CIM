@@ -40,8 +40,10 @@ import android.widget.Toast;
 
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
+import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
+import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Adapters.HigherPlanSummAdapter;
 import com.phc.cim.DataElements.ActionType;
@@ -558,6 +560,10 @@ public class HigherPlanSummActivity extends AppCompatActivity {
                         startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_quack:
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
@@ -627,7 +633,10 @@ public class HigherPlanSummActivity extends AppCompatActivity {
                         alert11.show();*/
                         return true;
 
-
+                    case R.id.nav_list:
+                        startActivity(new Intent(context, DesealListing.class));
+                        drawer.closeDrawers();
+                        return true;
 
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment

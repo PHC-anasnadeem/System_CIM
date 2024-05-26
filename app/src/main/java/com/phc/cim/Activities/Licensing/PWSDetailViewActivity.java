@@ -15,6 +15,7 @@ import android.os.Handler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.view.GravityCompat;
@@ -38,8 +39,10 @@ import android.widget.Toast;
 
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
+import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
+import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Activities.Inspection.InspectionFilterActivity;
 import com.phc.cim.Activities.Inspection.InspectionVisitsActivity;
@@ -81,7 +84,7 @@ public class PWSDetailViewActivity extends AppCompatActivity {
     EditText HCSP_ContactEdit;
     EditText Reg_NoEdit;
     EditText coun_NoEdit;
-    EditText reg_dateEdit,pl_noEdit,rl_dateEdit,rl_noEdit,fee_rcvdEdit,regcertissuEdit,reasonEdit,total_bedsEdit, pl_dateEdit,dereg_noEdit,dereg_dateEdit;
+    EditText reg_dateEdit, pl_noEdit, rl_dateEdit, rl_noEdit, fee_rcvdEdit, regcertissuEdit, reasonEdit, total_bedsEdit, pl_dateEdit, dereg_noEdit, dereg_dateEdit;
 
     TextInputLayout hce_namelayout;
     TextInputLayout Addresslayout;
@@ -146,67 +149,67 @@ public class PWSDetailViewActivity extends AppCompatActivity {
     ImageView imageView;
     TextView textView;
     Context context;
-      ListView listView;
+    ListView listView;
     ProgressDialog pDialog;
-       ArrayList<HashMap<String, String>> indtabresult;
-       int PICK_IMAGE_REQUEST = 111;
-    private Uri u=null;
-    private Boolean picTaken=false;
-    private Boolean picreceved=false;
-    private Boolean picUploaded=false;
-    private Boolean picAttachement=false;
-    int count=0;
-    private String filePath=null;
-    String directoryPath=null;
+    ArrayList<HashMap<String, String>> indtabresult;
+    int PICK_IMAGE_REQUEST = 111;
+    private Uri u = null;
+    private Boolean picTaken = false;
+    private Boolean picreceved = false;
+    private Boolean picUploaded = false;
+    private Boolean picAttachement = false;
+    int count = 0;
+    private String filePath = null;
+    String directoryPath = null;
     private Uri filePathURI;
-    int MY_REQUEST_CODE=5;
-    String imageNAme=null;
+    int MY_REQUEST_CODE = 5;
+    String imageNAme = null;
     int TotalRecord;
     int PageSize;
-    String MID2,MText2,jsonStr2;
+    String MID2, MText2, jsonStr2;
     //-----End Images----
     // ArrayList<String> mylist;
-     int currentPage=1;
-       String MID;
+    int currentPage = 1;
+    String MID;
     String MText;
     String jsonStr;
-     EditText latEdit;
+    EditText latEdit;
     EditText lngEdit;
-     EditText coments;
+    EditText coments;
 
-     TextInputLayout substatusInput;
+    TextInputLayout substatusInput;
     EditText timePicker1;
     EditText infoVisitDate;
     EditText loctimePickerEdit;
     EditText locDateTimeEdit;
     EditText bedsEdit;
-     String FeeReceived = "";
+    String FeeReceived = "";
     String lngText = "";
-    String password="";
-    String isEdit="";
-    String username="";
+    String password = "";
+    String isEdit = "";
+    String username = "";
     String isStat;
     String UserID;
     String RoleID;
     String HCEindex;
     String Hcp_recID = "";
-    String PHCDeRegDate= "";
-    String PHCDeRegNo= "";
-    String Reason= "";
-    String RegistrationCertificateIssued= "";
-    String PHCPLDate= "";
+    String PHCDeRegDate = "";
+    String PHCDeRegNo = "";
+    String Reason = "";
+    String RegistrationCertificateIssued = "";
+    String PHCPLDate = "";
     String PHCPLNo = "";
     String PHCRLDate = "";
     String PHCRLNo = "";
     String PHCRegDate = "";
     String currlocID = "-1";
     String total_beds = "";
-     Button btn_info, btn_loc, btn_save,btn_cancel;
-    LinearLayout layout_submit,errortextlayout,infolayout,loclayout,imageslayout;
-    TextInputLayout loc_layout,reg_layout,Sector_layout,hce_name_layout,Address_layout,hcetype_layout,HCSP_Name_layout,Mobile_layout,
-            beds_layout,txtDateTime_layout,timePicker1_layout,lat_layout,lng_layout,locDatelayout,loctimelayout;
+    Button btn_info, btn_loc, btn_save, btn_cancel;
+    LinearLayout layout_submit, errortextlayout, infolayout, loclayout, imageslayout;
+    TextInputLayout loc_layout, reg_layout, Sector_layout, hce_name_layout, Address_layout, hcetype_layout, HCSP_Name_layout, Mobile_layout,
+            beds_layout, txtDateTime_layout, timePicker1_layout, lat_layout, lng_layout, locDatelayout, loctimelayout;
     TextView indicatelabel;
-    TextView locindlabel,latvisitinfo,latvisitloc;
+    TextView locindlabel, latvisitinfo, latvisitloc;
     Spinner currloc_spinner;
     ArrayList<District> districts;
     ArrayList<SectorType> sectorTypes;
@@ -240,10 +243,10 @@ public class PWSDetailViewActivity extends AppCompatActivity {
     private static final String LOG_TAG = "AppUpgrade";
     private String activityTitles;
     private int versionCode = 0;
-    String date1="";
-    String date2="";
+    String date1 = "";
+    String date2 = "";
     String appURI = "";
-    String BfromText, BtoText, RegnoText, hcenameText,CNICtext;
+    String BfromText, BtoText, RegnoText, hcenameText, CNICtext;
     //ArrayAdapter adapter;
     PWSListAdapter pwsListAdapter;
     //MyCustomPagerAdapter myCustomPagerAdapter;
@@ -269,6 +272,7 @@ public class PWSDetailViewActivity extends AppCompatActivity {
     public static final String TAG = "GalleryActivity";
     ViewPager _pager;
     LinearLayout _thumbnails;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -302,8 +306,6 @@ public class PWSDetailViewActivity extends AppCompatActivity {
         regcertissuEdit = (EditText) findViewById(R.id.regcertissuEdit);
         reasonEdit = (EditText) findViewById(R.id.reasonEdit);
         total_bedsEdit = (EditText) findViewById(R.id.total_bedsEdit);
-
-
 
 
         hce_nameEdit.setEnabled(false);
@@ -355,7 +357,7 @@ public class PWSDetailViewActivity extends AppCompatActivity {
         username = prefs.getString("username", null);//"No name defined" is the default value.
         isEdit = prefs.getString("isEdit", null);//"No name defined" is the default value.
         RoleID = prefs.getString("RoleID", null); //0 is the default value.
-        UserID= prefs.getString("UserID", null); //0 is the default value.
+        UserID = prefs.getString("UserID", null); //0 is the default value.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         gps = new CurrentLocation(context);
@@ -372,18 +374,17 @@ public class PWSDetailViewActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);*/
         // load toolbar titles from string resources
 
-        activityTitles =getResources().getString(R.string.nav_pwsview_titles);
-        if(RoleID.equals("1") || RoleID.equals("3")) {
+        activityTitles = getResources().getString(R.string.nav_pwsview_titles);
+        if (RoleID.equals("1") || RoleID.equals("3")) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
-            if (isStat.equals("true")&& RoleID.equals("1")) {
+            if (isStat.equals("true") && RoleID.equals("1")) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
 
 
             } else {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
             }
-        }
-        else {
+        } else {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
         }
@@ -438,99 +439,99 @@ public class PWSDetailViewActivity extends AppCompatActivity {
 
         HCEindex = (String) intent.getSerializableExtra("index");
         AddressText = (String) intent.getSerializableExtra("Address");
-        CNIC_Text= (String) intent.getSerializableExtra("CNIC");
-        counciltypetext= (String) intent.getSerializableExtra("CouncilName");
-        coun_NoText= (String) intent.getSerializableExtra("CouncilNo");
+        CNIC_Text = (String) intent.getSerializableExtra("CNIC");
+        counciltypetext = (String) intent.getSerializableExtra("CouncilName");
+        coun_NoText = (String) intent.getSerializableExtra("CouncilNo");
         districtText = (String) intent.getSerializableExtra("District");
-        hce_nameText= (String) intent.getSerializableExtra("HCEName");
-        hceTypetext= (String) intent.getSerializableExtra("HCEType");
+        hce_nameText = (String) intent.getSerializableExtra("HCEName");
+        hceTypetext = (String) intent.getSerializableExtra("HCEType");
         HCSP_ContactText = (String) intent.getSerializableExtra("Mobile");
         HCSP_nameText = (String) intent.getSerializableExtra("SPName");
-        HCSPTypeText= (String) intent.getSerializableExtra("SPType");
-        sectortypetext= (String) intent.getSerializableExtra("SectorType");
-        Reg_NoText= (String) intent.getSerializableExtra("PHCRegNo");
-        PHCRegDate= (String) intent.getSerializableExtra("PHCRegDate");
+        HCSPTypeText = (String) intent.getSerializableExtra("SPType");
+        sectortypetext = (String) intent.getSerializableExtra("SectorType");
+        Reg_NoText = (String) intent.getSerializableExtra("PHCRegNo");
+        PHCRegDate = (String) intent.getSerializableExtra("PHCRegDate");
         PHCDeRegDate = (String) intent.getSerializableExtra("PHCDeRegDate");
-        PHCDeRegNo= (String) intent.getSerializableExtra("PHCDeRegNo");
-        PHCPLDate= (String) intent.getSerializableExtra("PHCPLDate");
-        PHCPLNo= (String) intent.getSerializableExtra("PHCPLNo");
+        PHCDeRegNo = (String) intent.getSerializableExtra("PHCDeRegNo");
+        PHCPLDate = (String) intent.getSerializableExtra("PHCPLDate");
+        PHCPLNo = (String) intent.getSerializableExtra("PHCPLNo");
         PHCRLDate = (String) intent.getSerializableExtra("PHCRLDate");
         PHCRLNo = (String) intent.getSerializableExtra("PHCRLNo");
         FeeReceived = (String) intent.getSerializableExtra("FeeReceived");
-        Reason= (String) intent.getSerializableExtra("Reason");
+        Reason = (String) intent.getSerializableExtra("Reason");
         RegistrationCertificateIssued = (String) intent.getSerializableExtra("RegistrationCertificateIssued");
-        total_beds= (String) intent.getSerializableExtra("bedStrength");
-        Hcp_recID= (String) intent.getSerializableExtra("Hcp_recID");
+        total_beds = (String) intent.getSerializableExtra("bedStrength");
+        Hcp_recID = (String) intent.getSerializableExtra("Hcp_recID");
 
 
-        if(AddressText.equals("null")){
-            AddressText="";
+        if (AddressText.equals("null")) {
+            AddressText = "";
         }
-        if(CNIC_Text.equals("null")){
-            CNIC_Text="";
+        if (CNIC_Text.equals("null")) {
+            CNIC_Text = "";
         }
-        if(counciltypetext.equals("null")){
-            counciltypetext="";
+        if (counciltypetext.equals("null")) {
+            counciltypetext = "";
         }
-        if(coun_NoText.equals("null")){
-            coun_NoText="";
+        if (coun_NoText.equals("null")) {
+            coun_NoText = "";
         }
-        if(districtText.equals("null")){
-            districtText="";
+        if (districtText.equals("null")) {
+            districtText = "";
         }
-        if(hce_nameText.equals("null")){
-            hce_nameText="";
+        if (hce_nameText.equals("null")) {
+            hce_nameText = "";
         }
-        if(hceTypetext.equals("null")){
-            hceTypetext="";
+        if (hceTypetext.equals("null")) {
+            hceTypetext = "";
         }
-        if(HCSP_ContactText.equals("null")){
-            HCSP_ContactText="";
+        if (HCSP_ContactText.equals("null")) {
+            HCSP_ContactText = "";
         }
-        if(HCSP_nameText.equals("null")){
-            HCSP_nameText="";
+        if (HCSP_nameText.equals("null")) {
+            HCSP_nameText = "";
         }
-        if(HCSPTypeText.equals("null")){
-            HCSPTypeText="";
+        if (HCSPTypeText.equals("null")) {
+            HCSPTypeText = "";
         }
-        if(sectortypetext.equals("null")){
-            sectortypetext="";
+        if (sectortypetext.equals("null")) {
+            sectortypetext = "";
         }
-        if(Reg_NoText.equals("null")){
-            Reg_NoText="";
+        if (Reg_NoText.equals("null")) {
+            Reg_NoText = "";
         }
-        if(PHCRegDate.equals("null")){
-            PHCRegDate="";
+        if (PHCRegDate.equals("null")) {
+            PHCRegDate = "";
         }
-        if(PHCDeRegDate.equals("null")){
-            PHCDeRegDate="";
+        if (PHCDeRegDate.equals("null")) {
+            PHCDeRegDate = "";
         }
-        if(PHCDeRegNo.equals("null")){
-            PHCDeRegNo="";
+        if (PHCDeRegNo.equals("null")) {
+            PHCDeRegNo = "";
         }
-        if(PHCPLDate.equals("null")){
-            PHCPLDate="";
+        if (PHCPLDate.equals("null")) {
+            PHCPLDate = "";
         }
-        if(PHCPLNo.equals("null")){
-            PHCPLNo="";
+        if (PHCPLNo.equals("null")) {
+            PHCPLNo = "";
         }
-        if(PHCRLDate.equals("null")){
-            PHCRLDate="";
+        if (PHCRLDate.equals("null")) {
+            PHCRLDate = "";
         }
-        if(PHCRLNo.equals("null")){
-            PHCRLNo="";
+        if (PHCRLNo.equals("null")) {
+            PHCRLNo = "";
         }
-        if(FeeReceived.equals("null")){
-            FeeReceived="";
+        if (FeeReceived.equals("null")) {
+            FeeReceived = "";
         }
-        if(Reason.equals("null")){
-            Reason="";
+        if (Reason.equals("null")) {
+            Reason = "";
         }
-        if(RegistrationCertificateIssued.equals("null")){
-            RegistrationCertificateIssued="";
+        if (RegistrationCertificateIssued.equals("null")) {
+            RegistrationCertificateIssued = "";
         }
-        if(total_beds.equals("null")){
-            total_beds="";
+        if (total_beds.equals("null")) {
+            total_beds = "";
         }
 
 
@@ -606,6 +607,7 @@ public class PWSDetailViewActivity extends AppCompatActivity {
             gps.showSettingsAlert();
         }
     }
+
     private void loadNavHeader() {
         // name, website
 
@@ -734,50 +736,56 @@ public class PWSDetailViewActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.nav_home:
-                        if(RoleID.equals("3")){
+                        if (RoleID.equals("3")) {
                             startActivity(new Intent(context, InspectionFilterActivity.class));
 
-                        }
-                        else {
-                            startActivity(new Intent(context, FilterActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        } else {
+                            startActivity(new Intent(context, FilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
 
                         }
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_reportquack:
-                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_quack:
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
                         String UserID = prefs.getString("UserID", null); //0 is the default value.
-                        if(isStat.equals("true")) {
-                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        if (isStat.equals("true")) {
+                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                             drawer.closeDrawers();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
                         }
                         return true;
                     case R.id.nav_actiondesc:
-                        if(RoleID.equals("3")){
+                        if (RoleID.equals("3")) {
                             startActivity(new Intent(context, InspectionVisitsActivity.class));
 
-                        }
-                        else {
-                            startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        } else {
+                            startActivity(new Intent(context, IndReportingActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
 
-                        } drawer.closeDrawers();
+                        }
+                        drawer.closeDrawers();
                         return true;
 
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));
+                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email", email).putExtra("password", password));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_pwssearch:
                         startActivity(new Intent(context, PWSFilterActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_list:
+                        startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_about_us:

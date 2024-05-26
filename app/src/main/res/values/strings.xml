@@ -40,6 +40,7 @@
     <string name="action_summary">Action Report</string>
     <string name="title_activity_comments">Update</string>
     <string name="title_report_quack">Report New Quack</string>
+    <string name="report_quack">Report Quack</string>
     <string name="title_pws_search">PWS Search</string>
     <string name="no_data_found">No data found</string>
     <string name="about_us_text">Census Information Manager\n

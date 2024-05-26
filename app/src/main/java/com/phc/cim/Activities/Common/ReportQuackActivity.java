@@ -50,10 +50,10 @@ public class ReportQuackActivity extends AppCompatActivity {
     double des_lat;
     double des_lng;
     DataManager dataManager;
-    String MID;
-    String MText;
-    String jsonStr;
-    Context context;
+    static String MID;
+    static String MText;
+    static String jsonStr;
+    static Context context;
     CurrentLocation gps;
     EditText hce_nameEdit;
     EditText AddressEdit;
@@ -70,27 +70,27 @@ public class ReportQuackActivity extends AppCompatActivity {
     Spinner quackloc_spinner;
 
 
-    String hce_nameText = "";
-    String AddressText = "";
-    String HCSP_nameText = "";
-    String HCSP_SOText = "";
-    String CNIC_Text = "";
-    String HCSP_ContactText = "";
+    static String hce_nameText = "";
+    static String AddressText = "";
+    static String HCSP_nameText = "";
+    static String HCSP_SOText = "";
+    static String CNIC_Text = "";
+    static String HCSP_ContactText = "";
 
     String comnt = "";
-    String final_id = "";
-    String districtText = "";
+    static String final_id = "";
+    static String districtText = "";
     String quackloctext;
     String divisionText = "";
     String tehsilText = "";
-    String email = "";
-    String password;
-    String isEdit;
-    String username;
+    static String email = "";
+    static String password;
+    static String isEdit;
+    static String username;
     TextView errortext;
-    ProgressDialog pDialog;
-    double cur_latitude;
-    double cur_longitude;
+    static ProgressDialog pDialog;
+    static double cur_latitude;
+    static double cur_longitude;
     float loc_accuracy;
     double user_latitude;
     double user_longitude;
@@ -100,7 +100,7 @@ public class ReportQuackActivity extends AppCompatActivity {
     ArrayList<District> districts;
     ArrayList<SectorType> sectorTypes;
     ArrayList<Tehsil> tehsils;
-    private ArrayList<String> _images;
+    private static ArrayList<String> _images;
     String roleid;
 
     private TextInputEditText latitudeEditText;
@@ -930,7 +930,7 @@ public class ReportQuackActivity extends AppCompatActivity {
         return TehsilList;
     }
 
-    private class DownloadTask extends AsyncTask<String, Void, String> {
+    class DownloadTask extends AsyncTask<String, Void, String> {
 
 
         @Override
@@ -974,7 +974,7 @@ public class ReportQuackActivity extends AppCompatActivity {
         return url;
     }
 
-    private String downloadUrl(String strUrl) throws IOException {
+    private static String downloadUrl(String strUrl) throws IOException {
 
 
         String data = "";
@@ -1024,7 +1024,7 @@ public class ReportQuackActivity extends AppCompatActivity {
         return data;
     }
 
-    private class ParserTask extends AsyncTask<Object, Object, String> {
+    class ParserTask extends AsyncTask<Object, Object, String> {
 
         @Override
         protected void onPreExecute() {

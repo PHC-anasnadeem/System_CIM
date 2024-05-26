@@ -1484,6 +1484,10 @@ public class FilterActivity extends AppCompatActivity {
                         startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_quack:
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
@@ -1502,6 +1506,10 @@ public class FilterActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_pwssearch:
                         startActivity(new Intent(context, PWSFilterActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_list:
+                        startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_resetPassword:

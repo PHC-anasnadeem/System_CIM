@@ -21,10 +21,13 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+
 import androidx.annotation.RequiresApi;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -34,6 +37,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +58,9 @@ import android.widget.Toast;
 
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
+import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
+import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.GalleryActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
@@ -115,26 +121,26 @@ public class LicensingActionActivity extends AppCompatActivity {
     TextInputLayout counNoInput;
     TextInputLayout Reg_No_lay;
     TextInputLayout fir_layout;
-    private Boolean picTaken=false;
-    private Boolean picreceved=false;
-    private Boolean picUploaded=false;
+    private Boolean picTaken = false;
+    private Boolean picreceved = false;
+    private Boolean picUploaded = false;
 
-    private Boolean picAttachement=false;
+    private Boolean picAttachement = false;
     Context context;
-    int count=0;
-    int backcount=0;
-    private String filePath=null;
-    String directoryPath=null;
+    int count = 0;
+    int backcount = 0;
+    private String filePath = null;
+    String directoryPath = null;
     private Uri filePathURI;
     String visitDate;
-    String LoctionVisitedTime= "";
+    String LoctionVisitedTime = "";
     String actionTypeText;
     String actionTypeID;
     String subactionTypeText;
     String subactionTypeID;
     String firtext;
-    String imageNAme=null;
-    String firID="0";
+    String imageNAme = null;
+    String firID = "0";
     String subactiontseltext;
     String actiontseltext;
     Spinner actionType_spinner;
@@ -145,7 +151,7 @@ public class LicensingActionActivity extends AppCompatActivity {
     ArrayList<ActionType> actionTypeList = null;
     ArrayList<subActionType> subactionType = null;
     ArrayList<ActionType> actionTypeselected = null;
-    ArrayList<subActionType> subactionTypeselected=null;
+    ArrayList<subActionType> subactionTypeselected = null;
     ArrayList<CouncilType> councilTypes;
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
@@ -170,7 +176,7 @@ public class LicensingActionActivity extends AppCompatActivity {
     private String activityTitles;
     private int versionCode = 0;
     int PICK_IMAGE_REQUEST = 111;
-    private Uri u=null;
+    private Uri u = null;
     String appURI = "";
     String time1;
     String MID;
@@ -178,38 +184,38 @@ public class LicensingActionActivity extends AppCompatActivity {
     String MID2;
     String MText2;
     Switch simpleSwitch1;
-    String hce_nameText="";
-    String Reg_NoText="";
-    String coun_NoText="";
-    String  final_id="";
+    String hce_nameText = "";
+    String Reg_NoText = "";
+    String coun_NoText = "";
+    String final_id = "";
     String visited;
     String UploadedBy;
     TimePickerDialog timePickerDialog;
     int currentHour;
     int currentMinute;
     String amPm;
-  //  String districtText="";
+    //  String districtText="";
     //String sectortypetext="";
-  //  String hceTypetext="";
+    //  String hceTypetext="";
 //    String HCSPTypeText="";
- //   String RegstatusText="";
+    //   String RegstatusText="";
 //    String counStatusText="";
-    String counciltypetext="";
-    String counciltypeID="";
-//    String RegType="";
-    String email=null;
+    String counciltypetext = "";
+    String counciltypeID = "";
+    //    String RegType="";
+    String email = null;
     String password;
     String isEdit;
     String username;
-//    String RecordLockedForUpdate="";
+    //    String RecordLockedForUpdate="";
 //    String total_beds="";
     String index;
     String firactionbit;
     String ftpbaseurl;
-    String  VisitedDate;
+    String VisitedDate;
     String isFIRSubmit;
-   // double latitude;
-  //  double longitude;
+    // double latitude;
+    //  double longitude;
     EditText coun_NoEdit;
     EditText hce_nameEdit;
     EditText Reg_no_edit;
@@ -217,10 +223,10 @@ public class LicensingActionActivity extends AppCompatActivity {
     TextView totalpics;
     TextView newquacktext;
     TextView vistedtext;
-    int countPictures=0;
+    int countPictures = 0;
     private DownloadManager downloadManager;
     private long downloadReference;
-    int MY_REQUEST_CODE=5;
+    int MY_REQUEST_CODE = 5;
     private ArrayList<String> _images;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -234,7 +240,7 @@ public class LicensingActionActivity extends AppCompatActivity {
     ArrayList<HashMap<String, String>> mylist;
     ProgressDialog pDialog;
     String jsonStr;
-    String jsonStr2,jsonStr0;
+    String jsonStr2, jsonStr0;
     String imagepath;
     String VisitedTime;
     EditText txtDateTime;
@@ -242,7 +248,7 @@ public class LicensingActionActivity extends AppCompatActivity {
     EditText loctimePickerEdit;
     EditText comments;
     TextView errortext;
-    String commentText,UserID;
+    String commentText, UserID;
     int actionposition;
     int subactionposition;
     int firposition;
@@ -250,13 +256,13 @@ public class LicensingActionActivity extends AppCompatActivity {
     Bundle saveinstance;
 
     ArrayAdapter<String> actionadapter;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.licensing_action);
         context = this;
-
 
 
         pDialog = new ProgressDialog(context);
@@ -270,16 +276,16 @@ public class LicensingActionActivity extends AppCompatActivity {
         hce_nameEdit = (EditText) findViewById(R.id.hce_name);
         coun_NoEdit = (EditText) findViewById(R.id.council_no);
         Reg_no_edit = (EditText) findViewById(R.id.Reg_no_edit);
-        totalpics= (TextView) findViewById(R.id.totalpics);
-        newquacktext= (TextView) findViewById(R.id.newquacktext);
-        vistedtext= (TextView) findViewById(R.id.vistedtext);
-        errortext= (TextView) findViewById(R.id.errortext);
+        totalpics = (TextView) findViewById(R.id.totalpics);
+        newquacktext = (TextView) findViewById(R.id.newquacktext);
+        vistedtext = (TextView) findViewById(R.id.vistedtext);
+        errortext = (TextView) findViewById(R.id.errortext);
 
-        comments= (EditText) findViewById(R.id.comments);
+        comments = (EditText) findViewById(R.id.comments);
         newquacktext.setVisibility(View.GONE);
         dataManager = new DataManager(context);
         myCalendar = Calendar.getInstance(TimeZone.getDefault());
-        if(comments.requestFocus()) {
+        if (comments.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -288,25 +294,25 @@ public class LicensingActionActivity extends AppCompatActivity {
         vistedtext.setVisibility(View.GONE);
         Intent intent = getIntent();
         errortext.setVisibility(View.GONE);
-       // AddressText = (String) intent.getSerializableExtra("HCEAddress");
-      //  districtText = (String) intent.getSerializableExtra("District");
+        // AddressText = (String) intent.getSerializableExtra("HCEAddress");
+        //  districtText = (String) intent.getSerializableExtra("District");
         //sectortypetext = (String) intent.getSerializableExtra("SectorType");
-     //   hceTypetext = (String) intent.getSerializableExtra("OrgType");
-      //  HCSPTypeText = (String) intent.getSerializableExtra("HCSPType");
-     //   HCSP_nameText = (String) intent.getSerializableExtra("HCSPName");
-     //   HCSP_SOText = (String) intent.getSerializableExtra("HCSPSO");
-    //    CNIC_Text = (String) intent.getSerializableExtra("HCSPCNIC");
-     //   HCSP_ContactText = (String) intent.getSerializableExtra("HCSPContactNo");
-     //   RegstatusText = (String) intent.getSerializableExtra("RegStatus");
+        //   hceTypetext = (String) intent.getSerializableExtra("OrgType");
+        //  HCSPTypeText = (String) intent.getSerializableExtra("HCSPType");
+        //   HCSP_nameText = (String) intent.getSerializableExtra("HCSPName");
+        //   HCSP_SOText = (String) intent.getSerializableExtra("HCSPSO");
+        //    CNIC_Text = (String) intent.getSerializableExtra("HCSPCNIC");
+        //   HCSP_ContactText = (String) intent.getSerializableExtra("HCSPContactNo");
+        //   RegstatusText = (String) intent.getSerializableExtra("RegStatus");
 
-     //   counStatusText = (String) intent.getSerializableExtra("CouncilStatus");
+        //   counStatusText = (String) intent.getSerializableExtra("CouncilStatus");
 
-     //   RegType = (String) intent.getSerializableExtra("RegType");
-      //  total_beds = (String) intent.getSerializableExtra("total_beds");
-      //  RecordLockedForUpdate = (String) intent.getSerializableExtra("RecordLockedForUpdate");
+        //   RegType = (String) intent.getSerializableExtra("RegType");
+        //  total_beds = (String) intent.getSerializableExtra("total_beds");
+        //  RecordLockedForUpdate = (String) intent.getSerializableExtra("RecordLockedForUpdate");
 
-      //  latitude = (double) intent.getSerializableExtra("latitude");
-      //  longitude = (double) intent.getSerializableExtra("longitude");
+        //  latitude = (double) intent.getSerializableExtra("latitude");
+        //  longitude = (double) intent.getSerializableExtra("longitude");
         VisitedDate = (String) intent.getSerializableExtra("VisitedDate");
         actionTypeID = (String) intent.getSerializableExtra("ActionType");
         subactionTypeID = (String) intent.getSerializableExtra("SubActionType");
@@ -327,8 +333,8 @@ public class LicensingActionActivity extends AppCompatActivity {
         VisitedTime = (String) intent.getSerializableExtra("VisitedTime");
         _images = (ArrayList<String>) getIntent().getSerializableExtra("imageurls");
 
-        if(commentText!=null){
-                 comments.setText(commentText);
+        if (commentText != null) {
+            comments.setText(commentText);
         }
     /*    if(isFIRSubmit!=null){
             if(isFIRSubmit.equals("1")){
@@ -339,27 +345,26 @@ public class LicensingActionActivity extends AppCompatActivity {
             }
 
         }*/
-        if(visited!=null && visited.equals("1")) {
+        if (visited != null && visited.equals("1")) {
             vistedtext.setVisibility(View.VISIBLE);
             vistedtext.setText("Last visited by: " + UploadedBy);
         }
-        if(VisitedTime!=null)
-        loctimePickerEdit.setText(VisitedTime);
-        if(index.equals("0")){
+        if (VisitedTime != null)
+            loctimePickerEdit.setText(VisitedTime);
+        if (index.equals("0")) {
             newquacktext.setVisibility(View.VISIBLE);
         }
-       // regNoInput = (TextInputLayout) findViewById(R.id.reg);
-        counTypeInput= (TextInputLayout) findViewById(R.id.counclType);
+        // regNoInput = (TextInputLayout) findViewById(R.id.reg);
+        counTypeInput = (TextInputLayout) findViewById(R.id.counclType);
         counNoInput = (TextInputLayout) findViewById(R.id.council);
-       // fir_layout= (TextInputLayout) findViewById(R.id.fir_layout);
+        // fir_layout= (TextInputLayout) findViewById(R.id.fir_layout);
         Reg_No_lay = (TextInputLayout) findViewById(R.id.Reg_No_lay);
 
 
         hce_nameEdit.setEnabled(false);
-        if(visited!=null && visited.equals("1")) {
-            hce_nameEdit.setText(index+". "+hce_nameText);
-        }
-        else {
+        if (visited != null && visited.equals("1")) {
+            hce_nameEdit.setText(index + ". " + hce_nameText);
+        } else {
             hce_nameEdit.setText(index + ". " + final_id + " - " + hce_nameText);
         }
         //ImageView imageView = (ImageView) findViewById(R.id.splashImage);
@@ -390,7 +395,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);*/
         // load toolbar titles from string resources
         activityTitles = getResources().getString(R.string.nav_item_action_titles);
-        ftpbaseurl=context.getResources().getString(R.string.ftpbaseurl);
+        ftpbaseurl = context.getResources().getString(R.string.ftpbaseurl);
         loadNavHeader();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_CALENDAR}, 42);
@@ -406,10 +411,10 @@ public class LicensingActionActivity extends AppCompatActivity {
             loadHomeFragment();
         }
 
-        if(coun_NoText!=null){
+        if (coun_NoText != null) {
             coun_NoEdit.setText(coun_NoText);
         }
-        if(Reg_NoText!=null) {
+        if (Reg_NoText != null) {
             Reg_no_edit.setText(Reg_NoText);
         }
 
@@ -417,7 +422,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         roleid = prefs.getString("RoleID", null);//"No name defined" is the default value.
         UserID = prefs.getString("UserID", null);//"No name defined" is the default value.
         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
-        if(roleid.equals("1")) {
+        if (roleid.equals("1")) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
             if (isStat.equals("true")) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
@@ -426,8 +431,7 @@ public class LicensingActionActivity extends AppCompatActivity {
             } else {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
             }
-        }
-        else {
+        } else {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
         }
@@ -440,9 +444,9 @@ public class LicensingActionActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
 
 
-                    myCalendar.set(Calendar.YEAR, year);
-                    myCalendar.set(Calendar.MONTH, monthOfYear);
-                    myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 updateLabel();
             }
@@ -452,21 +456,21 @@ public class LicensingActionActivity extends AppCompatActivity {
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        if(VisitedDate!=null && VisitedDate!="0") {
+        if (VisitedDate != null && VisitedDate != "0") {
             String start_dt = VisitedDate;
             DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             Date date2 = null;
             try {
-                date2 = (Date)formatter.parse(start_dt);
+                date2 = (Date) formatter.parse(start_dt);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
             SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yy");
-            String finalString="";
-            if(date2!=null)
-                finalString= newFormat.format(date2);
-        txtDateTime.setText(finalString);
+            String finalString = "";
+            if (date2 != null)
+                finalString = newFormat.format(date2);
+            txtDateTime.setText(finalString);
         }
        /* else {
             txtDateTime.setText(sdf.format(myCalendar.getTime()));
@@ -478,8 +482,8 @@ public class LicensingActionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
 
-                    new DatePickerDialog(context, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(context, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
             }
         });
@@ -491,7 +495,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         loctimePickerEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar   calendar = Calendar.getInstance();
+                Calendar calendar = Calendar.getInstance();
                 currentHour = calendar.get(Calendar.HOUR_OF_DAY);
                 currentMinute = calendar.get(Calendar.MINUTE);
 
@@ -499,14 +503,14 @@ public class LicensingActionActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
                         if (hourOfDay >= 12) {
-                            hourOfDay = hourOfDay-12;
-                            if(hourOfDay==00){
-                                hourOfDay=12;
+                            hourOfDay = hourOfDay - 12;
+                            if (hourOfDay == 00) {
+                                hourOfDay = 12;
                             }
                             amPm = "PM";
                         } else {
-                            if(hourOfDay==00){
-                                hourOfDay=12;
+                            if (hourOfDay == 00) {
+                                hourOfDay = 12;
                             }
                             amPm = "AM";
                         }
@@ -517,8 +521,8 @@ public class LicensingActionActivity extends AppCompatActivity {
                 timePickerDialog.show();
             }
         });
-        actionTypeList= dataManager.getActionstype(roleid);
-     actionadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, getactionTypes()) {
+        actionTypeList = dataManager.getActionstype(roleid);
+        actionadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, getactionTypes()) {
             @Override
             public boolean isEnabled(int position) {
                 if (position == 0) {
@@ -548,7 +552,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         actionType_spinner.setAdapter(actionadapter);
         if (actionTypeID != null) {
             getactionsel();
-           int spinnerPosition = actionadapter.getPosition(actiontseltext);
+            int spinnerPosition = actionadapter.getPosition(actiontseltext);
             actionType_spinner.setSelection(spinnerPosition);
         }
         actionType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -558,7 +562,7 @@ public class LicensingActionActivity extends AppCompatActivity {
 
                 actionType_spinner.setSelection(position);
                 actionTypeText = parent.getItemAtPosition(position).toString();
-                actionTypeID=actionTypeList.get(position).getActionType_Id();
+                actionTypeID = actionTypeList.get(position).getActionType_Id();
                 //firactionbit=actionTypeList.get(position).getFIRAssociated();
                /* if(firactionbit.equals("1")) {
                     fir_layout.setVisibility(View.VISIBLE);
@@ -567,7 +571,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                     fir_layout.setVisibility(View.GONE);
                 }*/
                 getsubactionTypes();
-                if(comments.requestFocus()) {
+                if (comments.requestFocus()) {
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -580,7 +584,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         });
         //---------------------------------counciltype Spinner--------------------------------------------
 
-        councilTypes= dataManager.getCouncilTypes();
+        councilTypes = dataManager.getCouncilTypes();
         ArrayAdapter<String> counciltype_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, getCouncilTypes()) {
             @Override
             public boolean isEnabled(int position) {
@@ -618,9 +622,9 @@ public class LicensingActionActivity extends AppCompatActivity {
                                        int position, long id) {
                 //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
 
-                 councilposition=position;
+                councilposition = position;
                 counciltypetext = parent.getItemAtPosition(position).toString();
-                counciltypeID=councilTypes.get(position).getSectorType_id();
+                counciltypeID = councilTypes.get(position).getSectorType_id();
             }
 
             @Override
@@ -715,15 +719,15 @@ public class LicensingActionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int errorcount = 0;
                 coun_NoText = coun_NoEdit.getText().toString();
-                Reg_NoText  = Reg_no_edit.getText().toString();
+                Reg_NoText = Reg_no_edit.getText().toString();
            /*     String day = "Day = " + simpleDatePicker.getDayOfMonth();
                 String month = "Month = " + (simpleDatePicker.getMonth() + 1);
                 String year = "Year = " + simpleDatePicker.getYear();*/
 
-            visitDate=txtDateTime.getText().toString();
-            LoctionVisitedTime = loctimePickerEdit.getText().toString();
-            commentText=comments.getText().toString();
-                if(visitDate.equals("")){
+                visitDate = txtDateTime.getText().toString();
+                LoctionVisitedTime = loctimePickerEdit.getText().toString();
+                commentText = comments.getText().toString();
+                if (visitDate.equals("")) {
                     txtDateTime.setError("Please select date");
                     errortext.setText("* Required fields are missing");
                     errorcount++;
@@ -734,13 +738,13 @@ public class LicensingActionActivity extends AppCompatActivity {
                     errorcount++;
 
                 }
-            if(actionTypeID.equals("0")){
-                setSpinnerError(actionType_spinner,("Please select Action"));
-                errortext.setText("* Required fields are missing");
-                errorcount++;
-            }
-                if(subactionTypeID.equals("0")){
-                    setSpinnerError(subactionType_spinner,("Please select type"));
+                if (actionTypeID.equals("0")) {
+                    setSpinnerError(actionType_spinner, ("Please select Action"));
+                    errortext.setText("* Required fields are missing");
+                    errorcount++;
+                }
+                if (subactionTypeID.equals("0")) {
+                    setSpinnerError(subactionType_spinner, ("Please select type"));
                     errortext.setText("* Required fields are missing");
                     errorcount++;
                 }
@@ -759,12 +763,12 @@ public class LicensingActionActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int id) {
 
 
-                                   pDialog.setMessage("Loading Data, Please wait...");
-                                   pDialog.setCancelable(false);
-                                   pDialog.show();
+                                    pDialog.setMessage("Loading Data, Please wait...");
+                                    pDialog.setCancelable(false);
+                                    pDialog.show();
 
-                                   if(counciltypeID.equals("0")){
-                                       counciltypetext="";
+                                    if (counciltypeID.equals("0")) {
+                                        counciltypetext = "";
                                     }
                                     String url = getDirectionsUrl0(context);
                                     DownloadTask0 downloadTask = new DownloadTask0();
@@ -779,8 +783,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                             });
                     AlertDialog alert = builder.create();
                     alert.show();
-                }
-                else {
+                } else {
                     errortext.setVisibility(View.VISIBLE);
                 }
             }
@@ -791,37 +794,37 @@ public class LicensingActionActivity extends AppCompatActivity {
 
 
             public void onClick(View v) {
-                if(Build.VERSION.SDK_INT>=24){
-                    try{
+                if (Build.VERSION.SDK_INT >= 24) {
+                    try {
                         Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
                         m.invoke(null);
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                 }
-                count=2;
+                count = 2;
                 requestRuntimePermission();
                 SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
                 String currentDateandTime = sdf.format(new Date());
-                String pictureName=final_id+"_"+currentDateandTime;//here you can get picture name from user. I supposed Test name
+                String pictureName = final_id + "_" + currentDateandTime;//here you can get picture name from user. I supposed Test name
                 Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File photo = new File(Environment.getExternalStorageDirectory(),  pictureName+".jpg");//save picture (.jpg) on SD Card
-                u= Uri.fromFile(photo);
-                intentcamera.putExtra(MediaStore.EXTRA_OUTPUT,u);
+                File photo = new File(Environment.getExternalStorageDirectory(), pictureName + ".jpg");//save picture (.jpg) on SD Card
+                u = Uri.fromFile(photo);
+                intentcamera.putExtra(MediaStore.EXTRA_OUTPUT, u);
                 intentcamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 filePath = photo.getAbsolutePath();
                 startActivityForResult(intentcamera, REQUEST_CODE);
 
             }
-            });
+        });
         Button attachment = (Button) findViewById(R.id.attach_pic);
 
         attachment.setOnClickListener(new Button.OnClickListener() {
 
             public void onClick(View v) {
 
-                count=1;
+                count = 1;
                 requestRuntimePermission();
                 Intent attachintent = new Intent();
                 attachintent.setType("image/*");
@@ -834,7 +837,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         gallery_button.setOnClickListener(new Button.OnClickListener() {
 
             public void onClick(View v) {
-        startGalleryActivity();
+                startGalleryActivity();
             }
         });
     }
@@ -843,9 +846,10 @@ public class LicensingActionActivity extends AppCompatActivity {
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-            txtDateTime.setText(sdf.format(myCalendar.getTime()));
+        txtDateTime.setText(sdf.format(myCalendar.getTime()));
 
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -853,6 +857,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         // do this for each or your Spinner
         // You might consider using Bundle.putStringArray() instead
     }
+
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -861,6 +866,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         savedInstanceState.getBoolean("actionType_spinner");
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -870,8 +876,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                 if (requestCode == MY_REQUEST_CODE) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         // Now user should be able to use camera
-                    }
-                    else {
+                    } else {
                         // Your app will not have this permission. Turn off all functions
                         // that require this permission or it will force close like your
                         // original question
@@ -909,23 +914,25 @@ public class LicensingActionActivity extends AppCompatActivity {
 
         }
     }
+
     public Uri getOutputMediaFileUri(int type) {
         requestRuntimePermission();
         return Uri.fromFile(getOutputMediaFile(type));
     }
-  // @RequiresApi(api = Build.VERSION_CODES.M)
-  public void requestRuntimePermission() {
-      if (Build.VERSION.SDK_INT >= 23) {
 
-          if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                  != PackageManager.PERMISSION_GRANTED) {
-              ActivityCompat.requestPermissions(this,
-                      new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-          }
-      }
-  }
+    // @RequiresApi(api = Build.VERSION_CODES.M)
+    public void requestRuntimePermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
 
-    public void checkPermission(){
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
+    }
+
+    public void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -937,6 +944,7 @@ public class LicensingActionActivity extends AppCompatActivity {
 
 
     }
+
     private static File getOutputMediaFile(int type) {
 
         // External sdcard location
@@ -970,12 +978,13 @@ public class LicensingActionActivity extends AppCompatActivity {
 
         return mediaFile;
     }
+
     /*
-   * Load navigation menu header information
-   * like background image, profile image
-   * name, website, notifications action view (dot)
-   */
-    private void setSpinnerError(Spinner spinner, String error){
+     * Load navigation menu header information
+     * like background image, profile image
+     * name, website, notifications action view (dot)
+     */
+    private void setSpinnerError(Spinner spinner, String error) {
         View selectedView = spinner.getSelectedView();
         if (selectedView != null && selectedView instanceof TextView) {
             spinner.requestFocus();
@@ -987,6 +996,7 @@ public class LicensingActionActivity extends AppCompatActivity {
 
         }
     }
+
     private void loadNavHeader() {
         // name, website
 
@@ -1020,7 +1030,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         selectNavMenu();
 
         // set toolbar title
-              setToolbarTitle();
+        setToolbarTitle();
 
         // if user select the current navigatiokn menu again, don't do anything
         // just close the navigation drawer
@@ -1114,27 +1124,30 @@ public class LicensingActionActivity extends AppCompatActivity {
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-               case R.id.nav_home:
-                   startActivity(new Intent(context, FilterActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
-                   drawer.closeDrawers();
-                   return true;
+                    case R.id.nav_home:
+                        startActivity(new Intent(context, FilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_reportquack:
-                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_quack:
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actiondesc:
-                        startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, IndReportingActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
                         String UserID = prefs.getString("UserID", null); //0 is the default value.
-                        if(isStat.equals("true")) {
-                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        if (isStat.equals("true")) {
+                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                             drawer.closeDrawers();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
                         }
                         return true;
@@ -1157,7 +1170,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                         return true;*/
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));
+                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email", email).putExtra("password", password));
                         drawer.closeDrawers();
          /*               AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                         alertDialog.setTitle("Change Password");
@@ -1211,6 +1224,10 @@ public class LicensingActionActivity extends AppCompatActivity {
                         startActivity(new Intent(context, PWSFilterActivity.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_list:
+                        startActivity(new Intent(context, DesealListing.class));
+                        drawer.closeDrawers();
+                        return true;
 
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
@@ -1238,7 +1255,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                         alert.show();
                         return true;
                     //default:
-                     //   navItemIndex = 0;
+                    //   navItemIndex = 0;
                 }
 
                 //Checking if the item is in checked state or not, if not make it in checked state
@@ -1280,23 +1297,21 @@ public class LicensingActionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(backcount==1) {
+        if (backcount == 1) {
             super.onBackPressed();
             return;
         }
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             return;
-        }
-
-        else {
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage("Do you really want to navigate away from this screen? Changes made will not be effective")
                     .setTitle("Warning")
                     .setCancelable(false)
                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            backcount=1;
+                            backcount = 1;
                             onBackPressed();
                         }
                     })
@@ -1332,25 +1347,27 @@ public class LicensingActionActivity extends AppCompatActivity {
     private ArrayList<String> getactionTypes() {
 
         ArrayList<String> actiontypelist = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (ActionType actionType : actionTypeList) {
-            String actiontypelists= actionType.getActionType();
+            String actiontypelists = actionType.getActionType();
             actiontypelist.add(actiontypelists);
             i++;
         }
         return actiontypelist;
     }
+
     private ArrayList<String> getCouncilTypes() {
 
         ArrayList<String> counciltypelist = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (CouncilType councilType : councilTypes) {
-            String counciltypelists= councilType.getCouncilType();
+            String counciltypelists = councilType.getCouncilType();
             counciltypelist.add(counciltypelists);
             i++;
         }
         return counciltypelist;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1358,13 +1375,13 @@ public class LicensingActionActivity extends AppCompatActivity {
         if (count == 2) {
             try {
 
-               // context.getContentResolver().notifyChange(u, null);
-               // ContentResolver cr = context.getContentResolver();
-               // Bitmap bm = android.provider.MediaStore.Images.Media.getBitmap(cr, u);
+                // context.getContentResolver().notifyChange(u, null);
+                // ContentResolver cr = context.getContentResolver();
+                // Bitmap bm = android.provider.MediaStore.Images.Media.getBitmap(cr, u);
 //ImageView to set the picture taken from camera.
                 //   mImageView.setImageBitmap(bm);
                 picTaken = true; //to ensure picture is taken
-                picAttachement=false;
+                picAttachement = false;
                 pDialog.setMessage("Uploading image, Please wait...");
                 pDialog.setCancelable(false);
                 pDialog.show();
@@ -1383,7 +1400,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                 filePath = getRealPathFromUri(context, filePathURI);
 
                 try {
-                    picAttachement=true;
+                    picAttachement = true;
                     picTaken = false;
                     //getting image from gallery
                     //Bitmap bm = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(filePath));
@@ -1399,6 +1416,7 @@ public class LicensingActionActivity extends AppCompatActivity {
             }
         }
     }
+
     public void upLoadPicture() {
 
         if (picTaken) {
@@ -1415,10 +1433,10 @@ public class LicensingActionActivity extends AppCompatActivity {
                     // BufferedInputStream buffIn = null;
 
                     try {
-                        picUploaded=false;
+                        picUploaded = false;
                         imagepath = null;
-                        imageNAme=null;
-                        directoryPath=null;
+                        imageNAme = null;
+                        directoryPath = null;
                         picreceved = true;
                         FTPClient client = new FTPClient();
 
@@ -1433,7 +1451,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                             client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
                             client.makeDirectory("HCEImages/" + final_id + "/" + username);
                             client.makeDirectory("HCEImages/" + final_id + "/" + username + "/Camera");
-                            directoryPath="HCEImages/" + final_id + "/" + username + "/Camera";
+                            directoryPath = "HCEImages/" + final_id + "/" + username + "/Camera";
                             //client.sendCommand("OPTS UTF8 ON");
 
                         } catch (Exception e) {
@@ -1449,38 +1467,33 @@ public class LicensingActionActivity extends AppCompatActivity {
                         if (picreceved) {
                             SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
                             String currentDateandTime = sdf.format(new Date());
-                            imageNAme=final_id + "_" + currentDateandTime+extension;
+                            imageNAme = final_id + "_" + currentDateandTime + extension;
                             imagepath = final_id + "/" + username + "/Camera/" + imageNAme;
 
-                            try
-                            {
+                            try {
                                 if (!client.storeFile("HCEImages/" + imagepath, fis))//this is actual file uploading on FtpServer in specified directory/folder
                                 {
                                     throw new Exception("Unable to write file to FTP server");
                                 }
                                 //Make sure to always close the inputStream
-                            }
-                            finally
-                            {
+                            } finally {
                                 fis.close();
                             }
-                            InputStream inputStream = client.retrieveFileStream("/"+directoryPath+"/"+imageNAme);
+                            InputStream inputStream = client.retrieveFileStream("/" + directoryPath + "/" + imageNAme);
                             int returnCode = client.getReplyCode();
                             if (inputStream == null || returnCode == 550) {
-                                picUploaded=false;
+                                picUploaded = false;
                                 if (pDialog.isShowing())
                                     pDialog.dismiss();
                                 Toast.makeText(context, "Picture not uploaded! Please try again", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                picUploaded=true;
+                            } else {
+                                picUploaded = true;
                                 countPictures++;
                             }
                             totalpics.setText("Total pictures uploaded: " + countPictures);
                         }
 
-                        try
-                        {
+                        try {
 
                             //10 seconds to log off.  Also 10 seconds to disconnect.
                             client.setSoTimeout(10000);
@@ -1488,24 +1501,19 @@ public class LicensingActionActivity extends AppCompatActivity {
 
                             //depending on the state of the server the .logout() may throw an exception,
                             //we want to ensure complete disconnect.
-                        }
-                        catch(Exception innerException)
-                        {
+                        } catch (Exception innerException) {
 
                             //You potentially just want to log that there was a logout exception.
 
-                        }
-                        finally
-                        {
+                        } finally {
                             //Make sure to always disconnect.  If not, there is a chance you will leave hanging sockects
                             client.disconnect();
                         }
 
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    if(picUploaded) {
+                    if (picUploaded) {
                         String url = getDirectionsUrl2(context);
                         DownloadTask2 downloadTask = new DownloadTask2();
                         //Start downloading json data from Google Directions API
@@ -1557,10 +1565,8 @@ public class LicensingActionActivity extends AppCompatActivity {
             pd.dismiss();
 
 
-        }
-        else
-        {
-           // Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
+        } else {
+            // Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
 
         }
 
@@ -1579,11 +1585,11 @@ public class LicensingActionActivity extends AppCompatActivity {
                     // BufferedInputStream buffIn = null;
 
                     try {
-                        picUploaded=false;
-                        imagepath=null;
-                        imageNAme=null;
-                        directoryPath=null;
-                        picreceved=true;
+                        picUploaded = false;
+                        imagepath = null;
+                        imageNAme = null;
+                        directoryPath = null;
+                        picreceved = true;
                         FTPClient client = new FTPClient();
 
                         client.connect(ftpbaseurl);
@@ -1594,49 +1600,44 @@ public class LicensingActionActivity extends AppCompatActivity {
                             fis = new FileInputStream(file);
                             client.enterLocalPassiveMode();
                             client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
-                            client.makeDirectory("HCEImages/" + final_id+"/"+username);
-                            client.makeDirectory("HCEImages/" + final_id+"/"+username+"/Attachments");
-                            directoryPath="HCEImages/" + final_id+"/"+username+"/Attachments";
+                            client.makeDirectory("HCEImages/" + final_id + "/" + username);
+                            client.makeDirectory("HCEImages/" + final_id + "/" + username + "/Attachments");
+                            directoryPath = "HCEImages/" + final_id + "/" + username + "/Attachments";
                         } catch (Exception e) {
                             if (pDialog.isShowing())
                                 pDialog.dismiss();
-                            picreceved=false;
+                            picreceved = false;
                             Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
                         }
 
-                        if(picreceved) {
+                        if (picreceved) {
                             SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
                             String currentDateandTime = sdf.format(new Date());
-                            imageNAme=final_id + "_" + currentDateandTime+extension;
-                            imagepath = final_id +"/"+username+"/Attachments/" + imageNAme;
-                            try
-                            {
+                            imageNAme = final_id + "_" + currentDateandTime + extension;
+                            imagepath = final_id + "/" + username + "/Attachments/" + imageNAme;
+                            try {
                                 if (!client.storeFile("HCEImages/" + imagepath, fis))//this is actual file uploading on FtpServer in specified directory/folder
                                 {
                                     throw new Exception("Unable to write file to FTP server");
                                 }
                                 //Make sure to always close the inputStream
-                            }
-                            finally
-                            {
+                            } finally {
                                 fis.close();
                             }
-                            InputStream inputStream = client.retrieveFileStream("/"+directoryPath+"/"+imageNAme);
+                            InputStream inputStream = client.retrieveFileStream("/" + directoryPath + "/" + imageNAme);
                             int returnCode = client.getReplyCode();
                             if (inputStream == null || returnCode == 550) {
-                                picUploaded=false;
+                                picUploaded = false;
                                 if (pDialog.isShowing())
                                     pDialog.dismiss();
                                 Toast.makeText(context, "Picture not uploaded! Please try again", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                picUploaded=true;
+                            } else {
+                                picUploaded = true;
                                 countPictures++;
                             }
                             totalpics.setText("Total pictures uploaded: " + countPictures);
                         }
-                        try
-                        {
+                        try {
 
                             //10 seconds to log off.  Also 10 seconds to disconnect.
                             client.setSoTimeout(10000);
@@ -1644,24 +1645,19 @@ public class LicensingActionActivity extends AppCompatActivity {
 
                             //depending on the state of the server the .logout() may throw an exception,
                             //we want to ensure complete disconnect.
-                        }
-                        catch(Exception innerException)
-                        {
+                        } catch (Exception innerException) {
 
                             //You potentially just want to log that there was a logout exception.
 
-                        }
-                        finally
-                        {
+                        } finally {
                             //Make sure to always disconnect.  If not, there is a chance you will leave hanging sockects
                             client.disconnect();
                         }
 
-                }
-                    catch (Exception e) {
-                    e.printStackTrace();
-                }
-                    if(picUploaded) {
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (picUploaded) {
                         String url = getDirectionsUrl2(context);
                         DownloadTask2 downloadTask = new DownloadTask2();
                         //Start downloading json data from Google Directions API
@@ -1712,20 +1708,19 @@ public class LicensingActionActivity extends AppCompatActivity {
             pd.dismiss();
 
 
-        }
-        else
-        {
-         //   Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
+        } else {
+            //   Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
 
         }
     }
+
     /**
      * Creating file uri to store image/video
      */
     public static String getRealPathFromUri(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
+            String[] proj = {MediaStore.Images.Media.DATA};
             cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
@@ -1736,28 +1731,31 @@ public class LicensingActionActivity extends AppCompatActivity {
             }
         }
     }
+
     private String getactionsel() {
         DatabaseManager databaseManager = new DatabaseManager(context);
         actionTypeselected = databaseManager.getActionselected(actionTypeID);
-        if(actionTypeselected.size()>0) {
+        if (actionTypeselected.size() > 0) {
             actiontseltext = actionTypeselected.get(0).getActionType();
         }
         return actiontseltext;
     }
+
     private String getsubactionsel() {
         DatabaseManager databaseManager = new DatabaseManager(context);
         subactionTypeselected = databaseManager.getsubActionselected(subactionTypeID);
-        if(subactionTypeselected.size()>0) {
+        if (subactionTypeselected.size() > 0) {
             subactiontseltext = subactionTypeselected.get(0).getSubactionType();
         }
         return subactiontseltext;
     }
+
     private ArrayList<String> getsubactionTypes() {
-      subactionType= dataManager.getsubActionstype(actionTypeID,"2");
+        subactionType = dataManager.getsubActionstype(actionTypeID, "2");
         ArrayList<String> subactiontypelist = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (subActionType subActionType : subactionType) {
-            String subactiontype= subActionType.getSubactionType();
+            String subactiontype = subActionType.getSubactionType();
             subactiontypelist.add(subactiontype);
             i++;
         }
@@ -1799,9 +1797,9 @@ public class LicensingActionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                 //subactionposition=position;
+                //subactionposition=position;
                 subactionTypeText = parent.getItemAtPosition(position).toString();
-                subactionTypeID=subactionType.get(position).getSubActionType_Id();
+                subactionTypeID = subactionType.get(position).getSubActionType_Id();
            /*     if(subactionTypeID.equals("9")) {
                     counTypeInput.setVisibility(View.VISIBLE);
                     counNoInput.setVisibility(View.VISIBLE);
@@ -1824,7 +1822,7 @@ public class LicensingActionActivity extends AppCompatActivity {
 
             }
         });
-        if(comments.requestFocus()) {
+        if (comments.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -1841,17 +1839,17 @@ public class LicensingActionActivity extends AppCompatActivity {
         }
         return true;
     }
-    public void EnableRuntimePermission(){
+
+    public void EnableRuntimePermission() {
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA))
-        {
+                Manifest.permission.CAMERA)) {
 
             // Toast.makeText(EditHCEFragment.this,"CAMERA permission allows us to Access CAMERA app", Toast.LENGTH_LONG).show();
 
         } else {
 
-            ActivityCompat.requestPermissions(this,new String[]{
+            ActivityCompat.requestPermissions(this, new String[]{
 
                     Manifest.permission.CAMERA}, RequestPermissionCode);
 
@@ -1894,21 +1892,23 @@ public class LicensingActionActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             ParserTask0 parserTask = new ParserTask0();
-            jsonStr0=result;
+            jsonStr0 = result;
             // Invokes the thread for parsing the JSON data
             parserTask.execute();
 
         }
     }
+
     private String getDirectionsUrl0(Context context) {
 
         // Building the url to the web service
-        String baseurl=context.getResources().getString(R.string.baseurl);
-        String token=context.getResources().getString(R.string.token);
-        String url=baseurl+"GetPlanID?strToken="+token+"&FinalID="+final_id+"&ImagePath=&ImageUploadMode=Camera&Lat="+cur_latitude+"&Lng="+cur_longitude+"&UploadedBy=&emailAddress="+email+"&ActionType="+actionTypeID+"&ActionSubType="+subactionTypeID+"&PicCount="+countPictures+"&Council="+counciltypetext+"&CouncilNo="+coun_NoText+"&isFIR="+firID+"&phcRegNo="+Reg_NoText+"&visitedDate="+visitDate+"&comments="+commentText+"&QuackCategory=&QuackSubCategory=&RoleID="+roleid;
+        String baseurl = context.getResources().getString(R.string.baseurl);
+        String token = context.getResources().getString(R.string.token);
+        String url = baseurl + "GetPlanID?strToken=" + token + "&FinalID=" + final_id + "&ImagePath=&ImageUploadMode=Camera&Lat=" + cur_latitude + "&Lng=" + cur_longitude + "&UploadedBy=&emailAddress=" + email + "&ActionType=" + actionTypeID + "&ActionSubType=" + subactionTypeID + "&PicCount=" + countPictures + "&Council=" + counciltypetext + "&CouncilNo=" + coun_NoText + "&isFIR=" + firID + "&phcRegNo=" + Reg_NoText + "&visitedDate=" + visitDate + "&comments=" + commentText + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid;
         url = url.replaceAll(" ", "%20");
         return url;
     }
+
     private String downloadUrl0(String strUrl) throws IOException {
 
 
@@ -1985,8 +1985,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-            }
-            else {
+            } else {
                 Log.e("exception", "Couldn't get json from server.");
             }
 
@@ -2023,11 +2022,9 @@ public class LicensingActionActivity extends AppCompatActivity {
 
                     // Showing Alert Message
                     alertDialog.show();
-                }
-                else if (MID.equals("0")){
+                } else if (MID.equals("0")) {
                     Toast.makeText(context, "Service is not responding", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
 
                     String url = getDirectionsUrl(context);
                     DownloadTask downloadTask = new DownloadTask();
@@ -2037,8 +2034,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                 }
                 // Updating parsed JSON data into ListView
 
-            }
-            else{
+            } else {
                 Toast.makeText(context, "Server is not responding. Please try again", Toast.LENGTH_SHORT).show();
             }
 
@@ -2046,6 +2042,7 @@ public class LicensingActionActivity extends AppCompatActivity {
         }
 
     }
+
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
 
@@ -2070,21 +2067,23 @@ public class LicensingActionActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             ParserTask parserTask = new ParserTask();
-            jsonStr=result;
+            jsonStr = result;
             // Invokes the thread for parsing the JSON data
             parserTask.execute();
 
         }
     }
+
     private String getDirectionsUrl(Context context) {
 
         // Building the url to the web service
-        String baseurl=context.getResources().getString(R.string.baseurl);
-        String token=context.getResources().getString(R.string.token);
-        String url=baseurl+"SaveHCEImage?strToken="+token+"&FinalID="+final_id+"&ImagePath=&ImageUploadMode=Camera&Lat="+cur_latitude+"&Lng="+cur_longitude+"&UploadedBy=&emailAddress="+email+"&ActionType="+actionTypeID+"&ActionSubType="+subactionTypeID+"&PicCount="+countPictures+"&Council="+counciltypetext+"&CouncilNo="+coun_NoText+"&isFIR="+firID+"&phcRegNo="+Reg_NoText+"&visitedDate="+visitDate+"&comments="+commentText+"&QuackCategory=&QuackSubCategory=&RoleID="+roleid+"&VisitedTime="+LoctionVisitedTime;
+        String baseurl = context.getResources().getString(R.string.baseurl);
+        String token = context.getResources().getString(R.string.token);
+        String url = baseurl + "SaveHCEImage?strToken=" + token + "&FinalID=" + final_id + "&ImagePath=&ImageUploadMode=Camera&Lat=" + cur_latitude + "&Lng=" + cur_longitude + "&UploadedBy=&emailAddress=" + email + "&ActionType=" + actionTypeID + "&ActionSubType=" + subactionTypeID + "&PicCount=" + countPictures + "&Council=" + counciltypetext + "&CouncilNo=" + coun_NoText + "&isFIR=" + firID + "&phcRegNo=" + Reg_NoText + "&visitedDate=" + visitDate + "&comments=" + commentText + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid + "&VisitedTime=" + LoctionVisitedTime;
         url = url.replaceAll(" ", "%20");
-             return url;
+        return url;
     }
+
     private String downloadUrl(String strUrl) throws IOException {
 
 
@@ -2161,8 +2160,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-            }
-            else {
+            } else {
                 Log.e("exception", "Couldn't get json from server.");
             }
 
@@ -2191,15 +2189,14 @@ public class LicensingActionActivity extends AppCompatActivity {
                     alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // Write your code here to execute after dialog closed
-                           finish();
-                          //  Toast.makeText(context, "Thanks You!", Toast.LENGTH_SHORT).show();
+                            finish();
+                            //  Toast.makeText(context, "Thanks You!", Toast.LENGTH_SHORT).show();
                         }
                     });
 
                     // Showing Alert Message
                     alertDialog.show();
-                }
-                else {
+                } else {
 
 
                     Toast.makeText(context, "Update not submitted! Please Verify", Toast.LENGTH_SHORT).show();
@@ -2207,8 +2204,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                 }
                 // Updating parsed JSON data into ListView
 
-            }
-            else{
+            } else {
                 Toast.makeText(context, "Server is not responding. Please try again", Toast.LENGTH_SHORT).show();
             }
 
@@ -2216,7 +2212,6 @@ public class LicensingActionActivity extends AppCompatActivity {
         }
 
     }
-
 
 
     private class DownloadTask2 extends AsyncTask<String, Void, String> {
@@ -2243,22 +2238,24 @@ public class LicensingActionActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             ParserTask2 parserTask = new ParserTask2();
-            jsonStr2=result;
+            jsonStr2 = result;
             // Invokes the thread for parsing the JSON data
             parserTask.execute();
 
         }
     }
+
     private String getDirectionsUrl2(Context context) {
 
         // Building the url to the web service
-        String baseurl=context.getResources().getString(R.string.baseurl);
-        String token=context.getResources().getString(R.string.token);
-        String url=baseurl+"UploadHCEImage?strToken="+token+"&FinalID="+final_id+"&ImagePath="+imagepath+"&emailAddress="+email+"&visitedDate=&RoleID="+roleid;
+        String baseurl = context.getResources().getString(R.string.baseurl);
+        String token = context.getResources().getString(R.string.token);
+        String url = baseurl + "UploadHCEImage?strToken=" + token + "&FinalID=" + final_id + "&ImagePath=" + imagepath + "&emailAddress=" + email + "&visitedDate=&RoleID=" + roleid;
         url = url.replaceAll(" ", "%20");
         return url;
 
     }
+
     private String downloadUrl2(String strUrl) throws IOException {
 
 
@@ -2335,8 +2332,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-            }
-            else {
+            } else {
                 Log.e("exception", "Couldn't get json from server.");
             }
 
@@ -2348,26 +2344,25 @@ public class LicensingActionActivity extends AppCompatActivity {
             super.onPostExecute(result);
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            if(comments.requestFocus()) {
+            if (comments.requestFocus()) {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             }
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             if (result != null) {
                 if (MID2.equals("1")) {
                     Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
-                    String imagebaseurl=context.getResources().getString(R.string.Imagesbaseurl);;
-                    _images.add(imagebaseurl+imagepath);
-                    imagepath=null;
+                    String imagebaseurl = context.getResources().getString(R.string.Imagesbaseurl);
+                    ;
+                    _images.add(imagebaseurl + imagepath);
+                    imagepath = null;
 
-                }
-                else {
+                } else {
                     Toast.makeText(context, "Update not submitted! Please Verify", Toast.LENGTH_SHORT).show();
 
                 }
                 // Updating parsed JSON data into ListView
 
-            }
-            else{
+            } else {
                 Toast.makeText(context, "Server is not responding. Please try again", Toast.LENGTH_SHORT).show();
             }
 

@@ -12,10 +12,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.RequiresApi;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.view.GravityCompat;
@@ -23,6 +26,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +45,9 @@ import android.widget.Toast;
 
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
+import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.IndReportingActivity;
+import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Activities.Licensing.PWSFilterActivity;
 import com.phc.cim.Adapters.InspectionVisitsAdapter;
@@ -87,13 +93,13 @@ public class InspectionVisitsActivity extends AppCompatActivity {
     TextInputLayout counNoInput;
     TextInputLayout Reg_No_lay;
     TextInputLayout fir_layout;
-    private Boolean picTaken=false;
-    private Boolean picreceved=true;
-    private Boolean picAttachement=false;
+    private Boolean picTaken = false;
+    private Boolean picreceved = true;
+    private Boolean picAttachement = false;
     Context context;
 
-    int backcount=0;
-    private String filePath=null;
+    int backcount = 0;
+    private String filePath = null;
     private Uri filePathURI;
     String visitDate;
     String actionTypeText;
@@ -101,7 +107,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
     String subactionTypeText;
     String subactionTypeID;
     String firtext;
-    String firID="0";
+    String firID = "0";
     String subactiontseltext;
     String actiontseltext;
     Spinner actionType_spinner;
@@ -111,7 +117,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
     ArrayList<ActionType> actionTypeList = null;
     ArrayList<subActionType> subactionType = null;
     ArrayList<ActionType> actionTypeselected = null;
-    ArrayList<subActionType> subactionTypeselected=null;
+    ArrayList<subActionType> subactionTypeselected = null;
     ArrayList<CouncilType> councilTypes;
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
@@ -136,7 +142,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
     private String activityTitles;
     private int versionCode = 0;
     int PICK_IMAGE_REQUEST = 111;
-    private Uri u=null;
+    private Uri u = null;
     String appURI = "";
     String time1;
     String MID;
@@ -144,39 +150,39 @@ public class InspectionVisitsActivity extends AppCompatActivity {
     String MID2;
     String MText2;
     Switch simpleSwitch1;
-    String hce_nameText="";
-  //  String AddressText="";
-   // String HCSP_nameText="";
-   // String HCSP_SOText="";
-  //  String CNIC_Text="";
- //   String HCSP_ContactText="";
-    String Reg_NoText="";
-    String coun_NoText="";
-    String  final_id="";
+    String hce_nameText = "";
+    //  String AddressText="";
+    // String HCSP_nameText="";
+    // String HCSP_SOText="";
+    //  String CNIC_Text="";
+    //   String HCSP_ContactText="";
+    String Reg_NoText = "";
+    String coun_NoText = "";
+    String final_id = "";
     String visited;
     String UploadedBy;
-  //  String districtText="";
+    //  String districtText="";
     //String sectortypetext="";
-  //  String hceTypetext="";
+    //  String hceTypetext="";
 //    String HCSPTypeText="";
- //   String RegstatusText="";
+    //   String RegstatusText="";
 //    String counStatusText="";
-    int dateCount=0;
-    String counciltypeID="";
-//    String RegType="";
-    String email=null;
+    int dateCount = 0;
+    String counciltypeID = "";
+    //    String RegType="";
+    String email = null;
     String password;
     String isEdit;
     String username;
-//    String RecordLockedForUpdate="";
+    //    String RecordLockedForUpdate="";
 //    String total_beds="";
     String index;
     String firactionbit;
 
-    String  DateFromText="";
-    String DateToText="";
-   // double latitude;
-  //  double longitude;
+    String DateFromText = "";
+    String DateToText = "";
+    // double latitude;
+    //  double longitude;
     EditText DateFromEdit;
     EditText DateToEdit;
     LinearLayout errortextlayout;
@@ -205,6 +211,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
     TextView hce_name;
     String RoleID;
     ArrayAdapter<String> actionadapter;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,12 +220,11 @@ public class InspectionVisitsActivity extends AppCompatActivity {
         context = this;
 
 
-
         pDialog = new ProgressDialog(context);
         listView = (ListView) findViewById(R.id.list);
-        DateFromEdit  = (EditText) findViewById(R.id.DateFromEdit);
+        DateFromEdit = (EditText) findViewById(R.id.DateFromEdit);
         DateToEdit = (EditText) findViewById(R.id.DateToEdit);
-        errortextlayout= (LinearLayout) findViewById(R.id.errortextlayout);
+        errortextlayout = (LinearLayout) findViewById(R.id.errortextlayout);
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
         isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
         email = prefs.getString("email", null);//"No name defined" is the default value.
@@ -226,7 +232,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
         username = prefs.getString("username", null);//"No name defined" is the default value.
         isEdit = prefs.getString("isEdit", null);//"No name defined" is the default value.
         RoleID = prefs.getString("RoleID", null); //0 is the default value.
-        UserID= prefs.getString("UserID", null); //0 is the default value.
+        UserID = prefs.getString("UserID", null); //0 is the default value.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         gps = new CurrentLocation(context);
@@ -243,7 +249,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);*/
         // load toolbar titles from string resources
         activityTitles = getResources().getString(R.string.nav_insp_visits);
-        if(RoleID.equals("1") || RoleID.equals("3")) {
+        if (RoleID.equals("1") || RoleID.equals("3")) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
             if (isStat.equals("true") && RoleID.equals("1")) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
@@ -252,8 +258,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
             } else {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
             }
-        }
-        else {
+        } else {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
         }
@@ -290,7 +295,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                dateCount=1;
+                dateCount = 1;
                 new DatePickerDialog(context, date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
 
@@ -301,13 +306,13 @@ public class InspectionVisitsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                dateCount=2;
+                dateCount = 2;
                 new DatePickerDialog(context, date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
 
             }
         });
-     Button btn_search = (Button) findViewById(R.id.btn_search);
+        Button btn_search = (Button) findViewById(R.id.btn_search);
         btn_search.setOnClickListener(new Button.OnClickListener() {
 
 
@@ -342,16 +347,17 @@ public class InspectionVisitsActivity extends AppCompatActivity {
 
 
     }
+
     private void updateLabel() {
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         if (dateCount == 1) {
             DateFromEdit.setText(sdf.format(calendar.getTime()));
-        }
-        else if (dateCount == 2) {
+        } else if (dateCount == 2) {
             DateToEdit.setText(sdf.format(calendar.getTime()));
         }
     }
+
     private void loadNavHeader() {
         // name, website
 
@@ -385,7 +391,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
         selectNavMenu();
 
         // set toolbar title
-              setToolbarTitle();
+        setToolbarTitle();
 
         // if user select the current navigatiokn menu again, don't do anything
         // just close the navigation drawer
@@ -479,47 +485,53 @@ public class InspectionVisitsActivity extends AppCompatActivity {
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-               case R.id.nav_home:
-                   startActivity(new Intent(context, InspectionFilterActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
-                   drawer.closeDrawers();
-                   return true;
+                    case R.id.nav_home:
+                        startActivity(new Intent(context, InspectionFilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_reportquack:
-                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_quack:
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
                         String UserID = prefs.getString("UserID", null); //0 is the default value.
-                        if(isStat.equals("true")) {
-                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        if (isStat.equals("true")) {
+                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                             drawer.closeDrawers();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
                         }
                         return true;
 
                     case R.id.nav_actiondesc:
-                        if(RoleID.equals("3")){
+                        if (RoleID.equals("3")) {
                             startActivity(new Intent(context, InspectionVisitsActivity.class));
 
-                        }
-                        else {
-                            startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        } else {
+                            startActivity(new Intent(context, IndReportingActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
 
                         }
-                          drawer.closeDrawers();
+                        drawer.closeDrawers();
 
                         return true;
 
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));
+                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email", email).putExtra("password", password));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_pwssearch:
                         startActivity(new Intent(context, PWSFilterActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_list:
+                        startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_about_us:
@@ -548,7 +560,7 @@ public class InspectionVisitsActivity extends AppCompatActivity {
                         alert.show();
                         return true;
                     //default:
-                     //   navItemIndex = 0;
+                    //   navItemIndex = 0;
                 }
 
                 //Checking if the item is in checked state or not, if not make it in checked state
@@ -637,7 +649,6 @@ public class InspectionVisitsActivity extends AppCompatActivity {
     }
 
 
-
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
 
@@ -673,10 +684,10 @@ public class InspectionVisitsActivity extends AppCompatActivity {
 
         // Building the url to the web service
         String baseurl = context.getResources().getString(R.string.baseurl);
-        String token= context.getResources().getString(R.string.token);
-        String url =null;
+        String token = context.getResources().getString(R.string.token);
+        String url = null;
 
-        url = baseurl + "GetAllHCEBasicInfo_Location_DateWise?strToken="+token+"&SearchDateFrom="+DateFromText+"&SearchDateTo="+DateToText+"&UserID="+email;
+        url = baseurl + "GetAllHCEBasicInfo_Location_DateWise?strToken=" + token + "&SearchDateFrom=" + DateFromText + "&SearchDateTo=" + DateToText + "&UserID=" + email;
         url = url.replaceAll(" ", "%20");
         return url;
 
@@ -751,17 +762,17 @@ public class InspectionVisitsActivity extends AppCompatActivity {
                     for (int i = 0; i < json.length(); i++) {
                         HashMap<String, String> map = new HashMap<String, String>();
                         JSONObject e = json.getJSONObject(i);
-                            map.put("index", String.valueOf(i+1));
-                            map.put("BasicInfoChange", e.getString("BasicInfoChange"));
-                            map.put("HCEName", e.getString("HCEName"));
-                            map.put("LocChange", e.getString("LocChange"));
-                            map.put("LocVisitedBy", e.getString("LocVisitedBy"));
-                            map.put("LocVisitedDate", e.getString("LocVisitedDate"));
-                            map.put("LocVisitedTime", e.getString("LocVisitedTime"));
-                            map.put("RegNum", e.getString("RegNum"));
-                            map.put("VisitedBy", e.getString("VisitedBy"));
-                            map.put("VisitedDate", e.getString("VisitedDate"));
-                            map.put("VisitedTime", e.getString("VisitedTime"));
+                        map.put("index", String.valueOf(i + 1));
+                        map.put("BasicInfoChange", e.getString("BasicInfoChange"));
+                        map.put("HCEName", e.getString("HCEName"));
+                        map.put("LocChange", e.getString("LocChange"));
+                        map.put("LocVisitedBy", e.getString("LocVisitedBy"));
+                        map.put("LocVisitedDate", e.getString("LocVisitedDate"));
+                        map.put("LocVisitedTime", e.getString("LocVisitedTime"));
+                        map.put("RegNum", e.getString("RegNum"));
+                        map.put("VisitedBy", e.getString("VisitedBy"));
+                        map.put("VisitedDate", e.getString("VisitedDate"));
+                        map.put("VisitedTime", e.getString("VisitedTime"));
                         mylist.add(map);
                     }
 
@@ -787,13 +798,12 @@ public class InspectionVisitsActivity extends AppCompatActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
 
-            if(result!=null && result.size()>0) {
+            if (result != null && result.size() > 0) {
 
                 InspectionVisitsAdapter adapter = new InspectionVisitsAdapter(context, result);
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-            }
-            else {
+            } else {
                 InspectionVisitsAdapter adapter = new InspectionVisitsAdapter(context, result);
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();

@@ -13,9 +13,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.view.GravityCompat;
@@ -24,6 +26,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,8 +44,10 @@ import android.widget.Toast;
 
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
+import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
+import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Activities.Inspection.InspectionFilterActivity;
 import com.phc.cim.Activities.Inspection.InspectionVisitsActivity;
@@ -92,25 +97,25 @@ public class PWSDetailListActivity extends AppCompatActivity {
     ArrayList<HashMap<String, String>> indtabresult;
     ArrayList<HashMap<String, String>> mylist;
     int PICK_IMAGE_REQUEST = 111;
-    private Uri u=null;
-    private Boolean picTaken=false;
-    private Boolean picreceved=false;
-    private Boolean picUploaded=false;
-    private Boolean picAttachement=false;
-    int count=0;
-    private String filePath=null;
-    String directoryPath=null;
+    private Uri u = null;
+    private Boolean picTaken = false;
+    private Boolean picreceved = false;
+    private Boolean picUploaded = false;
+    private Boolean picAttachement = false;
+    int count = 0;
+    private String filePath = null;
+    String directoryPath = null;
     private Uri filePathURI;
-    int MY_REQUEST_CODE=5;
-    String imageNAme=null;
+    int MY_REQUEST_CODE = 5;
+    String imageNAme = null;
     int TotalRecord;
     int PageSize;
-    String MID2,MText2,jsonStr2;
+    String MID2, MText2, jsonStr2;
     //-----End Images----
-   // ArrayList<String> mylist;
+    // ArrayList<String> mylist;
     double des_lat;
     double des_lng;
-    int currentPage=1;
+    int currentPage = 1;
     DataManager dataManager;
     String MID;
     String MText;
@@ -145,9 +150,9 @@ public class PWSDetailListActivity extends AppCompatActivity {
     String Reg_NoText = "";
     String final_id = "";
     String RegType = "";
-    String password="";
-    String isEdit="";
-    String username="";
+    String password = "";
+    String isEdit = "";
+    String username = "";
     String isStat;
     String UserID;
     String RoleID;
@@ -155,11 +160,11 @@ public class PWSDetailListActivity extends AppCompatActivity {
     String infoVisitDatetext = "";
     String sectortypetext = "";
     String hceTypetext = "";
-    String infoVisitBytext= "";
-    String BasicInfoVisitedTime= "";
-    String LoctionVisitedBy= "";
-    String LoctionVisitedDate= "";
-    String LoctionVisitedTime= "";
+    String infoVisitBytext = "";
+    String BasicInfoVisitedTime = "";
+    String LoctionVisitedBy = "";
+    String LoctionVisitedDate = "";
+    String LoctionVisitedTime = "";
     String UserName = "";
     String BasicInfoVisitedUserName = "";
     String LocationVisitedUserName = "";
@@ -169,12 +174,12 @@ public class PWSDetailListActivity extends AppCompatActivity {
     double latitude;
     double longitude;
     String email = "";
-    Button btn_info, btn_loc, btn_save,btn_cancel;
-    LinearLayout layout_submit,errortextlayout,infolayout,loclayout,imageslayout;
-    TextInputLayout loc_layout,reg_layout,Sector_layout,hce_name_layout,Address_layout,hcetype_layout,HCSP_Name_layout,Mobile_layout,
-            beds_layout,txtDateTime_layout,timePicker1_layout,lat_layout,lng_layout,locDatelayout,loctimelayout;
+    Button btn_info, btn_loc, btn_save, btn_cancel;
+    LinearLayout layout_submit, errortextlayout, infolayout, loclayout, imageslayout;
+    TextInputLayout loc_layout, reg_layout, Sector_layout, hce_name_layout, Address_layout, hcetype_layout, HCSP_Name_layout, Mobile_layout,
+            beds_layout, txtDateTime_layout, timePicker1_layout, lat_layout, lng_layout, locDatelayout, loctimelayout;
     TextView indicatelabel;
-    TextView locindlabel,latvisitinfo,latvisitloc;
+    TextView locindlabel, latvisitinfo, latvisitloc;
     Spinner currloc_spinner;
     ArrayList<District> districts;
     ArrayList<SectorType> sectorTypes;
@@ -209,10 +214,10 @@ public class PWSDetailListActivity extends AppCompatActivity {
     private static final String LOG_TAG = "AppUpgrade";
     private String activityTitles;
     private int versionCode = 0;
-    String date1="";
-    String date2="";
+    String date1 = "";
+    String date2 = "";
     String appURI = "";
-    String districtText, BfromText, BtoText, RegnoText, hcenameText,CNICtext;
+    String districtText, BfromText, BtoText, RegnoText, hcenameText, CNICtext;
     //ArrayAdapter adapter;
     PWSListAdapter pwsListAdapter;
     //MyCustomPagerAdapter myCustomPagerAdapter;
@@ -239,86 +244,85 @@ public class PWSDetailListActivity extends AppCompatActivity {
     ViewPager _pager;
     LinearLayout _thumbnails;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_pws_list);
-            context=this;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pws_list);
+        context = this;
         pDialog = new ProgressDialog(context);
 
-            gps = new CurrentLocation(context);
+        gps = new CurrentLocation(context);
         Intent intent;
         intent = getIntent();
 
-            hceTypetext= (String) intent.getSerializableExtra("hceTypetext");
-            districtText= (String) intent.getSerializableExtra("districtText");
-            BfromText= (String) intent.getSerializableExtra("BfromText");
-            BtoText= (String) intent.getSerializableExtra("BtoText");
-            RegnoText= (String) intent.getSerializableExtra("RegnoText");
-            hcenameText= (String) intent.getSerializableExtra("hcenameText");
-            CNICtext= (String) intent.getSerializableExtra("cnicText");
-            indtabresult = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("result");
-            TotalRecord= Integer.parseInt(indtabresult.get(0).get("TotalRec"));
-            PageSize= Integer.parseInt(indtabresult.get(0).get("PageSize"));
-            int total = (int) Math.ceil((double)TotalRecord/PageSize);
-            listView = (ListView) findViewById(R.id.list);
-            footerView = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_view, null, false);
-            if(currentPage<total) {
-                this.listView.addFooterView(footerView);
-            }
-            ButterKnife.bind(this);
-            _pager = (ViewPager) findViewById(R.id.pager);
-            _thumbnails = (LinearLayout) findViewById(R.id.thumbnails);
-            SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
-            isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
-            email = prefs.getString("email", null);//"No name defined" is the default value.
-            password = prefs.getString("password", null);//"No name defined" is the default value.
-            username = prefs.getString("username", null);//"No name defined" is the default value.
-            isEdit = prefs.getString("isEdit", null);//"No name defined" is the default value.
-            RoleID = prefs.getString("RoleID", null); //0 is the default value.
-            UserID= prefs.getString("UserID", null); //0 is the default value.
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            gps = new CurrentLocation(context);
-            mHandler = new Handler();
-            TextView t2 = (TextView) findViewById(R.id.text2);
-            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.setItemIconTintList(null);
-            navHeader = navigationView.getHeaderView(0);
-            txtName = (TextView) navHeader.findViewById(R.id.name);
-            txtWebsite = (TextView) navHeader.findViewById(R.id.website);
-            imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
+        hceTypetext = (String) intent.getSerializableExtra("hceTypetext");
+        districtText = (String) intent.getSerializableExtra("districtText");
+        BfromText = (String) intent.getSerializableExtra("BfromText");
+        BtoText = (String) intent.getSerializableExtra("BtoText");
+        RegnoText = (String) intent.getSerializableExtra("RegnoText");
+        hcenameText = (String) intent.getSerializableExtra("hcenameText");
+        CNICtext = (String) intent.getSerializableExtra("cnicText");
+        indtabresult = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("result");
+        TotalRecord = Integer.parseInt(indtabresult.get(0).get("TotalRec"));
+        PageSize = Integer.parseInt(indtabresult.get(0).get("PageSize"));
+        int total = (int) Math.ceil((double) TotalRecord / PageSize);
+        listView = (ListView) findViewById(R.id.list);
+        footerView = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_view, null, false);
+        if (currentPage < total) {
+            this.listView.addFooterView(footerView);
+        }
+        ButterKnife.bind(this);
+        _pager = (ViewPager) findViewById(R.id.pager);
+        _thumbnails = (LinearLayout) findViewById(R.id.thumbnails);
+        SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
+        isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
+        email = prefs.getString("email", null);//"No name defined" is the default value.
+        password = prefs.getString("password", null);//"No name defined" is the default value.
+        username = prefs.getString("username", null);//"No name defined" is the default value.
+        isEdit = prefs.getString("isEdit", null);//"No name defined" is the default value.
+        RoleID = prefs.getString("RoleID", null); //0 is the default value.
+        UserID = prefs.getString("UserID", null); //0 is the default value.
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        gps = new CurrentLocation(context);
+        mHandler = new Handler();
+        TextView t2 = (TextView) findViewById(R.id.text2);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null);
+        navHeader = navigationView.getHeaderView(0);
+        txtName = (TextView) navHeader.findViewById(R.id.name);
+        txtWebsite = (TextView) navHeader.findViewById(R.id.website);
+        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
   /*      BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);*/
-            // load toolbar titles from string resources
+        // load toolbar titles from string resources
 
-            activityTitles =getResources().getString(R.string.nav_item_HCElist_titles);
-            if(RoleID.equals("1") || RoleID.equals("3")) {
-                navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
-                if (isStat.equals("true")&& RoleID.equals("1")) {
-                    navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
+        activityTitles = getResources().getString(R.string.nav_item_HCElist_titles);
+        if (RoleID.equals("1") || RoleID.equals("3")) {
+            navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
+            if (isStat.equals("true") && RoleID.equals("1")) {
+                navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
 
 
-                } else {
-                    navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
-                }
-            }
-            else {
-                navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
+            } else {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
             }
+        } else {
+            navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
+        }
 
 
-            loadNavHeader();
-            // initializing navigation menu
-            setUpNavigationView();
+        loadNavHeader();
+        // initializing navigation menu
+        setUpNavigationView();
 
-            if (savedInstanceState == null) {
-                navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
-                loadHomeFragment();
-            }
+        if (savedInstanceState == null) {
+            navItemIndex = 0;
+            CURRENT_TAG = TAG_HOME;
+            loadHomeFragment();
+        }
 
           /*  pDialog = new ProgressDialog(context);
             pDialog.setMessage("Loading Data, Please wait...");
@@ -329,49 +333,48 @@ public class PWSDetailListActivity extends AppCompatActivity {
             //Start downloading json data from Google Directions API
             downloadTask.execute(url);*/
 
-            index=PageSize;
-                pwsListAdapter = new PWSListAdapter(context,indtabresult);
-                listView.setAdapter(pwsListAdapter);
-                pwsListAdapter.notifyDataSetChanged();
+        index = PageSize;
+        pwsListAdapter = new PWSListAdapter(context, indtabresult);
+        listView.setAdapter(pwsListAdapter);
+        pwsListAdapter.notifyDataSetChanged();
 
 
-            listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
 
-                @Override
-                public void onScrollStateChanged(AbsListView view, int scrollState) {
-                }
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
 
-                @Override
-                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                    //what is the bottom item that is visible
-                    int lastInScreen = firstVisibleItem + visibleItemCount;
-                    //is the bottom item visible & not loading more already? Load more!
-                    if ((lastInScreen == totalItemCount) && !(loadingMore)) {
+                //what is the bottom item that is visible
+                int lastInScreen = firstVisibleItem + visibleItemCount;
+                //is the bottom item visible & not loading more already? Load more!
+                if ((lastInScreen == totalItemCount) && !(loadingMore)) {
 
-                        //start a new thread for loading the items in the list
+                    //start a new thread for loading the items in the list
 
-                        int total = (int) Math.ceil((double)TotalRecord/PageSize);
-                        if(currentPage<total) {
+                    int total = (int) Math.ceil((double) TotalRecord / PageSize);
+                    if (currentPage < total) {
 
-                            String url = getDirectionsUrl();
-                            DownloadTask downloadTask = new DownloadTask();
-                            //Start downloading json data from Google Directions API
-                            downloadTask.execute(url);
-                        }
+                        String url = getDirectionsUrl();
+                        DownloadTask downloadTask = new DownloadTask();
+                        //Start downloading json data from Google Directions API
+                        downloadTask.execute(url);
                     }
-
                 }
 
-            });
-            if (gps.canGetLocation()) {
+            }
+
+        });
+        if (gps.canGetLocation()) {
 
             cur_latitude = gps.getLatitude();
             cur_longitude = gps.getLongitude();
             // latlangListener.onlatlang(cur_latitude, cur_longitude);
             if (cur_latitude != 0.0 && cur_longitude != 0.0) {
-            }
-            else {
+            } else {
 
             }
         } else {
@@ -493,7 +496,7 @@ public class PWSDetailListActivity extends AppCompatActivity {
     }
 
     private void setToolbarTitle() {
-        getSupportActionBar().setTitle(activityTitles+" ("+TotalRecord+")");
+        getSupportActionBar().setTitle(activityTitles + " (" + TotalRecord + ")");
     }
 
     private void selectNavMenu() {
@@ -512,50 +515,56 @@ public class PWSDetailListActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.nav_home:
-                        if(RoleID.equals("3")){
+                        if (RoleID.equals("3")) {
                             startActivity(new Intent(context, InspectionFilterActivity.class));
 
-                        }
-                        else {
-                            startActivity(new Intent(context, FilterActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        } else {
+                            startActivity(new Intent(context, FilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
 
                         }
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_reportquack:
-                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_quack:
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
                         String UserID = prefs.getString("UserID", null); //0 is the default value.
-                        if(isStat.equals("true")) {
-                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        if (isStat.equals("true")) {
+                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                             drawer.closeDrawers();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
                         }
                         return true;
                     case R.id.nav_actiondesc:
-                        if(RoleID.equals("3")){
+                        if (RoleID.equals("3")) {
                             startActivity(new Intent(context, InspectionVisitsActivity.class));
 
-                        }
-                        else {
-                            startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        } else {
+                            startActivity(new Intent(context, IndReportingActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
 
-                        } drawer.closeDrawers();
+                        }
+                        drawer.closeDrawers();
                         return true;
 
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));
+                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email", email).putExtra("password", password));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_pwssearch:
                         startActivity(new Intent(context, PWSFilterActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_list:
+                        startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_about_us:
@@ -680,6 +689,7 @@ public class PWSDetailListActivity extends AppCompatActivity {
             }
         }
     }
+
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
 
@@ -717,8 +727,7 @@ public class PWSDetailListActivity extends AppCompatActivity {
         String baseurl = context.getResources().getString(R.string.baseurl);
         String token = context.getResources().getString(R.string.token);
         String url = null;
-        url = baseurl + "Get_HCEDetailForMobile?strToken="+token+"&HCEName="+hcenameText+"&District="+districtText+"&BedsFrom="+BfromText+"&BedsTo="+BtoText+"&orgType="+hceTypetext+"&RegNum="+RegnoText+"&CNIC="+CNICtext+"&CurrentPage="+currentPage;
-
+        url = baseurl + "Get_HCEDetailForMobile?strToken=" + token + "&HCEName=" + hcenameText + "&District=" + districtText + "&BedsFrom=" + BfromText + "&BedsTo=" + BtoText + "&orgType=" + hceTypetext + "&RegNum=" + RegnoText + "&CNIC=" + CNICtext + "&CurrentPage=" + currentPage;
 
 
         url = url.replaceAll(" ", "%20");
@@ -795,7 +804,7 @@ public class PWSDetailListActivity extends AppCompatActivity {
                     for (int i = 0; i < json.length(); i++) {
                         HashMap<String, String> map = new HashMap<String, String>();
                         JSONObject e = json.getJSONObject(i);
-                        index= index + 1;
+                        index = index + 1;
                         map.put("index", String.valueOf(index));
                         map.put("Address", e.getString("Address"));
                         map.put("CNIC", e.getString("CNIC"));
@@ -848,12 +857,12 @@ public class PWSDetailListActivity extends AppCompatActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
             if (result != null && result.size() > 0) {
-                TotalRecord= Integer.parseInt(result.get(0).get("TotalRec"));
-                PageSize= Integer.parseInt(result.get(0).get("PageSize"));
-                currentPage=currentPage+1;
+                TotalRecord = Integer.parseInt(result.get(0).get("TotalRec"));
+                PageSize = Integer.parseInt(result.get(0).get("PageSize"));
+                currentPage = currentPage + 1;
                 pwsListAdapter.notifyDataSetChanged();
                 loadingMore = false;
-              //  indtabresult.;
+                //  indtabresult.;
 
 
                 /*Intent firstpage = new Intent(context, PWSDetailListActivity.class);
