@@ -1692,9 +1692,9 @@ public class ActionActivity extends AppCompatActivity {
                 subactionTypeID = subactionType.get(position).getSubActionType_Id();
 
                 // Convert MarkSurvCount to an integer for comparison
-                int markSurvCountInt = Integer.parseInt(MarkSurvCount);
+//                int markSurvCountInt = Integer.parseInt(MarkSurvCount);
 
-                if (markSurvCountInt > 3) {
+//                if (markSurvCountInt > 3) {
                     // If it is, exclude subactionTypeID.equals("16")
                     if (!subactionTypeID.equals("16")) {
                         // Your logic for showing the view goes here
@@ -1711,7 +1711,7 @@ public class ActionActivity extends AppCompatActivity {
                             counNoInput.setVisibility(View.GONE);
                             Reg_No_lay.setVisibility(View.GONE);
                         }
-                    }
+//                    }
 
                 } else {
                     // Otherwise, show the view

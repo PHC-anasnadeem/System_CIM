@@ -283,32 +283,47 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
                 return tv;
             }
         };
+        // Set the dropdown view resource for the date adapter
         dateadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+// Set the popup background resource for the spinner if the SDK version is Jelly Bean or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             date_spinner.setPopupBackgroundResource(R.drawable.spinner);
         }
+
+// Set the adapter for the date spinner
         date_spinner.setAdapter(dateadapter);
+
+// Set an item selected listener for the date spinner
         date_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-               ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Check if the view is not null and is an instance of TextView before setting the text color
+                if (view != null && view instanceof TextView) {
+                    ((TextView) view).setTextColor(Color.WHITE);
+                }
+
+                // Get the selected visit date
                 Vistdate = parent.getItemAtPosition(position).toString();
-                DateFormat formatter;
-                if (Vistdate != null && Vistdate!="All") {
-                    formatter = new SimpleDateFormat("dd-MMM-yyyy");
+
+                // Format the visit date if it is not null and not equal to "All"
+                if (Vistdate != null && !Vistdate.equals("All")) {
+                    DateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
                     Date date2 = null;
                     try {
-                        date2 = (Date) formatter.parse(Vistdate);
+                        date2 = formatter.parse(Vistdate);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
+                    // Reformat the date to the desired format
                     SimpleDateFormat newFormat = new SimpleDateFormat("M/d/yyyy");
-                    if (date2 != null)
+                    if (date2 != null) {
                         Vistdate = newFormat.format(date2);
-
+                    }
                 }
 
+                // Put relevant data into the bundle
                 bundle.putSerializable("indtabresult", indtabresult);
                 bundle.putString("email", email);
                 bundle.putString("password", password);
@@ -316,14 +331,12 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
                 bundle.putString("isEdit", isEdit);
                 bundle.putString("Vistdate", Vistdate);
 
-                //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
-                viewPager = (ViewPager) findViewById(R.id.viewpager);
-
+                // Set up the ViewPager and TabLayout
+                viewPager = findViewById(R.id.viewpager);
                 viewPager.setOffscreenPageLimit(4);
                 setupViewPager(viewPager);
 
-                tabLayout = (TabLayout) findViewById(R.id.tabs);
+                tabLayout = findViewById(R.id.tabs);
                 tabLayout.setupWithViewPager(viewPager);
                 tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#00a652"));
                 tabLayout.setSelectedTabIndicatorHeight((int) (3 * getResources().getDisplayMetrics().density));
@@ -332,9 +345,10 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Handle the case where nothing is selected if needed
             }
         });
+
 
 
 

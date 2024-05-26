@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Looper;
@@ -61,7 +62,7 @@ public class ReportQuackActivity extends AppCompatActivity {
     EditText CNIC_Edit;
     EditText HCSP_ContactEdit;
     EditText coments;
-    int a=0;
+    int a = 0;
 
     Spinner division_spinner;
     Spinner district_spinner;
@@ -69,20 +70,20 @@ public class ReportQuackActivity extends AppCompatActivity {
     Spinner quackloc_spinner;
 
 
-    String hce_nameText="";
-    String AddressText="";
-    String HCSP_nameText="";
-    String HCSP_SOText="";
-    String CNIC_Text="";
-    String HCSP_ContactText="";
+    String hce_nameText = "";
+    String AddressText = "";
+    String HCSP_nameText = "";
+    String HCSP_SOText = "";
+    String CNIC_Text = "";
+    String HCSP_ContactText = "";
 
-    String comnt="";
-    String  final_id="";
-    String districtText="";
+    String comnt = "";
+    String final_id = "";
+    String districtText = "";
     String quackloctext;
-    String divisionText="";
-    String tehsilText="";
-    String email= "";
+    String divisionText = "";
+    String tehsilText = "";
+    String email = "";
     String password;
     String isEdit;
     String username;
@@ -135,7 +136,6 @@ public class ReportQuackActivity extends AppCompatActivity {
         longitudeEditText = findViewById(R.id.lng);
 
 
-
         errortext.setVisibility(View.GONE);
         Intent intent = getIntent();
         email = (String) intent.getSerializableExtra("email");
@@ -143,7 +143,7 @@ public class ReportQuackActivity extends AppCompatActivity {
         username = (String) intent.getSerializableExtra("username");
         isEdit = (String) intent.getSerializableExtra("isEdit");
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
-         roleid = prefs.getString("RoleID", null);//"No name defined" is the default value.
+        roleid = prefs.getString("RoleID", null);//"No name defined" is the default value.
 
 
         // Initialize pDialog in onCreate
@@ -152,29 +152,21 @@ public class ReportQuackActivity extends AppCompatActivity {
         pDialog.setCancelable(false);
 
 
-
-
-
-
-
-
-
         //-------------------------Current Location----------------------------
 
         if (gps.canGetLocation()) {
 
             cur_latitude = gps.getLatitude();
             cur_longitude = gps.getLongitude();
-            loc_accuracy= gps.getAccuracy();
-            accuracyTextView.setText("Location Accurate to "+loc_accuracy+" meters");
+            loc_accuracy = gps.getAccuracy();
+            accuracyTextView.setText("Location Accurate to " + loc_accuracy + " meters");
             accuracyTextView.setTextColor(Color.parseColor("#303F9F"));
 
             // latlangListener.onlatlang(cur_latitude, cur_longitude);
             if (cur_latitude != 0.0 && cur_longitude != 0.0) {
 
 
-            }
-            else {
+            } else {
                 cur_latitude = gps.getLatitude();
                 cur_longitude = gps.getLongitude();
 
@@ -186,12 +178,12 @@ public class ReportQuackActivity extends AppCompatActivity {
             // Ask user to enable GPS/network in settings.
             gps.showSettingsAlert();
         }
-            this.runThread();
+        this.runThread();
 
 
         //---------------------------------Division Spinner--------------------------------------------
 
-        divisions= dataManager.getDivision();
+        divisions = dataManager.getDivision();
 
         ArrayAdapter<String> division_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, getDivision()) {
             @Override
@@ -236,10 +228,9 @@ public class ReportQuackActivity extends AppCompatActivity {
         });
 
 
-
         //---------------------------------Quack location Spinner--------------------------------------------
 
-       String quackloc[]={"Please Select","Yes","No"};
+        String quackloc[] = {"Please Select", "Yes", "No"};
         ArrayAdapter<String> quackloc_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, quackloc) {
             @Override
             public boolean isEnabled(int position) {
@@ -296,12 +287,12 @@ public class ReportQuackActivity extends AppCompatActivity {
         markasdone.setOnClickListener(new Button.OnClickListener() {
 
             public void onClick(View v) {
-                int count=0;
+                int count = 0;
                 hce_nameText = hce_nameEdit.getText().toString();
                 AddressText = AddressEdit.getText().toString();
                 HCSP_nameText = HCSP_nameEdit.getText().toString();
                 HCSP_SOText = HCSP_SOEdit.getText().toString();
-                CNIC_Text=CNIC_Edit.getText().toString();
+                CNIC_Text = CNIC_Edit.getText().toString();
                 HCSP_ContactText = HCSP_ContactEdit.getText().toString();
                 comnt = coments.getText().toString();
 
@@ -314,70 +305,69 @@ public class ReportQuackActivity extends AppCompatActivity {
 
                     // Further processing with latitude and longitude
                 } else {
-                    latitude=cur_latitude;
-                    longitude=cur_longitude;
+                    latitude = cur_latitude;
+                    longitude = cur_longitude;
                 }
 
-                _images=new ArrayList<String>();
-
+                _images = new ArrayList<String>();
 
 
                 if (comnt.equals("")) {
                     coments.setError("Please Enter Comments");
                     count++;
                 }
-                if(hce_nameText.equals("")){
+                if (hce_nameText.equals("")) {
                     hce_nameEdit.setError("Name can't be empty");
                     count++;
                 }
-                if(AddressText.equals("")){
+                if (AddressText.equals("")) {
                     AddressEdit.setError("Address can't be empty");
                     count++;
                 }
                 if (divisionText.equals("Please Select")) {
-                    setSpinnerError(division_spinner,("Please select division"));
+                    setSpinnerError(division_spinner, ("Please select division"));
                     count++;
                 }
                 if (districtText.equals("Please Select")) {
-                    setSpinnerError(district_spinner,("Please select district"));
+                    setSpinnerError(district_spinner, ("Please select district"));
                     count++;
                 }
                 if (tehsilText.equals("Please Select")) {
-                    setSpinnerError(tehsil_spinner,("Please select tehsil"));
+                    setSpinnerError(tehsil_spinner, ("Please select tehsil"));
                     count++;
                 }
                 if (quackloctext.equals("Please Select")) {
-                    setSpinnerError(quackloc_spinner,("Please select Quack location"));
+                    setSpinnerError(quackloc_spinner, ("Please select Quack location"));
                     count++;
                 }
-                if(count>0){
+                if (count > 0) {
                     errortext.setVisibility(View.VISIBLE);
                 }
                 //User Latitude & Longitude
 
-                user_latitude=latitude;
-                user_longitude=longitude;
-                if (count<1) {
+                user_latitude = latitude;
+                user_longitude = longitude;
+                if (count < 1) {
 
                     if (quackloctext.equals("No")) {
-                        latitude=cur_latitude;
-                        longitude=cur_longitude;
+                        latitude = cur_latitude;
+                        longitude = cur_longitude;
                     }
 
-                    if(CNIC_Text.equals("")){
-                        CNIC_Text="00000-0000000-0";
+                    if (CNIC_Text.equals("")) {
+                        CNIC_Text = "00000-0000000-0";
                     }
-                    if(HCSP_ContactText.equals("")){
-                        HCSP_ContactText="00000000000";
+                    if (HCSP_ContactText.equals("")) {
+                        HCSP_ContactText = "00000000000";
                     }
-                    if(divisionText.equals("Please Select")){
-                        divisionText="";
+                    if (divisionText.equals("Please Select")) {
+                        divisionText = "";
                     }
-                    if(districtText.equals("Please Select")){
-                        districtText="";
+                    if (districtText.equals("Please Select")) {
+                        districtText = "";
                     }
-                    if(tehsilText.equals("Please Select")){
-                        tehsilText="";
+                    if (tehsilText.equals("Please Select")) {
+                        tehsilText = "";
                     }
                 /*    if(sectortypetext.equals("Please Select")){
                         sectortypetext="";
@@ -386,24 +376,25 @@ public class ReportQuackActivity extends AppCompatActivity {
 //                    pDialog.setCancelable(false);
                     pDialog.show();
 
-                             String url = getDirectionsUrl(context);
-                              DownloadTask downloadTask = new DownloadTask();
-                            //Start downloading json data from Google Directions API
-                              downloadTask.execute(url);
-                        }
+                    String url = getDirectionsUrl(context);
+                    DownloadTask downloadTask = new DownloadTask();
+                    //Start downloading json data from Google Directions API
+                    downloadTask.execute(url);
+                }
 
 
             }
         });
 
     }
-   // int i=0;
+
+    // int i=0;
     private void runThread() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Looper.prepare();//Call looper.prepare()
-                while(true){
+                while (true) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -413,12 +404,12 @@ public class ReportQuackActivity extends AppCompatActivity {
                     gps = new CurrentLocation(context);
                     cur_latitude = gps.getLatitude();
                     cur_longitude = gps.getLongitude();
-                    loc_accuracy= gps.getAccuracy();
+                    loc_accuracy = gps.getAccuracy();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
-                            accuracyTextView.setText("Location Accurate to "+loc_accuracy+" meters ");
+                            accuracyTextView.setText("Location Accurate to " + loc_accuracy + " meters ");
                             accuracyTextView.setTextColor(Color.parseColor("#303F9F"));
                         }
                     });
@@ -429,12 +420,14 @@ public class ReportQuackActivity extends AppCompatActivity {
             }
         }).start();
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
-    private void setSpinnerError(Spinner spinner, String error){
+
+    private void setSpinnerError(Spinner spinner, String error) {
         View selectedView = spinner.getSelectedView();
         if (selectedView != null && selectedView instanceof TextView) {
             spinner.requestFocus();
@@ -446,12 +439,13 @@ public class ReportQuackActivity extends AppCompatActivity {
 
         }
     }
+
     private ArrayList<String> getsectorTypes() {
 
         ArrayList<String> sectorTypeList = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (SectorType sectorType : sectorTypes) {
-            String sectortypelists= sectorType.getSectorType();
+            String sectortypelists = sectorType.getSectorType();
             sectorTypeList.add(sectortypelists);
             i++;
         }
@@ -495,15 +489,15 @@ public class ReportQuackActivity extends AppCompatActivity {
 //            divisionList.add("Rawalpindi");
 //            divisionList.add("Other");
 //        }
-            return divisionList;
-        }
+        return divisionList;
+    }
 
     private ArrayList<String> getDistrict() {
-        districts= dataManager.getDistrictList(divisionText);
+        districts = dataManager.getDistrictList(divisionText);
         ArrayList<String> districtList = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (District district : districts) {
-            String districtLists= district.getDistrict();
+            String districtLists = district.getDistrict();
             districtList.add(districtLists);
             i++;
         }
@@ -588,9 +582,7 @@ public class ReportQuackActivity extends AppCompatActivity {
 //            }
 
 
-
         //---------------------------------District Spinner--------------------------------------------
-
 
 
         ArrayAdapter<String> district_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, districtList) {
@@ -641,11 +633,11 @@ public class ReportQuackActivity extends AppCompatActivity {
 
     private ArrayList<String> getTehsil() {
 
-        tehsils= dataManager.getTehsilList(districtText);
+        tehsils = dataManager.getTehsilList(districtText);
         ArrayList<String> TehsilList = new ArrayList<String>();
-        int i=0;
+        int i = 0;
         for (Tehsil tehsil : tehsils) {
-            String Tehsillists= tehsil.getTehsil();
+            String Tehsillists = tehsil.getTehsil();
             TehsilList.add(Tehsillists);
             i++;
         }
@@ -892,54 +884,53 @@ public class ReportQuackActivity extends AppCompatActivity {
 //        }
 
 
+        //---------------------------------Tehsil Spinner--------------------------------------------
 
-            //---------------------------------Tehsil Spinner--------------------------------------------
-
-            ArrayAdapter<String> tehsil_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, TehsilList) {
-                @Override
-                public boolean isEnabled(int position) {
-                    if (position == 0) {
-                        // Disable the first item from Spinner
-                        // First item will be use for hint
-                        return true;
-                    } else {
-                        return true;
-                    }
+        ArrayAdapter<String> tehsil_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, TehsilList) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return true;
+                } else {
+                    return true;
                 }
+            }
 
-                @Override
-                public View getDropDownView(int position, View convertView,
-                                            ViewGroup parent) {
-                    View view = super.getDropDownView(position, convertView, parent);
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
 
-                    if (position == 0) {
-                        // Set the hint text color gray
-                        //tv.setTextColor(Color.GRAY);
-                    } else {
-                        // tv.setTextColor(Color.BLACK);
-                    }
-                    return view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    //tv.setTextColor(Color.GRAY);
+                } else {
+                    // tv.setTextColor(Color.BLACK);
                 }
-            };
-            tehsil_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            tehsil_spinner.setAdapter(tehsil_spinneradapter);
-            tehsil_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                public void onItemSelected(AdapterView<?> parent, View view,
-                                           int position, long id) {
-                    //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                    tehsilText = parent.getItemAtPosition(position).toString();
-                }
+                return view;
+            }
+        };
+        tehsil_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tehsil_spinner.setAdapter(tehsil_spinneradapter);
+        tehsil_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                tehsilText = parent.getItemAtPosition(position).toString();
+            }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                }
-            });
+            }
+        });
 
         return TehsilList;
     }
 
-private class DownloadTask extends AsyncTask<String, Void, String> {
+    private class DownloadTask extends AsyncTask<String, Void, String> {
 
 
         @Override
@@ -962,25 +953,27 @@ private class DownloadTask extends AsyncTask<String, Void, String> {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-         ParserTask parserTask = new ParserTask();
-            jsonStr=result;
+            ParserTask parserTask = new ParserTask();
+            jsonStr = result;
             // Invokes the thread for parsing the JSON data
             parserTask.execute();
 
         }
     }
+
     private String getDirectionsUrl(Context context) {
 
         // Building the url to the web service
-        String baseurl=context.getResources().getString(R.string.baseurl);
-        String token=context.getResources().getString(R.string.token);
-        String url=baseurl+"ReportQuack?strToken="+token+"&HCEName="+hce_nameText+"&HCEAddress="+AddressText+"&Division="+divisionText+"&District="+districtText+"&Tehsil="+tehsilText+"&SectorType=Private&HCSPName="+HCSP_nameText+"&HCSP_SO="+HCSP_SOText+"&HCSP_CNIC="+CNIC_Text+"&HCSPContactNo="+HCSP_ContactText+"&lat="+cur_latitude+"&lng="+cur_longitude+"&emailAddress="+email+"&Comments="+comnt+"&Userlat="+user_latitude+"&Userlng="+user_longitude+"&QuackCategory=&QuackSubCategory=&RoleID="+roleid;
+        String baseurl = context.getResources().getString(R.string.baseurl);
+        String token = context.getResources().getString(R.string.token);
+        String url = baseurl + "ReportQuack?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&Division=" + divisionText + "&District=" + districtText + "&Tehsil=" + tehsilText + "&SectorType=Private&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&lat=" + cur_latitude + "&lng=" + cur_longitude + "&emailAddress=" + email + "&Comments=" + comnt + "&Userlat=" + user_latitude + "&Userlng=" + user_longitude + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid;
         url = url.replaceAll(" ", "%20");
         url = url.replaceAll("#", "%23");
         url = url.replaceAll(",", "%2C");
 
         return url;
     }
+
     private String downloadUrl(String strUrl) throws IOException {
 
 
@@ -1057,8 +1050,7 @@ private class DownloadTask extends AsyncTask<String, Void, String> {
                     e.printStackTrace();
                 }
 
-            }
-            else {
+            } else {
                 Log.e("exception", "Couldn't get json from server.");
             }
 
@@ -1073,13 +1065,11 @@ private class DownloadTask extends AsyncTask<String, Void, String> {
             if (result != null) {
                 if (MID.equals("0")) {
                     Toast.makeText(context, "Record not saved! Please try again", Toast.LENGTH_SHORT).show();
-                }
-
-                    else{
+                } else {
                     // Show MID value as a Toast message
                     Toast.makeText(context, "MID: " + MID, Toast.LENGTH_SHORT).show();
 
-                        final_id=MID;
+                    final_id = MID;
                     Intent firstpage = new Intent(context, ActionActivity.class);
                     firstpage.putExtra("HCEName", hce_nameText);
                     firstpage.putExtra("HCEAddress", AddressText);
@@ -1109,15 +1099,15 @@ private class DownloadTask extends AsyncTask<String, Void, String> {
                     firstpage.putStringArrayListExtra("imageurls", _images);
                     finish();
                     context.startActivity(firstpage);
-                        }
-
-                    // Showing Alert Message
-                    //alertDialog.show();
                 }
-                // Updating parsed JSON data into ListView
+
+                // Showing Alert Message
+                //alertDialog.show();
+            }
+            // Updating parsed JSON data into ListView
 
 
-            else{
+            else {
                 Toast.makeText(context, "Server error! Please try again", Toast.LENGTH_SHORT).show();
             }
 
