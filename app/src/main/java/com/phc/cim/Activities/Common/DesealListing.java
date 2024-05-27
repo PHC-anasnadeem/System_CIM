@@ -86,9 +86,7 @@ public class DesealListing extends AppCompatActivity {
     private void fetchDiaryEntries() {
         // Retrieve user input
         String finalID = etFinalID.getText().toString().trim();
-//        String district = etDistrict.getText().toString().trim();
-//        String startDate = etStartDate.getText().toString().trim();
-//        String endDate = etEndDate.getText().toString().trim();
+
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -106,7 +104,7 @@ public class DesealListing extends AppCompatActivity {
                         try {
                             JSONArray deSealOrders = response.getJSONArray("DeSealOrders");
                             if (deSealOrders.length() == 0) {
-                                Toast.makeText(DesealListing.this, "This final ID is not De-seal yet", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DesealListing.this, "This final ID has not been de-sealed yet", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             List<DiaryEntry> newDiaryEntries = new ArrayList<>();
@@ -169,6 +167,12 @@ public class DesealListing extends AppCompatActivity {
             return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         }
         return false;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void showDatePickerDialog(final EditText dateField) {

@@ -268,7 +268,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         index = (String) intent.getSerializableExtra("index");
         UserName = (String) intent.getSerializableExtra("UserName");
         LastVisitedDate = (String) intent.getSerializableExtra("LastVisitedDate");
-        MarkSurvCount = (String) intent.getSerializableExtra("MarkSurvCount");
+//        MarkSurvCount = (String) intent.getSerializableExtra("MarkSurvCount");
         imageurls = (ArrayList<String>) getIntent().getSerializableExtra("imageurls");
         latitude = (double) intent.getSerializableExtra("latitude");
         longitude = (double) intent.getSerializableExtra("longitude");
@@ -826,7 +826,6 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
 
         Button markasdone = (Button) findViewById(R.id.btn_submit);
         markasdone.setOnClickListener(new Button.OnClickListener() {
-
             public void onClick(View v) {
                 Location loc1 = new Location("");
                 loc1.setLatitude(latitude);
@@ -837,8 +836,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                 loc2.setLongitude(cur_longitude);
                 distCurrPrevInMeters = String.valueOf(loc1.distanceTo(loc2));
 
-
-                latLngInput = editTextLatLng.getText().toString(); //Add latLngInput
+                latLngInput = editTextLatLng.getText().toString(); // Add latLngInput
                 hce_nameText = hce_nameEdit.getText().toString();
                 AddressText = AddressEdit.getText().toString();
                 HCSP_nameText = HCSP_nameEdit.getText().toString();
@@ -850,101 +848,79 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
 
                 int count = 0;
                 comnt = coments.getText().toString();
-                if (hce_nameText.equals("")) {
+
+                if (hce_nameText.isEmpty()) {
                     hce_nameEdit.setError("Please enter name");
                     count++;
                 }
-                if (AddressText.equals("")) {
-                    AddressEdit.setError("Please enter address ");
+                if (AddressText.isEmpty()) {
+                    AddressEdit.setError("Please enter address");
                     count++;
                 }
-                if (HCSP_nameText.equals("")) {
+                if (HCSP_nameText.isEmpty()) {
                     HCSP_nameEdit.setError("Please enter name");
                     count++;
                 }
-                if (quackloctext.equals("Please Select")) {
-                    setSpinnerError(quackloc_spinner, ("Please select"));
+                if ("Please Select".equals(quackloctext)) {
+                    setSpinnerError(quackloc_spinner, "Please select");
                     count++;
                 }
-                if (currloc_text.equals("Please Select")) {
-                    setSpinnerError(currloc_spinner, ("Please select"));
+                if ("Please Select".equals(currloc_text)) {
+                    setSpinnerError(currloc_spinner, "Please select");
                     count++;
                 }
 
                 // Check if the AddressText is empty when "No" is selected
-                if (quacklocID.equals("0") && AddressText.isEmpty()) {
+                if ("0".equals(quacklocID) && AddressText.isEmpty()) {
                     editTextLatLng.setError("Please enter address"); // Show error message
                     count++;
                 }
 
                 if (count > 0) {
                     errortext.setVisibility(View.VISIBLE);
-                }
-                if (count < 1) {
+                } else {
                     errortext.setVisibility(View.GONE);
-           /*          AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                     builder1.setMessage("Your slected location is "+distanceInMeters+" away from previous location./n Are you sure you want to proceed?")
-                             .setTitle("Alert")
-                             .setCancelable(false)
-                             .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
-                                 public void onClick(DialogInterface dialog, int id) {
-
-
-                                 }
-                             })
-                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                 public void onClick(DialogInterface dialog, int id) {
-                                     dialog.cancel();
-
-                                 }
-                             });
-                     AlertDialog alert = builder1.create();
-                     alert.show();*/
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage("Do you want to save the changes?")
                             .setTitle("Save")
                             .setCancelable(false)
                             .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-
-                                    if (counStatusText.equals("No")) {
+                                    if ("No".equals(counStatusText)) {
                                         coun_NoText = "";
                                         counciltypetext = "";
                                         counStatusID = "0";
-
                                     }
-                                    if (RegstatusText.equals("No")) {
+                                    if ("No".equals(RegstatusText)) {
                                         Reg_NoText = "";
                                         RegstatusID = "0";
                                     }
-                                    if (counStatusText.equals("Yes")) {
-
+                                    if ("Yes".equals(counStatusText)) {
                                         counStatusID = "1";
-
                                     }
-                                    if (RegstatusText.equals("Yes")) {
+                                    if ("Yes".equals(RegstatusText)) {
                                         RegstatusID = "1";
                                     }
-                                    if (districtText.equals("Please Select")) {
+
+                                    if ("Please Select".equals(districtText)) {
                                         districtText = "";
                                     }
-                                    if (sectortypetext.equals("Please Select")) {
+                                    if ("Please Select".equals(sectortypetext)) {
                                         sectortypetext = "";
                                     }
-                                    if (hceTypetext.equals("Please Select")) {
+                                    if ("Please Select".equals(hceTypetext)) {
                                         hceTypetext = "";
                                     }
-                                    if (counciltypetext.equals("Please Select")) {
+                                    if ("Please Select".equals(counciltypetext)) {
                                         counciltypetext = "";
                                     }
-                                    if (HCSPTypeText.equals("Please Select")) {
+                                    if ("Please Select".equals(HCSPTypeText)) {
                                         HCSPTypeText = "";
                                     }
-                                    if (RegstatusText.equals("Please Select")) {
+                                    if ("Please Select".equals(RegstatusText)) {
                                         RegstatusText = "";
                                     }
-                                    if (counStatusText.equals("Please Select")) {
+                                    if ("Please Select".equals(counStatusText)) {
                                         counStatusText = "";
                                     }
 
@@ -953,7 +929,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                                     pDialog.show();
                                     String url = getDirectionsUrl(context);
                                     DownloadTask downloadTask = new DownloadTask();
-                                    //Start downloading json data from Google Directions API
+                                    // Start downloading json data from Google Directions API
                                     downloadTask.execute(url);
                                 }
                             })
@@ -964,12 +940,155 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                             });
                     AlertDialog alert = builder.create();
                     alert.show();
-
                 }
-
-
             }
         });
+
+//        markasdone.setOnClickListener(new Button.OnClickListener() {
+//
+//            public void onClick(View v) {
+//                Location loc1 = new Location("");
+//                loc1.setLatitude(latitude);
+//                loc1.setLongitude(longitude);
+//
+//                Location loc2 = new Location("");
+//                loc2.setLatitude(cur_latitude);
+//                loc2.setLongitude(cur_longitude);
+//                distCurrPrevInMeters = String.valueOf(loc1.distanceTo(loc2));
+//
+//
+//                latLngInput = editTextLatLng.getText().toString(); //Add latLngInput
+//                hce_nameText = hce_nameEdit.getText().toString();
+//                AddressText = AddressEdit.getText().toString();
+//                HCSP_nameText = HCSP_nameEdit.getText().toString();
+//                HCSP_SOText = HCSP_SOEdit.getText().toString();
+//                CNIC_Text = CNIC_Edit.getText().toString();
+//                HCSP_ContactText = HCSP_ContactEdit.getText().toString();
+//                Reg_NoText = Reg_NoEdit.getText().toString();
+//                coun_NoText = coun_NoEdit.getText().toString();
+//
+//                int count = 0;
+//                comnt = coments.getText().toString();
+//                if (hce_nameText.equals("")) {
+//                    hce_nameEdit.setError("Please enter name");
+//                    count++;
+//                }
+//                if (AddressText.equals("")) {
+//                    AddressEdit.setError("Please enter address ");
+//                    count++;
+//                }
+//                if (HCSP_nameText.equals("")) {
+//                    HCSP_nameEdit.setError("Please enter name");
+//                    count++;
+//                }
+//                if (quackloctext.equals("Please Select")) {
+//                    setSpinnerError(quackloc_spinner, ("Please select"));
+//                    count++;
+//                }
+//                if (currloc_text.equals("Please Select")) {
+//                    setSpinnerError(currloc_spinner, ("Please select"));
+//                    count++;
+//                }
+//
+//                // Check if the AddressText is empty when "No" is selected
+//                if (quacklocID.equals("0") && AddressText.isEmpty()) {
+//                    editTextLatLng.setError("Please enter address"); // Show error message
+//                    count++;
+//                }
+//
+//                if (count > 0) {
+//                    errortext.setVisibility(View.VISIBLE);
+//                }
+//                if (count < 1) {
+//                    errortext.setVisibility(View.GONE);
+//           /*          AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+//                     builder1.setMessage("Your slected location is "+distanceInMeters+" away from previous location./n Are you sure you want to proceed?")
+//                             .setTitle("Alert")
+//                             .setCancelable(false)
+//                             .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
+//                                 public void onClick(DialogInterface dialog, int id) {
+//
+//
+//                                 }
+//                             })
+//                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                 public void onClick(DialogInterface dialog, int id) {
+//                                     dialog.cancel();
+//
+//                                 }
+//                             });
+//                     AlertDialog alert = builder1.create();
+//                     alert.show();*/
+//
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                    builder.setMessage("Do you want to save the changes?")
+//                            .setTitle("Save")
+//                            .setCancelable(false)
+//                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//
+//                                    if (counStatusText.equals("No")) {
+//                                        coun_NoText = "";
+//                                        counciltypetext = "";
+//                                        counStatusID = "0";
+//
+//                                    }
+//                                    if (RegstatusText.equals("No")) {
+//                                        Reg_NoText = "";
+//                                        RegstatusID = "0";
+//                                    }
+//                                    if (counStatusText.equals("Yes")) {
+//
+//                                        counStatusID = "1";
+//
+//                                    }
+//                                    if (RegstatusText.equals("Yes")) {
+//                                        RegstatusID = "1";
+//                                    }
+//                                    if (districtText.equals("Please Select")) {
+//                                        districtText = "";
+//                                    }
+//                                    if (sectortypetext.equals("Please Select")) {
+//                                        sectortypetext = "";
+//                                    }
+//                                    if (hceTypetext.equals("Please Select")) {
+//                                        hceTypetext = "";
+//                                    }
+//                                    if (counciltypetext.equals("Please Select")) {
+//                                        counciltypetext = "";
+//                                    }
+//                                    if (HCSPTypeText.equals("Please Select")) {
+//                                        HCSPTypeText = "";
+//                                    }
+//                                    if (RegstatusText.equals("Please Select")) {
+//                                        RegstatusText = "";
+//                                    }
+//                                    if (counStatusText.equals("Please Select")) {
+//                                        counStatusText = "";
+//                                    }
+//
+//                                    pDialog.setMessage("Submitting your update, Please wait...");
+//                                    pDialog.setCancelable(false);
+//                                    pDialog.show();
+//                                    String url = getDirectionsUrl(context);
+//                                    DownloadTask downloadTask = new DownloadTask();
+//                                    //Start downloading json data from Google Directions API
+//                                    downloadTask.execute(url);
+//                                }
+//                            })
+//                            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//                    AlertDialog alert = builder.create();
+//                    alert.show();
+//
+//                }
+//
+//
+//            }
+//        });
         Button canceldone = (Button) findViewById(R.id.btn_cancel);
         canceldone.setOnClickListener(new Button.OnClickListener() {
 
@@ -1486,7 +1605,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                 if (MID.equals("1")) {
                     Toast.makeText(context, "Information update saved successfully", Toast.LENGTH_SHORT).show();
 
-                    DownloadActionDetail downloadActionDetail = new DownloadActionDetail(context, hce_nameText, final_id, email, password, username, isEdit, index, countt,MarkSurvCount);
+                    DownloadActionDetail downloadActionDetail = new DownloadActionDetail(context, hce_nameText, final_id, email, password, username, isEdit, index, countt);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

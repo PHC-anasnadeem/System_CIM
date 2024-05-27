@@ -63,9 +63,9 @@ public class DownloadActionDetail {
     double Lng;
     int count=0;
     String RecordLockedForUpdate;
-    String UserName,LastVisitedDate, HCEName, HCEAddress, District, SectorType, OrgType, HCSPType, HCSPName, HCSPSO ,HCSPCNIC ,HCSPContactNo ,RegStatus ,RegNum ,CouncilStatus ,CouncilName ,CouncilNum,RegType,index,total_beds,MarkSurvCount;
+    String UserName,LastVisitedDate, HCEName, HCEAddress, District, SectorType, OrgType, HCSPType, HCSPName, HCSPSO ,HCSPCNIC ,HCSPContactNo ,RegStatus ,RegNum ,CouncilStatus ,CouncilName ,CouncilNum,RegType,index,total_beds;
        double latitude,longitude;
-    public DownloadActionDetail(Context context, String HCEName, String final_id, String email, String password, String username, String isEdit , String index, int count, String MarkSurvCount){
+    public DownloadActionDetail(Context context, String HCEName, String final_id, String email, String password, String username, String isEdit , String index, int count){
 
         this.count=count;
         this.context=context;
@@ -76,7 +76,7 @@ public class DownloadActionDetail {
         this.username=username;
         this.isEdit=isEdit;
         this.index=index;
-        this.MarkSurvCount= MarkSurvCount;
+//        this.MarkSurvCount= MarkSurvCount;
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading Data, Please wait...");
         pDialog.setCancelable(false);
@@ -531,7 +531,7 @@ public class DownloadActionDetail {
                     firstpage.putExtra("username", username);
                     firstpage.putExtra("isEdit", isEdit);
                     firstpage.putExtra("index", index);
-                    firstpage.putExtra("MarkSurvCount", MarkSurvCount);
+//                    firstpage.putExtra("MarkSurvCount", MarkSurvCount);
                     firstpage.putStringArrayListExtra("imageurls", imagespath);
                     context.startActivity(firstpage);
                 }
@@ -563,7 +563,7 @@ public class DownloadActionDetail {
                     firstpage.putExtra("username", username);
                     firstpage.putExtra("isEdit", isEdit);
                     firstpage.putExtra("index", index);
-                    firstpage.putExtra("MarkSurvCount", MarkSurvCount);
+//                    firstpage.putExtra("MarkSurvCount", MarkSurvCount);
                     firstpage.putStringArrayListExtra("imageurls", imagespath);
                     context.startActivity(firstpage);
                 }
@@ -599,7 +599,7 @@ public class DownloadActionDetail {
                             firstpage.putExtra("username", username);
                             firstpage.putExtra("isEdit", isEdit);
                             firstpage.putExtra("index", index);
-                            firstpage.putExtra("MarkSurvCount", MarkSurvCount);
+//                            firstpage.putExtra("MarkSurvCount", MarkSurvCount);
                             firstpage.putStringArrayListExtra("imageurls", imagespath);
                             context.startActivity(firstpage);
                         }
@@ -669,7 +669,7 @@ public class DownloadActionDetail {
                         firstpage.putExtra("index", index);
                         firstpage.putExtra("UserName", UserName);
                         firstpage.putExtra("LastVisitedDate", LastVisitedDate);
-                        firstpage.putExtra("MarkSurvCount", MarkSurvCount);
+//                        firstpage.putExtra("MarkSurvCount", MarkSurvCount);
                         firstpage.putStringArrayListExtra("imageurls", imagespath);
                         context.startActivity(firstpage);
                     }
