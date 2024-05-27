@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CIM_Plus.iml" filepath="$PROJECT_DIR$/.idea/modules/CIM_Plus.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CIM_Plus.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CIM_Plus.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CIM_Plus.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CIM_Plus.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CIM_Plus.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CIM_Plus.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CIM_Plus.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CIM_Plus.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CIM+.iml" filepath="$PROJECT_DIR$/.idea/modules/CIM+.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CIM+.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CIM+.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CIM+.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CIM+.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CIM+.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CIM+.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CIM+.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CIM+.app.unitTest.iml" />
     </modules>
   </component>
 </project>

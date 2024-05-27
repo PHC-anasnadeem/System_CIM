@@ -161,33 +161,34 @@ public class QuackActivity extends AppCompatActivity {
 
         //-------------------------Current Location----------------------------
 
-        if (gps.canGetLocation()) {
-
-            cur_latitude = gps.getLatitude();
-            cur_longitude = gps.getLongitude();
-            loc_accuracy = gps.getAccuracy();
-            accuracyTextView.setText("Location Accurate to " + loc_accuracy + " meters");
-            accuracyTextView.setTextColor(Color.parseColor("#303F9F"));
-
-            if (cur_latitude != 0.0 && cur_longitude != 0.0) {
-
-
-            } else {
-                cur_latitude = gps.getLatitude();
-                cur_longitude = gps.getLongitude();
-
-
-            }
-        } else {
-            // Can't get location.
-            // GPS or network is not enabled.
-            // Ask user to enable GPS/network in settings.
-            gps.showSettingsAlert();
-        }
-        this.runThread();
+//        if (gps.canGetLocation()) {
+//
+//            cur_latitude = gps.getLatitude();
+//            cur_longitude = gps.getLongitude();
+//            loc_accuracy = gps.getAccuracy();
+//            accuracyTextView.setText("Location Accurate to " + loc_accuracy + " meters");
+//            accuracyTextView.setTextColor(Color.parseColor("#303F9F"));
+//
+//            if (cur_latitude != 0.0 && cur_longitude != 0.0) {
+//
+//
+//            } else {
+//                cur_latitude = gps.getLatitude();
+//                cur_longitude = gps.getLongitude();
+//
+//
+//            }
+//        } else {
+//            // Can't get location.
+//            // GPS or network is not enabled.
+//            // Ask user to enable GPS/network in settings.
+//            gps.showSettingsAlert();
+//        }
+//        this.runThread();
 
 
     }
+
 
     private void setupQuackLocationSpinner() {
         String[] quackloc = {"Please Select", "Yes", "No"};
@@ -225,6 +226,7 @@ public class QuackActivity extends AppCompatActivity {
         });
     }
 
+
     private boolean checkLocationPermissions() {
         // Implement your logic to check location permissions
         return true;
@@ -237,12 +239,11 @@ public class QuackActivity extends AppCompatActivity {
             loc_accuracy = gps.getAccuracy();
             accuracyTextView.setText("Location Accurate to " + loc_accuracy + " meters");
             accuracyTextView.setTextColor(Color.parseColor("#303F9F"));
+            runThread();
         } else {
             gps.showSettingsAlert();
         }
-        this.runThread();
     }
-
 
     private void requestLocationPermissions() {
         // Implement your logic to request location permissions
@@ -339,30 +340,32 @@ public class QuackActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Looper.prepare();//Call looper.prepare()
-                while (true) {
+                Looper.prepare();
+                boolean running = true;
+                while (running) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(10000); // Update every 10 seconds to reduce frequency
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        running = false; // Exit loop on interruption
                     }
-                    //i++;
+
+                    // Fetch the current location
                     gps = new CurrentLocation(context);
                     cur_latitude = gps.getLatitude();
                     cur_longitude = gps.getLongitude();
                     loc_accuracy = gps.getAccuracy();
+
+                    // Update the UI on the main thread
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
                             accuracyTextView.setText("Location Accurate to " + loc_accuracy + " meters ");
                             accuracyTextView.setTextColor(Color.parseColor("#303F9F"));
                         }
                     });
-
-
                 }
-
+                Looper.loop();
             }
         }).start();
     }
