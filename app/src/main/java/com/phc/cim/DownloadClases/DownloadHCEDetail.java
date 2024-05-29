@@ -226,7 +226,7 @@ public class DownloadHCEDetail {
                             map.put("lng", e.getString("lng"));
                             map.put("LastVisitedDate", e.getString("LastVisitedDate"));
                             map.put("UserName", e.getString("UserName"));
-                            map.put("MarkSurvCount", e.getString("MarkSurvCount"));
+//                            map.put("MarkSurvCount", e.getString("MarkSurvCount"));
 
                         mylist.add(map);
                     }
@@ -475,7 +475,7 @@ public class DownloadHCEDetail {
                         firstpage.putExtra("count", count);
                         firstpage.putExtra("UserName", UserName);
                         firstpage.putExtra("LastVisitedDate", LastVisitedDate);
-                        firstpage.putExtra("MarkSurvCount", MarkSurvCount);
+//                        firstpage.putExtra("MarkSurvCount", MarkSurvCount);
                         firstpage.putStringArrayListExtra("imageurls", imagespath);
                         context.startActivity(firstpage);
                     }
@@ -509,7 +509,7 @@ public class DownloadHCEDetail {
                         firstpage.putExtra("index", index);
                         firstpage.putExtra("UserName", UserName);
                         firstpage.putExtra("LastVisitedDate", LastVisitedDate);
-                        firstpage.putExtra("MarkSurvCount", MarkSurvCount);
+//                        firstpage.putExtra("MarkSurvCount", MarkSurvCount);
                         firstpage.putStringArrayListExtra("imageurls", imagespath);
                         context.startActivity(firstpage);
                     }
