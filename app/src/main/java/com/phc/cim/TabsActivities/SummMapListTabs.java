@@ -1,4 +1,5 @@
 package com.phc.cim.TabsActivities;
+
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
@@ -9,9 +10,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import android.os.Handler;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -21,6 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,8 +70,8 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
     String TehsilText;
     String distancetext;
     String subactionTypeID;
-    String BfromText="";
-    String BtoText="";
+    String BfromText = "";
+    String BtoText = "";
     String email;
     String lastvisitedText;
     String RegnoText;
@@ -122,24 +126,24 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_tabs);
-        context=this;
+        context = this;
         Intent intent;
         intent = getIntent();
 
-        dataType= (String) intent.getSerializableExtra("dataType");
-        registrationType= (String) intent.getSerializableExtra("registrationType");
-        orgType= (String) intent.getSerializableExtra("orgType");
-        REGfilterstatus= (String) intent.getSerializableExtra("hcestatus");
-        districtText= (String) intent.getSerializableExtra("districtText");
-        TehsilText= (String) intent.getSerializableExtra("tehsilText");
-        subactionTypeID= (String) intent.getSerializableExtra("subactionTypeID");
-        distancetext= (String) intent.getSerializableExtra("distancetext");
-        BfromText= (String) intent.getSerializableExtra("BfromText");
-        BtoText= (String) intent.getSerializableExtra("BtoText");
-        lastvisitedText= (String) intent.getSerializableExtra("lastvisitedText");
-        RegnoText= (String) intent.getSerializableExtra("RegnoText");
-        hcenameText= (String) intent.getSerializableExtra("hcenameText");
-        email= (String) intent.getSerializableExtra("email");
+        dataType = (String) intent.getSerializableExtra("dataType");
+        registrationType = (String) intent.getSerializableExtra("registrationType");
+        orgType = (String) intent.getSerializableExtra("orgType");
+        REGfilterstatus = (String) intent.getSerializableExtra("hcestatus");
+        districtText = (String) intent.getSerializableExtra("districtText");
+        TehsilText = (String) intent.getSerializableExtra("tehsilText");
+        subactionTypeID = (String) intent.getSerializableExtra("subactionTypeID");
+        distancetext = (String) intent.getSerializableExtra("distancetext");
+        BfromText = (String) intent.getSerializableExtra("BfromText");
+        BtoText = (String) intent.getSerializableExtra("BtoText");
+        lastvisitedText = (String) intent.getSerializableExtra("lastvisitedText");
+        RegnoText = (String) intent.getSerializableExtra("RegnoText");
+        hcenameText = (String) intent.getSerializableExtra("hcenameText");
+        email = (String) intent.getSerializableExtra("email");
         password = (String) intent.getSerializableExtra("password");
         username = (String) intent.getSerializableExtra("username");
         isEdit = (String) intent.getSerializableExtra("isEdit");
@@ -149,20 +153,20 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         QuackType = (String) intent.getSerializableExtra("QuackType");
         indtabresult = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("result");
         bundle = new Bundle();
-        bundle.putString("dataType",dataType);
-        bundle.putString("registrationType",registrationType);
-        bundle.putString("orgType",orgType);
-        bundle.putString("hcestatus",REGfilterstatus);
-        bundle.putString("districtText",districtText);
-        bundle.putString("tehsilText",TehsilText);
-        bundle.putString("distancetext",distancetext);
-        bundle.putString("BfromText",BfromText);
-        bundle.putString("BtoText",BtoText);
-        bundle.putString("lastvisitedText",lastvisitedText);
-        bundle.putString("subactionTypeID",subactionTypeID);
-        bundle.putString("RegnoText",RegnoText);
-        bundle.putString("hcenameText",hcenameText);
-        bundle.putString("email",email);
+        bundle.putString("dataType", dataType);
+        bundle.putString("registrationType", registrationType);
+        bundle.putString("orgType", orgType);
+        bundle.putString("hcestatus", REGfilterstatus);
+        bundle.putString("districtText", districtText);
+        bundle.putString("tehsilText", TehsilText);
+        bundle.putString("distancetext", distancetext);
+        bundle.putString("BfromText", BfromText);
+        bundle.putString("BtoText", BtoText);
+        bundle.putString("lastvisitedText", lastvisitedText);
+        bundle.putString("subactionTypeID", subactionTypeID);
+        bundle.putString("RegnoText", RegnoText);
+        bundle.putString("hcenameText", hcenameText);
+        bundle.putString("email", email);
         bundle.putString("Password", password);
         bundle.putString("username", username);
         bundle.putString("isEdit", isEdit);
@@ -187,7 +191,7 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
 
         // load toolbar titles from string resources
-     activityTitles = getResources().getString(R.string.nav_item_filterresult_titles);
+        activityTitles = getResources().getString(R.string.nav_item_filterresult_titles);
 
         loadNavHeader();
 
@@ -203,7 +207,7 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
         String roleid = prefs.getString("RoleID", null); //0 is the default value.
-        if(roleid.equals("1")) {
+        if (roleid.equals("1")) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
             if (isStat.equals("true")) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
@@ -212,18 +216,16 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
             } else {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
             }
-        }
-        else {
+        } else {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
         }
         //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if(indtabresult!=null) {
+        if (indtabresult != null) {
             viewPager.setOffscreenPageLimit(4);
-        }
-        else {
+        } else {
             viewPager.setOffscreenPageLimit(3);
         }
 
@@ -238,18 +240,16 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(),bundle);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), bundle);
         adapter.addFragment(new summaryFragment(), "Summary");
         adapter.addFragment(new MapFragment(), "Map View");
         adapter.addFragment(new HCEListFragment(), "List View");
-        if(indtabresult!=null) {
-            if(REGfilterstatus.equals("5")){
+        if (indtabresult != null) {
+            if (REGfilterstatus.equals("5")) {
                 adapter.addFragment(new QuackClusterListFragment(), "Clusters");
-            }
-            else if(REGfilterstatus.equals("4")){
+            } else if (REGfilterstatus.equals("4")) {
                 adapter.addFragment(new NotRegClusterListFragment(), "Clusters");
             }
-
 
 
         }
@@ -257,24 +257,24 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
     }
+
     @Override
     public void onFragmentInteraction(String lat, String lng) {
-        adapter.onFragmentInteraction(lat, lng );
+        adapter.onFragmentInteraction(lat, lng);
     }
-    public static class ViewPagerAdapter extends FragmentPagerAdapter implements QuackClusterListFragment.OnFragmentInteractionListener{
+
+    public static class ViewPagerAdapter extends FragmentPagerAdapter implements QuackClusterListFragment.OnFragmentInteractionListener {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
         private final Bundle fragmentBundle;
 
         public ViewPagerAdapter(FragmentManager manager, Bundle bundle) {
             super(manager);
-            fragmentBundle=bundle;
+            fragmentBundle = bundle;
         }
 
         @Override
         public Fragment getItem(int position) {
-            //final MapFragment f = new MapFragment();
-            //f.setArguments(this.fragmentBundle);
             mFragmentList.get(position).setArguments(fragmentBundle);
             return mFragmentList.get(position);
         }
@@ -301,168 +301,14 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         }
     }
 
-
-
-
-
-/*    // TabSpec Names
-    private static final String INBOX_SPEC = "Inbox";
-    private static final String OUTBOX_SPEC = "Outbox";
-    private static final String PROFILE_SPEC = "Profile";
-
-    EditText searchPlate;
-    Toolbar mActionBarToolbar;
-    ViewPager viewPager;
-    SearchView editsearch;
-    Context context;
-
-    String dataType;
-    String registrationType;
-    String orgType;
-    String REGfilterstatus;
-    String districtText;
-    String TehsilText;
-    String distancetext;
-    String searchbytext;
-    String BfromText="";
-    String BtoText="";
-    String email;
-
-    *//**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     *//*
-    // private GoogleApiClient client;
-    //private static final String urlNavHeaderBg = "http://api.androidhive.info/images/nav-menu-header-bg.jpg";
-    //private static final String urlProfileImg = "https://lh3.googleusercontent.com/eCtE_G34M9ygdkmOpYvCag1vBARCmZwnVS6rS5t4JLzJ6QgQSBquM0nuTsCpLhYbKljoyS-txg";
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tab);
-        context=this;
-*//*
-        TabHost tabHost = getTabHost();
-        Intent intent;
-        // Tab for Photos
-        TabHost.TabSpec photospec = tabHost.newTabSpec("Map");
-        // setting Title and Icon for the Tab
-       // photospec.setIndicator("Photos", getResources().getDrawable(R.drawable.icon_photos_tab));
-         intent = new Intent(this, FilterMapsFragment.class);
-        photospec.setIndicator("Map");
-        photospec.setContent(intent);
-
-        // Tab for Songs
-        TabHost.TabSpec songspec = tabHost.newTabSpec("List");
-        //songspec.setIndicator("Songs", getResources().getDrawable(R.drawable.icon_songs_tab));
-        intent = new Intent(this, HCEListActivity.class);
-        songspec.setIndicator("List");
-        songspec.setContent(intent);
-
-        // Tab for Videos
-
-
-        // Adding all TabSpec to TabHost
-        tabHost.addTab(photospec); // Adding photos tab
-        tabHost.addTab(songspec); // Adding songs tab
-
-        tabHost.setCurrentTab(0);*//*
-
-        TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost); // initiate TabHost
-        TabHost.TabSpec spec; // Reusable TabSpec for each tab
-        Intent intent; // Reusable Intent for each tab
-
-
-    *//*    spec = tabHost.newTabSpec("Map"); // Create a new TabSpec using tab host
-        spec.setIndicator("Map");// set the “HOME” as an indicator
-
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent(this, FilterMapsFragment.class);
-        intent.putExtra("dataType", dataType);
-        intent.putExtra("registrationType", registrationType);
-        intent.putExtra("orgType", orgType);
-        intent.putExtra("hcestatus", REGfilterstatus);
-        intent.putExtra("districtText", districtText);
-        intent.putExtra("tehsilText", TehsilText);
-        intent.putExtra("searchbytext", searchbytext);
-        intent.putExtra("distancetext", distancetext);
-        intent.putExtra("BfromText", BfromText);
-        intent.putExtra("BtoText", BtoText);
-        intent.putExtra("email", email);
-        spec.setContent(intent);
-        tabHost.addTab(spec);*//*
-
-        // Do the same for the other tabs
-
-        spec = tabHost.newTabSpec("List"); // Create a new TabSpec using tab host
-        spec.setIndicator("List"); // set the “CONTACT” as an indicator
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent(this, HCEListActivity.class);
-        intent.putExtra("dataType", dataType);
-        intent.putExtra("registrationType", registrationType);
-        intent.putExtra("orgType", orgType);
-        intent.putExtra("hcestatus", REGfilterstatus);
-        intent.putExtra("districtText", districtText);
-        intent.putExtra("tehsilText", TehsilText);
-        //intent.putExtra("searchbytext", searchbytext);
-        intent.putExtra("distancetext", distancetext);
-        intent.putExtra("BfromText", BfromText);
-        intent.putExtra("BtoText", BtoText);
-        intent.putExtra("email", email);
-        spec.setContent(intent);
-       tabHost.addTab(spec);
-
-*//*
- spec = tabHost.newTabSpec("About"); // Create a new TabSpec using tab host
-        spec.setIndicator("ABOUT"); // set the “ABOUT” as an indicator
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent(this, AboutActivity.class);
-        spec.setContent(intent);
-        tabHost.addTab(spec);
-*//*
-
-        //set tab which one you want to open first time 0 or 1 or 2
-        tabHost.setCurrentTab(0);
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                // display the name of the tab whenever a tab is changed
-                Toast.makeText(getApplicationContext(), tabId, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-    }*/
-
     private void loadNavHeader() {
         // name, website
 
         txtName.setText(username);
         txtWebsite.setText(email);
-
-        // loading header background image
-       /* Glide.with(this).load(urlNavHeaderBg)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgNavHeaderBg);
-
-        // Loading profile image
-        Glide.with(this).load(urlProfileImg)
-                .crossFade()
-                .thumbnail(0.5f)
-                .bitmapTransform(new CircleTransform(this))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgProfile);
-
-        // showing dot next to notifications label
-        navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);*/
     }
 
-    /***
-     * Returns respected fragment that user
-     * selected from navigation menu
-     */
+
     private void loadHomeFragment() {
         // selecting appropriate nav menu item
         selectNavMenu();
@@ -563,53 +409,36 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.nav_home:
-                        startActivity(new Intent(context, FilterActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, FilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_reportquack:
-                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_quack:
-                        startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
                         String UserID = prefs.getString("UserID", null); //0 is the default value.
-                        if(isStat.equals("true")) {
-                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        if (isStat.equals("true")) {
+                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                             drawer.closeDrawers();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
                         }
                         return true;
                     case R.id.nav_actiondesc:
-                        startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, IndReportingActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
-                    /*  case R.id.nav_photos:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_PHOTOS;
-                        break;
-                    case R.id.nav_movies:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_MOVIES;
-                        break;
-                    case R.id.nav_notifications:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_NOTIFICATIONS;
-                        break;*/
-                /*    case R.id.nav_settings:
-                        // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, Setting.class));
-                        drawer.closeDrawers();
-                        return true;*/
+
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));
+                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email", email).putExtra("password", password));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_pwssearch:
@@ -645,8 +474,8 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
                         AlertDialog alert = builder.create();
                         alert.show();
                         return true;
-                   // default:
-                       // navItemIndex = 0;
+                    // default:
+                    // navItemIndex = 0;
                 }
 
                 //Checking if the item is in checked state or not, if not make it in checked state

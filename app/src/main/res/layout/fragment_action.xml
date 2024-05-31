@@ -360,30 +360,7 @@
                 android:text="Take Picture"/>
 
         </LinearLayout>
-        <!--    <Button
-        android:id="@+id/markasdone"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:background="#229954"
-        android:text="Submit"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="20dp"
-        android:textSize="20sp" />-->
-        <!-- Signup Button -->
-        <!--      <ImageView
-                  android:id="@+id/Imageprev"
-  android:layout_width="wrap_content"
-  android:layout_height="100dp"
-  android:layout_gravity="center_horizontal" />
-             <android.support.v7.widget.AppCompatButton
-                 android:id="@+id/btn_camera"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginBottom="5dp"
-                 android:layout_marginTop="20dp"
-                 android:background="#225499"
-                 android:text="Take picture"
-                 android:textColor="#FFFFFF" />-->
+
         <TextView
             android:id="@+id/errortext"
             android:layout_width="wrap_content"
@@ -405,39 +382,12 @@
             android:text="Submit"
             android:textColor="#FFFFFF" />
 
-        <!-- <TextView android:id="@+id/link_login"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:layout_marginBottom="24dp"
-         android:textColor="#ffffff"
-         android:text="Already Registered? Enter Registration Number"
-         android:gravity="center"
-         android:textSize="16dip"/>-->
 
     </LinearLayout>
 
 
     </ScrollView>
-<!--    <RelativeLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        >
-        &lt;!&ndash;  android:background="#eaf2ee"&ndash;&gt;
 
-
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-
-            android:background="@drawable/pages_border"
-            app:menu="@menu/navigation"
-            app:itemTextColor="#ffffff"
-            app:itemIconTint="#ffffff"
-            />
-    </RelativeLayout>-->
     <include
         layout="@layout/navdrawer_main"
         android:layout_width="match_parent"

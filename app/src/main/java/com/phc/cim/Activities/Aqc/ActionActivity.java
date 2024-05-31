@@ -24,6 +24,12 @@ import android.provider.MediaStore;
 
 import androidx.annotation.RequiresApi;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -82,6 +88,7 @@ import com.phc.cim.TabsActivities.DashboardTabs;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPSClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -115,6 +122,7 @@ import javax.net.ssl.X509TrustManager;
 
 import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 import static com.phc.cim.TabsActivities.DetailTabActivity.MEDIA_TYPE_IMAGE;
+import static com.squareup.okhttp.internal.Internal.instance;
 
 
 public class ActionActivity extends AppCompatActivity {
@@ -196,40 +204,27 @@ public class ActionActivity extends AppCompatActivity {
     String MText2;
     String ftpbaseurl, ftpUser, ftpPas;
     String hce_nameText = "";
-    //  String AddressText="";
-    // String HCSP_nameText="";
-    // String HCSP_SOText="";
-    //  String CNIC_Text="";
-    //   String HCSP_ContactText="";
+
     String Reg_NoText = "";
     String coun_NoText = "";
     String final_id = "";
     String visited;
     String UploadedBy;
-    //  String districtText="";
-    //String sectortypetext="";
-    //  String hceTypetext="";
-//    String HCSPTypeText="";
-    //   String RegstatusText="";
-//    String counStatusText="";
+
     String counciltypetext = "";
     String counciltypeID = "";
-    //    String RegType="";
     String email = null;
     String password;
     String isEdit;
     String username;
     String VisitedTime = "";
-    String MarkSurvCount = "";
-    //    String RecordLockedForUpdate="";
-//    String total_beds="";
+
+
     String index;
     String firactionbit;
     String jsonStr0;
     String VisitedDate;
     String isFIRSubmit;
-    // double latitude;
-    //  double longitude;
     EditText coun_NoEdit;
     EditText hce_nameEdit;
     EditText Reg_no_edit;
@@ -245,13 +240,7 @@ public class ActionActivity extends AppCompatActivity {
     private static final int RequestPermissionCode = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
     private ArrayList<String> _images;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    // private GoogleApiClient client;
-    //private static final String urlNavHeaderBg = "http://api.androidhive.info/images/nav-menu-header-bg.jpg";
-    //private static final String urlProfileImg = "https://lh3.googleusercontent.com/eCtE_G34M9ygdkmOpYvCag1vBARCmZwnVS6rS5t4JLzJ6QgQSBquM0nuTsCpLhYbKljoyS-txg";
+
     public static int navItemIndex = -1;
 
     ArrayList<HashMap<String, String>> mylist;
@@ -272,6 +261,8 @@ public class ActionActivity extends AppCompatActivity {
     String roleid;
 
     ArrayAdapter<String> actionadapter;
+    int MarkSurvCount = 0;
+    private RequestQueue requestQueue;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -328,8 +319,14 @@ public class ActionActivity extends AppCompatActivity {
         UploadedBy = (String) intent.getSerializableExtra("UploadedBy");
         visited = (String) intent.getSerializableExtra("visited");
         VisitedTime = (String) intent.getSerializableExtra("VisitedTime");
-        MarkSurvCount = (String) intent.getSerializableExtra("MarkSurvCount");
+//        MarkSurvCount = (String) intent.getSerializableExtra("MarkSurvCount");
         _images = (ArrayList<String>) getIntent().getSerializableExtra("imageurls");
+
+        // Initialize the RequestQueue
+        requestQueue = Volley.newRequestQueue(this);
+
+        // Make the API call
+        callApi();
 
         if (commentText != null) {
             comments.setText(commentText);
@@ -366,32 +363,29 @@ public class ActionActivity extends AppCompatActivity {
         } else {
             hce_nameEdit.setText(index + ". " + final_id + " - " + hce_nameText);
         }
-        //ImageView imageView = (ImageView) findViewById(R.id.splashImage);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         gps = new CurrentLocation(context);
         mHandler = new Handler();
         TextView t2 = (TextView) findViewById(R.id.text2);
-        //Linkify.addLinks(t2, Linkify.ALL);
-        //t2.setMovementMethod(LinkMovementMethod.getInstance());
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
-        //fab = (FloatingActionButton) findViewById(R.id.fab);
+
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(R.id.name);
         txtWebsite = (TextView) navHeader.findViewById(R.id.website);
-        //imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
         regNoInput.setVisibility(View.GONE);
         counTypeInput.setVisibility(View.GONE);
         counNoInput.setVisibility(View.GONE);
         Reg_No_lay.setVisibility(View.GONE);
         fir_layout.setVisibility(View.GONE);
-  /*      BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);*/
+
         // load toolbar titles from string resources
         activityTitles = getResources().getString(R.string.nav_item_action_titles);
         ftpbaseurl = context.getResources().getString(R.string.ftpbaseurl);
@@ -473,10 +467,6 @@ public class ActionActivity extends AppCompatActivity {
                 finalString = newFormat.format(date2);
             txtDateTime.setText(finalString);
         }
-       /* else {
-            txtDateTime.setText(sdf.format(myCalendar.getTime()));
-        }*/
-
         txtDateTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -558,7 +548,6 @@ public class ActionActivity extends AppCompatActivity {
         actionType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
 
                 actionType_spinner.setSelection(position);
                 actionTypeText = parent.getItemAtPosition(position).toString();
@@ -569,6 +558,7 @@ public class ActionActivity extends AppCompatActivity {
                 } else {
                     fir_layout.setVisibility(View.GONE);
                 }
+//                getsubactionTypes(MarkSurvCount);
                 getsubactionTypes();
                 if (comments.requestFocus()) {
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -837,6 +827,8 @@ public class ActionActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void updateLabel() {
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -877,33 +869,7 @@ public class ActionActivity extends AppCompatActivity {
                         // original question
                     }
                 }
-  /*              if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //do here
-                } else {
-                    Toast.makeText(this, "The app was not allowed to read your store.", Toast.LENGTH_LONG).show();
-                }
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    gps = new CurrentLocation(context);
-                    // Check if GPS enabled
-                    if (gps.canGetLocation()) {
 
-                        cur_latitude = gps.getLatitude();
-                        cur_longitude = gps.getLongitude();
-                        // latlangListener.onlatlang(cur_latitude, cur_longitude);
-
-                    } else {
-                        // Can't get location.
-                        // GPS or network is not enabled.
-                        // Ask user to enable GPS/network in settings.
-                        gps.showSettingsAlert();
-                    }
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(context, "You need to grant permission", Toast.LENGTH_SHORT).show();
-                }
-
-                return;*/
 
             }
 
@@ -974,11 +940,7 @@ public class ActionActivity extends AppCompatActivity {
         return mediaFile;
     }
 
-    /*
-     * Load navigation menu header information
-     * like background image, profile image
-     * name, website, notifications action view (dot)
-     */
+
     private void setSpinnerError(Spinner spinner, String error) {
         View selectedView = spinner.getSelectedView();
         if (selectedView != null && selectedView instanceof TextView) {
@@ -1109,7 +1071,7 @@ public class ActionActivity extends AppCompatActivity {
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_quack:
-                        startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actiondesc:
@@ -1277,11 +1239,7 @@ public class ActionActivity extends AppCompatActivity {
         if (count == 2) {
             try {
 
-                // context.getContentResolver().notifyChange(u, null);
-                // ContentResolver cr = context.getContentResolver();
-                // Bitmap bm = android.provider.MediaStore.Images.Media.getBitmap(cr, u);
-//ImageView to set the picture taken from camera.
-                //   mImageView.setImageBitmap(bm);
+
                 picTaken = true; //to ensure picture is taken
                 picAttachement = false;
                 pDialog = new ProgressDialog(context);
@@ -1701,26 +1659,28 @@ public class ActionActivity extends AppCompatActivity {
                 subactionTypeText = parent.getItemAtPosition(position).toString();
                 subactionTypeID = subactionType.get(position).getSubActionType_Id();
 
+
+
                 // Convert MarkSurvCount to an integer for comparison
 //                int markSurvCountInt = Integer.parseInt(MarkSurvCount);
 
 //                if (markSurvCountInt > 3) {
-                    // If it is, exclude subactionTypeID.equals("16")
-                    if (!subactionTypeID.equals("16")) {
-                        // Your logic for showing the view goes here
-                        if (subactionTypeID.equals("9")) {
-                            counTypeInput.setVisibility(View.VISIBLE);
-                            counNoInput.setVisibility(View.VISIBLE);
-                            Reg_No_lay.setVisibility(View.VISIBLE);
-                            if (comments.requestFocus()) {
-                                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                            }
-                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                        } else {
-                            counTypeInput.setVisibility(View.GONE);
-                            counNoInput.setVisibility(View.GONE);
-                            Reg_No_lay.setVisibility(View.GONE);
+                // If it is, exclude subactionTypeID.equals("16")
+                if (!subactionTypeID.equals("16")) {
+                    // Your logic for showing the view goes here
+                    if (subactionTypeID.equals("9")) {
+                        counTypeInput.setVisibility(View.VISIBLE);
+                        counNoInput.setVisibility(View.VISIBLE);
+                        Reg_No_lay.setVisibility(View.VISIBLE);
+                        if (comments.requestFocus()) {
+                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                         }
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                    } else {
+                        counTypeInput.setVisibility(View.GONE);
+                        counNoInput.setVisibility(View.GONE);
+                        Reg_No_lay.setVisibility(View.GONE);
+                    }
 //                    }
 
                 } else {
@@ -1754,6 +1714,76 @@ public class ActionActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         return subactiontypelist;
     }
+
+//    private ArrayList<String> getsubactionTypes(int MarkSurvCount) {
+//        subactionType = dataManager.getsubActionstype(actionTypeID, roleid);
+//        ArrayList<String> subactiontypelist = new ArrayList<String>();
+//
+//        // Populate the subactiontypelist and filter based on MarkSurvCount
+//        for (subActionType subActionType : subactionType) {
+//            String subactiontype = subActionType.getSubactionType();
+//            if (MarkSurvCount < 3 || !subactiontype.equals("16")) {
+//                subactiontypelist.add(subactiontype);
+//            }
+//        }
+//
+//        ArrayAdapter<String> subactiontype_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, subactiontypelist) {
+//            @Override
+//            public boolean isEnabled(int position) {
+//                return true; // All items are enabled
+//            }
+//
+//            @Override
+//            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+//                View view = super.getDropDownView(position, convertView, parent);
+//                return view;
+//            }
+//        };
+//
+//        subactiontype_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        subactionType_spinner.setAdapter(subactiontype_spinneradapter);
+//
+//        if (subactionTypeID != null) {
+//            getsubactionsel();
+//            int spinnerPosition = subactiontype_spinneradapter.getPosition(subactiontseltext);
+//            subactionType_spinner.setSelection(spinnerPosition);
+//        }
+//
+//        subactionType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                subactionTypeText = parent.getItemAtPosition(position).toString();
+//                subactionTypeID = subactionType.get(position).getSubActionType_Id();
+//
+//                if (MarkSurvCount >= 3 && subactionTypeID.equals("16")) {
+//                    // Do not allow selection of "16" if MarkSurvCount >= 3
+//                    Toast.makeText(context, "Selection not allowed", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if (subactionTypeID.equals("9")) {
+//                    counTypeInput.setVisibility(View.VISIBLE);
+//                    counNoInput.setVisibility(View.VISIBLE);
+//                    Reg_No_lay.setVisibility(View.VISIBLE);
+//                    if (comments.requestFocus()) {
+//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//                    }
+//                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//                } else {
+//                    counTypeInput.setVisibility(View.GONE);
+//                    counNoInput.setVisibility(View.GONE);
+//                    Reg_No_lay.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // Do nothing
+//            }
+//        });
+//
+//        return subactiontypelist;
+//    }
+
 
     private static boolean hasPermissions(Context context, String... permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
@@ -2305,4 +2335,52 @@ public class ActionActivity extends AppCompatActivity {
         }
 
     }
+    private void callApi() {
+        // Construct the API URL with the final_id parameter
+        String url = "https://census.phc.org.pk:51599/api/Allocation/GetSurveillanceCount?FinalID=" + final_id;
+
+        // Show progress dialog
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+
+        // Create the JsonObjectRequest
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Hide progress dialog
+                        pDialog.dismiss();
+
+                        try {
+                            // Parse response JSON
+                            JSONArray surveillanceCounts = response.getJSONArray("SurveillanceCount");
+                            if (surveillanceCounts.length() > 0) {
+                                JSONObject surveillanceCountObject = surveillanceCounts.getJSONObject(0);
+                                MarkSurvCount = surveillanceCountObject.getInt("MarkForSurveillanceCount");
+                            } else {
+                                Toast.makeText(context, "Surveillance count data is not available", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Hide progress dialog
+                        pDialog.dismiss();
+
+                        // Handle the error
+                        Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        // Add the request to the RequestQueue
+        requestQueue.add(jsonObjectRequest);
+    }
+
+
+
 }
