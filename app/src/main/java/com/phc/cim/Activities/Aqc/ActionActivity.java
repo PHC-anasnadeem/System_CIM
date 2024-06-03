@@ -558,8 +558,8 @@ public class ActionActivity extends AppCompatActivity {
                 } else {
                     fir_layout.setVisibility(View.GONE);
                 }
-//                getsubactionTypes(MarkSurvCount);
-                getsubactionTypes();
+                getsubactionTypes(MarkSurvCount);
+//                getsubactionTypes();
                 if (comments.requestFocus()) {
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
@@ -1610,110 +1610,182 @@ public class ActionActivity extends AppCompatActivity {
         return subactiontseltext;
     }
 
-    private ArrayList<String> getsubactionTypes() {
+//    private ArrayList<String> getsubactionTypes() {
+//        subactionType = dataManager.getsubActionstype(actionTypeID, roleid);
+//        ArrayList<String> subactiontypelist = new ArrayList<String>();
+//        int i = 0;
+//        for (subActionType subActionType : subactionType) {
+//            String subactiontype = subActionType.getSubactionType();
+//            subactiontypelist.add(subactiontype);
+//            i++;
+//        }
+//
+//        ArrayAdapter<String> subactiontype_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, subactiontypelist) {
+//            @Override
+//            public boolean isEnabled(int position) {
+//                if (position == 0) {
+//                    // Disable the first item from Spinner
+//                    // First item will be use for hint
+//                    return true;
+//                } else {
+//                    return true;
+//                }
+//            }
+//
+//            @Override
+//            public View getDropDownView(int position, View convertView,
+//                                        ViewGroup parent) {
+//                View view = super.getDropDownView(position, convertView, parent);
+//
+//                if (position == 0) {
+//                    // Set the hint text color gray
+//                    //tv.setTextColor(Color.GRAY);
+//                } else {
+//                    // tv.setTextColor(Color.BLACK);
+//                }
+//                return view;
+//            }
+//        };
+//        subactiontype_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        subactionType_spinner.setAdapter(subactiontype_spinneradapter);
+//        if (subactionTypeID != null) {
+//            getsubactionsel();
+//            int spinnerPosition = subactiontype_spinneradapter.getPosition(subactiontseltext);
+//            subactionType_spinner.setSelection(spinnerPosition);
+//        }
+//        subactionType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            public void onItemSelected(AdapterView<?> parent, View view,
+//                                       int position, long id) {
+//                subactionTypeText = parent.getItemAtPosition(position).toString();
+//                subactionTypeID = subactionType.get(position).getSubActionType_Id();
+//
+//
+//
+//                // Convert MarkSurvCount to an integer for comparison
+////                int markSurvCountInt = Integer.parseInt(MarkSurvCount);
+//
+////                if (markSurvCountInt > 3) {
+//                // If it is, exclude subactionTypeID.equals("16")
+//                if (!subactionTypeID.equals("16")) {
+//                    // Your logic for showing the view goes here
+//                    if (subactionTypeID.equals("9")) {
+//                        counTypeInput.setVisibility(View.VISIBLE);
+//                        counNoInput.setVisibility(View.VISIBLE);
+//                        Reg_No_lay.setVisibility(View.VISIBLE);
+//                        if (comments.requestFocus()) {
+//                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//                        }
+//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//                    } else {
+//                        counTypeInput.setVisibility(View.GONE);
+//                        counNoInput.setVisibility(View.GONE);
+//                        Reg_No_lay.setVisibility(View.GONE);
+//                    }
+////                    }
+//
+//                } else {
+//                    // Otherwise, show the view
+//                    // Your existing logic goes here
+//                    if (subactionTypeID.equals("9")) {
+//                        counTypeInput.setVisibility(View.VISIBLE);
+//                        counNoInput.setVisibility(View.VISIBLE);
+//                        Reg_No_lay.setVisibility(View.VISIBLE);
+//                        if (comments.requestFocus()) {
+//                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//                        }
+//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//                    } else {
+//                        counTypeInput.setVisibility(View.GONE);
+//                        counNoInput.setVisibility(View.GONE);
+//                        Reg_No_lay.setVisibility(View.GONE);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//
+//        if (comments.requestFocus()) {
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//        }
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//        return subactiontypelist;
+//    }
+
+    private ArrayList<String> getsubactionTypes(int MarkSurvCount) {
         subactionType = dataManager.getsubActionstype(actionTypeID, roleid);
         ArrayList<String> subactiontypelist = new ArrayList<String>();
-        int i = 0;
+
+        // Populate the subactiontypelist and filter based on MarkSurvCount
         for (subActionType subActionType : subactionType) {
             String subactiontype = subActionType.getSubactionType();
-            subactiontypelist.add(subactiontype);
-            i++;
+            String subactionTypeID = subActionType.getSubActionType_Id(); // Assuming this method exists to get the ID
+            if (MarkSurvCount <= 3 || !subactionTypeID.equals("16")) {
+                subactiontypelist.add(subactiontype);
+            }
         }
 
         ArrayAdapter<String> subactiontype_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, subactiontypelist) {
             @Override
             public boolean isEnabled(int position) {
-                if (position == 0) {
-                    // Disable the first item from Spinner
-                    // First item will be use for hint
-                    return true;
-                } else {
-                    return true;
-                }
+                return true; // All items are enabled
             }
 
             @Override
-            public View getDropDownView(int position, View convertView,
-                                        ViewGroup parent) {
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
-
-                if (position == 0) {
-                    // Set the hint text color gray
-                    //tv.setTextColor(Color.GRAY);
-                } else {
-                    // tv.setTextColor(Color.BLACK);
-                }
                 return view;
             }
         };
+
         subactiontype_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subactionType_spinner.setAdapter(subactiontype_spinneradapter);
+
         if (subactionTypeID != null) {
             getsubactionsel();
             int spinnerPosition = subactiontype_spinneradapter.getPosition(subactiontseltext);
             subactionType_spinner.setSelection(spinnerPosition);
         }
+
         subactionType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 subactionTypeText = parent.getItemAtPosition(position).toString();
                 subactionTypeID = subactionType.get(position).getSubActionType_Id();
 
+                if (MarkSurvCount > 3 && subactionTypeID.equals("16")) {
+                    // Do not allow selection of "16" if MarkSurvCount > 3
+                    Toast.makeText(context, "Selection not allowed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-
-                // Convert MarkSurvCount to an integer for comparison
-//                int markSurvCountInt = Integer.parseInt(MarkSurvCount);
-
-//                if (markSurvCountInt > 3) {
-                // If it is, exclude subactionTypeID.equals("16")
-                if (!subactionTypeID.equals("16")) {
-                    // Your logic for showing the view goes here
-                    if (subactionTypeID.equals("9")) {
-                        counTypeInput.setVisibility(View.VISIBLE);
-                        counNoInput.setVisibility(View.VISIBLE);
-                        Reg_No_lay.setVisibility(View.VISIBLE);
-                        if (comments.requestFocus()) {
-                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                        }
-                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                    } else {
-                        counTypeInput.setVisibility(View.GONE);
-                        counNoInput.setVisibility(View.GONE);
-                        Reg_No_lay.setVisibility(View.GONE);
+                if (subactionTypeID.equals("9")) {
+                    counTypeInput.setVisibility(View.VISIBLE);
+                    counNoInput.setVisibility(View.VISIBLE);
+                    Reg_No_lay.setVisibility(View.VISIBLE);
+                    if (comments.requestFocus()) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                     }
-//                    }
-
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 } else {
-                    // Otherwise, show the view
-                    // Your existing logic goes here
-                    if (subactionTypeID.equals("9")) {
-                        counTypeInput.setVisibility(View.VISIBLE);
-                        counNoInput.setVisibility(View.VISIBLE);
-                        Reg_No_lay.setVisibility(View.VISIBLE);
-                        if (comments.requestFocus()) {
-                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                        }
-                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                    } else {
-                        counTypeInput.setVisibility(View.GONE);
-                        counNoInput.setVisibility(View.GONE);
-                        Reg_No_lay.setVisibility(View.GONE);
-                    }
+                    counTypeInput.setVisibility(View.GONE);
+                    counNoInput.setVisibility(View.GONE);
+                    Reg_No_lay.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Do nothing
             }
         });
 
-        if (comments.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         return subactiontypelist;
     }
+
+    //////////////////////////////////////////////////////////////////////////
 
 //    private ArrayList<String> getsubactionTypes(int MarkSurvCount) {
 //        subactionType = dataManager.getsubActionstype(actionTypeID, roleid);
@@ -1722,7 +1794,7 @@ public class ActionActivity extends AppCompatActivity {
 //        // Populate the subactiontypelist and filter based on MarkSurvCount
 //        for (subActionType subActionType : subactionType) {
 //            String subactiontype = subActionType.getSubactionType();
-//            if (MarkSurvCount < 3 || !subactiontype.equals("16")) {
+//            if (MarkSurvCount > 3 || !subactiontype.equals("16")) {
 //                subactiontypelist.add(subactiontype);
 //            }
 //        }
@@ -1783,6 +1855,9 @@ public class ActionActivity extends AppCompatActivity {
 //
 //        return subactiontypelist;
 //    }
+
+
+
 
 
     private static boolean hasPermissions(Context context, String... permissions) {
