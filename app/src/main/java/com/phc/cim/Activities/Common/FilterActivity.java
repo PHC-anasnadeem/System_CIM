@@ -206,6 +206,9 @@ public class FilterActivity extends AppCompatActivity {
     ProgressDialog pDialog;
     String jsonStr;
     ArrayAdapter<String> sectortypeadapter;
+    private ImageView notificationIcon;
+    private TextView notificationCount;
+    private int notificationCounter = 0;
 
     @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -222,14 +225,34 @@ public class FilterActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         gps = new CurrentLocation(context);
         mHandler = new Handler();
-        TextView t2 = (TextView) findViewById(R.id.text2);
+//        TextView t2 = (TextView) findViewById(R.id.text2);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
 
+        // Find notification views
+        notificationIcon = findViewById(R.id.notificationIcon);
+        notificationCount = findViewById(R.id.notificationCount);
 
-        // Navigation view header
+        int notificationCount = getIntent().getIntExtra("notificationCount", 0);
+
+        // Set click listener for notification icon
+        notificationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent notifyIntent = new Intent(FilterActivity.this, NotificationActivity.class);
+                startActivity(notifyIntent);
+//                Toast.makeText(FilterActivity.this, "Notifications clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        incrementNotificationCount();
+
+
+
+
+
+    // Navigation view header
         navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(R.id.name);
         txtWebsite = (TextView) navHeader.findViewById(R.id.website);
@@ -1113,6 +1136,8 @@ public class FilterActivity extends AppCompatActivity {
     }
 
 
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -1759,5 +1784,21 @@ public class FilterActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    // Method to update notification count
+    private void updateNotificationCount(int count) {
+        if (count > 0) {
+            notificationCount.setVisibility(View.VISIBLE);
+            notificationCount.setText(String.valueOf(count));
+        } else {
+            notificationCount.setVisibility(View.GONE);
+        }
+    }
+
+    // increment notification count
+    private void incrementNotificationCount() {
+        notificationCounter++;
+        updateNotificationCount(notificationCounter);
     }
 }
