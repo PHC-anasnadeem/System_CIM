@@ -1,6 +1,11 @@
 package com.phc.cim.DataElements;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "notifications")
 public class NotificationItem {
+    @PrimaryKey
     private int ComplaintsDetail_SEQ;
     private String title;
     private String OutletName;

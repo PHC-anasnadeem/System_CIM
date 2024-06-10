@@ -19,6 +19,10 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.phc.cim.Extra.NotificationWorker;
 import com.phc.cim.Managers.WebApiManager;
 import com.phc.cim.R;
 import com.trncic.library.DottedProgressBar;
@@ -43,6 +48,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -122,12 +128,25 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }, SPLASH_TIME_OUT);
 
+
+        // Schedule the periodic work request
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             // Activity was brought to front and not created,
             // Thus finishing this will get us to the last viewed activity
             finish();
             return;
         }
+
+        PeriodicWorkRequest notificationWorkRequest = new PeriodicWorkRequest.Builder(
+                NotificationWorker.class, 15, TimeUnit.MINUTES)
+                .build();
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "NotificationWork",
+                ExistingPeriodicWorkPolicy.KEEP,
+                notificationWorkRequest);
+
+
         getVersionInfo();
         progressBar = (DottedProgressBar) findViewById(R.id.progress);
         progressBar.startProgress();
