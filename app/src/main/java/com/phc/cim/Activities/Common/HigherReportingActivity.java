@@ -445,6 +445,10 @@ public class HigherReportingActivity extends AppCompatActivity {
                         startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_hearing:
+                        startActivity(new Intent(context, HearingStatusActivity.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_actiondesc:
                         startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();

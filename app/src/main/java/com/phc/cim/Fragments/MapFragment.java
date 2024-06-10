@@ -18,20 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-
-import androidx.annotation.RequiresApi;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +28,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,12 +51,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.maps.android.clustering.ClusterManager;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Activities.Common.RouteMapsActivity;
+import com.phc.cim.DataElements.District;
 import com.phc.cim.DataElements.MyItem;
 import com.phc.cim.DownloadClases.DownloadHCEDetail;
-import com.phc.cim.DataElements.District;
 import com.phc.cim.Others.CurrentLocation;
 import com.phc.cim.ParcelableModel.CarParcelable;
 import com.phc.cim.R;
@@ -186,6 +183,7 @@ public class MapFragment extends Fragment {
     float hue_yellow = 57;
     float hue_blue = 206;
     float hue_red = 358;
+    float hue_purple = 400;
     int blue_transp = 0x408cb4cc;
     int red_transp = 0x40ff0000;
     static int filcolor = 0x40ff0000;
@@ -244,42 +242,6 @@ public class MapFragment extends Fragment {
         teame = (TextView) rootView.findViewById(R.id.teame);
         circlelayout = (LinearLayout) rootView.findViewById(R.id.circlelayout);
         circlelayout.setVisibility(View.GONE);
-
-
-/*
-
-        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        mHandler = new Handler();
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        //fab = (FloatingActionButton) findViewById(R.id.fab);
-
-        // Navigation view header
-        navHeader = navigationView.getHeaderView(0);
-        txtName = (TextView) navHeader.findViewById(R.id.name);
-        txtWebsite = (TextView) navHeader.findViewById(R.id.website);
-        imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
-        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
-
-        // load toolbar titles from string resources
-        activityTitles = getResources().getString(R.string.nav_item_activity_titles);
-
-        loadNavHeader();
-
-        // initializing navigation menu
-        setUpNavigationView();
-
-        if (savedInstanceState == null) {
-            navItemIndex = 0;
-            CURRENT_TAG = TAG_HOME;
-            loadHomeFragment();
-        }
-*/
-        // MapsInitializer.initialize(getApplicationContext());
-
 
         mTextMessage = (TextView) rootView.findViewById(R.id.Reg_text);
         mname = (TextView) rootView.findViewById(R.id.Name);
@@ -350,9 +312,6 @@ public class MapFragment extends Fragment {
                     List<Address> addresses;
                     try {
                         addresses = gcd.getFromLocation(cur_latitude, cur_longitude, 1);
-                        //if (addresses.size() > 0)
-                        //  System.out.println(addresses.get(0).getLocality());
-//                        cityName = addresses.get(0).getLocality();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -432,15 +391,6 @@ public class MapFragment extends Fragment {
                         linearLayout.setVisibility(View.GONE);
                         //circlelayout.setVisibility(View.GONE);
 
-
-             /*           LatLng center = myCircle.getCenter();
-
-
-                        double radius = myCircle.getRadius();
-                        float[] distance = new float[1];
-                        Location.distanceBetween(arg0.latitude, arg0.longitude, center.latitude, center.longitude, distance);
-                        boolean clicked = distance[0] < radius;
-                        if (clicked) {*/
                         circlelayout.setVisibility(View.VISIBLE);
                         for (int i = 0; i < indtabresult.size(); i++) {
                             LatLng latLng = new LatLng(Double.parseDouble(indtabresult.get(i).get("lat")), Double.parseDouble(indtabresult.get(i).get("lng")));
@@ -454,8 +404,6 @@ public class MapFragment extends Fragment {
 
                     }
                 });
-
-
                 //User Can add manually Marker
 
 //                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -495,26 +443,7 @@ public class MapFragment extends Fragment {
                 // Add a marker in Sydney and move the camera
             }
         });
-//            Reg_icon = BitmapDescriptorFactory.fromResource(R.drawable.yellow_marker);
-        // PL_icon = BitmapDescriptorFactory.fromResource(R.drawable.green_marker);
-        // unReg_icon = BitmapDescriptorFactory.fromResource(R.drawable.blue_marker);
-        //  quack_icon = BitmapDescriptorFactory.fromResource(R.drawable.red_marker );
 
-
-
-
-
-      /*  SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);*/
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-/*
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);*/
         return rootView;
     }
 
@@ -660,147 +589,6 @@ public class MapFragment extends Fragment {
     }
 
 
-
-/*
-    private void addMarker(){
-
-        if(current_icon!=null){
-            current_icon.remove();}
-        String lat = Double.toString(cur_latitude);
-        //Log.d(TAG, lat);
-
-        LatLng carLoc = null, newCarLoc = null;
-        //mCarParcelableListLastLocation = mCarParcelableListCurrentLation;
-        if(mCarParcelableListLastLocation ==null){
-            mCarParcelableListLastLocation = mCarParcelableListCurrentLation;
-        }
-        //Initially add markers for all cars to the map
-        if(mCarParcelableListCurrentLation==null){
-            mCarParcelableListLastLocation = mCarParcelableList;
-            // for(CarParcelable car : mCarParcelableList) {
-            carLoc = new LatLng(cur_latitude, cur_longitude);
-
-            current_icon = mMap.addMarker(new MarkerOptions()
-                    .position(carLoc)
-                    .title("Current Location")
-                    .snippet("current")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_pickup)));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(carLoc, 14));
-
-            //}
-        }else{ // then update each car's position by moving the marker smoothly from previous
-            // location to the current location
-            for(int i=0; i<mCarParcelableListCurrentLation.size();i++) {
-
-                carLoc = new LatLng(mCarParcelableListLastLocation.get(i).mLat, mCarParcelableListLastLocation.get(i).mLon);
-                newCarLoc = new LatLng(mCarParcelableListCurrentLation.get(i).mLat, mCarParcelableListCurrentLation.get(i).mLon);
-                cur_latitude= mCarParcelableListCurrentLation.get(i).mLat;
-                cur_longitude=mCarParcelableListCurrentLation.get(i).mLon;
-                animateMarker(i, carLoc, newCarLoc, false);
-            }
-            mCarParcelableListLastLocation = mCarParcelableListCurrentLation;
-            //set the the last known location of each car to the current location of each car
-            //so we will get the updates of car's location then we will move the marker from
-            //last known location to the current location again.
-
-
-
-        }
-
-    }
-
-
-    //creating a broadcast receiver object
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateUI(intent);
-        }
-    };
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mServiceIntent = new Intent(this, BroadCastService.class);
-        startService(mServiceIntent);//starting the service
-        //IntentFilter filter = new IntentFilter();
-        //filter.addAction(BroadCastService.BROADCAST_ACTION);
-        // registerReceiver(broadcastReceiver, filter);
-        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION));//register the broadcast receiver
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(broadcastReceiver);
-        stopService(mServiceIntent);
-    }
-
-    private void updateUI(Intent intent) {
-
-        //"carList" parcelable object is Broadcast from BroadCastService class
-        mCarParcelableListCurrentLation = intent.getParcelableArrayListExtra("carList");
-
-        addMarker();
-
-    }
-
-    //This methos is used to move the marker of each car smoothly when there are any updates of their position
-    public void animateMarker(final int position, final LatLng startPosition, final LatLng toPosition,
-                              final boolean hideMarker) {
-
-
-      */
-/*  current_icon = mMap.addMarker(new MarkerOptions()
-                .position(startPosition)
-                .title(mCarParcelableListCurrentLation.get(position).mCarName)
-                .snippet(mCarParcelableListCurrentLation.get(position).mAddress)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPosition, 14));
-
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-
-        final long duration = 1000;
-        final Interpolator interpolator = new LinearInterpolator();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = interpolator.getInterpolation((float) elapsed
-                        / duration);
-                double lng = t * toPosition.longitude + (1 - t)
-                        * startPosition.longitude;
-                double lat = t * toPosition.latitude + (1 - t)
-                        * startPosition.latitude;
-
-                current_icon.setPosition(new LatLng(lat, lng));
-                animateCurrent=new LatLng(lat,lng);
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    handler.postDelayed(this, 16);
-                } else {
-                    if (hideMarker) {
-                        current_icon.setVisible(false);
-                    } else {
-                        current_icon.setVisible(true);
-                    }
-                }
-            }
-        });*//*
-
-        if (cur_latitude != 0.0 && cur_longitude != 0.0 && mCarParcelableListCurrentLation!=mCarParcelableListLastLocation) {
-            // pDialog = new ProgressDialog(this);
-            String url = getDirectionsUrl();
-            DownloadTask downloadTask = new DownloadTask();
-            downloadTask.execute(url);
-        }
-    }
-*/
-
-
     //-------------------------DownloadInspDetail Task------------------------------------------------
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
@@ -835,29 +623,9 @@ public class MapFragment extends Fragment {
 
     private String getDirectionsUrl() {
         String url = null;
-        // Building the url to the web service
-        // String baseurl = context.getResources().getString(R.string.baseurl);
-        //districtText
-        //TehsilText
         String baseurl = getContext().getResources().getString(R.string.baseurl);
-
-
         String token = getContext().getResources().getString(R.string.token);
-
         url = baseurl + "GetHCEs?strToken=" + token + "&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText + "&Lvs=&RegNum=" + RegnoText + "&HCEName=" + hcenameText + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude + "&Distance=" + distancetext + "&finalid=" + finalidText + "&ActionType=" + lastvisitedText + "&QuackCategory=" + QuackType + "&QuackSubCategory=&SubActionType=" + subactionTypeID;
-        // }+"&Cnic="+Cnic+"&Phone="+Phone
-        // else if(searchbytext.equals("Distance")){
-        //   url = baseurl+"SearchHCE?DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude;
-
-        // }
-
-    /*    if(REGfilterstatus.equals("Yes")) {
-         url = "http://202.142.147.36:8098/PHCCensusData.svc/SearchHCE?DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude;
-            //url = url.replaceAll(" ", "%20");
-        }
-        if(REGfilterstatus.equals("No")) {
-            url="http://202.142.147.36:8098/PHCCensusData.svc/SearchUnRegHCE?DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude;
-        }*/
         url = url.replaceAll(" ", "%20");
         return url;
     }
@@ -914,7 +682,6 @@ public class MapFragment extends Fragment {
             super.onPreExecute();
             // Showing progress dialog
 
-
         }
 
         @Override
@@ -925,7 +692,6 @@ public class MapFragment extends Fragment {
             if (jsonStr != null) {
                 try {
                     JSONArray json = new JSONArray(jsonStr);
-// ...
                     mylist = new ArrayList<HashMap<String, String>>();
                     for (int i = 0; i < json.length(); i++) {
                         HashMap<String, String> map = new HashMap<String, String>();
@@ -965,10 +731,6 @@ public class MapFragment extends Fragment {
 //                            map.put("hcsp_cnic", e.getString("hcsp_cnic"));
 //                            map.put("hcsp_phone", e.getString("hcsp_phone"));
 
-
-                        //map.put("dataType", e.getString("dataType"));
-                        //  map.put("registrationType",e.getString("registrationType"));
-                        // map.put("orgType",e.getString("orgType"));
                         mylist.add(map);
                     }
 
@@ -992,32 +754,9 @@ public class MapFragment extends Fragment {
         protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
             super.onPostExecute(result);
 
-
-         /*   if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            mMap.setMyLocationEnabled(true);*/
-  /*          current_icon = mMap.addMarker(new MarkerOptions()
-                    .position(animateCurrent)
-                    .title("Current Location")
-                    .snippet("current")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer)));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(animateCurrent, 14));*/
             if (result != null) {
                 if (result.size() > 0) {
                     LatLng latLngzoom = null;
-                    // mClusterManager = new ClusterManager<MyItem>(getContext(), mMap);
-
-                    // Point the map's listeners at the listeners implemented by the cluster
-                    // manager.
-
 
                     for (int i = 0; i < result.size(); i++) {
                         double latitude = 0;
@@ -1043,12 +782,10 @@ public class MapFragment extends Fragment {
                             latLngzoom = new LatLng(latitude, longitude);
                         }
 
-                        //id = Float.parseFloat(hces.get(i).getHCE_id());
 
                         if (RegType.equals("Registered")) {
 
                             if (latitude != 0 && longitude != 0) {
-
 
                                 LatLng latLng = new LatLng(latitude, longitude);
 
@@ -1085,7 +822,6 @@ public class MapFragment extends Fragment {
                         } else if (RegType.equals("Not Registered with PHC")) {
                             if (latitude != 0 && longitude != 0) {
 
-
                                 LatLng latLng = new LatLng(latitude, longitude);
                                 if (VisitStatus.equals("1") && (ActionType.equals("1") || ActionType.equals("3"))) {
                                     mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_blue)).snippet(RegType));
@@ -1113,7 +849,23 @@ public class MapFragment extends Fragment {
 
                                 }
                             }
+//                        } else if (RegType.equals("Quack") || RegType.equals("Not Registered with PHC")) {
+//                            if (latitude != 0 && longitude != 0) {
+//
+//                                LatLng latLng = new LatLng(latitude, longitude);
+//                                if (VisitStatus.equals("1") && (ActionType.equals("2"))) {
+//                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_purple)).snippet(RegType));
+//
+//                                } else if (VisitStatus.equals("1") && ActionType.equals("2")) {
+//                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_visited_purple)).snippet(RegType));
+//
+//                                } else {
+//                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.defaultMarker(hue_purple)).snippet(RegType));
+//
+//                                }
+//                            }
                         }
+
 
                         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
@@ -1164,15 +916,13 @@ public class MapFragment extends Fragment {
                                         mname.setText(arg0.getTitle());
                                         curr = "Reg";
 
-
-                                        //  mTextMessage.setTextColor(YELLOW);
-
                                     } else if (arg0.getSnippet().equals("current")) {
                                         curr = "curent";
                                         mTextMessage.setText("Current Location");
                                         status = "Current Location";
                                         maddress.setVisibility(View.GONE);
                                         mname.setVisibility(View.GONE);
+
                                     } else if (arg0.getSnippet().equals("Provisional License") || arg0.getSnippet().equals("Regular License")) {
                                         for (int i = 0; i < result.size(); i++) {
                                             double _latitude = Double.parseDouble(result.get(i).get("lat"));
@@ -1214,8 +964,7 @@ public class MapFragment extends Fragment {
                                         circlelayout.setVisibility(View.GONE);
                                         linearLayout.setVisibility(View.VISIBLE);
                                         curr = "Reg";
-                                        // mTextMessage.setText(status);
-                                        // mTextMessage.setTextColor(GREEN);
+
                                     } else if (arg0.getSnippet().equals("Not Registered with PHC")) {
                                         for (int i = 0; i < result.size(); i++) {
                                             double _latitude = Double.parseDouble(result.get(i).get("lat"));

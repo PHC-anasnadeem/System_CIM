@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.phc.cim.Adapters.DiaryEntryAdapter;
@@ -51,6 +52,8 @@ public class DesealListing extends AppCompatActivity {
     String savedToken,savedUsername,savedEmail;
     int savedHceUserIdSeq;
     ProgressBar progressBar;
+    String finalID;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +78,7 @@ public class DesealListing extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isInternetAvailable()) {
-                    fetchDiaryEntries();
+                    fetchDiaryEntries(DesealListing.this);
                 } else {
                     Toast.makeText(getApplicationContext(), "Internet not available. Please check your connection.", Toast.LENGTH_SHORT).show();
                 }
@@ -83,35 +86,36 @@ public class DesealListing extends AppCompatActivity {
         });
     }
 
-    private void fetchDiaryEntries() {
+    private void fetchDiaryEntries(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("Context cannot be null");
+        }
+
         // Retrieve user input
-        String finalID = etFinalID.getText().toString().trim();
-
-
+        finalID = etFinalID.getText().toString().trim();
         progressBar.setVisibility(View.VISIBLE);
 
         // Construct the URL with FinalID parameter
-        String url = "https://census.phc.org.pk:51599/api/Allocation/GetDeSealOrders?FinalID=" + finalID;
-        //String url = "https://census.phc.org.pk:6693/api/Allocation/GetDeSealOrders?FinalID=" + finalID;
+        String baseurl = context.getResources().getString(R.string.baseurl);
+        String token = context.getResources().getString(R.string.token);
+        String url = baseurl + "GetDeSealOrders?FinalID=" + finalID;
 
-
-        // Create JSON request
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+        // Create JSON array request
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         progressBar.setVisibility(View.GONE);
                         try {
-                            JSONArray deSealOrders = response.getJSONArray("DeSealOrders");
-                            if (deSealOrders.length() == 0) {
+                            if (response.length() == 0) {
                                 Toast.makeText(DesealListing.this, "This final ID has not been de-sealed yet", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             List<DiaryEntry> newDiaryEntries = new ArrayList<>();
 
                             // Parse JSON response and create DiaryEntry objects
-                            for (int i = 0; i < deSealOrders.length(); i++) {
-                                JSONObject item = deSealOrders.getJSONObject(i);
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject item = response.getJSONObject(i);
                                 int finalID = item.getInt("finalID");
                                 int aqcFileNo = item.getInt("caseFileID");
                                 String comments = item.optString("Comments", "");
@@ -120,15 +124,12 @@ public class DesealListing extends AppCompatActivity {
                                 String outletName = item.getString("OutletName");
                                 String formattedDate = item.getString("DesealDate");
 
-                                // Parse and format the desealDate
-                                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                                // Extract the timestamp from the formattedDate
+                                long timestamp = extractTimestamp(formattedDate);
+                                Date date = new Date(timestamp);
+
+                                // Format the date
                                 SimpleDateFormat targetFormat = new SimpleDateFormat("dd MMM yyyy");
-                                Date date = null;
-                                try {
-                                    date = originalFormat.parse(formattedDate);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
                                 String desealDate = targetFormat.format(date);
 
                                 // Assuming DiaryEntry has the appropriate constructor
@@ -157,8 +158,16 @@ public class DesealListing extends AppCompatActivity {
         );
 
         // Add the request to the RequestQueue
-        requestQueue.add(jsonObjectRequest);
+        requestQueue.add(jsonArrayRequest);
     }
+
+    private long extractTimestamp(String formattedDate) {
+        // Extract the numeric part of the date string
+        String timestampStr = formattedDate.replaceAll("[^0-9]", "");
+        return Long.parseLong(timestampStr);
+    }
+
+
 
     private boolean isInternetAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

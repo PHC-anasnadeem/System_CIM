@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.android.volley.Request;
@@ -65,6 +66,7 @@ import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
 import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
+import com.phc.cim.Activities.Common.HearingStatusActivity;
 import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.GalleryActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
@@ -112,6 +114,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -130,6 +133,8 @@ public class ActionActivity extends AppCompatActivity {
 
     CurrentLocation gps;
     double cur_latitude;
+
+
     double cur_longitude;
 
     TextInputLayout regNoInput;
@@ -179,8 +184,6 @@ public class ActionActivity extends AppCompatActivity {
     private static final String TAG_NOTIFICATIONS = "notifications";
     private static final String TAG_SETTINGS = "settings";
     public static String CURRENT_TAG = TAG_HOME;
-    // toolbar titles respected to selected nav menu item
-    // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
 
@@ -773,36 +776,45 @@ public class ActionActivity extends AppCompatActivity {
                 }
             }
         });
-        Button camera = (Button) findViewById(R.id.take_pic);
+//        Button camera = (Button) findViewById(R.id.take_pic);
+//
+//        camera.setOnClickListener(new Button.OnClickListener() {
+//
+//
+//            public void onClick(View v) {
+//                if (Build.VERSION.SDK_INT >= 24) {
+//                    try {
+//                        Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+//                        m.invoke(null);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//                count = 2;
+//                requestRuntimePermission();
+//                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
+//                String currentDateandTime = sdf.format(new Date());
+//                String pictureName = final_id + "_" + currentDateandTime;//here you can get picture name from user. I supposed Test name
+//                Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                File photo = new File(context.getExternalFilesDir(null), pictureName + ".jpg");//save picture (.jpg) on SD Card
+//                u = Uri.fromFile(photo);
+//                intentcamera.putExtra(MediaStore.EXTRA_OUTPUT, u);
+//                intentcamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                filePath = photo.getAbsolutePath();
+//                startActivityForResult(intentcamera, REQUEST_CODE);
+//
+//            }
+//        });
 
-        camera.setOnClickListener(new Button.OnClickListener() {
-
-
+        Button camera = findViewById(R.id.take_pic);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= 24) {
-                    try {
-                        Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
-                        m.invoke(null);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                count = 2;
                 requestRuntimePermission();
-                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
-                String currentDateandTime = sdf.format(new Date());
-                String pictureName = final_id + "_" + currentDateandTime;//here you can get picture name from user. I supposed Test name
-                Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File photo = new File(context.getExternalFilesDir(null), pictureName + ".jpg");//save picture (.jpg) on SD Card
-                u = Uri.fromFile(photo);
-                intentcamera.putExtra(MediaStore.EXTRA_OUTPUT, u);
-                intentcamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                filePath = photo.getAbsolutePath();
-                startActivityForResult(intentcamera, REQUEST_CODE);
-
             }
         });
+
         Button attachment = (Button) findViewById(R.id.attach_pic);
 
         attachment.setOnClickListener(new Button.OnClickListener() {
@@ -854,25 +866,81 @@ public class ActionActivity extends AppCompatActivity {
 
     }
 
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        switch (requestCode) {
+//
+//            case 1: {
+//                if (requestCode == MY_REQUEST_CODE) {
+//                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                        // Now user should be able to use camera
+//                    } else {
+//                        // Your app will not have this permission. Turn off all functions
+//                        // that require this permission or it will force close like your
+//                        // original question
+//                    }
+//                }
+//
+//
+//            }
+//
+//        }
+//    }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Camera and storage permissions are required to take photos", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
-            case 1: {
-                if (requestCode == MY_REQUEST_CODE) {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        // Now user should be able to use camera
-                    } else {
-                        // Your app will not have this permission. Turn off all functions
-                        // that require this permission or it will force close like your
-                        // original question
-                    }
-                }
+    private void openCamera() {
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        count = 2;
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
+        String currentDateandTime = sdf.format(new Date());
+        String pictureName = final_id + "_" + currentDateandTime;
+        Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photo = new File(getExternalFilesDir(null), pictureName + ".jpg");
+        u = Uri.fromFile(photo);
+        intentcamera.putExtra(MediaStore.EXTRA_OUTPUT, u);
+        intentcamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        filePath = photo.getAbsolutePath();
+        startActivityForResult(intentcamera, REQUEST_CODE);
+    }
 
+    public void requestRuntimePermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            List<String> permissionsNeeded = new ArrayList<>();
 
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
 
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(Manifest.permission.CAMERA);
+            }
+
+            if (!permissionsNeeded.isEmpty()) {
+                ActivityCompat.requestPermissions(this,
+                        permissionsNeeded.toArray(new String[0]), 1);
+            }
         }
     }
 
@@ -882,16 +950,19 @@ public class ActionActivity extends AppCompatActivity {
     }
 
     // @RequiresApi(api = Build.VERSION_CODES.M)
-    public void requestRuntimePermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
 
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            }
-        }
-    }
+    // public void requestRuntimePermission() {
+    ////        if (Build.VERSION.SDK_INT >= 23) {
+    ////
+    ////            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    ////                    != PackageManager.PERMISSION_GRANTED) {
+    ////                ActivityCompat.requestPermissions(this,
+    ////                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+    ////            }
+    ////        }
+    ////    }
+//
+
 
     public void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -1097,13 +1168,15 @@ public class ActionActivity extends AppCompatActivity {
                         startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_hearing:
+                        startActivity(new Intent(context, HearingStatusActivity.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email", email).putExtra("password", password));
                         drawer.closeDrawers();
                         return true;
-
-
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, AboutusActivity.class));
@@ -2240,7 +2313,7 @@ public class ActionActivity extends AppCompatActivity {
                 } else {
 
 
-                    Toast.makeText(context, "Update not submitted! Please Verify", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Update not submitted! Please Verify" + result, Toast.LENGTH_SHORT).show();
 
                 }
                 // Updating parsed JSON data into ListView

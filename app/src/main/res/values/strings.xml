@@ -14,7 +14,7 @@
     <string name="view_homework">HCEs</string>
     <!--        <string name="baseurl">http://116.58.56.236:8098/PHCCensusData.svc/</string>-->
     <string name="baseurl">https://www.phc.org.pk:8099/PHCCensusData.svc/</string>
-<!--    <string name="baseurl">http://www.phc.org.pk:6695/PHCCensusData.svc/</string>-->
+    <!--    <string name="baseurl">http://www.phc.org.pk:6695/PHCCensusData.svc/</string>-->
     <!--    <string name="baseurl">http://192.168.200.19:5152/PHCCensusData.svc/</string>-->
     <!--    <string name="baseurl">https://localhost:5152/PHCCensusData.svc/</string>-->
 

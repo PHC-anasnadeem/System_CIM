@@ -86,6 +86,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     BitmapDescriptor PL_icon;
     BitmapDescriptor unReg_icon;
     BitmapDescriptor quack_icon;
+    BitmapDescriptor deseal_icon;
     LatLng current;
     LatLng animateCurrent;
     ArrayList<District> hces;
@@ -148,104 +149,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         PL_icon = BitmapDescriptorFactory.fromResource(R.drawable.map_green_icon);
         unReg_icon = BitmapDescriptorFactory.fromResource(R.drawable.blue_icon);
         quack_icon = BitmapDescriptorFactory.fromResource(R.drawable.red_icon);
+        deseal_icon = BitmapDescriptorFactory.fromResource(R.drawable.purple_icon);
         context = this;
         pDialog = new ProgressDialog(this);
         mTextMessage = (TextView) findViewById(R.id.Reg_text);
         mname = (TextView) findViewById(R.id.Name);
         maddress = (TextView) findViewById(R.id.addrs);
 
-        //FrameLayout = (FrameLayout) findViewById(R.id.mapframe);
-        //FrameLayout.setVisibility(View.INVISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         Intent intent = getIntent();
         email= (String) intent.getSerializableExtra("email");
-    /*    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);*/
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         final MenuItem searchItem = menu.findItem(R.id.action_location);
-
-/*        if (searchItem != null) {
-            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-            searchView.setOnSearchClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                }
-            });
-
-            searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-                @Override
-                public boolean onClose() {
-
-
-                    return false;
-                }
-            });
-
-            searchPlate = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-            searchPlate.setHint("HCE name");
-
-
-            View searchPlateView = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
-            searchPlateView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
-
-            // use this method for search process
-
-
-
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    // use this method when query submitted
-                    searchCount=1;
-                    String url = getsearchUrl(query);
-                    DownloadTask downloadTask = new DownloadTask();
-                    //Start downloading json data from Google Directions API
-                    downloadTask.execute(url);
-                    return true;
-
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    // use this method for auto complete search process
-                    if(!TextUtils.isEmpty(newText)) {
-                        *//*list.setVisibility(View.VISIBLE);
-                        stops = dataManager.getStopsArray();
-
-                        stopListAdapter = new StopListAdapter(context, stops);
-                        list.setAdapter(stopListAdapter);
-                        stopListAdapter.getFilter().filter(newText);*//*
-
-                    }
-
-                    else {
-
-                        // list.setVisibility(View.GONE);
-                    }
-                    return false;
-                }
-
-            });
-
-            SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-        }*/
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -296,7 +219,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     cur_latitude = gps.getLatitude();
                     cur_longitude = gps.getLongitude();
-                    // latlangListener.onlatlang(cur_latitude, cur_longitude);
                 } else {
                     // Can't get location.
                     // GPS or network is not enabled.
@@ -311,7 +233,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (gps.canGetLocation()) {
                 cur_latitude = gps.getLatitude();
                 cur_longitude = gps.getLongitude();
-                // latlangListener.onlatlang(cur_latitude, cur_longitude);
             } else {
                 gps.showSettingsAlert();
 
@@ -342,25 +263,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setMyLocationEnabled(true);
             //current_icon = mMap.addMarker(new MarkerOptions().position(current).title("Current Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.location_pickup)).rotation(mOrientation).snippet("current"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 14));
-            // DataManager dataManager = new DataManager(this);
-            // hces = dataManager.getHCEArray();
 
-       /*     pDialog.setMessage("Please wait!....");
-            pDialog.setCancelable(false);
-            pDialog.show();
-            String url = getDirectionsUrl();
-            DownloadTask downloadTask = new DownloadTask();
-            //Start downloading json data from Google Directions API
-            downloadTask.execute(url);*/
         } else {
             // Toast.makeText(getApplicationContext(), "Please Refresh the page", Toast.LENGTH_SHORT).show();
         }
-
-
-        //cur_latitude = gps.getLatitude();
-        //cur_longitude = gps.getLongitude();
-
-        // Add a marker in Sydney and move the camera
 
     }
 
@@ -397,9 +303,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void addMarker() {
 
-
-
-
             if (current_icon != null) {
                 current_icon.remove();
             }
@@ -407,7 +310,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //Log.d(TAG, lat);
 
             LatLng carLoc = null, newCarLoc = null;
-            //mCarParcelableListLastLocation = mCarParcelableListCurrentLation;
             if (mCarParcelableListLastLocation == null) {
                 mCarParcelableListLastLocation = mCarParcelableListCurrentLation;
             }
@@ -424,7 +326,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_pickup)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(carLoc, 14));
 
-                //}
+
             } else { // then update each car's position by moving the marker smoothly from previous
                 // location to the current location
                 for (int i = 0; i < mCarParcelableListCurrentLation.size(); i++) {
@@ -439,8 +341,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //set the the last known location of each car to the current location of each car
                 //so we will get the updates of car's location then we will move the marker from
                 //last known location to the current location again.
-
-
             }
 
     }
@@ -487,56 +387,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                               final boolean hideMarker) {
         animateCurrent=toPosition;
 
-
-/*
-        current_icon = mMap.addMarker(new MarkerOptions()
-                .position(startPosition)
-                .title(mCarParcelableListCurrentLation.get(position).mCarName)
-                .snippet(mCarParcelableListCurrentLation.get(position).mAddress)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPosition, 14));*/
-       /* if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mMap.setMyLocationEnabled(true);*/
- /*       final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-
-        final long duration = 1000;
-        final Interpolator interpolator = new LinearInterpolator();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = interpolator.getInterpolation((float) elapsed
-                        / duration);
-                double lng = t * toPosition.longitude + (1 - t)
-                        * startPosition.longitude;
-                double lat = t * toPosition.latitude + (1 - t)
-                        * startPosition.latitude;
-
-                current_icon.setPosition(new LatLng(lat, lng));
-                animateCurrent = new LatLng(lat, lng);
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    handler.postDelayed(this, 16);
-                } else {
-                    if (hideMarker) {
-                        current_icon.setVisible(false);
-                    } else {
-                        current_icon.setVisible(true);
-                    }
-                }
-            }
-        });*/
         if (cur_latitude != 0.0 && cur_longitude != 0.0 && mCarParcelableListCurrentLation != mCarParcelableListLastLocation) {
             // pDialog = new ProgressDialog(this);
             if(count==0){
@@ -750,11 +600,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 pDialog.dismiss();
 
             mMap.clear();
-           /* current_icon = mMap.addMarker(new MarkerOptions()
-                    .position(animateCurrent)
-                    .title("Current Location")
-                    .snippet("current")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer)));*/
             if(count==0){
                          if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -782,8 +627,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     is_reg_with_PHC= result.get(i).get("is_reg_with_phc");
                     is_reg_council= result.get(i).get("is_reg_council");
 
-
-                    //id = Float.parseFloat(hces.get(i).getHCE_id());
 
                     if (Status_db.equals("Reg")) {
 
@@ -834,15 +677,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         maddress.setText(marker_address);
                                         mname.setText(marker_name);
                                         final_id = result.get(i).get("final_id");
-                                       /* SpannableString spanString = new SpannableString(marker_address);
-                                        spanString.setSpan(new UnderlineSpan(), 0, spanString.length(), 0);
-                                        spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
-                                        spanString.setSpan(new StyleSpan(Typeface.ITALIC), 0, spanString.length(), 0);*/
                                         mname.setVisibility(View.VISIBLE);
                                         maddress.setVisibility(View.VISIBLE);
                                     }
                                 }
-                              //  FrameLayout.setVisibility(View.VISIBLE);
                                 mname.setText(arg0.getTitle());
                                 curr = "Reg";
                                 status = "Registered but not yet Licensed";
@@ -989,25 +827,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mobile_number));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
-                         /*   //This code will make a call without user interaction and will also pick up the default phone dialler
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + mobile_number));
-
-                            // IF you wants the user to choose his dialler remove
-                            intent.setClassName("com.android.phone", "com.android.phone.OutgoingCallBroadcaster");
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                // TODO: Consider calling
-                                //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                //                                          int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
-                                return;
-                            }
-                            context.startActivity(intent);*/
                                 //If you want just to throw the number to the dialler and the user press the call button use this code
-
                             }
 
                         } else {

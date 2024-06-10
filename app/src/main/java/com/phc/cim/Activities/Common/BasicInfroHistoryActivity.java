@@ -353,6 +353,10 @@ public class BasicInfroHistoryActivity extends AppCompatActivity {
                         startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_hearing:
+                        startActivity(new Intent(context, HearingStatusActivity.class));
+                        drawer.closeDrawers();
+                        return true;
 
          /*               AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                         alertDialog.setTitle("Change Password");

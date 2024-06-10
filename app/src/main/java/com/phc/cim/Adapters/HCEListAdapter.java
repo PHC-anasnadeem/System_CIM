@@ -166,6 +166,7 @@ public class HCEListAdapter extends BaseAdapter {
 
             hcetypetext.setText(arrayList.get(position).get("HCE_Cat_Type") + " (" + arrayList.get(position).get("total_beds") + " beds)" + " - " + arrayList.get(position).get("councils"));
             Status.setText(arrayList.get(position).get("RegType"));
+
         } else if (arrayList.get(position).get("RegType").equals("Quack")) {
             if (VisitStatus.equals("1") && (ActionType.equals("1") || ActionType.equals("3"))) {
                 image_view.setImageResource(R.drawable.marker_sealed_red);
@@ -174,10 +175,16 @@ public class HCEListAdapter extends BaseAdapter {
             } else {
                 image_view.setImageResource(R.drawable.marker_red);
             }
-
             hcetypetext.setText(arrayList.get(position).get("HCE_Cat_Type") + " (" + arrayList.get(position).get("total_beds") + " beds)"+" - "+arrayList.get(position).get("QuackCategory"));
             Status.setText(arrayList.get(position).get("RegType") + " (Not registered with any federal council)");
+
         }
+//        else if (arrayList.get(position).get("RegType").equals("Quack") || ("RegType").equals("Not Registered with PHC")) {
+//                image_view.setImageResource(R.drawable.purple_icon);
+//
+//            hcetypetext.setText(arrayList.get(position).get("HCE_Cat_Type") + " (" + arrayList.get(position).get("total_beds") + " beds)"+" - "+arrayList.get(position).get("QuackCategory"));
+//            Status.setText(arrayList.get(position).get("RegType"));
+//        }
 
        image_view.setOnClickListener(new OnClickListener() {
            @Override

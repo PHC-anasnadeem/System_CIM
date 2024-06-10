@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvFinalid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Final Id"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvOutletName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Outlet Name"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvOutletAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Outlet Address"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/tvDistrict"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="District"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <!--    <TextView-->
+        <!--        android:id="@+id/tvPHCQuackSealedFileNo"-->
+        <!--        android:layout_width="wrap_content"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:text="PHC Quack Sealed File No"-->
+        <!--        android:textColor="#666"-->
+        <!--        android:textSize="14sp"/>-->
+
+
+        <TextView
+            android:id="@+id/tvCaseFileId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Case File Id"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvHearingStatusDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hearing Status Desc"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comments"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvCommittees"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Committees"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvActiveStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active Status"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvfineimposed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fine Imposed"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvCreateDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Date"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvHearingScheduledDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hearing Scheduled Date"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

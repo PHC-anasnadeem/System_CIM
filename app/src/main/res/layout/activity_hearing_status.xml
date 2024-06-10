@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.Common.HearingStatusActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/planidlayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="40dp">
+
+                        <TextView
+                            android:id="@+id/planidtext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:text="Final ID :"
+                            android:textColor="#fff"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/FinalID"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:textColor="#FAF6F6"
+                            android:textColorHint="#000" />
+
+
+                    </LinearLayout>
+
+
+                    <!-- Fetch Button -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="end"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnFetch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:elevation="3dp"
+                            android:text="Search"
+                            android:textColor="#ffffff"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>

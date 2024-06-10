@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
+import com.phc.cim.Activities.Common.HearingStatusActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
 import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
@@ -447,6 +448,10 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
                         return true;
                     case R.id.nav_list:
                         startActivity(new Intent(context, DesealListing.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_hearing:
+                        startActivity(new Intent(context, HearingStatusActivity.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_about_us:

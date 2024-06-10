@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.phc.cim.DataElements.NotificationItem;
 import com.phc.cim.Managers.NotificationDatabase;
+import com.phc.cim.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,16 +34,19 @@ import java.util.concurrent.Executors;
 public class NotificationWorker extends Worker {
 
     private static final String TAG = "NotificationWorker";
+    Context context;
+    String userID;
 
     public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters params) {
         super(context, params);
+        this.context = context;  // Initialize the context
     }
 
     @NonNull
     @Override
     public Result doWork() {
         // Fetch notifications from API
-        fetchNotifications();
+        fetchNotifications(context);
         return Result.success();
     }
 
@@ -56,11 +60,26 @@ public class NotificationWorker extends Worker {
 
 
 
-    private void fetchNotifications() {
+    private void fetchNotifications(Context context) {
+
+        if (context == null) {
+            throw new IllegalArgumentException("Context cannot be null");
+        }
+
+        // Assume the userID is set somehow
+        if (userID == null || userID.isEmpty()) {
+            Log.e(TAG, "UserID is not set");
+            return;
+        }
+
+
         // Construct the URL with AuthorizedOfficer parameter
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("MyPrefsFile", Context.MODE_PRIVATE);
-        String userID = prefs.getString("UserID", null);
-        String url = "https://census.phc.org.pk:51599/api/Allocation/GetComplaintsDataAgainstOfficer?AuthorizedOfficer=" + userID;
+        userID = prefs.getString("UserID", null);
+        // Building the url to the web service
+        String baseurl = context.getResources().getString(R.string.baseurl);
+        String token = context.getResources().getString(R.string.token);
+        String url =  baseurl +"GetComplaintsDataAgainstOfficer?AuthorizedOfficer=" + userID;
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 

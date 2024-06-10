@@ -107,8 +107,8 @@ public class HCEListFragment extends Fragment {
         isEdit= args.getString("isEdit");
         finalidText= args.getString("finalidText");
         QuackType= args.getString("QuackType");
-        Cnic= args.getString("Cnic");
-        Phone= args.getString("Phone");
+//        Cnic= args.getString("Cnic");
+//        Phone= args.getString("Phone");
         if (gps.canGetLocation()) {
          /*   pDialog.setMessage("Please wait....");
             pDialog.setCancelable(false);
@@ -302,20 +302,7 @@ public class HCEListFragment extends Fragment {
 
         String token= getContext().getResources().getString(R.string.token);
 
-        url = baseurl + "GetHCEs?strToken="+token+"&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText+"&Lvs=&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&finalid="+finalidText+"&ActionType="+lastvisitedText+"&QuackCategory="+QuackType+"&QuackSubCategory=&SubActionType="+subactionTypeID+"&Cnic="+Cnic+"&Phone="+Phone;
-        // }
-        // else if(searchbytext.equals("Distance")){
-        //     url = baseurl+"SearchHCE?DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude;
-
-        //  }
-
-    /*    if(REGfilterstatus.equals("Yes")) {
-         url = "http://202.142.147.36:8098/PHCCensusData.svc/SearchHCE?DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude;
-            //url = url.replaceAll(" ", "%20");
-        }
-        if(REGfilterstatus.equals("No")) {
-            url="http://202.142.147.36:8098/PHCCensusData.svc/SearchUnRegHCE?DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude;
-        }*/
+        url = baseurl + "GetHCEs?strToken="+token+"&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText+"&Lvs=&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&finalid="+finalidText+"&ActionType="+lastvisitedText+"&QuackCategory="+QuackType+"&QuackSubCategory=&SubActionType="+subactionTypeID;
         url = url.replaceAll(" ", "%20");
 
         return url;
@@ -373,7 +360,6 @@ public class HCEListFragment extends Fragment {
             super.onPreExecute();
             // Showing progress dialog
 
-
         }
 
         @Override
@@ -384,7 +370,6 @@ public class HCEListFragment extends Fragment {
             if (jsonStr != null) {
                 try {
                     JSONArray json = new JSONArray(jsonStr);
-// ...
                     mylist = new ArrayList<HashMap<String, String>>();
                     for (int i = 0; i <json.length(); i++) {
                         HashMap<String, String> map = new HashMap<String, String>();
@@ -413,10 +398,8 @@ public class HCEListFragment extends Fragment {
                         map.put("hcsp_sodowo", e.getString("hcsp_sodowo"));
                         map.put("RoleID", e.getString("RoleID"));
                         map.put("district", e.getString("district"));
-                        map.put("hcsp_cnic", e.getString("hcsp_cnic"));   //Add here
-                        map.put("hcsp_phone", e.getString("hcsp_phone"));
-
-
+//                        map.put("hcsp_cnic", e.getString("hcsp_cnic"));   //Add here
+//                        map.put("hcsp_phone", e.getString("hcsp_phone"));
 
                         mylist.add(map);
                     }
@@ -450,7 +433,6 @@ public class HCEListFragment extends Fragment {
 
             if (result != null) {
                 if (result.size() > 0) {
-
 
                     HCEListAdapter adapter = new HCEListAdapter(getContext(), result, email, password, username, isEdit);
                     listView.setAdapter(adapter);
@@ -490,13 +472,12 @@ public class HCEListFragment extends Fragment {
 
                 }*/
 
-
                 } else {
                     Toast.makeText(getContext(), "No data found", Toast.LENGTH_SHORT).show();
                 }
             }
             else {
-             //   Toast.makeText(getContext(), "Internet Connection Error: Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Internet Connection Error: Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
 

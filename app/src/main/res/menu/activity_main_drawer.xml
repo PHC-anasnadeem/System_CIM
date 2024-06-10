@@ -32,6 +32,11 @@
             android:id="@+id/nav_list"
             android:icon="@drawable/baseline_view_list_24"
             android:title="De-Seal List" />
+
+        <item
+            android:id="@+id/nav_hearing"
+            android:icon="@drawable/baseline_view_list_24"
+            android:title="Hearing Status" />
         <item
             android:id="@+id/nav_resetPassword"
             android:icon="@drawable/icon_change_password"

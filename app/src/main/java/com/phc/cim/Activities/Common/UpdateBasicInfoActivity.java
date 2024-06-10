@@ -1249,6 +1249,10 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                         startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_hearing:
+                        startActivity(new Intent(context, HearingStatusActivity.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, AboutusActivity.class));

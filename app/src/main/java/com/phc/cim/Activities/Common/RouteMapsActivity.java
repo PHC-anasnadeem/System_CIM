@@ -742,6 +742,10 @@ public class RouteMapsActivity extends AppCompatActivity implements OnMapReadyCa
                         startActivity(new Intent(context, DesealListing.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_hearing:
+                        startActivity(new Intent(context, HearingStatusActivity.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));

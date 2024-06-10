@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
 import com.phc.cim.Activities.Common.DesealListing;
+import com.phc.cim.Activities.Common.HearingStatusActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
 import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
@@ -486,6 +487,10 @@ if(count<1) {
                         return true;
                     case R.id.nav_list:
                         startActivity(new Intent(context, DesealListing.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_hearing:
+                        startActivity(new Intent(context, HearingStatusActivity.class));
                         drawer.closeDrawers();
                         return true;
 

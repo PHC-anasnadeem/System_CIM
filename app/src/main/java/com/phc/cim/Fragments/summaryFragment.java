@@ -52,15 +52,18 @@ public class summaryFragment extends Fragment {
     float FTotalReg;
     float  FTotalUnregistered;
     float   FTotalQuacks;
+    float   FTotalDeseal;
     TextView totaltex;
     TextView PLRLTEXT;
     TextView RegText;
     TextView notReg;
     TextView quacktext;
+    TextView desealtext;
     ImageView licenseicon;
     ImageView registeredicon;
     ImageView notregicon;
     ImageView quackicon;
+    ImageView desealicon;
     LinearLayout errortextlayout;
 
     String finalidText;
@@ -95,11 +98,13 @@ public class summaryFragment extends Fragment {
     ArrayList<BarEntry> BARENTRY2;
     ArrayList<BarEntry> BARENTRY3;
     ArrayList<BarEntry> BARENTRY4;
+    ArrayList<BarEntry> BARENTRY5;
     ArrayList<String> BarEntryLabels ;
     BarDataSet Bardataset1;
     BarDataSet Bardataset2;
     BarDataSet Bardataset3;
     BarDataSet Bardataset4;
+    BarDataSet Bardataset5;
     BarData BARDATA ;
     String jsonStr = null;
     List<IBarDataSet> bars;
@@ -121,11 +126,13 @@ public class summaryFragment extends Fragment {
          RegText= (TextView) objview.findViewById(R.id.regtext);
          notReg= (TextView) objview.findViewById(R.id.notregtext);
          quacktext= (TextView) objview.findViewById(R.id.quacktext);
+//        desealtext= (TextView) objview.findViewById(R.id.desealtext);
 
         licenseicon= (ImageView) objview.findViewById(R.id.licenseicon);
         registeredicon= (ImageView) objview.findViewById(R.id.registeredicon);
         notregicon= (ImageView) objview.findViewById(R.id.notregicon);
         quackicon= (ImageView) objview.findViewById(R.id.quackicon);
+//        desealicon= (ImageView) objview.findViewById(R.id.desealicon);
         errortextlayout = (LinearLayout) objview.findViewById(R.id.errortextlayout);
 
         pDialog = new ProgressDialog(getActivity());
@@ -157,15 +164,14 @@ public class summaryFragment extends Fragment {
         registeredicon.setVisibility(View.GONE);
         notregicon.setVisibility(View.GONE);
         quackicon.setVisibility(View.GONE);
+//        desealicon.setVisibility(View.GONE);
         errortextlayout.setVisibility(View.GONE);
 
         if (gps.canGetLocation()) {
-         /*   pDialog.setMessage("Please wait....");
-            pDialog.setCancelable(false);
-            pDialog.show();*/
+
             cur_latitude = gps.getLatitude();
             cur_longitude = gps.getLongitude();
-            // latlangListener.onlatlang(cur_latitude, cur_longitude);
+
             if (cur_latitude != 0.0 && cur_longitude != 0.0) {
                 pDialog.setMessage("Loading Data, Please wait...");
                 pDialog.setCancelable(false);
@@ -195,6 +201,7 @@ public class summaryFragment extends Fragment {
         BARENTRY2 = new ArrayList<>();
         BARENTRY3 = new ArrayList<>();
         BARENTRY4 = new ArrayList<>();
+//        BARENTRY5 = new ArrayList<>();
         bars = new ArrayList<IBarDataSet>();
 
         BarEntryLabels = new ArrayList<String>();
@@ -212,9 +219,7 @@ public class summaryFragment extends Fragment {
         BARENTRY2.add(new BarEntry(Math.round(FTotalReg), 1));
         BARENTRY3.add(new BarEntry(Math.round(FTotalUnregistered), 2));
         BARENTRY4.add(new BarEntry(Math.round(FTotalQuacks), 3));
-
-      /*  BARENTRY.add(new BarEntry(7f, 4));
-        BARENTRY.add(new BarEntry(3f, 5));*/
+//        BARENTRY5.add(new BarEntry(Math.round(FTotalDeseal), 4));
 
     }
 
@@ -224,8 +229,7 @@ public class summaryFragment extends Fragment {
         BarEntryLabels.add("");
         BarEntryLabels.add("");
       BarEntryLabels.add("");
-      /*  BarEntryLabels.add("May");
-        BarEntryLabels.add("June");*/
+//      BarEntryLabels.add("");
 
     }
 
@@ -269,19 +273,7 @@ public class summaryFragment extends Fragment {
         String token= getContext().getResources().getString(R.string.token);
 
         url = baseurl + "GetPercentage?strToken="+token+"&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText+"&Lvs=&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&finalid="+finalidText+"&ActionType="+lastvisitedText+"&QuackCategory="+QuackType+"&QuackSubCategory=&SubActionType="+subactionTypeID;
-        // }
-        // else if(searchbytext.equals("Distance")){
-        //     url = baseurl+"SearchHCE?DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude;
 
-        //  }
-
-    /*    if(REGfilterstatus.equals("Yes")) {
-         url = "http://202.142.147.36:8098/PHCCensusData.svc/SearchHCE?DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude;
-            //url = url.replaceAll(" ", "%20");
-        }
-        if(REGfilterstatus.equals("No")) {
-            url="http://202.142.147.36:8098/PHCCensusData.svc/SearchUnRegHCE?DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude;
-        }*/
         url = url.replaceAll(" ", "%20");
 
         return url;
@@ -400,7 +392,7 @@ public class summaryFragment extends Fragment {
                         TotalRL =  Float.parseFloat(result.get(i).get("TotalRL"));
                         TotalReg =  Float.parseFloat(result.get(i).get("TotalReg"));
                         TotalUnregistered =  Float.parseFloat(result.get(i).get("TotalUnregistered"));
-                        TotalQuacks = (int) Float.parseFloat(result.get(i).get("TotalQuacks"));
+//                        TotalQuacks = (int) Float.parseFloat(result.get(i).get("TotalQuacks"));
                     }
 
                     TotalRLPL=TotalPL+TotalRL;
@@ -410,6 +402,7 @@ public class summaryFragment extends Fragment {
                      FTotalReg=(TotalReg/TotalRecords)*100;
                       FTotalUnregistered=(TotalUnregistered/TotalRecords)*100;
                        FTotalQuacks=(TotalQuacks/TotalRecords)*100;
+//                    FTotalDeseal=(TotalQuacks/TotalRecords)*100;
 
                     totaltex.setText("Total record found: "+((int) TotalRecords));
                     if(TotalRecords!=0) {
@@ -418,11 +411,13 @@ public class summaryFragment extends Fragment {
                         registeredicon.setVisibility(View.VISIBLE);
                         notregicon.setVisibility(View.VISIBLE);
                         quackicon.setVisibility(View.VISIBLE);
+//                        desealicon.setVisibility(View.VISIBLE);
                         errortextlayout.setVisibility(View.VISIBLE);
                         PLRLTEXT.setText("Provisional/Regular License ("+((int) TotalRLPL)+" - "+Math.round(FTotalRLPL)+"% )");
                         RegText.setText("Registered with PHC ("+((int) TotalReg)+" - "+Math.round(FTotalReg)+"% )");
                         notReg.setText("Not Registered with PHC ("+((int) TotalUnregistered)+" - "+Math.round(FTotalUnregistered)+"% )");
                         quacktext.setText("Quack ("+((int) TotalQuacks)+" - "+Math.round(FTotalQuacks)+"% )");
+//                        desealtext.setText("DeSeal ("+((int) TotalQuacks)+" - "+Math.round(FTotalDeseal)+"% )");
                         AddValuesToBARENTRY();
 
                         AddValuesToBarEntryLabels();
@@ -434,7 +429,6 @@ public class summaryFragment extends Fragment {
                         bars.add(Bardataset1);
                         Bardataset2 = new BarDataSet(BARENTRY2, "REG");
                         Bardataset2.setValueTextSize(10);
-                        //  Bardataset2.setColor(Color.rgb(104, 241, 175));
                         Bardataset2.setColor(Color.YELLOW);
                         Bardataset2.setBarSpacePercent(-285f);
                         bars.add(Bardataset2);
@@ -446,14 +440,18 @@ public class summaryFragment extends Fragment {
                         Bardataset4 = new BarDataSet(BARENTRY4, "QUACK");
                         Bardataset4.setValueTextSize(10);
                         Bardataset4.setColor(Color.RED);
-                        Bardataset4.setBarSpacePercent(-500f);
+                        Bardataset4.setBarSpacePercent(-285f);
                         bars.add(Bardataset4);
+//                        Bardataset5 = new BarDataSet(BARENTRY5, "DeSeal");
+//                        Bardataset5.setValueTextSize(10);
+//                        Bardataset5.setColor(0xFFA765E9);
+//                        Bardataset5.setBarSpacePercent(-500f);
+//                        bars.add(Bardataset5);
 
                         BARDATA = new BarData(BarEntryLabels, bars);
                         chart.getAxisRight().setDrawGridLines(false);
                         chart.getAxisLeft().setDrawGridLines(false);
                         chart.getXAxis().setDrawGridLines(false);
-                        //Bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
                         chart.setDescription("");
                         chart.getAxisRight().setAxisMaxValue(100f);
                         chart.getAxisRight().setAxisMinValue(0f);
@@ -468,7 +466,7 @@ public class summaryFragment extends Fragment {
                 }
             }
             else {
-               // Toast.makeText(getContext(), "Internet Connection Error: Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Internet Connection Error: Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
 
