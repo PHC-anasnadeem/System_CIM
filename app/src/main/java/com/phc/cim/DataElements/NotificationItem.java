@@ -42,6 +42,8 @@ public class NotificationItem {
         LastUpdatedBy = lastUpdatedBy;
     }
 
+    public NotificationItem(){}
+
     public int getComplaintsDetail_SEQ() {
         return ComplaintsDetail_SEQ;
     }
