@@ -141,9 +141,9 @@ public class ReportingTabActivity extends AppCompatActivity {
         CloseSealedID= (String) intent.getSerializableExtra("CloseSealedID");
         CloseSealed= (String) intent.getSerializableExtra("CloseSealed");
         ClosedSealedcount= (String) intent.getSerializableExtra("ClosedSealedcount");
-        CloseSealedInspectionID= (String) intent.getSerializableExtra("CloseSealedInspectionID");
-        CloseSealedInspection= (String) intent.getSerializableExtra("CloseSealedInspection");
-        CloseSealedInspectioncount= (String) intent.getSerializableExtra("CloseSealedInspectioncount");
+//        CloseSealedInspectionID= (String) intent.getSerializableExtra("CloseSealedInspectionID");
+//        CloseSealedInspection= (String) intent.getSerializableExtra("CloseSealedInspection");
+//        CloseSealedInspectioncount= (String) intent.getSerializableExtra("CloseSealedInspectioncount");
         PlanID= (String) intent.getSerializableExtra("PlanID");
         index= (String) intent.getSerializableExtra("index");
         team= (String) intent.getSerializableExtra("team");
@@ -192,7 +192,7 @@ public class ReportingTabActivity extends AppCompatActivity {
         bundle.putString("FunctionalSealedID",FunctionalSealedID);
         bundle.putString("NotSealedID",NotSealedID);
         bundle.putString("CloseSealedID",CloseSealedID);
-        bundle.putString("CloseSealedInspectionID",CloseSealedInspectionID);
+//        bundle.putString("CloseSealedInspectionID",CloseSealedInspectionID);
 
         bundle.putString("email",email);
         bundle.putString("password",password);
@@ -276,7 +276,7 @@ public class ReportingTabActivity extends AppCompatActivity {
         adapter.addFragment(new FunctionalSealedFragment(), FunctionalSealed + " (" + FunctionalSealedcount + ")");
         adapter.addFragment(new ClosedSealedFragment(), CloseSealed + " (" + ClosedSealedcount + ")");
         adapter.addFragment(new NotSealedFragment(), NotSealed + " (" + NotSealedcount + ")");
-        adapter.addFragment(new CloseSealInspDaywiseFragment(),CloseSealedInspection+ " (" + CloseSealedInspectioncount + ")");
+//        adapter.addFragment(new CloseSealInspDaywiseFragment(),CloseSealedInspection+ " (" + CloseSealedInspectioncount + ")");
 
 
        // adapter.addFragment(new ThreeFragment(), "THREE");
@@ -319,161 +319,12 @@ public class ReportingTabActivity extends AppCompatActivity {
     }
 
 
-
-
-
-/*    // TabSpec Names
-    private static final String INBOX_SPEC = "Inbox";
-    private static final String OUTBOX_SPEC = "Outbox";
-    private static final String PROFILE_SPEC = "Profile";
-
-    EditText searchPlate;
-    Toolbar mActionBarToolbar;
-    ViewPager viewPager;
-    SearchView editsearch;
-    Context context;
-
-    String dataType;
-    String registrationType;
-    String orgType;
-    String REGfilterstatus;
-    String districtText;
-    String TehsilText;
-    String distancetext;
-    String searchbytext;
-    String BfromText="";
-    String BtoText="";
-    String email;
-
-    *//**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     *//*
-    // private GoogleApiClient client;
-    //private static final String urlNavHeaderBg = "http://api.androidhive.info/images/nav-menu-header-bg.jpg";
-    //private static final String urlProfileImg = "https://lh3.googleusercontent.com/eCtE_G34M9ygdkmOpYvCag1vBARCmZwnVS6rS5t4JLzJ6QgQSBquM0nuTsCpLhYbKljoyS-txg";
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tab);
-        context=this;
-*//*
-        TabHost tabHost = getTabHost();
-        Intent intent;
-        // Tab for Photos
-        TabHost.TabSpec photospec = tabHost.newTabSpec("Map");
-        // setting Title and Icon for the Tab
-       // photospec.setIndicator("Photos", getResources().getDrawable(R.drawable.icon_photos_tab));
-         intent = new Intent(this, FilterMapsFragment.class);
-        photospec.setIndicator("Map");
-        photospec.setContent(intent);
-
-        // Tab for Songs
-        TabHost.TabSpec songspec = tabHost.newTabSpec("List");
-        //songspec.setIndicator("Songs", getResources().getDrawable(R.drawable.icon_songs_tab));
-        intent = new Intent(this, HCEListActivity.class);
-        songspec.setIndicator("List");
-        songspec.setContent(intent);
-
-        // Tab for Videos
-
-
-        // Adding all TabSpec to TabHost
-        tabHost.addTab(photospec); // Adding photos tab
-        tabHost.addTab(songspec); // Adding songs tab
-
-        tabHost.setCurrentTab(0);*//*
-
-        TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost); // initiate TabHost
-        TabHost.TabSpec spec; // Reusable TabSpec for each tab
-        Intent intent; // Reusable Intent for each tab
-
-
-    *//*    spec = tabHost.newTabSpec("Map"); // Create a new TabSpec using tab host
-        spec.setIndicator("Map");// set the “HOME” as an indicator
-
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent(this, FilterMapsFragment.class);
-        intent.putExtra("dataType", dataType);
-        intent.putExtra("registrationType", registrationType);
-        intent.putExtra("orgType", orgType);
-        intent.putExtra("hcestatus", REGfilterstatus);
-        intent.putExtra("districtText", districtText);
-        intent.putExtra("tehsilText", TehsilText);
-        intent.putExtra("searchbytext", searchbytext);
-        intent.putExtra("distancetext", distancetext);
-        intent.putExtra("BfromText", BfromText);
-        intent.putExtra("BtoText", BtoText);
-        intent.putExtra("email", email);
-        spec.setContent(intent);
-        tabHost.addTab(spec);*//*
-
-        // Do the same for the other tabs
-
-        spec = tabHost.newTabSpec("List"); // Create a new TabSpec using tab host
-        spec.setIndicator("List"); // set the “CONTACT” as an indicator
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent(this, HCEListActivity.class);
-        intent.putExtra("dataType", dataType);
-        intent.putExtra("registrationType", registrationType);
-        intent.putExtra("orgType", orgType);
-        intent.putExtra("hcestatus", REGfilterstatus);
-        intent.putExtra("districtText", districtText);
-        intent.putExtra("tehsilText", TehsilText);
-        //intent.putExtra("searchbytext", searchbytext);
-        intent.putExtra("distancetext", distancetext);
-        intent.putExtra("BfromText", BfromText);
-        intent.putExtra("BtoText", BtoText);
-        intent.putExtra("email", email);
-        spec.setContent(intent);
-       tabHost.addTab(spec);
-
-*//*
- spec = tabHost.newTabSpec("About"); // Create a new TabSpec using tab host
-        spec.setIndicator("ABOUT"); // set the “ABOUT” as an indicator
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent(this, AboutActivity.class);
-        spec.setContent(intent);
-        tabHost.addTab(spec);
-*//*
-
-        //set tab which one you want to open first time 0 or 1 or 2
-        tabHost.setCurrentTab(0);
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                // display the name of the tab whenever a tab is changed
-                Toast.makeText(getApplicationContext(), tabId, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-    }*/
-
     private void loadNavHeader() {
         // name, website
 
         txtName.setText(username);
         txtWebsite.setText(email);
 
-        // loading header background image
-       /* Glide.with(this).load(urlNavHeaderBg)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgNavHeaderBg);
-
-        // Loading profile image
-        Glide.with(this).load(urlProfileImg)
-                .crossFade()
-                .thumbnail(0.5f)
-                .bitmapTransform(new CircleTransform(this))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgProfile);
-
-        // showing dot next to notifications label
-        navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);*/
     }
 
     /***
@@ -504,13 +355,7 @@ public class ReportingTabActivity extends AppCompatActivity {
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                // update the main content by replacing fragments
-             /*   Fragment fragment = getHomeFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();*/
+
             }
         };
 
@@ -607,23 +452,6 @@ public class ReportingTabActivity extends AppCompatActivity {
                         startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
-                    /*  case R.id.nav_photos:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_PHOTOS;
-                        break;
-                    case R.id.nav_movies:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_MOVIES;
-                        break;
-                    case R.id.nav_notifications:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_NOTIFICATIONS;
-                        break;*/
-                /*    case R.id.nav_settings:
-                        // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, Setting.class));
-                        drawer.closeDrawers();
-                        return true;*/
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));
@@ -714,35 +542,12 @@ public class ReportingTabActivity extends AppCompatActivity {
             return;
         }
 
-        // This code loads home fragment when back key is pressed
-        // when user is in other fragment than home
-     /*   if (shouldLoadHomeFragOnBackPress) {
-            // checking if user is on other navigation menu
-            // rather than home
-            if (navItemIndex != 0) {
-                navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
-                loadHomeFragment();
-                return;
-            }
-        }*/
-
         super.onBackPressed();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-/*
-        // show menu only when home fragment is selected
-        if (navItemIndex == 0) {
-            getMenuInflater().inflate(R.menu.menu_main, menu);
-        }
 
-        // when fragment is notifications, load the menu created for notifications
-        if (navItemIndex == 3) {
-            getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
-        }*/
         return true;
     }
 }

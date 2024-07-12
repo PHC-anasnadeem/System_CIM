@@ -373,7 +373,7 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
         adapter.addFragment(new FunSealDaywiseFragment(), "Functional Sealed");
         adapter.addFragment(new CloSealDaywiseFragment(), "Close Sealed");
         adapter.addFragment(new NotSealDaywiseFragment(), "Sealing Not Required");
-        adapter.addFragment(new CloseSealInspDaywiseFragment(), "Close Sealed Inspection");
+//        adapter.addFragment(new CloseSealInspDaywiseFragment(), "Close Sealed Inspection");
 
 
         // adapter.addFragment(new ThreeFragment(), "THREE");

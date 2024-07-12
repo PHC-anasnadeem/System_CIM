@@ -118,17 +118,17 @@ public class DownloadVisitsActivity {
                 NotSealed = indtabresult.get(i).get("TypeDesc");
                 NotselTotal = NotselTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
             }
-            if(indtabresult.get(i).get("PKID").equals("9") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
-
-                CloseSealedInspectionID = indtabresult.get(i).get("PKID");
-                CloseSealedInspection = indtabresult.get(i).get("TypeDesc");
-                ClosInspTotal = ClosInspTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
-            }
+//            if(indtabresult.get(i).get("PKID").equals("9") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
+//
+//                CloseSealedInspectionID = indtabresult.get(i).get("PKID");
+//                CloseSealedInspection = indtabresult.get(i).get("TypeDesc");
+//                ClosInspTotal = ClosInspTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+//            }
         }
         FunctionalSealedcount = String.valueOf(FuncselTotal);
         NotSealedcount= String.valueOf(NotselTotal);
         ClosedSealedcount = String.valueOf(ClosselTotal);
-        CloseSealedInspectioncount = String.valueOf(ClosInspTotal);
+//        CloseSealedInspectioncount = String.valueOf(ClosInspTotal);
         DateFormat formatter;
         if (Vistdate != null && Vistdate!="All") {
             formatter = new SimpleDateFormat("M/d/yyyy");
@@ -319,9 +319,9 @@ public class DownloadVisitsActivity {
                 firstpage.putExtra("CloseSealedID", CloseSealedID);
                 firstpage.putExtra("CloseSealed", CloseSealed);
                 firstpage.putExtra("ClosedSealedcount", ClosedSealedcount);
-                firstpage.putExtra("CloseSealedInspectionID", CloseSealedInspectionID);
-                firstpage.putExtra("CloseSealedInspection", CloseSealedInspection);
-                firstpage.putExtra("CloseSealedInspectioncount", CloseSealedInspectioncount);
+//                firstpage.putExtra("CloseSealedInspectionID", CloseSealedInspectionID);
+//                firstpage.putExtra("CloseSealedInspection", CloseSealedInspection);
+//                firstpage.putExtra("CloseSealedInspectioncount", CloseSealedInspectioncount);
                 firstpage.putExtra("email", email);
                 firstpage.putExtra("Password", password);
                 firstpage.putExtra("username", username);

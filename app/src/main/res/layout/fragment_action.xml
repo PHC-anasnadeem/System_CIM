@@ -162,7 +162,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="3dp"
-                android:text="Quack Type *"
+                android:text="HCSP / HCE Type *"
                 android:textColor="#000000" />
 
             <Spinner
@@ -171,6 +171,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Sub Status" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/practicingstatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/practicingsttus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="3dp"
+                android:text="Practicing *"
+                android:textColor="#000000" />
+
+            <Spinner
+                android:id="@+id/practicingType_spinner"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Practicing" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Reg No Label -->

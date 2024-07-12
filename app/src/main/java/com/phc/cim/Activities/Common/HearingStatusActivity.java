@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class HearingStatusActivity extends AppCompatActivity {
@@ -129,20 +130,29 @@ public class HearingStatusActivity extends AppCompatActivity {
                                 String fineImposed = item.getString("fineimposed");
                                 Integer isFineImposed = item.isNull("isfineimposed") ? null : item.getInt("isfineimposed");
 
-
-                                // Convert date from /Date(1712049528740+0500)/ format to timestamp
                                 String createDateString = item.getString("create_date");
-                                long createDateTimestamp = Long.parseLong(createDateString.replaceAll("[^0-9]", ""));
-                                Date createDate = new Date(createDateTimestamp);
+                                String createDate = createDateString.replaceAll("[^0-9]", "");
 
                                 String hearingScheduledDateString = item.getString("hearingscheduledate");
-                                long hearingScheduledDateTimestamp = Long.parseLong(hearingScheduledDateString.replaceAll("[^0-9]", ""));
-                                Date hearingScheduledDate = new Date(hearingScheduledDateTimestamp);
+                                String hearingScheduledDate = hearingScheduledDateString.replaceAll("[^0-9]", "");
+
+                                // Convert the numeric strings to long
+                                long createDateMillis = Long.parseLong(createDate);
+                                long hearingScheduledDateMillis = Long.parseLong(hearingScheduledDate);
+
+                                // Create Date objects from milliseconds
+                                Date createDateObj = new Date(createDateMillis);
+                                Date hearingScheduledDateObj = new Date(hearingScheduledDateMillis);
+
+                                // Debug: Print Date objects
+                                System.out.println("Create Date Obj: " + createDateObj);
+                                System.out.println("Hearing Scheduled Date Obj: " + hearingScheduledDateObj);
 
                                 // Format the dates
-                                SimpleDateFormat targetFormat = new SimpleDateFormat("dd MMM yyyy");
-                                String createDateFormatted = targetFormat.format(createDate);
-                                String hearingScheduledDateFormatted = targetFormat.format(hearingScheduledDate);
+                                SimpleDateFormat targetFormat = new SimpleDateFormat("dd-MM-yyy", Locale.ENGLISH);
+                                String createDateFormatted = targetFormat.format(createDateObj);
+                                String hearingScheduledDateFormatted = targetFormat.format(hearingScheduledDateObj);
+
 
                                 // Create Hearing object
                                 Hearing hearing = new Hearing(

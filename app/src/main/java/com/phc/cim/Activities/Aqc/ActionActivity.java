@@ -74,6 +74,7 @@ import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Activities.Licensing.PWSFilterActivity;
 import com.phc.cim.DataElements.ActionType;
 import com.phc.cim.DataElements.CouncilType;
+import com.phc.cim.DataElements.PracticingType;
 import com.phc.cim.DataElements.subActionType;
 import com.phc.cim.Extra.HomeFragment;
 import com.phc.cim.Extra.NotificationFragment;
@@ -162,6 +163,7 @@ public class ActionActivity extends AppCompatActivity {
     String actionTypeID;
     String subactionTypeText;
     String subactionTypeID;
+    int selectedSubactionTypeID;
     String firtext;
     String imageNAme = null;
     String imagepath;
@@ -169,7 +171,7 @@ public class ActionActivity extends AppCompatActivity {
     String subactiontseltext;
     String actiontseltext;
     Spinner actionType_spinner;
-    Spinner subactionType_spinner;
+    Spinner subactionType_spinner, practicingType_spinner;
     Spinner counciltypespiner;
     Spinner fir_spinner;
     ArrayList<ActionType> actionTypeList = null;
@@ -266,6 +268,7 @@ public class ActionActivity extends AppCompatActivity {
     ArrayAdapter<String> actionadapter;
     int MarkSurvCount = 0;
     private RequestQueue requestQueue;
+    String selectedSubactionTypeIDString;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -278,6 +281,7 @@ public class ActionActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(context);
         actionType_spinner = (Spinner) findViewById(R.id.actionType_spinner);
         subactionType_spinner = (Spinner) findViewById(R.id.subactionType_spinner);
+        practicingType_spinner = (Spinner) findViewById(R.id.practicingType_spinner);
         counciltypespiner = (Spinner) findViewById(R.id.counType_spinner);
         fir_spinner = (Spinner) findViewById(R.id.fir_spinner);
         txtDateTime = (EditText) findViewById(R.id.txtDateTime);
@@ -563,6 +567,7 @@ public class ActionActivity extends AppCompatActivity {
                 }
                 getsubactionTypes(MarkSurvCount);
 //                getsubactionTypes();
+                getPracticingTypes();
                 if (comments.requestFocus()) {
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
@@ -734,7 +739,8 @@ public class ActionActivity extends AppCompatActivity {
                     setSpinnerError(subactionType_spinner, ("Please select Quack type"));
                     errortext.setText("* Required fields are missing");
                     errorcount++;
-                } else if (subactionTypeID.equals("9")) {
+                }
+                else if (subactionTypeID.equals("9")) {
                     if ((counciltypeID.equals("0") && !coun_NoText.equals("")) || (!counciltypeID.equals("0") && coun_NoText.equals("")) || (counciltypeID.equals("0") && coun_NoText.equals(""))) {
                         errortext.setText("Please enter council type and council number both");
                         errorcount++;
@@ -1683,110 +1689,7 @@ public class ActionActivity extends AppCompatActivity {
         return subactiontseltext;
     }
 
-//    private ArrayList<String> getsubactionTypes() {
-//        subactionType = dataManager.getsubActionstype(actionTypeID, roleid);
-//        ArrayList<String> subactiontypelist = new ArrayList<String>();
-//        int i = 0;
-//        for (subActionType subActionType : subactionType) {
-//            String subactiontype = subActionType.getSubactionType();
-//            subactiontypelist.add(subactiontype);
-//            i++;
-//        }
-//
-//        ArrayAdapter<String> subactiontype_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, subactiontypelist) {
-//            @Override
-//            public boolean isEnabled(int position) {
-//                if (position == 0) {
-//                    // Disable the first item from Spinner
-//                    // First item will be use for hint
-//                    return true;
-//                } else {
-//                    return true;
-//                }
-//            }
-//
-//            @Override
-//            public View getDropDownView(int position, View convertView,
-//                                        ViewGroup parent) {
-//                View view = super.getDropDownView(position, convertView, parent);
-//
-//                if (position == 0) {
-//                    // Set the hint text color gray
-//                    //tv.setTextColor(Color.GRAY);
-//                } else {
-//                    // tv.setTextColor(Color.BLACK);
-//                }
-//                return view;
-//            }
-//        };
-//        subactiontype_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        subactionType_spinner.setAdapter(subactiontype_spinneradapter);
-//        if (subactionTypeID != null) {
-//            getsubactionsel();
-//            int spinnerPosition = subactiontype_spinneradapter.getPosition(subactiontseltext);
-//            subactionType_spinner.setSelection(spinnerPosition);
-//        }
-//        subactionType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            public void onItemSelected(AdapterView<?> parent, View view,
-//                                       int position, long id) {
-//                subactionTypeText = parent.getItemAtPosition(position).toString();
-//                subactionTypeID = subactionType.get(position).getSubActionType_Id();
-//
-//
-//
-//                // Convert MarkSurvCount to an integer for comparison
-////                int markSurvCountInt = Integer.parseInt(MarkSurvCount);
-//
-////                if (markSurvCountInt > 3) {
-//                // If it is, exclude subactionTypeID.equals("16")
-//                if (!subactionTypeID.equals("16")) {
-//                    // Your logic for showing the view goes here
-//                    if (subactionTypeID.equals("9")) {
-//                        counTypeInput.setVisibility(View.VISIBLE);
-//                        counNoInput.setVisibility(View.VISIBLE);
-//                        Reg_No_lay.setVisibility(View.VISIBLE);
-//                        if (comments.requestFocus()) {
-//                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//                        }
-//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-//                    } else {
-//                        counTypeInput.setVisibility(View.GONE);
-//                        counNoInput.setVisibility(View.GONE);
-//                        Reg_No_lay.setVisibility(View.GONE);
-//                    }
-////                    }
-//
-//                } else {
-//                    // Otherwise, show the view
-//                    // Your existing logic goes here
-//                    if (subactionTypeID.equals("9")) {
-//                        counTypeInput.setVisibility(View.VISIBLE);
-//                        counNoInput.setVisibility(View.VISIBLE);
-//                        Reg_No_lay.setVisibility(View.VISIBLE);
-//                        if (comments.requestFocus()) {
-//                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//                        }
-//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-//                    } else {
-//                        counTypeInput.setVisibility(View.GONE);
-//                        counNoInput.setVisibility(View.GONE);
-//                        Reg_No_lay.setVisibility(View.GONE);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//
-//        if (comments.requestFocus()) {
-//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//        }
-//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-//        return subactiontypelist;
-//    }
+
 
     private ArrayList<String> getsubactionTypes(int MarkSurvCount) {
         subactionType = dataManager.getsubActionstype(actionTypeID, roleid);
@@ -1858,76 +1761,78 @@ public class ActionActivity extends AppCompatActivity {
         return subactiontypelist;
     }
 
-    //////////////////////////////////////////////////////////////////////////
+    private ArrayList<PracticingType> getPracticingTypes() {
+        ArrayList<PracticingType> subactiontypelist = new ArrayList<>();
 
-//    private ArrayList<String> getsubactionTypes(int MarkSurvCount) {
-//        subactionType = dataManager.getsubActionstype(actionTypeID, roleid);
-//        ArrayList<String> subactiontypelist = new ArrayList<String>();
-//
-//        // Populate the subactiontypelist and filter based on MarkSurvCount
-//        for (subActionType subActionType : subactionType) {
-//            String subactiontype = subActionType.getSubactionType();
-//            if (MarkSurvCount > 3 || !subactiontype.equals("16")) {
-//                subactiontypelist.add(subactiontype);
-//            }
-//        }
-//
-//        ArrayAdapter<String> subactiontype_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, subactiontypelist) {
-//            @Override
-//            public boolean isEnabled(int position) {
-//                return true; // All items are enabled
-//            }
-//
-//            @Override
-//            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-//                View view = super.getDropDownView(position, convertView, parent);
-//                return view;
-//            }
-//        };
-//
-//        subactiontype_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        subactionType_spinner.setAdapter(subactiontype_spinneradapter);
-//
-//        if (subactionTypeID != null) {
-//            getsubactionsel();
-//            int spinnerPosition = subactiontype_spinneradapter.getPosition(subactiontseltext);
-//            subactionType_spinner.setSelection(spinnerPosition);
-//        }
-//
-//        subactionType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                subactionTypeText = parent.getItemAtPosition(position).toString();
-//                subactionTypeID = subactionType.get(position).getSubActionType_Id();
-//
-//                if (MarkSurvCount >= 3 && subactionTypeID.equals("16")) {
-//                    // Do not allow selection of "16" if MarkSurvCount >= 3
-//                    Toast.makeText(context, "Selection not allowed", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                if (subactionTypeID.equals("9")) {
-//                    counTypeInput.setVisibility(View.VISIBLE);
-//                    counNoInput.setVisibility(View.VISIBLE);
-//                    Reg_No_lay.setVisibility(View.VISIBLE);
-//                    if (comments.requestFocus()) {
-//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//                    }
-//                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-//                } else {
-//                    counTypeInput.setVisibility(View.GONE);
-//                    counNoInput.setVisibility(View.GONE);
-//                    Reg_No_lay.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // Do nothing
-//            }
-//        });
-//
-//        return subactiontypelist;
-//    }
+        // Add hardcoded values with String ids
+        subactiontypelist.add(new PracticingType("0", "Please Select"));
+        subactiontypelist.add(new PracticingType("1", "Allopathy"));
+        subactiontypelist.add(new PracticingType("2", "Dentistry"));
+        subactiontypelist.add(new PracticingType("3", "Tibb"));
+        subactiontypelist.add(new PracticingType("4", "Pharmacy"));
+        subactiontypelist.add(new PracticingType("5", "Laboratory"));
+        subactiontypelist.add(new PracticingType("6", "Dispensary"));
+        subactiontypelist.add(new PracticingType("7", "Medical Store"));
+        subactiontypelist.add(new PracticingType("8", "Gyne"));
+        subactiontypelist.add(new PracticingType("9", "Hadi Jore"));
+        subactiontypelist.add(new PracticingType("10", "Maternity home"));
+        subactiontypelist.add(new PracticingType("11", "Homeopathic"));
+        subactiontypelist.add(new PracticingType("12", "Other"));
+        subactiontypelist.add(new PracticingType("13", "Pathology Lab"));
+        subactiontypelist.add(new PracticingType("14", "Imaging Lab"));
+        subactiontypelist.add(new PracticingType("15", "Pathology+Imaging Lab"));
+        subactiontypelist.add(new PracticingType("16", "Collection Center"));
+        subactiontypelist.add(new PracticingType("17", "Matab/Dawakhna"));
+        subactiontypelist.add(new PracticingType("18", "Acupuncture"));
+        subactiontypelist.add(new PracticingType("19", "Hair Transplant"));
+        subactiontypelist.add(new PracticingType("20", "Cosmetic Surgery Clinic"));
+        subactiontypelist.add(new PracticingType("21", "Addiction Treatment Center"));
+        subactiontypelist.add(new PracticingType("22", "Dialysis Clinic"));
+
+        ArrayAdapter<PracticingType> subactiontype_spinneradapter = new ArrayAdapter<PracticingType>(context, android.R.layout.simple_spinner_item, subactiontypelist) {
+            @Override
+            public boolean isEnabled(int position) {
+                return true; // All items are enabled
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                return view;
+            }
+        };
+
+        subactiontype_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        practicingType_spinner.setAdapter(subactiontype_spinneradapter);
+
+        practicingType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                PracticingType selectedType = (PracticingType) parent.getItemAtPosition(position);
+                subactionTypeText = selectedType.getDescription();
+                String selectedSubactionTypeIDString = selectedType.getId();
+
+                if ("0".equals(selectedSubactionTypeIDString)) {
+                    // Handle "Please Select" case by setting subactionTypeText to null
+                    subactionTypeText = null;
+                } else {
+                    subactionTypeText = selectedType.getDescription();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+
+        // Set initial selection to "Please Select"
+        practicingType_spinner.setSelection(0);
+
+        return subactiontypelist;
+    }
+
+
 
 
 
