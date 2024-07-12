@@ -1,8 +1,8 @@
 package com.phc.cim.DataElements;
 
 public class PracticingType {
-    private String id; // Change from int to String
-    private String description;
+    private final String id;
+    private final String description;
 
     // Update the constructor to accept String for id
     public PracticingType(String id, String description) {

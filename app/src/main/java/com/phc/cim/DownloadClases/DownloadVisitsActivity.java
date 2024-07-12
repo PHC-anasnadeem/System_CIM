@@ -27,50 +27,32 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class DownloadVisitsActivity {
     Context context;
-    ArrayList<HashMap<String, String>> mylist;
+
     ArrayList<HashMap<String, String>> mylist2;
-    ArrayList<String> imagespath;
-    String jsonStr = null;
+
+
     String jsonStr2 = null;
-    String final_id;
+
     String email = null;
     String password;
     String isEdit;
     String username;
     ProgressDialog pDialog;
-    String ActionType;
-    String Comments;
-    String Council;
-    String CouncilNo;
-    String Date_Time;
-    String FinalID;
-    String ImageUploadMode;
-    String Image_Path;
-    String isFIRSubmit;
-    String PHCRegistrationNo;
-    String PKID;
-    String PicCount;
-    String SubActionType;
-    String UploadedBy;
-    String VisitedDate;
-    String isDeleted;
-    String visited = "1";
-    double Lat;
-    double Lng;
+
     String RoleID;
     int count = 0;
     int FuncselTotal=0;
     int ClosselTotal=0;
     int NotselTotal=0;
-    int ClosInspTotal=0;
-    String RecordLockedForUpdate;
+
     String PlanID,CloseSealedID,  NotSealedID  , FunctionalSealedID , index,FunctionalSealed, FunctionalSealedcount, NotSealed, NotSealedcount, CloseSealed, ClosedSealedcount,team,totalvisits,totalfir,startdat,enddate, District,PlanCode,selVistdate,TotalImages, CloseSealedInspectionID, CloseSealedInspection, CloseSealedInspectionTotal, CloseSealedInspectioncount ;
-    double latitude, longitude;
+
     ArrayList<HashMap<String, String>> indtabresult;
     public DownloadVisitsActivity(Context context, String PlanID, String email, String password, String username, String isEdit, String index,String team,String totalvisits,String totalfir,String startdat,String enddate,String District, String PlanCode,String Vistdate,ArrayList<HashMap<String, String>> indtabresult, String TotalImages) {
 
@@ -101,22 +83,22 @@ public class DownloadVisitsActivity {
         pDialog.show();
         for (int i=0;i<indtabresult.size();i++){
 
-            if(indtabresult.get(i).get("PKID").equals("1") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) ||indtabresult.get(i).get("VisitDate").equals("null"))) {
+            if(Objects.equals(indtabresult.get(i).get("PKID"), "1") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) ||indtabresult.get(i).get("VisitDate").equals("null"))) {
 
                 FunctionalSealedID = indtabresult.get(i).get("PKID");
                 FunctionalSealed = indtabresult.get(i).get("TypeDesc");
-                FuncselTotal = FuncselTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+                FuncselTotal = FuncselTotal + Integer.parseInt(Objects.requireNonNull(indtabresult.get(i).get("TotalSealed")));
             }
-            if(indtabresult.get(i).get("PKID").equals("3") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
+            if(Objects.equals(indtabresult.get(i).get("PKID"), "3") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
                 CloseSealedID = indtabresult.get(i).get("PKID");
                 CloseSealed = indtabresult.get(i).get("TypeDesc");
-                ClosselTotal = ClosselTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+                ClosselTotal = ClosselTotal + Integer.parseInt(Objects.requireNonNull(indtabresult.get(i).get("TotalSealed")));
             }
-            if(indtabresult.get(i).get("PKID").equals("2") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
+            if(Objects.equals(indtabresult.get(i).get("PKID"), "2") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
 
                 NotSealedID = indtabresult.get(i).get("PKID");
                 NotSealed = indtabresult.get(i).get("TypeDesc");
-                NotselTotal = NotselTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+                NotselTotal = NotselTotal + Integer.parseInt(Objects.requireNonNull(indtabresult.get(i).get("TotalSealed")));
             }
 //            if(indtabresult.get(i).get("PKID").equals("9") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
 //
