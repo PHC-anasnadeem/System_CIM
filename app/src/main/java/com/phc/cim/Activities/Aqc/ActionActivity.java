@@ -1832,12 +1832,6 @@ public class ActionActivity extends AppCompatActivity {
         return subactiontypelist;
     }
 
-
-
-
-
-
-
     private static boolean hasPermissions(Context context, String... permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {
