@@ -21,20 +21,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
-
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -44,7 +34,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,9 +53,7 @@ import android.widget.Toast;
 
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
-import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
-import com.phc.cim.Activities.Common.HearingStatusActivity;
 import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.GalleryActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
@@ -74,7 +61,6 @@ import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Activities.Licensing.PWSFilterActivity;
 import com.phc.cim.DataElements.ActionType;
 import com.phc.cim.DataElements.CouncilType;
-import com.phc.cim.DataElements.PracticingType;
 import com.phc.cim.DataElements.subActionType;
 import com.phc.cim.Extra.HomeFragment;
 import com.phc.cim.Extra.NotificationFragment;
@@ -91,7 +77,6 @@ import com.phc.cim.TabsActivities.DashboardTabs;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPSClient;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -115,7 +100,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -126,7 +110,6 @@ import javax.net.ssl.X509TrustManager;
 
 import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 import static com.phc.cim.TabsActivities.DetailTabActivity.MEDIA_TYPE_IMAGE;
-import static com.squareup.okhttp.internal.Internal.instance;
 
 
 public class ActionActivity extends AppCompatActivity {
@@ -134,8 +117,6 @@ public class ActionActivity extends AppCompatActivity {
 
     CurrentLocation gps;
     double cur_latitude;
-
-
     double cur_longitude;
 
     TextInputLayout regNoInput;
@@ -143,41 +124,40 @@ public class ActionActivity extends AppCompatActivity {
     TextInputLayout counNoInput;
     TextInputLayout Reg_No_lay;
     TextInputLayout fir_layout;
-    private Boolean picTaken = false;
-    private Boolean picreceved = false;
-    private Boolean picUploaded = false;
+    private Boolean picTaken=false;
+    private Boolean picreceved=false;
+    private Boolean picUploaded=false;
     TimePickerDialog timePickerDialog;
     int currentHour;
     int currentMinute;
     String amPm;
-    private Boolean picAttachement = false;
+    private Boolean picAttachement=false;
     Context context;
-    int count = 0;
-    int backcount = 0;
-    private String filePath = null;
-    String directoryPath = null;
+    int count=0;
+    int backcount=0;
+    private String filePath=null;
+    String directoryPath=null;
     private Uri filePathURI;
     String visitDate;
-    String LoctionVisitedTime = "";
+    String LoctionVisitedTime= "";
     String actionTypeText;
     String actionTypeID;
     String subactionTypeText;
     String subactionTypeID;
-    int selectedSubactionTypeID;
     String firtext;
-    String imageNAme = null;
+    String imageNAme=null;
     String imagepath;
-    String firID = "0";
+    String firID="0";
     String subactiontseltext;
     String actiontseltext;
     Spinner actionType_spinner;
-    Spinner subactionType_spinner, practicingType_spinner;
+    Spinner subactionType_spinner;
     Spinner counciltypespiner;
     Spinner fir_spinner;
     ArrayList<ActionType> actionTypeList = null;
     ArrayList<subActionType> subactionType = null;
     ArrayList<ActionType> actionTypeselected = null;
-    ArrayList<subActionType> subactionTypeselected = null;
+    ArrayList<subActionType> subactionTypeselected=null;
     ArrayList<CouncilType> councilTypes;
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
@@ -186,6 +166,8 @@ public class ActionActivity extends AppCompatActivity {
     private static final String TAG_NOTIFICATIONS = "notifications";
     private static final String TAG_SETTINGS = "settings";
     public static String CURRENT_TAG = TAG_HOME;
+    // toolbar titles respected to selected nav menu item
+    // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
 
@@ -200,36 +182,48 @@ public class ActionActivity extends AppCompatActivity {
     private String activityTitles;
     private int versionCode = 0;
     int PICK_IMAGE_REQUEST = 111;
-    private Uri u = null;
+    private Uri u=null;
     String appURI = "";
     String time1;
     String MID;
     String MText;
     String MID2;
     String MText2;
-    String ftpbaseurl, ftpUser, ftpPas;
-    String hce_nameText = "";
-
-    String Reg_NoText = "";
-    String coun_NoText = "";
-    String final_id = "";
+    String ftpbaseurl, ftpUser,ftpPas;
+    String hce_nameText="";
+    //  String AddressText="";
+    // String HCSP_nameText="";
+    // String HCSP_SOText="";
+    //  String CNIC_Text="";
+    //   String HCSP_ContactText="";
+    String Reg_NoText="";
+    String coun_NoText="";
+    String  final_id="";
     String visited;
     String UploadedBy;
-
-    String counciltypetext = "";
-    String counciltypeID = "";
-    String email = null;
+    //  String districtText="";
+    //String sectortypetext="";
+    //  String hceTypetext="";
+//    String HCSPTypeText="";
+    //   String RegstatusText="";
+//    String counStatusText="";
+    String counciltypetext="";
+    String counciltypeID="";
+    //    String RegType="";
+    String email=null;
     String password;
     String isEdit;
     String username;
-    String VisitedTime = "";
-
-
+    String VisitedTime="";
+    //    String RecordLockedForUpdate="";
+//    String total_beds="";
     String index;
     String firactionbit;
     String jsonStr0;
-    String VisitedDate;
+    String  VisitedDate;
     String isFIRSubmit;
+    // double latitude;
+    //  double longitude;
     EditText coun_NoEdit;
     EditText hce_nameEdit;
     EditText Reg_no_edit;
@@ -238,14 +232,20 @@ public class ActionActivity extends AppCompatActivity {
     TextView totalpics;
     TextView newquacktext;
     TextView vistedtext;
-    int countPictures = 0;
+    int countPictures=0;
     private DownloadManager downloadManager;
     private long downloadReference;
-    int MY_REQUEST_CODE = 5;
+    int MY_REQUEST_CODE=5;
     private static final int RequestPermissionCode = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
     private ArrayList<String> _images;
-
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    // private GoogleApiClient client;
+    //private static final String urlNavHeaderBg = "http://api.androidhive.info/images/nav-menu-header-bg.jpg";
+    //private static final String urlProfileImg = "https://lh3.googleusercontent.com/eCtE_G34M9ygdkmOpYvCag1vBARCmZwnVS6rS5t4JLzJ6QgQSBquM0nuTsCpLhYbKljoyS-txg";
     public static int navItemIndex = -1;
 
     ArrayList<HashMap<String, String>> mylist;
@@ -257,7 +257,7 @@ public class ActionActivity extends AppCompatActivity {
     Calendar myCalendar;
     EditText comments;
     TextView errortext;
-    String commentText, UserID;
+    String commentText,UserID;
     int actionposition;
     int subactionposition;
     int firposition;
@@ -266,10 +266,6 @@ public class ActionActivity extends AppCompatActivity {
     String roleid;
 
     ArrayAdapter<String> actionadapter;
-    int MarkSurvCount = 0;
-    private RequestQueue requestQueue;
-    String selectedSubactionTypeIDString;
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,7 +277,6 @@ public class ActionActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(context);
         actionType_spinner = (Spinner) findViewById(R.id.actionType_spinner);
         subactionType_spinner = (Spinner) findViewById(R.id.subactionType_spinner);
-        practicingType_spinner = (Spinner) findViewById(R.id.practicingType_spinner);
         counciltypespiner = (Spinner) findViewById(R.id.counType_spinner);
         fir_spinner = (Spinner) findViewById(R.id.fir_spinner);
         txtDateTime = (EditText) findViewById(R.id.txtDateTime);
@@ -290,16 +285,16 @@ public class ActionActivity extends AppCompatActivity {
         hce_nameEdit = (EditText) findViewById(R.id.hce_name);
         coun_NoEdit = (EditText) findViewById(R.id.council_no);
         Reg_no_edit = (EditText) findViewById(R.id.Reg_no_edit);
-        totalpics = (TextView) findViewById(R.id.totalpics);
-        newquacktext = (TextView) findViewById(R.id.newquacktext);
-        vistedtext = (TextView) findViewById(R.id.vistedtext);
-        errortext = (TextView) findViewById(R.id.errortext);
+        totalpics= (TextView) findViewById(R.id.totalpics);
+        newquacktext= (TextView) findViewById(R.id.newquacktext);
+        vistedtext= (TextView) findViewById(R.id.vistedtext);
+        errortext= (TextView) findViewById(R.id.errortext);
 
-        comments = (EditText) findViewById(R.id.comments);
+        comments= (EditText) findViewById(R.id.comments);
         newquacktext.setVisibility(View.GONE);
         dataManager = new DataManager(context);
         myCalendar = Calendar.getInstance(TimeZone.getDefault());
-        if (comments.requestFocus()) {
+        if(comments.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -307,7 +302,25 @@ public class ActionActivity extends AppCompatActivity {
         vistedtext.setVisibility(View.GONE);
         Intent intent = getIntent();
         errortext.setVisibility(View.GONE);
+        // AddressText = (String) intent.getSerializableExtra("HCEAddress");
+        //  districtText = (String) intent.getSerializableExtra("District");
+        //sectortypetext = (String) intent.getSerializableExtra("SectorType");
+        //   hceTypetext = (String) intent.getSerializableExtra("OrgType");
+        //  HCSPTypeText = (String) intent.getSerializableExtra("HCSPType");
+        //   HCSP_nameText = (String) intent.getSerializableExtra("HCSPName");
+        //   HCSP_SOText = (String) intent.getSerializableExtra("HCSPSO");
+        //    CNIC_Text = (String) intent.getSerializableExtra("HCSPCNIC");
+        //   HCSP_ContactText = (String) intent.getSerializableExtra("HCSPContactNo");
+        //   RegstatusText = (String) intent.getSerializableExtra("RegStatus");
 
+        //   counStatusText = (String) intent.getSerializableExtra("CouncilStatus");
+
+        //   RegType = (String) intent.getSerializableExtra("RegType");
+        //  total_beds = (String) intent.getSerializableExtra("total_beds");
+        //  RecordLockedForUpdate = (String) intent.getSerializableExtra("RecordLockedForUpdate");
+
+        //  latitude = (double) intent.getSerializableExtra("latitude");
+        //  longitude = (double) intent.getSerializableExtra("longitude");
         VisitedDate = (String) intent.getSerializableExtra("VisitedDate");
         actionTypeID = (String) intent.getSerializableExtra("ActionType");
         subactionTypeID = (String) intent.getSerializableExtra("SubActionType");
@@ -326,78 +339,75 @@ public class ActionActivity extends AppCompatActivity {
         UploadedBy = (String) intent.getSerializableExtra("UploadedBy");
         visited = (String) intent.getSerializableExtra("visited");
         VisitedTime = (String) intent.getSerializableExtra("VisitedTime");
-//        MarkSurvCount = (String) intent.getSerializableExtra("MarkSurvCount");
         _images = (ArrayList<String>) getIntent().getSerializableExtra("imageurls");
 
-        // Initialize the RequestQueue
-        requestQueue = Volley.newRequestQueue(this);
-
-        // Make the API call
-        callApi();
-
-        if (commentText != null) {
+        if(commentText!=null){
             comments.setText(commentText);
         }
-        if (isFIRSubmit != null) {
-            if (isFIRSubmit.equals("1")) {
-                firtext = "Yes";
+        if(isFIRSubmit!=null){
+            if(isFIRSubmit.equals("1")){
+                firtext="Yes";
             }
-            if (isFIRSubmit.equals("0")) {
-                firtext = "No";
+            if(isFIRSubmit.equals("0")){
+                firtext="No";
             }
 
         }
-        if (visited != null && visited.equals("1")) {
+        if(visited!=null && visited.equals("1")) {
             vistedtext.setVisibility(View.VISIBLE);
             vistedtext.setText("Last visited by: " + UploadedBy);
         }
-        if (VisitedTime != null)
+        if(VisitedTime!=null)
             loctimePickerEdit.setText(VisitedTime);
 
-        if (index.equals("0")) {
+        if(index.equals("0")){
             newquacktext.setVisibility(View.VISIBLE);
         }
         regNoInput = (TextInputLayout) findViewById(R.id.reg);
-        counTypeInput = (TextInputLayout) findViewById(R.id.counclType);
+        counTypeInput= (TextInputLayout) findViewById(R.id.counclType);
         counNoInput = (TextInputLayout) findViewById(R.id.council);
-        fir_layout = (TextInputLayout) findViewById(R.id.fir_layout);
+        fir_layout= (TextInputLayout) findViewById(R.id.fir_layout);
         Reg_No_lay = (TextInputLayout) findViewById(R.id.Reg_No_lay);
 
 
         hce_nameEdit.setEnabled(false);
-        if (visited != null && visited.equals("1")) {
-            hce_nameEdit.setText(index + ". " + hce_nameText);
-        } else {
+        if(visited!=null && visited.equals("1")) {
+            hce_nameEdit.setText(index+". "+hce_nameText);
+        }
+        else {
             hce_nameEdit.setText(index + ". " + final_id + " - " + hce_nameText);
         }
-
+        //ImageView imageView = (ImageView) findViewById(R.id.splashImage);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         gps = new CurrentLocation(context);
         mHandler = new Handler();
         TextView t2 = (TextView) findViewById(R.id.text2);
-
+        //Linkify.addLinks(t2, Linkify.ALL);
+        //t2.setMovementMethod(LinkMovementMethod.getInstance());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
-
+        //fab = (FloatingActionButton) findViewById(R.id.fab);
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(R.id.name);
         txtWebsite = (TextView) navHeader.findViewById(R.id.website);
+        //imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
         regNoInput.setVisibility(View.GONE);
         counTypeInput.setVisibility(View.GONE);
         counNoInput.setVisibility(View.GONE);
         Reg_No_lay.setVisibility(View.GONE);
         fir_layout.setVisibility(View.GONE);
-
+  /*      BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);*/
         // load toolbar titles from string resources
         activityTitles = getResources().getString(R.string.nav_item_action_titles);
-        ftpbaseurl = context.getResources().getString(R.string.ftpbaseurl);
-        ftpUser = context.getResources().getString(R.string.ftpUser);
-        ftpPas = context.getResources().getString(R.string.ftpPass);
+        ftpbaseurl=context.getResources().getString(R.string.ftpbaseurl);
+        ftpUser=context.getResources().getString(R.string.ftpUser);
+        ftpPas=context.getResources().getString(R.string.ftpPass);
         loadNavHeader();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_CALENDAR}, 42);
@@ -413,19 +423,19 @@ public class ActionActivity extends AppCompatActivity {
             loadHomeFragment();
         }
 
-        if (coun_NoText != null) {
+        if(coun_NoText!=null){
             coun_NoEdit.setText(coun_NoText);
         }
-        if (Reg_NoText != null) {
+        if(Reg_NoText!=null) {
             Reg_no_edit.setText(Reg_NoText);
         }
 
 
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
         roleid = prefs.getString("RoleID", null);//"No name defined" is the default value.
-        UserID = prefs.getString("UserID", null);//"No name defined" is the default value.
+        UserID=prefs.getString("UserID", null);//"No name defined" is the default value.
         String isStat = prefs.getString("isStat", null);
-        if (roleid.equals("1")) {
+        if(roleid.equals("1")) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
             if (isStat.equals("true")) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
@@ -434,7 +444,8 @@ public class ActionActivity extends AppCompatActivity {
             } else {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
             }
-        } else {
+        }
+        else {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
         }
@@ -458,22 +469,26 @@ public class ActionActivity extends AppCompatActivity {
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        if (VisitedDate != null && VisitedDate != "0") {
+        if(VisitedDate!=null && VisitedDate!="0") {
             String start_dt = VisitedDate;
             DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             Date date2 = null;
             try {
-                date2 = (Date) formatter.parse(start_dt);
+                date2 = (Date)formatter.parse(start_dt);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
             SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yy");
-            String finalString = "";
-            if (date2 != null)
-                finalString = newFormat.format(date2);
+            String finalString="";
+            if(date2!=null)
+                finalString= newFormat.format(date2);
             txtDateTime.setText(finalString);
         }
+       /* else {
+            txtDateTime.setText(sdf.format(myCalendar.getTime()));
+        }*/
+
         txtDateTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -493,21 +508,21 @@ public class ActionActivity extends AppCompatActivity {
         loctimePickerEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar calendar = Calendar.getInstance();
+                Calendar   calendar = Calendar.getInstance();
                 currentHour = calendar.get(Calendar.HOUR_OF_DAY);
                 currentMinute = calendar.get(Calendar.MINUTE);
                 timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
                         if (hourOfDay >= 12) {
-                            hourOfDay = hourOfDay - 12;
-                            if (hourOfDay == 00) {
-                                hourOfDay = 12;
+                            hourOfDay = hourOfDay-12;
+                            if(hourOfDay==00){
+                                hourOfDay=12;
                             }
                             amPm = "PM";
                         } else {
-                            if (hourOfDay == 00) {
-                                hourOfDay = 12;
+                            if(hourOfDay==00){
+                                hourOfDay=12;
                             }
                             amPm = "AM";
                         }
@@ -518,7 +533,7 @@ public class ActionActivity extends AppCompatActivity {
                 timePickerDialog.show();
             }
         });
-        actionTypeList = dataManager.getActionstype(roleid);
+        actionTypeList= dataManager.getActionstype(roleid);
         actionadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, getactionTypes()) {
             @Override
             public boolean isEnabled(int position) {
@@ -555,20 +570,20 @@ public class ActionActivity extends AppCompatActivity {
         actionType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
+                //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
 
                 actionType_spinner.setSelection(position);
                 actionTypeText = parent.getItemAtPosition(position).toString();
-                actionTypeID = actionTypeList.get(position).getActionType_Id();
-                firactionbit = actionTypeList.get(position).getFIRAssociated();
-                if (firactionbit.equals("1")) {
+                actionTypeID=actionTypeList.get(position).getActionType_Id();
+                firactionbit=actionTypeList.get(position).getFIRAssociated();
+                if(firactionbit.equals("1")) {
                     fir_layout.setVisibility(View.VISIBLE);
-                } else {
+                }
+                else {
                     fir_layout.setVisibility(View.GONE);
                 }
-                getsubactionTypes(MarkSurvCount);
-//                getsubactionTypes();
-                getPracticingTypes();
-                if (comments.requestFocus()) {
+                getsubactionTypes();
+                if(comments.requestFocus()) {
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -581,7 +596,7 @@ public class ActionActivity extends AppCompatActivity {
         });
         //---------------------------------counciltype Spinner--------------------------------------------
 
-        councilTypes = dataManager.getCouncilTypes();
+        councilTypes= dataManager.getCouncilTypes();
         ArrayAdapter<String> counciltype_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, getCouncilTypes()) {
             @Override
             public boolean isEnabled(int position) {
@@ -617,10 +632,11 @@ public class ActionActivity extends AppCompatActivity {
         counciltypespiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
+                //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
 
-                councilposition = position;
+                councilposition=position;
                 counciltypetext = parent.getItemAtPosition(position).toString();
-                counciltypeID = councilTypes.get(position).getSectorType_id();
+                counciltypeID=councilTypes.get(position).getSectorType_id();
             }
 
             @Override
@@ -632,7 +648,7 @@ public class ActionActivity extends AppCompatActivity {
 
         //---------------------------------fir_spinner Spinner--------------------------------------------
 
-        String FIRsubmitted[] = {"Please Select", "Yes", "No"};
+        String FIRsubmitted[]= {"Please Select","Yes","No"};
         //councilTypes= dataManager.getCouncilTypes();
         ArrayAdapter<String> fir_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, FIRsubmitted) {
             @Override
@@ -672,11 +688,12 @@ public class ActionActivity extends AppCompatActivity {
                                        int position, long id) {
                 //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
 
-                firposition = position;
+                firposition=position;
                 firtext = parent.getItemAtPosition(position).toString();
-                if (firtext.equals("Yes")) {
+                if(firtext.equals("Yes")) {
                     firID = "1";
-                } else if (firtext.equals("No")) {
+                }
+                else if(firtext.equals("No")){
                     firID = "0";
                 }
             }
@@ -714,12 +731,15 @@ public class ActionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int errorcount = 0;
                 coun_NoText = coun_NoEdit.getText().toString();
-                Reg_NoText = Reg_no_edit.getText().toString();
+                Reg_NoText  = Reg_no_edit.getText().toString();
+           /*     String day = "Day = " + simpleDatePicker.getDayOfMonth();
+                String month = "Month = " + (simpleDatePicker.getMonth() + 1);
+                String year = "Year = " + simpleDatePicker.getYear();*/
 
-                visitDate = txtDateTime.getText().toString();
+                visitDate=txtDateTime.getText().toString();
                 LoctionVisitedTime = loctimePickerEdit.getText().toString();
-                commentText = comments.getText().toString();
-                if (visitDate.equals("")) {
+                commentText=comments.getText().toString();
+                if(visitDate.equals("")){
                     txtDateTime.setError("Please select date");
                     errortext.setText("* Required fields are missing");
                     errorcount++;
@@ -730,18 +750,18 @@ public class ActionActivity extends AppCompatActivity {
                     errorcount++;
 
                 }
-                if (actionTypeID.equals("0")) {
-                    setSpinnerError(actionType_spinner, ("Please select Action type"));
+                if(actionTypeID.equals("0")){
+                    setSpinnerError(actionType_spinner,("Please select Action type"));
                     errortext.setText("* Required fields are missing");
                     errorcount++;
                 }
-                if (subactionTypeID.equals("0")) {
-                    setSpinnerError(subactionType_spinner, ("Please select Quack type"));
+                if(subactionTypeID.equals("0")){
+                    setSpinnerError(subactionType_spinner,("Please select Quack type"));
                     errortext.setText("* Required fields are missing");
                     errorcount++;
                 }
-                else if (subactionTypeID.equals("9")) {
-                    if ((counciltypeID.equals("0") && !coun_NoText.equals("")) || (!counciltypeID.equals("0") && coun_NoText.equals("")) || (counciltypeID.equals("0") && coun_NoText.equals(""))) {
+                else if(subactionTypeID.equals("9")) {
+                    if((counciltypeID.equals("0") && !coun_NoText.equals("")) || (!counciltypeID.equals("0") && coun_NoText.equals("")) || (counciltypeID.equals("0") && coun_NoText.equals(""))){
                         errortext.setText("Please enter council type and council number both");
                         errorcount++;
                     }
@@ -759,8 +779,8 @@ public class ActionActivity extends AppCompatActivity {
                                     pDialog.setCancelable(false);
                                     pDialog.show();
 
-                                    if (counciltypeID.equals("0")) {
-                                        counciltypetext = "";
+                                    if(counciltypeID.equals("0")){
+                                        counciltypetext="";
                                     }
                                     String url = getDirectionsUrl0(context);
                                     DownloadTask0 downloadTask = new DownloadTask0();
@@ -777,57 +797,49 @@ public class ActionActivity extends AppCompatActivity {
                             });
                     AlertDialog alert = builder.create();
                     alert.show();
-                } else {
+                }
+                else {
                     errortext.setVisibility(View.VISIBLE);
                 }
             }
         });
-//        Button camera = (Button) findViewById(R.id.take_pic);
-//
-//        camera.setOnClickListener(new Button.OnClickListener() {
-//
-//
-//            public void onClick(View v) {
-//                if (Build.VERSION.SDK_INT >= 24) {
-//                    try {
-//                        Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
-//                        m.invoke(null);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//                count = 2;
-//                requestRuntimePermission();
-//                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
-//                String currentDateandTime = sdf.format(new Date());
-//                String pictureName = final_id + "_" + currentDateandTime;//here you can get picture name from user. I supposed Test name
-//                Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                File photo = new File(context.getExternalFilesDir(null), pictureName + ".jpg");//save picture (.jpg) on SD Card
-//                u = Uri.fromFile(photo);
-//                intentcamera.putExtra(MediaStore.EXTRA_OUTPUT, u);
-//                intentcamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                filePath = photo.getAbsolutePath();
-//                startActivityForResult(intentcamera, REQUEST_CODE);
-//
-//            }
-//        });
+        Button camera = (Button) findViewById(R.id.take_pic);
 
-        Button camera = findViewById(R.id.take_pic);
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
+        camera.setOnClickListener(new Button.OnClickListener() {
+
+
             public void onClick(View v) {
+                if(Build.VERSION.SDK_INT>=24){
+                    try{
+                        Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                        m.invoke(null);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+                count=2;
                 requestRuntimePermission();
+                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
+                String currentDateandTime = sdf.format(new Date());
+                String pictureName=final_id+"_"+currentDateandTime;//here you can get picture name from user. I supposed Test name
+                Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File photo = new File(context.getExternalFilesDir(null),  pictureName+".jpg");//save picture (.jpg) on SD Card
+                u= Uri.fromFile(photo);
+                intentcamera.putExtra(MediaStore.EXTRA_OUTPUT,u);
+                intentcamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                filePath = photo.getAbsolutePath();
+                startActivityForResult(intentcamera, REQUEST_CODE);
+
             }
         });
-
         Button attachment = (Button) findViewById(R.id.attach_pic);
 
         attachment.setOnClickListener(new Button.OnClickListener() {
 
             public void onClick(View v) {
 
-                count = 1;
+                count=1;
                 requestRuntimePermission();
                 Intent attachintent = new Intent();
                 attachintent.setType("image/*");
@@ -845,8 +857,6 @@ public class ActionActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void updateLabel() {
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -854,7 +864,6 @@ public class ActionActivity extends AppCompatActivity {
         txtDateTime.setText(sdf.format(myCalendar.getTime()));
 
     }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -862,7 +871,6 @@ public class ActionActivity extends AppCompatActivity {
         // do this for each or your Spinner
         // You might consider using Bundle.putStringArray() instead
     }
-
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -871,106 +879,71 @@ public class ActionActivity extends AppCompatActivity {
         savedInstanceState.getBoolean("actionType_spinner");
 
     }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        switch (requestCode) {
-//
-//            case 1: {
-//                if (requestCode == MY_REQUEST_CODE) {
-//                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                        // Now user should be able to use camera
-//                    } else {
-//                        // Your app will not have this permission. Turn off all functions
-//                        // that require this permission or it will force close like your
-//                        // original question
-//                    }
-//                }
-//
-//
-//            }
-//
-//        }
-//    }
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
-            } else {
-                Toast.makeText(this, "Camera and storage permissions are required to take photos", Toast.LENGTH_SHORT).show();
+        switch (requestCode) {
+
+            case 1: {
+                if (requestCode == MY_REQUEST_CODE) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        // Now user should be able to use camera
+                    }
+                    else {
+                        // Your app will not have this permission. Turn off all functions
+                        // that require this permission or it will force close like your
+                        // original question
+                    }
+                }
+  /*              if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //do here
+                } else {
+                    Toast.makeText(this, "The app was not allowed to read your store.", Toast.LENGTH_LONG).show();
+                }
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    gps = new CurrentLocation(context);
+                    // Check if GPS enabled
+                    if (gps.canGetLocation()) {
+
+                        cur_latitude = gps.getLatitude();
+                        cur_longitude = gps.getLongitude();
+                        // latlangListener.onlatlang(cur_latitude, cur_longitude);
+
+                    } else {
+                        // Can't get location.
+                        // GPS or network is not enabled.
+                        // Ask user to enable GPS/network in settings.
+                        gps.showSettingsAlert();
+                    }
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(context, "You need to grant permission", Toast.LENGTH_SHORT).show();
+                }
+
+                return;*/
+
             }
+
         }
     }
-
-    private void openCamera() {
-        if (Build.VERSION.SDK_INT >= 24) {
-            try {
-                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
-                m.invoke(null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        count = 2;
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
-        String currentDateandTime = sdf.format(new Date());
-        String pictureName = final_id + "_" + currentDateandTime;
-        Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(getExternalFilesDir(null), pictureName + ".jpg");
-        u = Uri.fromFile(photo);
-        intentcamera.putExtra(MediaStore.EXTRA_OUTPUT, u);
-        intentcamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        filePath = photo.getAbsolutePath();
-        startActivityForResult(intentcamera, REQUEST_CODE);
-    }
-
-    public void requestRuntimePermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            List<String> permissionsNeeded = new ArrayList<>();
-
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                    != PackageManager.PERMISSION_GRANTED) {
-                permissionsNeeded.add(Manifest.permission.CAMERA);
-            }
-
-            if (!permissionsNeeded.isEmpty()) {
-                ActivityCompat.requestPermissions(this,
-                        permissionsNeeded.toArray(new String[0]), 1);
-            }
-        }
-    }
-
     public Uri getOutputMediaFileUri(int type) {
         requestRuntimePermission();
         return Uri.fromFile(getOutputMediaFile(type));
     }
-
     // @RequiresApi(api = Build.VERSION_CODES.M)
+    public void requestRuntimePermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
 
-    // public void requestRuntimePermission() {
-    ////        if (Build.VERSION.SDK_INT >= 23) {
-    ////
-    ////            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    ////                    != PackageManager.PERMISSION_GRANTED) {
-    ////                ActivityCompat.requestPermissions(this,
-    ////                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-    ////            }
-    ////        }
-    ////    }
-//
+            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
+    }
 
-
-    public void checkPermission() {
+    public void checkPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -982,7 +955,6 @@ public class ActionActivity extends AppCompatActivity {
 
 
     }
-
     private static File getOutputMediaFile(int type) {
 
         // External sdcard location
@@ -1016,9 +988,12 @@ public class ActionActivity extends AppCompatActivity {
 
         return mediaFile;
     }
-
-
-    private void setSpinnerError(Spinner spinner, String error) {
+    /*
+     * Load navigation menu header information
+     * like background image, profile image
+     * name, website, notifications action view (dot)
+     */
+    private void setSpinnerError(Spinner spinner, String error){
         View selectedView = spinner.getSelectedView();
         if (selectedView != null && selectedView instanceof TextView) {
             spinner.requestFocus();
@@ -1030,16 +1005,34 @@ public class ActionActivity extends AppCompatActivity {
 
         }
     }
-
     private void loadNavHeader() {
         // name, website
 
         txtName.setText(username);
         txtWebsite.setText(email);
 
+        // loading header background image
+       /* Glide.with(this).load(urlNavHeaderBg)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imgNavHeaderBg);
+
+        // Loading profile image
+        Glide.with(this).load(urlProfileImg)
+                .crossFade()
+                .thumbnail(0.5f)
+                .bitmapTransform(new CircleTransform(this))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imgProfile);
+
+        // showing dot next to notifications label
+        navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);*/
     }
 
-
+    /***
+     * Returns respected fragment that user
+     * selected from navigation menu
+     */
     private void loadHomeFragment() {
         // selecting appropriate nav menu item
         selectNavMenu();
@@ -1140,29 +1133,30 @@ public class ActionActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.nav_home:
-                        startActivity(new Intent(context, FilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, FilterActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_reportquack:
-                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_quack:
-                        startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actiondesc:
-                        startActivity(new Intent(context, IndReportingActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
                         String UserID = prefs.getString("UserID", null); //0 is the default value.
-                        if (isStat.equals("true")) {
-                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
+                        if(isStat.equals("true")) {
+                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                             drawer.closeDrawers();
-                        } else {
+                        }
+                        else {
                             Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
                         }
                         return true;
@@ -1170,19 +1164,78 @@ public class ActionActivity extends AppCompatActivity {
                         startActivity(new Intent(context, PWSFilterActivity.class));
                         drawer.closeDrawers();
                         return true;
-                    case R.id.nav_list:
-                        startActivity(new Intent(context, DesealListing.class));
+
+                    /*     case R.id.nav_photos:
+                        navItemIndex = 1;
+                        CURRENT_TAG = TAG_PHOTOS;
+                        break;
+                    case R.id.nav_movies:
+                        navItemIndex = 2;
+                        CURRENT_TAG = TAG_MOVIES;
+                        break;
+                    case R.id.nav_notifications:
+                        navItemIndex = 3;
+                        CURRENT_TAG = TAG_NOTIFICATIONS;
+                        break;*/
+                /*    case R.id.nav_settings:
+                        // launch new intent instead of loading fragment
+                        startActivity(new Intent(context, Setting.class));
                         drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_hearing:
-                        startActivity(new Intent(context, HearingStatusActivity.class));
-                        drawer.closeDrawers();
-                        return true;
+                        return true;*/
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email", email).putExtra("password", password));
+                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));
                         drawer.closeDrawers();
+         /*               AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                        alertDialog.setTitle("Change Password");
+                        final EditText oldPass = new EditText(context);
+                        final EditText newPass = new EditText(context);
+                        final EditText confirmPass = new EditText(context);
+
+
+                        oldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        newPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        confirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                        oldPass.setHint("Old Password");
+                        newPass.setHint("New Password");
+                        confirmPass.setHint("Confirm Password");
+                        LinearLayout ll=new LinearLayout(context);
+                        ll.setOrientation(LinearLayout.VERTICAL);
+                        ll.addView(oldPass);
+                        ll.addView(newPass);
+                        ll.addView(confirmPass);
+                        alertDialog.setView(ll);
+                        alertDialog.setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                      String oldpas=  oldPass.getText().toString();
+                                        String newPas = newPass.getText().toString();
+                                        String confirmPas =confirmPass.getText().toString();
+                                        if(newPas.equals(confirmPas) && oldpas.equals(password)){
+                                            ChangePassword changePassword=new ChangePassword(context,email,newPas);
+                                            dialog.cancel();
+                                        }
+                                        else {
+                                            Toast.makeText(context, "Password not matched", Toast.LENGTH_SHORT).show();
+                                        }
+
+
+                                    }
+                                });
+                        alertDialog.setNegativeButton("No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        AlertDialog alert11 = alertDialog.create();
+                        alert11.show();*/
                         return true;
+
+
+
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, AboutusActivity.class));
@@ -1251,21 +1304,23 @@ public class ActionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (backcount == 1) {
+        if(backcount==1) {
             super.onBackPressed();
             return;
         }
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             return;
-        } else {
+        }
+
+        else {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage("Do you really want to navigate away from this screen? Changes made will not be effective")
                     .setTitle("Warning")
                     .setCancelable(false)
                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            backcount = 1;
+                            backcount=1;
                             onBackPressed();
                         }
                     })
@@ -1284,33 +1339,42 @@ public class ActionActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+
+     /*   // show menu only when home fragment is selected
+        if (navItemIndex == 0) {
+           // getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
+
+        // when fragment is notifications, load the menu created for notifications
+        if (navItemIndex == 3) {
+            getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+        }*/
         return true;
     }
 
     private ArrayList<String> getactionTypes() {
 
         ArrayList<String> actiontypelist = new ArrayList<String>();
-        int i = 0;
+        int i=0;
         for (ActionType actionType : actionTypeList) {
-            String actiontypelists = actionType.getActionType();
+            String actiontypelists= actionType.getActionType();
             actiontypelist.add(actiontypelists);
             i++;
         }
         return actiontypelist;
     }
-
     private ArrayList<String> getCouncilTypes() {
 
         ArrayList<String> counciltypelist = new ArrayList<String>();
-        int i = 0;
+        int i=0;
         for (CouncilType councilType : councilTypes) {
-            String counciltypelists = councilType.getCouncilType();
+            String counciltypelists= councilType.getCouncilType();
             counciltypelist.add(counciltypelists);
             i++;
         }
         return counciltypelist;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1318,9 +1382,13 @@ public class ActionActivity extends AppCompatActivity {
         if (count == 2) {
             try {
 
-
+                // context.getContentResolver().notifyChange(u, null);
+                // ContentResolver cr = context.getContentResolver();
+                // Bitmap bm = android.provider.MediaStore.Images.Media.getBitmap(cr, u);
+//ImageView to set the picture taken from camera.
+                //   mImageView.setImageBitmap(bm);
                 picTaken = true; //to ensure picture is taken
-                picAttachement = false;
+                picAttachement=false;
                 pDialog = new ProgressDialog(context);
                 pDialog.setMessage("Uploading image, Please wait...");
                 pDialog.setCancelable(false);
@@ -1340,7 +1408,7 @@ public class ActionActivity extends AppCompatActivity {
                 filePath = getRealPathFromUri(context, filePathURI);
 
                 try {
-                    picAttachement = true;
+                    picAttachement=true;
                     picTaken = false;
                     //getting image from gallery
                     //Bitmap bm = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(filePath));
@@ -1357,7 +1425,6 @@ public class ActionActivity extends AppCompatActivity {
             }
         }
     }
-
     public void upLoadPicture() {
 
         if (picTaken) {
@@ -1374,10 +1441,10 @@ public class ActionActivity extends AppCompatActivity {
                     // BufferedInputStream buffIn = null;
                     FTPSClient client = new FTPSClient("TLS", true);
                     try {
-                        picUploaded = false;
+                        picUploaded=false;
                         imagepath = null;
-                        imageNAme = null;
-                        directoryPath = null;
+                        imageNAme=null;
+                        directoryPath=null;
                         picreceved = true;
                         try {
                             TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
@@ -1409,7 +1476,8 @@ public class ActionActivity extends AppCompatActivity {
                                 client.execPBSZ(0);
                                 client.execPROT("P");
                             }
-                        } catch (SocketException e) {
+                        }
+                        catch (SocketException e) {
                             Log.e("APPTAG", e.getStackTrace().toString());
                         } catch (UnknownHostException e) {
                             Log.e("APPTAG", e.getStackTrace().toString());
@@ -1427,7 +1495,7 @@ public class ActionActivity extends AppCompatActivity {
                             client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
                             client.makeDirectory("HCEImages/" + final_id + "/" + username);
                             client.makeDirectory("HCEImages/" + final_id + "/" + username + "/Camera");
-                            directoryPath = "HCEImages/" + final_id + "/" + username + "/Camera";
+                            directoryPath="HCEImages/" + final_id + "/" + username + "/Camera";
                             //client.sendCommand("OPTS UTF8 ON");
 
                         } catch (Exception e) {
@@ -1443,26 +1511,30 @@ public class ActionActivity extends AppCompatActivity {
                         if (picreceved) {
                             SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
                             String currentDateandTime = sdf.format(new Date());
-                            imageNAme = final_id + "_" + currentDateandTime + extension;
+                            imageNAme=final_id + "_" + currentDateandTime+extension;
                             imagepath = final_id + "/" + username + "/Camera/" + imageNAme;
 
-                            try {
+                            try
+                            {
                                 if (!client.storeFile("HCEImages/" + imagepath, fis))//this is actual file uploading on FtpServer in specified directory/folder
                                 {
                                     throw new Exception("Unable to write file to FTP server");
                                 }
                                 //Make sure to always close the inputStream
-                            } finally {
+                            }
+                            finally
+                            {
                                 fis.close();
                             }
-                            InputStream inputStream = client.retrieveFileStream("/" + directoryPath + "/" + imageNAme);
+                            InputStream inputStream = client.retrieveFileStream("/"+directoryPath+"/"+imageNAme);
                             int returnCode = client.getReplyCode();
                             if (inputStream == null || returnCode == 550) {
-                                picUploaded = false;
+                                picUploaded=false;
                                 if (pDialog.isShowing())
                                     pDialog.dismiss();
                                 Toast.makeText(context, "Picture not uploaded! Please try again", Toast.LENGTH_SHORT).show();
-                            } else {
+                            }
+                            else {
                                 String url = getDirectionsUrl2(context);
                                 DownloadTask2 downloadTask = new DownloadTask2();
                                 //Start downloading json data from Google Directions API
@@ -1472,7 +1544,8 @@ public class ActionActivity extends AppCompatActivity {
                             totalpics.setText("Total pictures uploaded: " + countPictures);
                         }
 
-                        try {
+                        try
+                        {
 
                             //10 seconds to log off.  Also 10 seconds to disconnect.
                             client.setSoTimeout(10000);
@@ -1480,19 +1553,25 @@ public class ActionActivity extends AppCompatActivity {
 
                             //depending on the state of the server the .logout() may throw an exception,
                             //we want to ensure complete disconnect.
-                        } catch (Exception innerException) {
+                        }
+                        catch(Exception innerException)
+                        {
 
                             //You potentially just want to log that there was a logout exception.
 
-                        } finally {
+                        }
+                        finally
+                        {
                             //Make sure to always disconnect.  If not, there is a chance you will leave hanging sockects
                             client.disconnect();
                         }
 
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (picUploaded) {
+                    if(picUploaded) {
+
 
 
                     }
@@ -1504,7 +1583,9 @@ public class ActionActivity extends AppCompatActivity {
             pd.dismiss();
 
 
-        } else {
+        }
+        else
+        {
             // Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
 
         }
@@ -1524,11 +1605,11 @@ public class ActionActivity extends AppCompatActivity {
                     // BufferedInputStream buffIn = null;
                     FTPSClient client = new FTPSClient("TLS", true);
                     try {
-                        picUploaded = false;
-                        imagepath = null;
-                        imageNAme = null;
-                        directoryPath = null;
-                        picreceved = true;
+                        picUploaded=false;
+                        imagepath=null;
+                        imageNAme=null;
+                        directoryPath=null;
+                        picreceved=true;
                         try {
                             TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
                                 @Override
@@ -1572,41 +1653,45 @@ public class ActionActivity extends AppCompatActivity {
                             client.setFileType(FTP.BINARY_FILE_TYPE);
                             // buffIn = new BufferedInputStream(new FileInputStream(file));
                             Uri mUri = Uri.fromFile(file);
-                            fis = getContentResolver().openInputStream(mUri);
+                            fis= getContentResolver().openInputStream(mUri);
                             client.enterLocalPassiveMode();
                             client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
-                            client.makeDirectory("HCEImages/" + final_id + "/" + username);
-                            client.makeDirectory("HCEImages/" + final_id + "/" + username + "/Attachments");
-                            directoryPath = "HCEImages/" + final_id + "/" + username + "/Attachments";
+                            client.makeDirectory("HCEImages/" + final_id+"/"+username);
+                            client.makeDirectory("HCEImages/" + final_id+"/"+username+"/Attachments");
+                            directoryPath="HCEImages/" + final_id+"/"+username+"/Attachments";
                         } catch (Exception e) {
                             if (pDialog.isShowing())
                                 pDialog.dismiss();
-                            picreceved = false;
+                            picreceved=false;
                             Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
                         }
 
-                        if (picreceved) {
+                        if(picreceved) {
                             SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
                             String currentDateandTime = sdf.format(new Date());
-                            imageNAme = final_id + "_" + currentDateandTime + extension;
-                            imagepath = final_id + "/" + username + "/Attachments/" + imageNAme;
-                            try {
+                            imageNAme=final_id + "_" + currentDateandTime+extension;
+                            imagepath = final_id +"/"+username+"/Attachments/" + imageNAme;
+                            try
+                            {
                                 if (!client.storeFile("HCEImages/" + imagepath, fis))//this is actual file uploading on FtpServer in specified directory/folder
                                 {
                                     throw new Exception("Unable to write file to FTP server");
                                 }
                                 //Make sure to always close the inputStream
-                            } finally {
+                            }
+                            finally
+                            {
                                 fis.close();
                             }
-                            InputStream inputStream = client.retrieveFileStream("/" + directoryPath + "/" + imageNAme);
+                            InputStream inputStream = client.retrieveFileStream("/"+directoryPath+"/"+imageNAme);
                             int returnCode = client.getReplyCode();
                             if (inputStream == null || returnCode == 550) {
-                                picUploaded = false;
+                                picUploaded=false;
                                 if (pDialog.isShowing())
                                     pDialog.dismiss();
                                 Toast.makeText(context, "Picture not uploaded! Please try again", Toast.LENGTH_SHORT).show();
-                            } else {
+                            }
+                            else {
                                 String url = getDirectionsUrl2(context);
                                 DownloadTask2 downloadTask = new DownloadTask2();
                                 //Start downloading json data from Google Directions API
@@ -1615,7 +1700,8 @@ public class ActionActivity extends AppCompatActivity {
                             }
                             totalpics.setText("Total pictures uploaded: " + countPictures);
                         }
-                        try {
+                        try
+                        {
 
                             //10 seconds to log off.  Also 10 seconds to disconnect.
                             client.setSoTimeout(10000);
@@ -1623,19 +1709,24 @@ public class ActionActivity extends AppCompatActivity {
 
                             //depending on the state of the server the .logout() may throw an exception,
                             //we want to ensure complete disconnect.
-                        } catch (Exception innerException) {
+                        }
+                        catch(Exception innerException)
+                        {
 
                             //You potentially just want to log that there was a logout exception.
 
-                        } finally {
+                        }
+                        finally
+                        {
                             //Make sure to always disconnect.  If not, there is a chance you will leave hanging sockects
                             client.disconnect();
                         }
 
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (picUploaded) {
+                    if(picUploaded) {
 
 
                     }
@@ -1646,19 +1737,20 @@ public class ActionActivity extends AppCompatActivity {
             pd.dismiss();
 
 
-        } else {
+        }
+        else
+        {
             //   Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
 
         }
     }
-
     /**
      * Creating file uri to store image/video
      */
     public static String getRealPathFromUri(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = {MediaStore.Images.Media.DATA};
+            String[] proj = { MediaStore.Images.Media.DATA };
             cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
@@ -1674,78 +1766,80 @@ public class ActionActivity extends AppCompatActivity {
     private String getactionsel() {
         DatabaseManager databaseManager = new DatabaseManager(context);
         actionTypeselected = databaseManager.getActionselected(actionTypeID);
-        if (actionTypeselected.size() > 0) {
+        if(actionTypeselected.size()>0) {
             actiontseltext = actionTypeselected.get(0).getActionType();
         }
         return actiontseltext;
     }
-
     private String getsubactionsel() {
         DatabaseManager databaseManager = new DatabaseManager(context);
         subactionTypeselected = databaseManager.getsubActionselected(subactionTypeID);
-        if (subactionTypeselected.size() > 0) {
+        if(subactionTypeselected.size()>0) {
             subactiontseltext = subactionTypeselected.get(0).getSubactionType();
         }
         return subactiontseltext;
     }
-
-
-
-    private ArrayList<String> getsubactionTypes(int MarkSurvCount) {
-        subactionType = dataManager.getsubActionstype(actionTypeID, roleid);
+    private ArrayList<String> getsubactionTypes() {
+        subactionType= dataManager.getsubActionstype(actionTypeID,roleid);
         ArrayList<String> subactiontypelist = new ArrayList<String>();
-
-        // Populate the subactiontypelist and filter based on MarkSurvCount
+        int i=0;
         for (subActionType subActionType : subactionType) {
-            String subactiontype = subActionType.getSubactionType();
-            String subactionTypeID = subActionType.getSubActionType_Id(); // Assuming this method exists to get the ID
-            if (MarkSurvCount <= 3 || !subactionTypeID.equals("16")) {
-                subactiontypelist.add(subactiontype);
-            }
+            String subactiontype= subActionType.getSubactionType();
+            subactiontypelist.add(subactiontype);
+            i++;
         }
 
         ArrayAdapter<String> subactiontype_spinneradapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, subactiontypelist) {
             @Override
             public boolean isEnabled(int position) {
-                return true; // All items are enabled
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return true;
+                } else {
+                    return true;
+                }
             }
 
             @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
+
+                if (position == 0) {
+                    // Set the hint text color gray
+                    //tv.setTextColor(Color.GRAY);
+                } else {
+                    // tv.setTextColor(Color.BLACK);
+                }
                 return view;
             }
         };
-
         subactiontype_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subactionType_spinner.setAdapter(subactiontype_spinneradapter);
-
         if (subactionTypeID != null) {
             getsubactionsel();
             int spinnerPosition = subactiontype_spinneradapter.getPosition(subactiontseltext);
             subactionType_spinner.setSelection(spinnerPosition);
         }
-
         subactionType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                //subactionposition=position;
                 subactionTypeText = parent.getItemAtPosition(position).toString();
-                subactionTypeID = subactionType.get(position).getSubActionType_Id();
-
-                if (MarkSurvCount > 3 && subactionTypeID.equals("16")) {
-                    // Do not allow selection of "16" if MarkSurvCount > 3
-                    Toast.makeText(context, "Selection not allowed", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (subactionTypeID.equals("9")) {
+                subactionTypeID=subactionType.get(position).getSubActionType_Id();
+                if(subactionTypeID.equals("9")) {
                     counTypeInput.setVisibility(View.VISIBLE);
                     counNoInput.setVisibility(View.VISIBLE);
                     Reg_No_lay.setVisibility(View.VISIBLE);
-                    if (comments.requestFocus()) {
+                    if(comments.requestFocus()) {
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                     }
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                } else {
+                }
+                else {
+
                     counTypeInput.setVisibility(View.GONE);
                     counNoInput.setVisibility(View.GONE);
                     Reg_No_lay.setVisibility(View.GONE);
@@ -1754,81 +1848,13 @@ public class ActionActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
+
             }
         });
-
-        return subactiontypelist;
-    }
-
-    private ArrayList<PracticingType> getPracticingTypes() {
-        ArrayList<PracticingType> subactiontypelist = new ArrayList<>();
-
-        // Add hardcoded values with String ids
-        subactiontypelist.add(new PracticingType("0", "Please Select"));
-        subactiontypelist.add(new PracticingType("1", "Allopathy"));
-        subactiontypelist.add(new PracticingType("2", "Dentistry"));
-        subactiontypelist.add(new PracticingType("3", "Tibb"));
-        subactiontypelist.add(new PracticingType("4", "Pharmacy"));
-        subactiontypelist.add(new PracticingType("5", "Laboratory"));
-        subactiontypelist.add(new PracticingType("6", "Dispensary"));
-        subactiontypelist.add(new PracticingType("7", "Medical Store"));
-        subactiontypelist.add(new PracticingType("8", "Gyne"));
-        subactiontypelist.add(new PracticingType("9", "Hadi Jore"));
-        subactiontypelist.add(new PracticingType("10", "Maternity home"));
-        subactiontypelist.add(new PracticingType("11", "Homeopathic"));
-        subactiontypelist.add(new PracticingType("12", "Other"));
-        subactiontypelist.add(new PracticingType("13", "Pathology Lab"));
-        subactiontypelist.add(new PracticingType("14", "Imaging Lab"));
-        subactiontypelist.add(new PracticingType("15", "Pathology+Imaging Lab"));
-        subactiontypelist.add(new PracticingType("16", "Collection Center"));
-        subactiontypelist.add(new PracticingType("17", "Matab/Dawakhna"));
-        subactiontypelist.add(new PracticingType("18", "Acupuncture"));
-        subactiontypelist.add(new PracticingType("19", "Hair Transplant"));
-        subactiontypelist.add(new PracticingType("20", "Cosmetic Surgery Clinic"));
-        subactiontypelist.add(new PracticingType("21", "Addiction Treatment Center"));
-        subactiontypelist.add(new PracticingType("22", "Dialysis Clinic"));
-
-        ArrayAdapter<PracticingType> subactiontype_spinneradapter = new ArrayAdapter<PracticingType>(context, android.R.layout.simple_spinner_item, subactiontypelist) {
-            @Override
-            public boolean isEnabled(int position) {
-                return true; // All items are enabled
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                return view;
-            }
-        };
-
-        subactiontype_spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        practicingType_spinner.setAdapter(subactiontype_spinneradapter);
-
-        practicingType_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                PracticingType selectedType = (PracticingType) parent.getItemAtPosition(position);
-                subactionTypeText = selectedType.getDescription();
-                String selectedSubactionTypeIDString = selectedType.getId();
-
-                if ("0".equals(selectedSubactionTypeIDString)) {
-                    // Handle "Please Select" case by setting subactionTypeText to null
-                    subactionTypeText = null;
-                } else {
-                    subactionTypeText = selectedType.getDescription();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
-        });
-
-        // Set initial selection to "Please Select"
-        practicingType_spinner.setSelection(0);
-
+        if(comments.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         return subactiontypelist;
     }
 
@@ -1842,17 +1868,17 @@ public class ActionActivity extends AppCompatActivity {
         }
         return true;
     }
-
-    public void EnableRuntimePermission() {
+    public void EnableRuntimePermission(){
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA)) {
+                Manifest.permission.CAMERA))
+        {
 
             // Toast.makeText(EditHCEFragment.this,"CAMERA permission allows us to Access CAMERA app", Toast.LENGTH_LONG).show();
 
         } else {
 
-            ActivityCompat.requestPermissions(this, new String[]{
+            ActivityCompat.requestPermissions(this,new String[]{
 
                     Manifest.permission.CAMERA}, RequestPermissionCode);
 
@@ -1870,7 +1896,6 @@ public class ActionActivity extends AppCompatActivity {
         intent.putStringArrayListExtra(GalleryActivity.EXTRA_NAME, _images);
         startActivity(intent);
     }
-
     private class DownloadTask0 extends AsyncTask<String, Void, String> {
 
 
@@ -1895,24 +1920,21 @@ public class ActionActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             ParserTask0 parserTask = new ParserTask0();
-            jsonStr0 = result;
+            jsonStr0=result;
             // Invokes the thread for parsing the JSON data
             parserTask.execute();
 
         }
     }
-
     private String getDirectionsUrl0(Context context) {
 
         // Building the url to the web service
-        String baseurl = context.getResources().getString(R.string.baseurl);
-        String token = context.getResources().getString(R.string.token);
-//        SaveHCEImage
-        String url = baseurl + "GetPlanID?strToken=" + token + "&FinalID=" + final_id + "&ImagePath=&ImageUploadMode=Camera&Lat=" + cur_latitude + "&Lng=" + cur_longitude + "&UploadedBy=&emailAddress=" + email + "&ActionType=" + actionTypeID + "&ActionSubType=" + subactionTypeID + "&PicCount=" + countPictures + "&Council=" + counciltypetext + "&CouncilNo=" + coun_NoText + "&isFIR=" + firID + "&phcRegNo=" + Reg_NoText + "&visitedDate=" + visitDate + "&comments=" + commentText + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid;
+        String baseurl=context.getResources().getString(R.string.baseurl);
+        String token=context.getResources().getString(R.string.token);
+        String url=baseurl+"GetPlanID?strToken="+token+"&FinalID="+final_id+"&ImagePath=&ImageUploadMode=Camera&Lat="+cur_latitude+"&Lng="+cur_longitude+"&UploadedBy=&emailAddress="+email+"&ActionType="+actionTypeID+"&ActionSubType="+subactionTypeID+"&PicCount="+countPictures+"&Council="+counciltypetext+"&CouncilNo="+coun_NoText+"&isFIR="+firID+"&phcRegNo="+Reg_NoText+"&visitedDate="+visitDate+"&comments="+commentText+"&QuackCategory=&QuackSubCategory=&RoleID="+roleid;
         url = url.replaceAll(" ", "%20");
         return url;
     }
-
     private String downloadUrl0(String strUrl) throws IOException {
 
 
@@ -1989,7 +2011,8 @@ public class ActionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-            } else {
+            }
+            else {
                 Log.e("exception", "Couldn't get json from server.");
             }
 
@@ -2026,9 +2049,11 @@ public class ActionActivity extends AppCompatActivity {
 
                     // Showing Alert Message
                     alertDialog.show();
-                } else if (MID.equals("0")) {
+                }
+                else if (MID.equals("0")){
                     Toast.makeText(context, "Service is not responding", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                else {
 
                     String url = getDirectionsUrl(context);
                     DownloadTask downloadTask = new DownloadTask();
@@ -2038,7 +2063,8 @@ public class ActionActivity extends AppCompatActivity {
                 }
                 // Updating parsed JSON data into ListView
 
-            } else {
+            }
+            else{
                 Toast.makeText(context, "Server is not responding. Please try again", Toast.LENGTH_SHORT).show();
             }
 
@@ -2072,23 +2098,21 @@ public class ActionActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             ParserTask parserTask = new ParserTask();
-            jsonStr = result;
+            jsonStr=result;
             // Invokes the thread for parsing the JSON data
             parserTask.execute();
 
         }
     }
-
     private String getDirectionsUrl(Context context) {
 
         // Building the url to the web service
-        String baseurl = context.getResources().getString(R.string.baseurl);
-        String token = context.getResources().getString(R.string.token);
-        String url = baseurl + "SaveHCEImage?strToken=" + token + "&FinalID=" + final_id + "&ImagePath=&ImageUploadMode=Camera&Lat=" + cur_latitude + "&Lng=" + cur_longitude + "&UploadedBy=&emailAddress=" + email + "&ActionType=" + actionTypeID + "&ActionSubType=" + subactionTypeID + "&PicCount=" + countPictures + "&Council=" + counciltypetext + "&CouncilNo=" + coun_NoText + "&isFIR=" + firID + "&phcRegNo=" + Reg_NoText + "&visitedDate=" + visitDate + "&comments=" + commentText + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid + "&VisitedTime=" + LoctionVisitedTime;
+        String baseurl=context.getResources().getString(R.string.baseurl);
+        String token=context.getResources().getString(R.string.token);
+        String url=baseurl+"SaveHCEImage?strToken="+token+"&FinalID="+final_id+"&ImagePath=&ImageUploadMode=Camera&Lat="+cur_latitude+"&Lng="+cur_longitude+"&UploadedBy=&emailAddress="+email+"&ActionType="+actionTypeID+"&ActionSubType="+subactionTypeID+"&PicCount="+countPictures+"&Council="+counciltypetext+"&CouncilNo="+coun_NoText+"&isFIR="+firID+"&phcRegNo="+Reg_NoText+"&visitedDate="+visitDate+"&comments="+commentText+"&QuackCategory=&QuackSubCategory=&RoleID="+roleid+"&VisitedTime="+LoctionVisitedTime;
         url = url.replaceAll(" ", "%20");
         return url;
     }
-
     private String downloadUrl(String strUrl) throws IOException {
 
 
@@ -2165,7 +2189,8 @@ public class ActionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-            } else {
+            }
+            else {
                 Log.e("exception", "Couldn't get json from server.");
             }
 
@@ -2186,10 +2211,10 @@ public class ActionActivity extends AppCompatActivity {
                     alertDialog.setTitle("Success");
 
                     // Setting Dialog Message
-                    if (actionTypeID.equals("1") || actionTypeID.equals("3")) {
+                    if(actionTypeID.equals("1") || actionTypeID.equals("3")) {
                         alertDialog.setMessage("Action against '" + hce_nameText + "' is recorded, please make sure to write its Reference ID '" + final_id + "' on seal report");
-                    } else {
-                        alertDialog.setMessage("Action against " + hce_nameText + " is recorded");
+                    }else {
+                        alertDialog.setMessage("Action against "+hce_nameText+" is recorded");
                     }
 
                     // Setting Icon to Dialog
@@ -2209,15 +2234,17 @@ public class ActionActivity extends AppCompatActivity {
 
                     // Showing Alert Message
                     alertDialog.show();
-                } else {
+                }
+                else {
 
 
-                    Toast.makeText(context, "Update not submitted! Please Verify" + result, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Update not submitted! Please Verify", Toast.LENGTH_SHORT).show();
 
                 }
                 // Updating parsed JSON data into ListView
 
-            } else {
+            }
+            else{
                 Toast.makeText(context, "Server is not responding. Please try again", Toast.LENGTH_SHORT).show();
             }
 
@@ -2225,6 +2252,7 @@ public class ActionActivity extends AppCompatActivity {
         }
 
     }
+
 
 
     private class DownloadTask2 extends AsyncTask<String, Void, String> {
@@ -2251,24 +2279,22 @@ public class ActionActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             ParserTask2 parserTask = new ParserTask2();
-            jsonStr2 = result;
+            jsonStr2=result;
             // Invokes the thread for parsing the JSON data
             parserTask.execute();
 
         }
     }
-
     private String getDirectionsUrl2(Context context) {
 
         // Building the url to the web service
-        String baseurl = context.getResources().getString(R.string.baseurl);
-        String token = context.getResources().getString(R.string.token);
-        String url = baseurl + "UploadHCEImage?strToken=" + token + "&FinalID=" + final_id + "&ImagePath=" + imagepath + "&emailAddress=" + email + "&visitedDate=&RoleID=" + roleid;
+        String baseurl=context.getResources().getString(R.string.baseurl);
+        String token=context.getResources().getString(R.string.token);
+        String url=baseurl+"UploadHCEImage?strToken="+token+"&FinalID="+final_id+"&ImagePath="+imagepath+"&emailAddress="+email+"&visitedDate=&RoleID="+roleid;
         url = url.replaceAll(" ", "%20");
         return url;
 
     }
-
     private String downloadUrl2(String strUrl) throws IOException {
 
 
@@ -2345,7 +2371,8 @@ public class ActionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-            } else {
+            }
+            else {
                 Log.e("exception", "Couldn't get json from server.");
             }
 
@@ -2357,24 +2384,26 @@ public class ActionActivity extends AppCompatActivity {
             super.onPostExecute(result);
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            if (comments.requestFocus()) {
+            if(comments.requestFocus()) {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             }
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             if (result != null) {
                 if (MID2.equals("1")) {
                     Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
-                    String imagebasepath = context.getResources().getString(R.string.Imagesbaseurl);
-                    _images.add(imagebasepath + imagepath);
-                    imagepath = null;
+                    String imagebasepath=context.getResources().getString(R.string.Imagesbaseurl);
+                    _images.add(imagebasepath+imagepath);
+                    imagepath=null;
 
-                } else {
+                }
+                else {
                     Toast.makeText(context, "Update not submitted! Please Verify", Toast.LENGTH_SHORT).show();
 
                 }
                 // Updating parsed JSON data into ListView
 
-            } else {
+            }
+            else{
                 Toast.makeText(context, "Server is not responding. Please try again", Toast.LENGTH_SHORT).show();
             }
 
@@ -2382,52 +2411,4 @@ public class ActionActivity extends AppCompatActivity {
         }
 
     }
-    private void callApi() {
-        // Construct the API URL with the final_id parameter
-        String url = "https://census.phc.org.pk:51599/api/Allocation/GetSurveillanceCount?FinalID=" + final_id;
-
-        // Show progress dialog
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-
-        // Create the JsonObjectRequest
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Hide progress dialog
-                        pDialog.dismiss();
-
-                        try {
-                            // Parse response JSON
-                            JSONArray surveillanceCounts = response.getJSONArray("SurveillanceCount");
-                            if (surveillanceCounts.length() > 0) {
-                                JSONObject surveillanceCountObject = surveillanceCounts.getJSONObject(0);
-                                MarkSurvCount = surveillanceCountObject.getInt("MarkForSurveillanceCount");
-                            } else {
-                                Toast.makeText(context, "Surveillance count data is not available", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Hide progress dialog
-                        pDialog.dismiss();
-
-                        // Handle the error
-                        Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        // Add the request to the RequestQueue
-        requestQueue.add(jsonObjectRequest);
-    }
-
-
-
 }

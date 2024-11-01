@@ -232,21 +232,21 @@ public class FilterActivity extends AppCompatActivity {
         navigationView.setItemIconTintList(null);
 
         // Find notification views
-        notificationIcon = findViewById(R.id.notificationIcon);
-        notificationCount = findViewById(R.id.notificationCount);
+//        notificationIcon = findViewById(R.id.notificationIcon);
+//        notificationCount = findViewById(R.id.notificationCount);
 
         int notificationCount = getIntent().getIntExtra("notificationCount", 0);
 
         // Set click listener for notification icon
-        notificationIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent notifyIntent = new Intent(FilterActivity.this, NotificationActivity.class);
-                startActivity(notifyIntent);
-//                Toast.makeText(FilterActivity.this, "Notifications clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
-        incrementNotificationCount();
+//        notificationIcon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent notifyIntent = new Intent(FilterActivity.this, NotificationActivity.class);
+//                startActivity(notifyIntent);
+////                Toast.makeText(FilterActivity.this, "Notifications clicked", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        incrementNotificationCount();
 
 
 
@@ -392,8 +392,8 @@ public class FilterActivity extends AppCompatActivity {
                                     hcenameLayout.setVisibility(View.VISIBLE);
                                     bed_layout.setVisibility(View.VISIBLE);
                                     finalidlayout.setVisibility(View.VISIBLE);
-                                    cniclayout.setVisibility(View.VISIBLE);
-                                    phonelayout.setVisibility(View.VISIBLE);
+                                    cniclayout.setVisibility(View.GONE);
+                                    phonelayout.setVisibility(View.GONE);
 
            /*     }
                 else {

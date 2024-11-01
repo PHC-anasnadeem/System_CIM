@@ -7,38 +7,38 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
-
+        android:background="#fff"
+        >
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/filter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:orientation="vertical"
             android:paddingTop="50dp"
-            tools:context="com.phc.cim.Activities.Common.FilterActivity">
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            tools:context="com.roles.census.Activities.Common.FilterActivity">
+
 
 
             <LinearLayout
 
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="-10dp"
-                android:orientation="vertical"
-                android:paddingLeft="24dp"
                 android:paddingTop="20dp"
-                android:paddingRight="24dp">
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                >
 
-                <ImageView
+                <ImageView android:src="@drawable/app_screen_logo"
                     android:layout_width="wrap_content"
                     android:layout_height="90dp"
-                    android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="8dp"
-                    android:src="@drawable/app_screen_logo" />
+                    android:layout_gravity="center_horizontal" />
                 <!--  Search By Label -->
                 <!--               <LinearLayout
                                    android:layout_width="match_parent"
@@ -69,6 +69,7 @@
                                </LinearLayout>-->
 
 
+
                 <!--  Sector Type Label -->
                 <!--    <Switch
                         android:layout_width="match_parent"
@@ -77,21 +78,20 @@
                         android:checked="false"
                         android:text="Advance Search" />-->
                 <LinearLayout
-                    android:id="@+id/HCSstatus_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/HCSstatus_layout">
                     <TextView
                         android:id="@+id/hcestatuslabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Reg Status: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- HCE Status Label -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -100,29 +100,26 @@
                         android:layout_marginBottom="10dp"
 
                         >
-
                         <Spinner
                             android:id="@+id/HCSstatus_spinner"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select HCE Status" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:hint="Select HCE Status"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/Action_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/Action_layout">
                     <TextView
                         android:id="@+id/actionlabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
                         android:text="Category: "
                         android:textColor="#000000" />
                     <!-- HCE Status Label -->
@@ -133,32 +130,29 @@
                         android:layout_marginBottom="10dp"
 
                         >
-
                         <Spinner
                             android:id="@+id/action_spinner"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select Action" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:hint="Select Action"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/lastvisit_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/lastvisit_layout">
                     <TextView
                         android:id="@+id/lastvisitlabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Visit Status: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- HCE Status Label -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -167,32 +161,29 @@
                         android:layout_marginBottom="10dp"
 
                         >
-
                         <Spinner
                             android:id="@+id/lastvisit_spinner"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select HCE Status" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:hint="Select HCE Status"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/subvisit_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/subvisit_layout">
                     <TextView
                         android:id="@+id/subvisitlabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Sub Status: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- HCE Status Label -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -201,112 +192,103 @@
                         android:layout_marginBottom="10dp"
 
                         >
-
                         <Spinner
                             android:id="@+id/subvisit_spinner"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select Sub Status" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:hint="Select Sub Status"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/distanceid"
                     android:layout_width="match_parent"
+                    android:id="@+id/distanceid"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
                     <TextView
                         android:id="@+id/distancelabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Distance: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- DistanceLabel -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp">
-
+                        android:layout_marginBottom="10dp"
+                        >
                         <Spinner
                             android:id="@+id/distanceSpinner"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select Tehsil" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:hint="Select Tehsil"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/showlayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="10dp"
+                    android:id="@+id/showlayout"
                     android:orientation="horizontal">
-
                     <TextView
                         android:id="@+id/showtext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show advance search"
-                        android:textColor="#5daeef" />
-
+                        android:textColor="#5daeef"
+                        android:text="Show advance search"/>
                     <ImageView
+                        android:src="@drawable/arrow_blue_down"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="10dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_blue_down" />
+                        android:layout_gravity="center_horizontal" />
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/hidelayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="10dp"
+                    android:id="@+id/hidelayout"
                     android:orientation="horizontal">
-
                     <TextView
                         android:id="@+id/hidetext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hide advance search"
-                        android:textColor="#5daeef" />
-
+                        android:textColor="#5daeef"
+                        android:text="Hide advance search"/>
                     <ImageView
+                        android:src="@drawable/arrow_blue_up"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="10dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/arrow_blue_up" />
+                        android:layout_gravity="center_horizontal" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/districtid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/districtid"
                     android:orientation="horizontal">
-
                     <TextView
                         android:id="@+id/districtlabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="District: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- District Label -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -315,20 +297,18 @@
                         android:layout_marginBottom="10dp"
 
                         >
-
                         <Spinner
                             android:id="@+id/districtSpinner"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select District" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:hint="Select District"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/tehsilid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/tehsilid"
                     android:orientation="horizontal">
 
                     <TextView
@@ -336,74 +316,71 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Tehsil:"
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- Tehsil Label -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp">
-
+                        android:layout_marginBottom="10dp"
+                        >
                         <Spinner
                             android:id="@+id/tehsilSpinner"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select Tehsil" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:hint="Select Tehsil"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/sectortypelayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/sectortypelayout">
                     <TextView
                         android:id="@+id/sectortypelabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Sector Type: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
-
+                        android:textColor="#000000" />
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp">
-
+                        android:layout_marginBottom="10dp"
+                        >
                         <Spinner
                             android:id="@+id/Sector_Type"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/Council_Typelayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/Council_Typelayout">
                     <TextView
                         android:id="@+id/councillabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Council Type: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
 
 
                     <!--  Council Type Label -->
@@ -414,47 +391,49 @@
                         android:layout_marginBottom="10dp"
 
                         >
-
                         <Spinner
                             android:id="@+id/Council_Typespinner"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select Council Type" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:hint="Select Council Type"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/hcetypelayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/hcetypelayout"
+                    >
                     <TextView
                         android:id="@+id/hcetypelabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:textSize="15dp"
+                        android:layout_marginTop="10dp"
                         android:text="HCE Type:"
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- HCE Types Label -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp">
-
+                        android:layout_marginBottom="10dp"
+                        >
                         <Spinner
                             android:id="@+id/HCE_Typespinner"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select HCE Type" />
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:hint="Select HCE Type"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
+
+
+
 
 
                 <!--                <LinearLayout
@@ -511,28 +490,27 @@
                                 </LinearLayout>-->
 
                 <LinearLayout
-                    android:id="@+id/finalidlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/finalidlayout">
                     <TextView
                         android:id="@+id/finalidlabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Reference ID: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- finalid Label -->
                     <com.google.android.material.textfield.TextInputLayout
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
                         android:textColorHint="#000000"
 
                         >
@@ -585,28 +563,27 @@
                    </LinearLayout>-->
 
                 <LinearLayout
-                    android:id="@+id/reg_noL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/reg_noL">
                     <TextView
                         android:id="@+id/regnolabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="PHC Reg No: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- Registration No. Label -->
                     <com.google.android.material.textfield.TextInputLayout
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
                         android:textColorHint="#000000"
 
                         >
@@ -621,30 +598,28 @@
                             />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/hce_nameL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/hce_nameL">
                     <TextView
                         android:id="@+id/hcenamelabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="HCE Name: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!-- HCE Name Label -->
                     <com.google.android.material.textfield.TextInputLayout
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
 
                         >
 
@@ -727,30 +702,29 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-
                 <LinearLayout
-                    android:id="@+id/bed_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:id="@+id/bed_layout"
+                    >
                     <TextView
                         android:id="@+id/bed_strength"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Bed Strength: "
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:textColor="#000000" />
                     <!--  bed from Label -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp">
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp">
 
                         <EditText
                             android:id="@+id/bed_from"
@@ -759,76 +733,75 @@
                             android:hint="From"
                             android:inputType="number"
                             android:maxLength="5"
+                            android:textSize="15dp"
                             android:textColor="#000000"
-                            android:textColorHighlight="#000000"
-                            android:textSize="15dp" />
+                            android:textColorHighlight="#000000" />
                     </com.google.android.material.textfield.TextInputLayout>
                     <!--  bed to Label -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp">
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp">
 
                         <EditText
                             android:id="@+id/bed_to"
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:hint="To"
-                            android:inputType="number"
                             android:maxLength="5"
+                            android:inputType="number"
+                            android:textSize="15dp"
                             android:textColor="#000000"
-                            android:textColorHighlight="#000000"
-                            android:textSize="15dp" />
+                            android:textColorHighlight="#000000" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/errortextlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
+                    >
                     <TextView
                         android:id="@+id/errortext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
                         android:text="Please select Distance or District and Tehsil"
-                        android:textColor="#f70505"
-                        android:textSize="15dp" />
+                        android:textColor="#f70505" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    >
                     <!-- Find Button -->
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_reset"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimaryDark"
-                        android:text="Reset"
-                        android:textColor="#ffffff" />
+                        android:textColor="#ffffff"
+                        android:text="Reset"/>
                     <!-- Find Button -->
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_find"
                         android:layout_width="150dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ffffff"
                         android:background="#229954"
-                        android:text="Search"
-                        android:textColor="#ffffff" />
+                        android:text="Search"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -836,70 +809,10 @@
         </ScrollView>
     </RelativeLayout>
 
-<!--    <include-->
-<!--        layout="@layout/navdrawer_main"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent" />-->
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <include
+        layout="@layout/navdrawer_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context="com.phc.cim.Activities.Common.MainActivity">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorGreen"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:id="@+id/notificationIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/baseline_circle_notifications_24" />
-
-                    <TextView
-                        android:id="@+id/notificationCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/notification_count_background"
-                        android:padding="4dp"
-                        android:text="0"
-                        android:textColor="#FFF"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
-                </RelativeLayout>
-
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <FrameLayout
-            android:id="@+id/frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        </FrameLayout>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -908,6 +821,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/navheader"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer"
+        />
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     String jsonStr = null;
     Button tryagain;
     DottedProgressBar progressBar;
+    private static final String API_URL = "https://webportal.phc.org.pk:51698/api/Plans/Download";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -245,6 +246,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
 
@@ -508,6 +511,91 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+
+//        @Override
+//        protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
+//            super.onPostExecute(result);
+//
+//            if (result != null) {
+//                String status = null;
+//                for (int i = 0; i < result.size(); i++) {
+//                    GeneralRemarks = result.get(i).get("GeneralRemarks");
+//                    MobileAppVerCode = result.get(i).get("MobileAppVerCode");
+//                    MobileAppVerName = result.get(i).get("MobileAppVerName");
+//                    OutDated = result.get(i).get("OutDated");
+//                    PKID = result.get(i).get("PKID");
+//                    PortNo = result.get(i).get("PortNo");
+//                    Remarks = result.get(i).get("Remarks");
+//                    UploadDate = result.get(i).get("UploadDate");
+//                }
+//
+//                if (OutDated.equals("true")) {
+//                    progressBar.stopProgress();
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                    builder.setMessage(GeneralRemarks)
+//                            .setTitle("Version Update")
+//                            .setCancelable(false)
+//                            .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    String apiUrl = "https://webportal.phc.org.pk:51698/api/Plans/Download";
+//                                    new DownloadTask(MainActivity.this).execute(apiUrl);
+//                                }
+//                            })
+//                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    dialog.cancel();
+//                                    MainActivity.this.finish();
+//                                }
+//                            });
+//                    AlertDialog alert = builder.create();
+//                    alert.show();
+//                } else if (OutDated.equals("false")) {
+//                    progressBar.stopProgress();
+//                    if (GeneralRemarks.equals("null")) {
+//                        Intent intent = new Intent();
+//                        intent.setClass(MainActivity.this, Login_Activity.class);
+//                        MainActivity.this.startActivity(intent);
+//                        MainActivity.this.finish();
+//                        finish();
+//                    } else {
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                        builder.setMessage(GeneralRemarks)
+//                                .setTitle("Version Update")
+//                                .setCancelable(false)
+//                                .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+//                                        intent.setData(Uri.parse("market://details?id=com.phc.cim"));
+//                                        try {
+//                                            startActivity(intent);
+//                                            MainActivity.this.finish();
+//                                        } catch (Exception e) {
+//                                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.phc.cim"));
+//                                            MainActivity.this.finish();
+//                                        }
+//                                    }
+//                                })
+//                                .setNegativeButton("Update Later", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        dialog.cancel();
+//                                        Intent intent = new Intent();
+//                                        intent.setClass(MainActivity.this, Login_Activity.class);
+//                                        MainActivity.this.startActivity(intent);
+//                                        MainActivity.this.finish();
+//                                        finish();
+//                                    }
+//                                });
+//                        AlertDialog alert = builder.create();
+//                        alert.show();
+//                    }
+//                }
+//            } else {
+//                Toast.makeText(context, "Server not responding! Please try again", Toast.LENGTH_SHORT).show();
+//                progressBar.stopProgress();
+//                progressBar.setVisibility(View.GONE);
+//                tryagain.setVisibility(View.VISIBLE);
+//            }
+//        }
 
     }
 }

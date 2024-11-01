@@ -355,6 +355,8 @@ public class MapFragment extends Fragment {
                         filcolor = blue_transp;
                     } else if (REGfilterstatus.equals("5")) {
                         filcolor = red_transp;
+                    } else if (REGfilterstatus.equals("6")) {
+                        filcolor = red_transp;
                     }
 
 

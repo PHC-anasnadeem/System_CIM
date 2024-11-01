@@ -212,7 +212,6 @@ public class DownloadQuackClusterActivity {
             if (jsonStr != null) {
                 try {
                     JSONArray json = new JSONArray(jsonStr);
-// ...
                     mylist = new ArrayList<HashMap<String, String>>();
                     for (int i = 0; i < json.length(); i++) {
                         HashMap<String, String> map = new HashMap<String, String>();

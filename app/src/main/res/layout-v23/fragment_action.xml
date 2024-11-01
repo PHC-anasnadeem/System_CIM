@@ -175,30 +175,30 @@
                 android:hint="Sub Status" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/practicingstatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp">
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/practicingstatus"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:layout_marginTop="10dp">-->
 
-            <TextView
-                android:id="@+id/practicingsttus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="3dp"
-                android:text="Practicing *"
-                android:textColor="#000000" />
+<!--            <TextView-->
+<!--                android:id="@+id/practicingsttus"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                android:layout_marginStart="3dp"-->
+<!--                android:text="Practicing *"-->
+<!--                android:textColor="#000000" />-->
 
-            <Spinner
-                android:id="@+id/practicingType_spinner"
-                style="@style/Widget.AppCompat.Spinner.Underlined"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Practicing" />
-        </com.google.android.material.textfield.TextInputLayout>
+<!--            <Spinner-->
+<!--                android:id="@+id/practicingType_spinner"-->
+<!--                style="@style/Widget.AppCompat.Spinner.Underlined"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="Practicing" />-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <!-- Reg No Label -->
         <com.google.android.material.textfield.TextInputLayout
@@ -420,13 +420,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-<!--    <com.google.android.material.navigation.NavigationView-->
-<!--        android:id="@+id/nav_view"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="start"-->
-<!--        android:fitsSystemWindows="true"-->
-<!--        app:headerLayout="@layout/navheader"-->
-<!--        app:menu="@menu/activity_main_drawer"-->
-<!--        />-->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/navheader"
+        app:menu="@menu/activity_main_drawer"
+        />
 </androidx.drawerlayout.widget.DrawerLayout>
