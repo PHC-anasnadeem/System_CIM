@@ -22,6 +22,14 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import androidx.annotation.RequiresApi;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -45,6 +53,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -59,6 +68,7 @@ import com.phc.cim.Activities.GalleryActivity;
 import com.phc.cim.Activities.Common.IndReportingActivity;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Activities.Licensing.PWSFilterActivity;
+import com.phc.cim.Adapters.ImageAdapter;
 import com.phc.cim.DataElements.ActionType;
 import com.phc.cim.DataElements.CouncilType;
 import com.phc.cim.DataElements.subActionType;
@@ -77,6 +87,7 @@ import com.phc.cim.TabsActivities.DashboardTabs;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPSClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -100,6 +111,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -266,6 +278,9 @@ public class ActionActivity extends AppCompatActivity {
     String roleid;
 
     ArrayAdapter<String> actionadapter;
+    private GridView gridView;
+    private ImageAdapter imageAdapter;
+    private ArrayList<String> imageUrls;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -724,6 +739,14 @@ public class ActionActivity extends AppCompatActivity {
 
 
         }
+
+        gridView = findViewById(R.id.image_grid_view);
+        imageUrls = new ArrayList<>();
+        imageAdapter = new ImageAdapter(this, imageUrls);
+        gridView.setAdapter(imageAdapter);
+
+        fetchImages(final_id);
+
         Button btn_submit = (Button) findViewById(R.id.btn_submit);
 
         btn_submit.setOnClickListener(new Button.OnClickListener() {
@@ -2293,8 +2316,8 @@ public class ActionActivity extends AppCompatActivity {
         String url=baseurl+"UploadHCEImage?strToken="+token+"&FinalID="+final_id+"&ImagePath="+imagepath+"&emailAddress="+email+"&visitedDate=&RoleID="+roleid;
         url = url.replaceAll(" ", "%20");
         return url;
-
     }
+
     private String downloadUrl2(String strUrl) throws IOException {
 
 
@@ -2411,4 +2434,47 @@ public class ActionActivity extends AppCompatActivity {
         }
 
     }
+
+    private void fetchImages(String final_id) {
+        String baseurl = context.getResources().getString(R.string.baseurl);
+        String url = baseurl + "GetCensusAttachmentList?FinalID=" + final_id;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        imageUrls.clear();
+
+                        try {
+                            // Assuming the API returns an object with an image URL field
+                            String imageUrl = response.getString("File_Path");
+                            imageUrls.add(imageUrl); // Add the image URL to the list
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        imageAdapter.notifyDataSetChanged(); // Notify adapter of data change
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ActionActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+    }
+
+
+    public void loadImage(String imageUrl, ImageView imageView) {
+        // Use Glide to load images with error handling
+        Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.placeholder)  // Placeholder while loading
+                .error(R.drawable.error)               // Error image if loading fails
+                .into(imageView);
+    }
+
 }

@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -17,11 +23,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.phc.cim.Activities.Aqc.ActionActivity;
 import com.phc.cim.Activities.Common.BasicInfroHistoryActivity;
 import com.phc.cim.Activities.GalleryActivity;
+import com.phc.cim.Adapters.ImageAdapter;
 import com.phc.cim.Adapters.MyCustomPagerAdapter;
 import com.phc.cim.DataElements.CouncilType;
 import com.phc.cim.DataElements.District;
@@ -45,12 +54,16 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 
@@ -172,6 +185,10 @@ public class DetailViewFragment extends Fragment {
     String index;
     private DownloadManager downloadManager;
     private long downloadReference;
+    private GridView gridView;
+    private ArrayList<String> imageUrls;
+    private ImageAdapter imageAdapter;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -239,15 +256,6 @@ public class DetailViewFragment extends Fragment {
         Reg_NoEdit.setEnabled(false);
         coun_NoEdit.setEnabled(false);
         bedsEdit.setEnabled(false);
-        //coments.setEnabled(false);
-
-   /*     district_spinner = (Spinner) findViewById(R.id.district);
-        sectortypespinner = (Spinner) findViewById(R.id.Sector_Type);
-        hcetypespinner = (Spinner) findViewById(R.id.hcetypespinner);
-        HCSP_spinner = (Spinner) findViewById(R.id.HCSP_Typespinner);
-        regStatus_spinner = (Spinner) findViewById(R.id.registration_spinner);
-        counStatus_spinner = (Spinner) findViewById(R.id.council_spinner);
-        counciltypespiner = (Spinner) findViewById(R.id.counType_spinner);*/
 
         district_spinner.setEnabled(false);
         sectortypespinner.setEnabled(false);
@@ -257,9 +265,6 @@ public class DetailViewFragment extends Fragment {
         counStatus_spinner.setEnabled(false);
         counciltypespiner.setEnabled(false);
 
-
-        // updatestatusspinner = (Spinner) findViewById(R.id.updstatus_spinner);
-        // substatusspinner = (Spinner) findViewById(R.id.substatus_spinner);
 
 
         final Bundle args = getArguments();
@@ -372,6 +377,11 @@ public class DetailViewFragment extends Fragment {
                 startActivity(firstpage);
             }
         });
+
+
+        setupGridView(objView);
+
+
         //-------------------------Current Location----------------------------
         if (gps.canGetLocation()) {
             cur_latitude = gps.getLatitude();
@@ -396,6 +406,58 @@ public class DetailViewFragment extends Fragment {
 
 
         return objView;
+    }
+
+    private void setupGridView(View view) {
+        gridView = view.findViewById(R.id.image_grid_view);
+        imageUrls = new ArrayList<>();
+        imageAdapter = new ImageAdapter(getContext(), imageUrls);
+        gridView.setAdapter(imageAdapter);
+
+
+        fetchImages(final_id);
+    }
+
+    private void fetchImages(String final_id) {
+        String baseurl = requireContext().getResources().getString(R.string.baseurl);
+        String url = baseurl + "GetCensusAttachmentList?FinalID=" + final_id;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        imageUrls.clear();
+
+                        try {
+                            // Assuming the API returns an object with an image URL field
+                            String imageUrl = response.getString("File_Path");
+                            imageUrls.add(imageUrl); // Add the image URL to the list
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        imageAdapter.notifyDataSetChanged(); // Notify adapter of data change
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        Volley.newRequestQueue(getContext()).add(jsonObjectRequest);
+    }
+
+
+    public void loadImage(String imageUrl, ImageView imageView) {
+        // Use Glide to load images with error handling
+        Glide.with(getContext())
+                .load(imageUrl)
+                .placeholder(R.drawable.placeholder)  // Placeholder while loading
+                .error(R.drawable.error)               // Error image if loading fails
+                .into(imageView);
     }
 
 
