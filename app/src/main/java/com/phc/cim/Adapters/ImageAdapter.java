@@ -71,6 +71,7 @@ public class ImageAdapter extends BaseAdapter {
         });
 
         return convertView;
+
     }
 
     // Method to display the image in a popup
