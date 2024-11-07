@@ -382,6 +382,16 @@ public class IndReportingActivity extends AppCompatActivity {
     }
 
     private void setUpNavigationView() {
+
+        Menu menu = navigationView.getMenu();
+
+        // Check if the username matches
+        if (username.equals("Faizan Niazi") || username.equals("Ali Abdul Mateen") || username.equals("Sami Ullah Khan")) {
+            menu.findItem(R.id.nav_registration).setVisible(true); // Show the item
+        } else {
+            menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item
+        }
+
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
@@ -431,6 +441,10 @@ public class IndReportingActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_hearing:
                         startActivity(new Intent(context, HearingStatusActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_registration:
+                        startActivity(new Intent(context, RegistrationStatus.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actiondesc:

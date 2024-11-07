@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_update"
+            android:icon="@drawable/baseline_update_24"
+            android:title="Latest Update" />
+
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
@@ -37,6 +43,11 @@
             android:id="@+id/nav_hearing"
             android:icon="@drawable/baseline_view_list_24"
             android:title="Hearing Status" />
+
+        <item
+            android:id="@+id/nav_registration"
+            android:icon="@drawable/registrationlisticon"
+            android:title="Registration Status" />
         <item
             android:id="@+id/nav_resetPassword"
             android:icon="@drawable/icon_change_password"
@@ -53,6 +64,8 @@
 
 
     </group>
+
+
     <item android:title="Other">
         <menu>
           <!--  <item

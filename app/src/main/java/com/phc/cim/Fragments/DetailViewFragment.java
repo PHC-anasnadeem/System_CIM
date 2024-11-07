@@ -9,6 +9,7 @@ import android.os.Handler;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -62,6 +63,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -419,19 +421,24 @@ public class DetailViewFragment extends Fragment {
     }
 
     private void fetchImages(String final_id) {
-        String baseurl = requireContext().getResources().getString(R.string.baseurl);
-        String url = baseurl + "GetCensusAttachmentList?FinalID=" + final_id;
+        String CensusBaseUrl=getContext().getResources().getString(R.string.CensusBaseUrl);
+        String url = "https://www.phc.org.pk:8099/PHCCensusData.svc/GetCensusAttachmentList?FinalID=" + final_id;
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         imageUrls.clear();
 
                         try {
-                            // Assuming the API returns an object with an image URL field
-                            String imageUrl = response.getString("File_Path");
-                            imageUrls.add(imageUrl); // Add the image URL to the list
+                            // Loop through each item in the JSON array
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject item = response.getJSONObject(i);
+                                String filePath = item.getString("File_Path");
+                                String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+                                String imageUrl = CensusBaseUrl + "/" + filePath;
+                                imageUrls.add(imageUrl);  // Add each image URL to the list
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -447,18 +454,10 @@ public class DetailViewFragment extends Fragment {
                 });
 
         // Add the request to the RequestQueue.
-        Volley.newRequestQueue(getContext()).add(jsonObjectRequest);
+        Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
     }
 
 
-    public void loadImage(String imageUrl, ImageView imageView) {
-        // Use Glide to load images with error handling
-        Glide.with(getContext())
-                .load(imageUrl)
-                .placeholder(R.drawable.placeholder)  // Placeholder while loading
-                .error(R.drawable.error)               // Error image if loading fails
-                .into(imageView);
-    }
 
 
     public class GalleryPagerAdapter extends PagerAdapter {

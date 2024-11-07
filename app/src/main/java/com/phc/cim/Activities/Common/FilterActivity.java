@@ -7,10 +7,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -21,6 +25,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +74,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -183,7 +191,8 @@ public class FilterActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private static final String LOG_TAG = "AppUpgrade";
     private String activityTitles;
-    private int versionCode = 0;
+    String versionName = "";
+    int versionCode = -1;
     String Roleid;
     String appURI = "";
     String time1;
@@ -209,6 +218,7 @@ public class FilterActivity extends AppCompatActivity {
     private ImageView notificationIcon;
     private TextView notificationCount;
     private int notificationCounter = 0;
+    private static final int REQUEST_CODE_INSTALL_PERMISSION = 1001;
 
     @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -1491,7 +1501,17 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     private void setUpNavigationView() {
-        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+
+        Menu menu = navigationView.getMenu();
+
+        // Check if the username matches Ali Abdul Mateen or Faizan Niazi or Sami Ullah Khan
+        if (username.equals("Faizan Niazi") || username.equals("Ali Abdul Mateen") || username.equals("Sami Ullah Khan")) {
+            menu.findItem(R.id.nav_registration).setVisible(true); // Show the item
+        } else {
+            menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item
+        }
+
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             // This method will trigger on item Click of navigation menu
@@ -1541,19 +1561,44 @@ public class FilterActivity extends AppCompatActivity {
                         startActivity(new Intent(context, HearingStatusActivity.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_registration:
+                        startActivity(new Intent(context, RegistrationStatus.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_resetPassword:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email",email).putExtra("password",password));
                         drawer.closeDrawers();
                         return true;
-
-
-
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, AboutusActivity.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_update:
+                        PackageInfo packageInfo;
+                        String versionName;
+                        int versionCode;
+
+                        try {
+                            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                            versionName = packageInfo.versionName;
+                            versionCode = packageInfo.versionCode;
+                        } catch (PackageManager.NameNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        String latestVersion = versionName; // This should be dynamically fetched from your server
+
+                        if (versionName.equals(latestVersion)) {
+                            Toast.makeText(context, "You are already up to date.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Initiate the update process
+                            updateApp();
+                        }
+                        drawer.closeDrawers();
+                        return true;
+
                     case R.id.nav_Logout:
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setMessage("Are you sure to exit CIM?")
@@ -1574,6 +1619,8 @@ public class FilterActivity extends AppCompatActivity {
                         AlertDialog alert = builder.create();
                         alert.show();
                         return true;
+
+
                     //default:
                      //   navItemIndex = 0;
                 }
@@ -1614,6 +1661,9 @@ public class FilterActivity extends AppCompatActivity {
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
     }
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -1805,4 +1855,105 @@ public class FilterActivity extends AppCompatActivity {
         notificationCounter++;
         updateNotificationCount(notificationCounter);
     }
+
+
+    // Method to handle app updates
+    private void updateApp() {
+        String apkUrl = "https://yourserver.com/path/to/yourapp.apk"; // Replace with your APK URL
+        String fileName = "app-release.apk"; // Name for the downloaded APK
+        File downloadFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName);
+
+        // Start downloading the APK
+        new DownloadFileTask().execute(apkUrl, downloadFile.getAbsolutePath());
+    }
+
+    // AsyncTask to download the APK file
+    private class DownloadFileTask extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String apkUrl = params[0];
+            String filePath = params[1];
+
+            try {
+                URL url = new URL(apkUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                // Check for successful response code
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return null;
+                }
+
+                // Create an input stream to read the file
+                InputStream input = connection.getInputStream();
+                FileOutputStream output = new FileOutputStream(filePath);
+
+                byte[] data = new byte[4096];
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    output.write(data, 0, count);
+                }
+
+                output.flush();
+                output.close();
+                input.close();
+                return filePath; // Return the path to the downloaded file
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String filePath) {
+            if (filePath != null) {
+                installAPK(filePath);
+            } else {
+                Toast.makeText(context, "Download failed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // Method to install the downloaded APK
+    private void installAPK(String filePath) {
+        File apkFile = new File(filePath);
+        requestInstallPermission(); // Ensure permission is granted
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    // Request permission for installing unknown apps
+    private void requestInstallPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!context.getPackageManager().canRequestPackageInstalls()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                        Uri.parse("package:" + context.getPackageName()));
+                startActivityForResult(intent, REQUEST_CODE_INSTALL_PERMISSION);
+            } else {
+                // Permission already granted, proceed with installation
+                installAPK("path_to_your_downloaded_apk"); // Update this path with the actual file path
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_INSTALL_PERMISSION) {
+            // Check if the user granted the permission
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (context.getPackageManager().canRequestPackageInstalls()) {
+                    // Permission granted, proceed with the installation
+                    installAPK("path_to_your_downloaded_apk"); // Update this path with the actual file path
+                } else {
+                    // Permission denied
+                    Toast.makeText(context, "Install permission denied. Cannot update app.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+
 }

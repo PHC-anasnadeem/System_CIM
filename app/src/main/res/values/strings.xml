@@ -14,6 +14,7 @@
     <string name="view_homework">HCEs</string>
     <!--        <string name="baseurl">http://116.58.56.236:8098/PHCCensusData.svc/</string>-->
     <string name="baseurl">https://www.phc.org.pk:8099/PHCCensusData.svc/</string>
+    <string name="CensusBaseUrl">https://census.phc.org.pk/assets</string>
     <!--    <string name="baseurl">http://www.phc.org.pk:6695/PHCCensusData.svc/</string>-->
     <!--    <string name="baseurl">http://192.168.200.19:5152/PHCCensusData.svc/</string>-->
     <!--    <string name="baseurl">https://localhost:5152/PHCCensusData.svc/</string>-->
@@ -105,4 +106,5 @@ Powered by PHC ICT Team
     <string name="action_logout">Logout</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="todo">TODO</string>
+    <string name="image_popup" />
 </resources>
