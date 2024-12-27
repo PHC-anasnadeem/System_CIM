@@ -1551,7 +1551,7 @@ public class ActionActivity extends AppCompatActivity {
                             {
                                 if (!client.storeFile("HCEImages/" + imagepath, fis))//this is actual file uploading on FtpServer in specified directory/folder
                                 {
-                                    throw new Exception("Unable to write file to FTP server");
+                                    throw new Exception("Unable to write file to FTPs server");
                                 }
                                 //Make sure to always close the inputStream
                             }
