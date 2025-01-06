@@ -77,6 +77,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -1586,12 +1587,37 @@ public class DetailTabActivity extends AppCompatActivity {
     /**
      * Creating file uri to store image/video
      */
-    public static String getRealPathFromUri(Context context, Uri contentUri) {
+
+    private String getRealPathFromUri(Context context, Uri uri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return getFilePathForAndroidQAndAbove(context, uri);
+        } else {
+            return getRealPathFromUriLegacy(context, uri);
+        }
+    }
+
+    private String getFilePathForAndroidQAndAbove(Context context, Uri uri) {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+            File tempFile = new File(context.getCacheDir(), "temp_file.jpg");
+            try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, read);
+                }
+            }
+            return tempFile.getAbsolutePath();
+        } catch (Exception e) {
+            Log.e("FILE_PATH", "Error creating temp file", e);
+            return null;
+        }
+    }
+
+    private String getRealPathFromUriLegacy(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
             String[] proj = { MediaStore.Images.Media.DATA };
-
-            cursor = context.getApplicationContext().getContentResolver().query(contentUri, proj, null, null, null);
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
@@ -1601,6 +1627,22 @@ public class DetailTabActivity extends AppCompatActivity {
             }
         }
     }
+
+//    public static String getRealPathFromUri(Context context, Uri contentUri) {
+//        Cursor cursor = null;
+//        try {
+//            String[] proj = { MediaStore.Images.Media.DATA };
+//
+//            cursor = context.getApplicationContext().getContentResolver().query(contentUri, proj, null, null, null);
+//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            return cursor.getString(column_index);
+//        } finally {
+//            if (cursor != null) {
+//                cursor.close();
+//            }
+//        }
+//    }
     public String getFileName(Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {

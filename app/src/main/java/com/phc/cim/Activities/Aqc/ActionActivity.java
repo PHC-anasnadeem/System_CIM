@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import androidx.annotation.RequiresApi;
@@ -94,6 +95,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -1453,6 +1455,8 @@ public class ActionActivity extends AppCompatActivity {
                     //Setting image to ImageView
                     //  mImageView.setImageBitmap(bitmap);
                 } catch (Exception e) {
+                    Log.e("APPTAG", "SocketException: " + e.getMessage());
+                    Toast.makeText(context, "Failed to connect to the server", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -1532,13 +1536,13 @@ public class ActionActivity extends AppCompatActivity {
                             //client.sendCommand("OPTS UTF8 ON");
 
                         } catch (Exception e) {
-                            if (pDialog.isShowing())
-                                pDialog.dismiss();
+                            Handler mainHandler = new Handler(Looper.getMainLooper());
+                            mainHandler.post(() -> {
+                                if (pDialog.isShowing())
+                                    pDialog.dismiss();
+                                Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
+                            });
                             picreceved = false;
-                            Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
-                            //client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
-                            //client.makeDirectory("HCEImages/" + final_id+"/Camera");
-
                         }
 
                         if (picreceved) {
@@ -1746,13 +1750,21 @@ public class ActionActivity extends AppCompatActivity {
                         catch(Exception innerException)
                         {
 
-                            //You potentially just want to log that there was a logout exception.
+                            Toast.makeText(context, "An error occurred while disconnecting from the server.", Toast.LENGTH_SHORT).show();
 
                         }
                         finally
                         {
                             //Make sure to always disconnect.  If not, there is a chance you will leave hanging sockects
-                            client.disconnect();
+                            try {
+                                // Ensure the client is disconnected
+                                if (client.isConnected()) {
+                                    client.disconnect();
+                                }
+                            } catch (IOException disconnectException) {
+                                // Log any additional errors during disconnection
+                                Log.e("FTP_DISCONNECT", "Error during FTP disconnection: ", disconnectException);
+                            }
                         }
 
                     }
@@ -1773,15 +1785,38 @@ public class ActionActivity extends AppCompatActivity {
         }
         else
         {
-            //   Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
+               Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
 
         }
     }
-    /**
-     * Creating file uri to store image/video
-     */
-    public static String getRealPathFromUri(Context context, Uri contentUri) {
-        Cursor cursor = null;
+
+    private String getRealPathFromUri(Context context, Uri uri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return getFilePathForAndroidQAndAbove(context, uri);
+        } else {
+            return getRealPathFromUriLegacy(context, uri);
+        }
+    }
+
+    private String getFilePathForAndroidQAndAbove(Context context, Uri uri) {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+            File tempFile = new File(context.getCacheDir(), "temp_file.jpg");
+            try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, read);
+                }
+            }
+            return tempFile.getAbsolutePath();
+        } catch (Exception e) {
+            Log.e("FILE_PATH", "Error creating temp file", e);
+            return null;
+        }
+    }
+
+    private String getRealPathFromUriLegacy(Context context, Uri contentUri) {
+                Cursor cursor = null;
         try {
             String[] proj = { MediaStore.Images.Media.DATA };
             cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
@@ -1794,6 +1829,21 @@ public class ActionActivity extends AppCompatActivity {
             }
         }
     }
+
+//    public static String getRealPathFromUri(Context context, Uri contentUri) {
+//        Cursor cursor = null;
+//        try {
+//            String[] proj = { MediaStore.Images.Media.DATA };
+//            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            return cursor.getString(column_index);
+//        } finally {
+//            if (cursor != null) {
+//                cursor.close();
+//            }
+//        }
+//    }
 
 
     private String getactionsel() {

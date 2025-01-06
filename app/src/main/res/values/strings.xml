@@ -20,7 +20,7 @@
     <!--    <string name="baseurl">https://localhost:5152/PHCCensusData.svc/</string>-->
 
 <!--    <string name="ftpbaseurl">116.58.56.236</string>-->
-    <string name="ftpbaseurl">phc.org.pk</string>
+    <string name="ftpbaseurl">www.phc.org.pk</string>
     <string name="ftpUser">mobile</string>
     <string name="ftpPass">Document2</string>
     <!--<string name="ftpbaseurl">116.58.56.236</string>-->
