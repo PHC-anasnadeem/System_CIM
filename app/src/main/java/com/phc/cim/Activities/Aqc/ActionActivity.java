@@ -229,8 +229,6 @@ public class ActionActivity extends AppCompatActivity {
     String isEdit;
     String username;
     String VisitedTime="";
-    //    String RecordLockedForUpdate="";
-//    String total_beds="";
     String index;
     String firactionbit;
     String jsonStr0;
@@ -1151,7 +1149,7 @@ public class ActionActivity extends AppCompatActivity {
         Menu menu = navigationView.getMenu();
 
         // Check if the username matches
-        if (username.equals("Faizan Niazi") || username.equals("Ali Abdul Mateen") || username.equals("Sami Ullah Khan")) {
+        if (username.equals("Faizan Niazi") || username.equals("Anas Nadeem") || username.equals("Sami Ullah Khan")) {
             menu.findItem(R.id.nav_registration).setVisible(true); // Show the item
         } else {
             menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item

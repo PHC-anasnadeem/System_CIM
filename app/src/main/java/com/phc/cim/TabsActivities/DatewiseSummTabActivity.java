@@ -13,15 +13,20 @@ import android.os.Handler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.core.view.GravityCompat;
-import androidx.viewpager.widget.ViewPager;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +39,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
 import com.phc.cim.Activities.Common.HearingStatusActivity;
@@ -47,6 +53,8 @@ import com.phc.cim.Fragments.CloSealDaywiseFragment;
 import com.phc.cim.Fragments.CloseSealInspDaywiseFragment;
 import com.phc.cim.Fragments.FunSealDaywiseFragment;
 import com.phc.cim.Extra.HomeFragment;
+import com.phc.cim.Fragments.L_ANoticeDaywiseFragment;
+import com.phc.cim.Fragments.NonRegisterHCEDaywiseFragment;
 import com.phc.cim.Fragments.NotSealDaywiseFragment;
 import com.phc.cim.Extra.NotificationFragment;
 import com.phc.cim.Extra.PhotosFragment;
@@ -54,6 +62,8 @@ import com.phc.cim.Extra.SettingFragment;
 import com.phc.cim.Extra.VideosFragment;
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
+import com.phc.cim.Fragments.SealTemperedDaywiseFragment;
+import com.phc.cim.Fragments.VisitOnComplaintDaywiseFragment;
 import com.phc.cim.Others.Logout;
 import com.phc.cim.R;
 
@@ -66,11 +76,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class DatewiseSummTabActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+//    private ViewPager viewPager;
+    private ViewPager2 viewPager;
     Bundle bundle;
     String dataType;
     String registrationType;
@@ -290,15 +302,15 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
         // Set the dropdown view resource for the date adapter
         dateadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-// Set the popup background resource for the spinner if the SDK version is Jelly Bean or higher
+        // Set the popup background resource for the spinner if the SDK version is Jelly Bean or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             date_spinner.setPopupBackgroundResource(R.drawable.spinner);
         }
 
-// Set the adapter for the date spinner
+        // Set the adapter for the date spinner
         date_spinner.setAdapter(dateadapter);
 
-// Set an item selected listener for the date spinner
+        // Set an item selected listener for the date spinner
         date_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -312,7 +324,7 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
 
                 // Format the visit date if it is not null and not equal to "All"
                 if (Vistdate != null && !Vistdate.equals("All")) {
-                    DateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+                    DateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
                     Date date2 = null;
                     try {
                         date2 = formatter.parse(Vistdate);
@@ -321,7 +333,7 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
                     }
 
                     // Reformat the date to the desired format
-                    SimpleDateFormat newFormat = new SimpleDateFormat("M/d/yyyy");
+                    SimpleDateFormat newFormat = new SimpleDateFormat("M/d/yyyy", Locale.getDefault());
                     if (date2 != null) {
                         Vistdate = newFormat.format(date2);
                     }
@@ -335,16 +347,20 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
                 bundle.putString("isEdit", isEdit);
                 bundle.putString("Vistdate", Vistdate);
 
-                // Set up the ViewPager and TabLayout
+                // Initialize TabLayout
+                tabLayout = findViewById(R.id.tabs);
+
+                // Set up the ViewPager2
                 viewPager = findViewById(R.id.viewpager);
                 viewPager.setOffscreenPageLimit(4);
                 setupViewPager(viewPager);
 
-                tabLayout = findViewById(R.id.tabs);
-                tabLayout.setupWithViewPager(viewPager);
+
+                // Style TabLayout
                 tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#00a652"));
                 tabLayout.setSelectedTabIndicatorHeight((int) (3 * getResources().getDisplayMetrics().density));
                 tabLayout.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#00a652"));
+
             }
 
             @Override
@@ -352,9 +368,6 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
                 // Handle the case where nothing is selected if needed
             }
         });
-
-
-
 
 
         btn_detail.setOnClickListener(new Button.OnClickListener() {
@@ -369,42 +382,44 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
 
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), bundle);
+    private void setupViewPager(ViewPager2 viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this, bundle);
         adapter.addFragment(new FunSealDaywiseFragment(), "Functional Sealed");
         adapter.addFragment(new CloSealDaywiseFragment(), "Close Sealed");
         adapter.addFragment(new NotSealDaywiseFragment(), "Sealing Not Required");
-//        adapter.addFragment(new CloseSealInspDaywiseFragment(), "Close Sealed Inspection");
+        adapter.addFragment(new CloseSealInspDaywiseFragment(), "Close Sealed Inspection");
+        adapter.addFragment(new L_ANoticeDaywiseFragment(), "L&A Notice");
+        adapter.addFragment(new VisitOnComplaintDaywiseFragment(), "Visit On Complaint");
+        adapter.addFragment(new SealTemperedDaywiseFragment(), "Seal -Tempered and Re-sealed");
+        adapter.addFragment(new NonRegisterHCEDaywiseFragment(), "Non-Register HCE Notice Issued");
 
-
-        // adapter.addFragment(new ThreeFragment(), "THREE");
         viewPager.setAdapter(adapter);
+
+        // Attach TabLayout with ViewPager2 and set tab titles
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            tab.setText(adapter.getFragmentTitle(position));
+        });
+
+        // Detach previous mediator if exists
+        if (tabLayoutMediator != null) {
+            tabLayoutMediator.detach();
+        }
+
+        // Attach the new mediator
+        tabLayoutMediator.attach();
+
         viewPager.setCurrentItem(0);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+
+    class ViewPagerAdapter extends FragmentStateAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
         private final Bundle fragmentBundle;
 
-        public ViewPagerAdapter(FragmentManager manager, Bundle bundle) {
-            super(manager);
-            fragmentBundle = bundle;
-        }
-        // Return the Fragment associated with a specified position.
-
-
-        @Override
-        public Fragment getItem(int position) {
-            //final MapFragment f = new MapFragment();
-            //f.setArguments(this.fragmentBundle);
-            mFragmentList.get(position).setArguments(fragmentBundle);
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
+        public ViewPagerAdapter(@NonNull FragmentActivity activity, Bundle bundle) {
+            super(activity);
+            this.fragmentBundle = bundle;
         }
 
         public void addFragment(Fragment fragment, String title) {
@@ -412,8 +427,20 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
             mFragmentTitleList.add(title);
         }
 
+        @NonNull
         @Override
-        public CharSequence getPageTitle(int position) {
+        public Fragment createFragment(int position) {
+            Fragment fragment = mFragmentList.get(position);
+            fragment.setArguments(fragmentBundle);
+            return fragment;
+        }
+
+        @Override
+        public int getItemCount() {
+            return mFragmentList.size();
+        }
+
+        public String getFragmentTitle(int position) {
             return mFragmentTitleList.get(position);
         }
     }
@@ -547,7 +574,7 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
         Menu menu = navigationView.getMenu();
 
         // Check if the username matches
-        if (username.equals("Faizan Niazi") || username.equals("Ali Abdul Mateen") || username.equals("Sami Ullah Khan")) {
+        if (username.equals("Faizan Niazi") || username.equals("Anas Nadeem") || username.equals("Sami Ullah Khan")) {
             menu.findItem(R.id.nav_registration).setVisible(true); // Show the item
         } else {
             menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item

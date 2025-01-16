@@ -2,12 +2,12 @@
 
 buildscript {
     repositories {
-        jcenter()
-        google()
+        google() // Place google() first as it contains Android-specific dependencies
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.google.gms:google-services:4.3.10'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -16,17 +16,17 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        google() // Ensure google() is included
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven {
-            url 'https://maven.google.com'
-        }
+        maven { url 'https://maven.google.com' }
         maven { url "https://jitpack.io" }
-        google()
+
+        // It's safe to remove jcenter() unless you absolutely need it
+        // jcenter()
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

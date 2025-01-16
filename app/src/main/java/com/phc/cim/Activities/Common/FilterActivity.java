@@ -18,6 +18,8 @@ import android.os.Environment;
 import android.os.Handler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.view.GravityCompat;
@@ -1504,8 +1506,8 @@ public class FilterActivity extends AppCompatActivity {
 
         Menu menu = navigationView.getMenu();
 
-        // Check if the username matches Ali Abdul Mateen or Faizan Niazi or Sami Ullah Khan
-        if (username.equals("Faizan Niazi") || username.equals("Ali Abdul Mateen") || username.equals("Sami Ullah Khan")) {
+        // Check if the username matches Anas Nadeem or Faizan Niazi or Sami Ullah Khan
+        if (username.equals("Faizan Niazi") || username.equals("Anas Nadeem") || username.equals("Sami Ullah Khan")) {
             menu.findItem(R.id.nav_registration).setVisible(true); // Show the item
         } else {
             menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item
@@ -1576,26 +1578,8 @@ public class FilterActivity extends AppCompatActivity {
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_update:
-                        PackageInfo packageInfo;
-                        String versionName;
-                        int versionCode;
-
-                        try {
-                            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                            versionName = packageInfo.versionName;
-                            versionCode = packageInfo.versionCode;
-                        } catch (PackageManager.NameNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        String latestVersion = versionName; // This should be dynamically fetched from your server
-
-                        if (versionName.equals(latestVersion)) {
-                            Toast.makeText(context, "You are already up to date.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Initiate the update process
-                            updateApp();
-                        }
+                        // Show a dialog asking the user if they want to update
+                        showUpdateDialog(); // Show the confirmation dialog
                         drawer.closeDrawers();
                         return true;
 
@@ -1856,30 +1840,66 @@ public class FilterActivity extends AppCompatActivity {
         updateNotificationCount(notificationCounter);
     }
 
+    private void showUpdateDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Update Available")
+                .setMessage("A new version is available. Do you want to update now?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // If user clicks Yes, start the update process
+                        startUpdateProcess();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // If user clicks No, do nothing (cancel the update)
+                        dialog.dismiss();
+                    }
+                });
 
-    // Method to handle app updates
-    private void updateApp() {
-        String apkUrl = "https://yourserver.com/path/to/yourapp.apk"; // Replace with your APK URL
-        String fileName = "app-release.apk"; // Name for the downloaded APK
+        // Show the dialog
+        builder.create().show();
+    }
+
+    private void startUpdateProcess() {
+        if (isAppInstalled(context, "com.phc.cim")) { // Replace with your app's package name
+            Toast.makeText(context, "Please uninstall the existing app before updating.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String apkUrl = "https://os.phc.org.pk/images/apk/app-release.apk";
+
+        String fileName = "app-release.apk";
         File downloadFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName);
 
-        // Start downloading the APK
         new DownloadFileTask().execute(apkUrl, downloadFile.getAbsolutePath());
+    }
+
+    // Method to check if the app is installed
+    private boolean isAppInstalled(Context context, String packageName) {
+        try {
+            context.getPackageManager().getPackageInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     // AsyncTask to download the APK file
     private class DownloadFileTask extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... params) {
-            String apkUrl = params[0];
-            String filePath = params[1];
+            String apkUrl = params[0]; // The URL to download APK from
+            String filePath = params[1]; // Path to save the APK file
 
             try {
+                // Connect to the server to fetch the APK file
                 URL url = new URL(apkUrl);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
                 connection.connect();
 
-                // Check for successful response code
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     return null;
                 }
@@ -1907,7 +1927,7 @@ public class FilterActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String filePath) {
             if (filePath != null) {
-                installAPK(filePath);
+                installAPK(filePath); // Call the install method after download completion
             } else {
                 Toast.makeText(context, "Download failed.", Toast.LENGTH_SHORT).show();
             }
@@ -1917,43 +1937,25 @@ public class FilterActivity extends AppCompatActivity {
     // Method to install the downloaded APK
     private void installAPK(String filePath) {
         File apkFile = new File(filePath);
-        requestInstallPermission(); // Ensure permission is granted
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
-    // Request permission for installing unknown apps
-    private void requestInstallPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!context.getPackageManager().canRequestPackageInstalls()) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
-                        Uri.parse("package:" + context.getPackageName()));
-                startActivityForResult(intent, REQUEST_CODE_INSTALL_PERMISSION);
-            } else {
-                // Permission already granted, proceed with installation
-                installAPK("path_to_your_downloaded_apk"); // Update this path with the actual file path
-            }
+        if (!apkFile.exists()) {
+            Toast.makeText(context, "Downloaded file not found.", Toast.LENGTH_SHORT).show();
+            return;
         }
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_INSTALL_PERMISSION) {
-            // Check if the user granted the permission
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (context.getPackageManager().canRequestPackageInstalls()) {
-                    // Permission granted, proceed with the installation
-                    installAPK("path_to_your_downloaded_apk"); // Update this path with the actual file path
-                } else {
-                    // Permission denied
-                    Toast.makeText(context, "Install permission denied. Cannot update app.", Toast.LENGTH_SHORT).show();
-                }
-            }
+        Intent intent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri apkUri = FileProvider.getUriForFile(context, getPackageName() + ".provider", apkFile);
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            Uri apkUri = Uri.fromFile(apkFile);
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
         }
-    }
 
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
 }

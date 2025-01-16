@@ -50,8 +50,14 @@ public class DownloadVisitsActivity {
     int FuncselTotal=0;
     int ClosselTotal=0;
     int NotselTotal=0;
+    int ClosInspTotal=0;
+    int L_ATotal=0;
+    int visitOnComplaintTotal=0;
+    int SealTemperedTotal=0;
+    int NonRegisterHCETotal=0;
 
-    String PlanID,CloseSealedID,  NotSealedID  , FunctionalSealedID , index,FunctionalSealed, FunctionalSealedcount, NotSealed, NotSealedcount, CloseSealed, ClosedSealedcount,team,totalvisits,totalfir,startdat,enddate, District,PlanCode,selVistdate,TotalImages, CloseSealedInspectionID, CloseSealedInspection, CloseSealedInspectionTotal, CloseSealedInspectioncount ;
+    String PlanID,CloseSealedID,  NotSealedID  , FunctionalSealedID , index,FunctionalSealed, FunctionalSealedcount, NotSealed, NotSealedcount, CloseSealed, ClosedSealedcount, CloseSealedInspectioncount, L_Acount, VisitOnComplaintcount, SealTemperedcount, NonRegisterHCEcount, team,totalvisits,totalfir,startdat,enddate, District,PlanCode,selVistdate,TotalImages, CloseSealedInspectionID, CloseSealedInspection, L_A_ID, L_A,
+    visitOnComplaintID, visitOnComplaint, SealTemperedID, SealTempered, NonRegisterHCEID, NonRegisterHCE ;
 
     ArrayList<HashMap<String, String>> indtabresult;
     public DownloadVisitsActivity(Context context, String PlanID, String email, String password, String username, String isEdit, String index,String team,String totalvisits,String totalfir,String startdat,String enddate,String District, String PlanCode,String Vistdate,ArrayList<HashMap<String, String>> indtabresult, String TotalImages) {
@@ -100,17 +106,47 @@ public class DownloadVisitsActivity {
                 NotSealed = indtabresult.get(i).get("TypeDesc");
                 NotselTotal = NotselTotal + Integer.parseInt(Objects.requireNonNull(indtabresult.get(i).get("TotalSealed")));
             }
-//            if(indtabresult.get(i).get("PKID").equals("9") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
-//
-//                CloseSealedInspectionID = indtabresult.get(i).get("PKID");
-//                CloseSealedInspection = indtabresult.get(i).get("TypeDesc");
-//                ClosInspTotal = ClosInspTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
-//            }
+            if(indtabresult.get(i).get("PKID").equals("9") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
+
+                CloseSealedInspectionID = indtabresult.get(i).get("PKID");
+                CloseSealedInspection = indtabresult.get(i).get("TypeDesc");
+                ClosInspTotal = ClosInspTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+            }
+            if(indtabresult.get(i).get("PKID").equals("10") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
+
+                L_A_ID = indtabresult.get(i).get("PKID");
+                L_A = indtabresult.get(i).get("TypeDesc");
+                L_ATotal = L_ATotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+            }
+            if(indtabresult.get(i).get("PKID").equals("11") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
+
+                visitOnComplaintID = indtabresult.get(i).get("PKID");
+                visitOnComplaint = indtabresult.get(i).get("TypeDesc");
+                visitOnComplaintTotal = visitOnComplaintTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+            }
+            if(indtabresult.get(i).get("PKID").equals("12") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
+
+                SealTemperedID = indtabresult.get(i).get("PKID");
+                SealTempered = indtabresult.get(i).get("TypeDesc");
+                SealTemperedTotal = SealTemperedTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+            }
+            if(indtabresult.get(i).get("PKID").equals("13") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
+
+                NonRegisterHCEID = indtabresult.get(i).get("PKID");
+                NonRegisterHCE = indtabresult.get(i).get("TypeDesc");
+                NonRegisterHCETotal = NonRegisterHCETotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+            }
         }
+
         FunctionalSealedcount = String.valueOf(FuncselTotal);
         NotSealedcount= String.valueOf(NotselTotal);
         ClosedSealedcount = String.valueOf(ClosselTotal);
-//        CloseSealedInspectioncount = String.valueOf(ClosInspTotal);
+        CloseSealedInspectioncount = String.valueOf(ClosInspTotal);
+        L_Acount = String.valueOf(L_ATotal);
+        VisitOnComplaintcount = String.valueOf(visitOnComplaintTotal);
+        SealTemperedcount = String.valueOf(SealTemperedTotal);
+        NonRegisterHCEcount = String.valueOf(NonRegisterHCETotal);
+
         DateFormat formatter;
         if (Vistdate != null && Vistdate!="All") {
             formatter = new SimpleDateFormat("M/d/yyyy");
@@ -301,9 +337,21 @@ public class DownloadVisitsActivity {
                 firstpage.putExtra("CloseSealedID", CloseSealedID);
                 firstpage.putExtra("CloseSealed", CloseSealed);
                 firstpage.putExtra("ClosedSealedcount", ClosedSealedcount);
-//                firstpage.putExtra("CloseSealedInspectionID", CloseSealedInspectionID);
-//                firstpage.putExtra("CloseSealedInspection", CloseSealedInspection);
-//                firstpage.putExtra("CloseSealedInspectioncount", CloseSealedInspectioncount);
+                firstpage.putExtra("CloseSealedInspectionID", CloseSealedInspectionID);
+                firstpage.putExtra("CloseSealedInspection", CloseSealedInspection);
+                firstpage.putExtra("CloseSealedInspectioncount", CloseSealedInspectioncount);
+                firstpage.putExtra("L_A_ID", L_A_ID);
+                firstpage.putExtra("L_A", L_A);
+                firstpage.putExtra("L_Acount", L_Acount);
+                firstpage.putExtra("visitOnComplaintID", visitOnComplaintID);
+                firstpage.putExtra("visitOnComplaint", visitOnComplaint);
+                firstpage.putExtra("VisitOnComplaintcount", VisitOnComplaintcount);
+                firstpage.putExtra("SealTemperedID", SealTemperedID);
+                firstpage.putExtra("SealTempered", SealTempered);
+                firstpage.putExtra("SealTemperedcount", SealTemperedcount);
+                firstpage.putExtra("NonRegisterHCEID", NonRegisterHCEID);
+                firstpage.putExtra("NonRegisterHCE", NonRegisterHCE);
+                firstpage.putExtra("NonRegisterHCEcount", NonRegisterHCEcount);
                 firstpage.putExtra("email", email);
                 firstpage.putExtra("Password", password);
                 firstpage.putExtra("username", username);
@@ -331,184 +379,5 @@ public class DownloadVisitsActivity {
         }
 
     }
-
-
-
-/*
-    private class DownloadTask extends AsyncTask<String, Void, String> {
-
-
-        @Override
-        protected String doInBackground(String... url) {
-
-            // For storing data from web service
-            String data = "";
-
-            try {
-                // Fetching the data from web service
-                data = downloadUrl(url[0]);
-                Log.d("Background Task data", data.toString());
-            } catch (Exception e) {
-                Log.d("Background Task", e.toString());
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            ParserTask parserTask = new ParserTask();
-            jsonStr = result;
-            // Invokes the thread for parsing the JSON data
-            parserTask.execute();
-
-        }
-    }
-
-    private String getDirectionsUrl() {
-
-        // Building the url to the web service
-        String baseurl = context.getResources().getString(R.string.baseurl);
-        String token = context.getResources().getString(R.string.token);
-        String url = null;
-        url = baseurl + "GetAllSealedCountPlanWise?strToken=" + token + "&planID=" + PlanID;
-
-        url = url.replaceAll(" ", "%20");
-
-        return url;
-    }
-
-    private String downloadUrl(String strUrl) throws IOException {
-
-
-        String data = "";
-        InputStream iStream = null;
-        HttpURLConnection urlConnection = null;
-        try {
-            URL url = new URL(strUrl);
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            urlConnection.connect();
-            int statusCode = urlConnection.getResponseCode();
-
-
-            if (statusCode >= 200 && statusCode < 400) {
-                // Create an InputStream in order to extract the response object
-                iStream = urlConnection.getInputStream();
-            } else {
-                iStream = urlConnection.getErrorStream();
-            }
-            //iStream = urlConnection.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-            StringBuffer sb = new StringBuffer();
-
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-            data = sb.toString();
-
-            br.close();
-
-        } catch (Exception e) {
-            Log.d("Exception", e.toString());
-        } finally {
-            iStream.close();
-            urlConnection.disconnect();
-        }
-        return data;
-    }
-
-    private class ParserTask extends AsyncTask<Object, Object, ArrayList<HashMap<String, String>>> {
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Showing progress dialog
-
-
-        }
-
-        @Override
-        protected ArrayList<HashMap<String, String>> doInBackground(Object... arg0) {
-
-            // Making a request to url and getting response
-
-            if (jsonStr != null) {
-                try {
-                    JSONArray json = new JSONArray(jsonStr);
-// ...
-                    mylist = new ArrayList<HashMap<String, String>>();
-                    for (int i = 0; i < json.length(); i++) {
-                        HashMap<String, String> map = new HashMap<String, String>();
-                        JSONObject e = json.getJSONObject(i);
-
-                        map.put("PKID", e.getString("PKID"));
-                        map.put("TotalSealed", e.getString("TotalSealed"));
-                        map.put("TypeDesc", e.getString("TypeDesc"));
-                        mylist.add(map);
-                    }
-
-                    // adding contact to contact list
-                    //contactList.add(contact);
-
-                } catch (final JSONException e) {
-
-                    e.printStackTrace();
-
-
-                }
-            } else {
-                Log.e("exception", "Couldn't get json from server.");
-            }
-
-            return mylist;
-        }
-
-        @Override
-        protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
-            super.onPostExecute(result);
-
-            if (result != null && result.size() > 0) {
-                for (int i = 0; i < result.size(); i++) {
-
-                    PKID = result.get(i).get("PKID");
-                    if(PKID.equals("1")) {
-                        FunctionalSealedID = result.get(i).get("PKID");
-                        FunctionalSealed = result.get(i).get("TypeDesc");
-                        FunctionalSealedcount = result.get(i).get("TotalSealed");
-                    }
-                    else  if(PKID.equals("2")){
-                        NotSealedID = result.get(i).get("PKID");
-                        NotSealed = result.get(i).get("TypeDesc");
-                        NotSealedcount = result.get(i).get("TotalSealed");
-                    }
-                    else  if(PKID.equals("3")){
-                        CloseSealedID = result.get(i).get("PKID");
-                        CloseSealed = result.get(i).get("TypeDesc");
-                        ClosedSealedcount = result.get(i).get("TotalSealed");
-                    }
-                }
-                String url = getDirectionsUrl2();
-                DownloadTask2 downloadTask = new DownloadTask2();
-                //Start downloading json data from Google Directions API
-                downloadTask.execute(url);
-
-            } else {
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
-
-                Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
-
-            }
-        }
-
-    }*/
 
 }

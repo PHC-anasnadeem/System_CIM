@@ -12,20 +12,15 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="view_homework">HCEs</string>
-    <!--        <string name="baseurl">http://116.58.56.236:8098/PHCCensusData.svc/</string>-->
-    <string name="baseurl">https://www.phc.org.pk:8099/PHCCensusData.svc/</string>
+    <string name="baseurl">https://www.cim.phc.org.pk:8099/PHCCensusData.svc/</string>
     <string name="CensusBaseUrl">https://census.phc.org.pk/assets</string>
-    <!--    <string name="baseurl">http://www.phc.org.pk:6695/PHCCensusData.svc/</string>-->
-    <!--    <string name="baseurl">http://192.168.200.19:5152/PHCCensusData.svc/</string>-->
-    <!--    <string name="baseurl">https://localhost:5152/PHCCensusData.svc/</string>-->
-
-<!--    <string name="ftpbaseurl">116.58.56.236</string>-->
-    <string name="ftpbaseurl">www.phc.org.pk</string>
+    <!--    <string name="ftpbaseurl">116.58.56.236</string>-->
+    <string name="ftpbaseurl">www.cim.phc.org.pk</string>
     <string name="ftpUser">mobile</string>
     <string name="ftpPass">Document2</string>
     <!--<string name="ftpbaseurl">116.58.56.236</string>-->
     <!--<string name="Imagesbaseurl">http://116.58.56.236:9091/</string>-->
-    <string name="Imagesbaseurl">https://www.phc.org.pk:9092/</string>
+    <string name="Imagesbaseurl">https://www.cim.phc.org.pk:9092/</string>
 
     <string name="token">7b00d46262f2fa9cc4730414660d6c452619881e34f272c3f1c07ad512bea0ae</string>
     <string name="header_value">TapdspMYvB50Y0ogCGOe3ZESTo97R4Cp98oC9zi+h+w=_5Bc</string>
@@ -47,15 +42,15 @@
     <string name="title_pws_search">PWS Search</string>
     <string name="no_data_found">No data found</string>
     <string name="about_us_text">Census Information Manager\n
-Version: 1.2.9.4+ \n
+Version: 1.2.9.5+ \n
 Powered by PHC ICT Team
 </string>
-    <string name="splash_bottom">Version 1.2.9.4+ \n
+    <string name="splash_bottom">Version 1.2.9.5+ \n
     Powered by PHC-ICT Team\n
     All Rights Reserved\n
 </string>
 
-    <string name="nav_drawer_text">Census Information Manager\nPunjab Healtcare Commission
+    <string name="nav_drawer_text">Census Information Manager\nPunjab Healthcare Commission
 </string>
 
 

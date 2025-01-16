@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,6 +49,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -104,13 +106,14 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinner1, spinner2;
     private Button btnSubmit;
     private static int SPLASH_TIME_OUT = 2000;
-    int count=0;
-     String versionName = "";
-     int versionCode = -1;
+    int count = 0;
+    String versionName = "";
+    int versionCode = -1;
     String jsonStr = null;
     Button tryagain;
     DottedProgressBar progressBar;
     private static final String API_URL = "https://webportal.phc.org.pk:51698/api/Plans/Download";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         getVersionInfo();
         progressBar = (DottedProgressBar) findViewById(R.id.progress);
         progressBar.startProgress();
-        mTextMessage = (TextView)  findViewById(R.id.connection);
+        mTextMessage = (TextView) findViewById(R.id.connection);
         mTextMessage.setVisibility(View.GONE);
         tryagain = (Button) findViewById(R.id.pass_button);
         tryagain.setVisibility(View.GONE);
@@ -162,79 +165,73 @@ public class MainActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 tryagain.setVisibility(View.GONE);
                 progressBar.startProgress();
-                                              final ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                                              final NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-                                              boolean isConnected = networkInfo != null &&
-                                                      networkInfo.isConnectedOrConnecting();
-
-                                              if(isConnected)
-                                              {
-                                                  if(count<16) {
-                                                      for(int i=0; i<16; i++) {
-
-                                                          WebApiManager webApiManager = new WebApiManager(context, count);
-                                                          count++;
-                                                      }
-                                                  }
-                                                  String url = getDirectionsUrl();
-                                                  DownloadTask downloadTask = new DownloadTask();
-                                                  //Start downloading json data from Google Directions API
-                                                  downloadTask.execute(url);
-                                                 //  if(networkInfo.getType()== ConnectivityManager.TYPE_MOBILE)
-
-                                              }
-
-                                              else{
-                                                  progressBar.stopProgress();
-                                                  progressBar.setVisibility(View.GONE);
-                                                  mTextMessage.setVisibility(View.VISIBLE);
-                                                  tryagain.setVisibility(View.VISIBLE);
-                                                 // Toast.makeText(context, "Internet connection unavailable", Toast.LENGTH_SHORT).show();
-
-                                              }
-                                          }
-                                      });
-
-
                 final ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 final NetworkInfo networkInfo = cm.getActiveNetworkInfo();
                 boolean isConnected = networkInfo != null &&
                         networkInfo.isConnectedOrConnecting();
 
                 if (isConnected) {
-
                     if (count < 16) {
                         for (int i = 0; i < 16; i++) {
-                            synchronized (MainActivity.class) {
-                                if (count < 16) {
-                                    WebApiManager webApiManager = new WebApiManager(context, count);
 
-                                    count++;
-                                } else {
-                                    break;
-                                }
-                            }
+                            WebApiManager webApiManager = new WebApiManager(context, count);
+                            count++;
                         }
                     }
                     String url = getDirectionsUrl();
                     DownloadTask downloadTask = new DownloadTask();
                     //Start downloading json data from Google Directions API
                     downloadTask.execute(url);
+                    //  if(networkInfo.getType()== ConnectivityManager.TYPE_MOBILE)
+
                 } else {
                     progressBar.stopProgress();
                     progressBar.setVisibility(View.GONE);
                     mTextMessage.setVisibility(View.VISIBLE);
                     tryagain.setVisibility(View.VISIBLE);
-                    //Toast.makeText(context, "Internet connection unavailable", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(context, "Internet connection unavailable", Toast.LENGTH_SHORT).show();
 
                 }
+            }
+        });
 
 
+        final ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        boolean isConnected = networkInfo != null &&
+                networkInfo.isConnectedOrConnecting();
 
+        if (isConnected) {
 
+            if (count < 16) {
+                for (int i = 0; i < 16; i++) {
+                    synchronized (MainActivity.class) {
+                        if (count < 16) {
+                            WebApiManager webApiManager = new WebApiManager(context, count);
+
+                            count++;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+            String url = getDirectionsUrl();
+            DownloadTask downloadTask = new DownloadTask();
+            //Start downloading json data from Google Directions API
+            downloadTask.execute(url);
+        } else {
+            progressBar.stopProgress();
+            progressBar.setVisibility(View.GONE);
+            mTextMessage.setVisibility(View.VISIBLE);
+            tryagain.setVisibility(View.VISIBLE);
+            //Toast.makeText(context, "Internet connection unavailable", Toast.LENGTH_SHORT).show();
+
+        }
 
 
     }
+
     private void getVersionInfo() {
 
         try {
@@ -280,8 +277,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getDirectionsUrl() {
-        String baseURL=  getString(R.string.baseurl);
-        String url=baseURL+"GetMobileAppVer?appVer="+versionName;
+        String baseURL = getString(R.string.baseurl);
+        String url = baseURL + "GetMobileAppVer?appVer=" + versionName;
         url = url.replaceAll(" ", "%20");
         return url;
     }
@@ -351,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray json = new JSONArray(jsonStr);
 // ...
                     mylist = new ArrayList<HashMap<String, String>>();
-                    for (int i = 0; i <json.length(); i++) {
+                    for (int i = 0; i < json.length(); i++) {
                         HashMap<String, String> map = new HashMap<String, String>();
                         JSONObject e = json.getJSONObject(i);
                         map.put("GeneralRemarks", e.getString("GeneralRemarks"));
@@ -382,135 +379,83 @@ public class MainActivity extends AppCompatActivity {
             return mylist;
         }
 
+        // Helper method to show mandatory update dialog
         @Override
         protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
             super.onPostExecute(result);
 
+            // Ensure progress bar stops irrespective of conditions
+            progressBar.stopProgress();
 
-            if(result!=null) {
-                String status = null;
-                for (int i = 0; i < result.size(); i++) {
-                    GeneralRemarks = result.get(i).get("GeneralRemarks");
-                    MobileAppVerCode = result.get(i).get("MobileAppVerCode");
-                    MobileAppVerName= result.get(i).get("MobileAppVerName");
-                    OutDated = result.get(i).get("OutDated");
-                    PKID = result.get(i).get("PKID");
-                    PortNo= result.get(i).get("PortNo");
-                    Remarks = result.get(i).get("Remarks");
-                    UploadDate = result.get(i).get("UploadDate");
+            if (result != null && !result.isEmpty()) {
+                // Initialize variables with default values
+                String generalRemarks = null, mobileAppVerCode = null, mobileAppVerName = null,  outDated = "false";;
+                String pkid = null, portNo = null, remarks = null, uploadDate = null;
 
-                }
-          /*      if(OutDated.equals("false")){
-                 *//*   new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {*//*
-                            // This method will be executed once the timer is over
-                            // Start your app main activity
-                            progressBar.stopProgress();
-                            Intent intent = new Intent();
-                            intent.setClass(MainActivity.this,
-                                    Login_Activity.class);
+                // Extract required data from the result
+                for (HashMap<String, String> map : result) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        generalRemarks = map.getOrDefault("GeneralRemarks", "");
+                    }
 
-                            MainActivity.this.startActivity(intent);
-                         MainActivity.this.finish();
-                            //  mProgressView.setVisibility( View.GONE);
-                            // Intent i = new Intent(context, Login_Activity.class);
-                            //  startActivity(i);
-
-                            // close this activity
-                           // finish();
-                *//*        }
-                    }, SPLASH_TIME_OUT);*//*
-                }*/
-                 if(OutDated.equals("true")) {
-                    progressBar.stopProgress();
-                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                     builder.setMessage(GeneralRemarks)
-                             .setTitle("Version Update")
-                             .setCancelable(false)
-                             .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
-                                 public void onClick(DialogInterface dialog, int id) {
-                                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                                     intent.setData(Uri.parse("market://details?id=com.phc.phc"));
-                                     try{
-                                         startActivity(intent);
-                                         MainActivity.this.finish();
-                                     }
-                                     catch(Exception e){
-                                         intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.phc.cim"));
-                                         MainActivity.this.finish();
-                                     }
-                                 }
-                             })
-                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                 public void onClick(DialogInterface dialog, int id) {
-                                     dialog.cancel();
-                                     MainActivity.this.finish();
-                                 }
-                             });
-                     AlertDialog alert = builder.create();
-                     alert.show();
-                }
-                else if(OutDated.equals("false")) {
-                    progressBar.stopProgress();
-                    if (GeneralRemarks.equals("null")) {
-                        Intent intent = new Intent();
-
-                       intent.setClass(MainActivity.this,
-                                Login_Activity.class);
-
-                        MainActivity.this.startActivity(intent);
-                        MainActivity.this.finish();
-                        finish();
-                    }else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setMessage(GeneralRemarks)
-                                .setTitle("Version Update")
-                                .setCancelable(false)
-                                .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                                        intent.setData(Uri.parse("market://details?id=com.phc.cim"));
-                                        try{
-                                            startActivity(intent);
-                                            MainActivity.this.finish();
-                                        }
-                                        catch(Exception e){
-                                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.phc.cim"));
-                                            MainActivity.this.finish();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton("Update Later", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                        Intent intent = new Intent();
-                                        intent.setClass(MainActivity.this,
-                                                Login_Activity.class);
-
-                                        MainActivity.this.startActivity(intent);
-                                        MainActivity.this.finish();
-                                        finish();
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        mobileAppVerCode = map.getOrDefault("MobileAppVerCode", "");
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        mobileAppVerName = map.getOrDefault("MobileAppVerName", "");
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        outDated = map.getOrDefault("OutDated", "false"); // Default to "false" if null
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        pkid = map.getOrDefault("PKID", "");
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        portNo = map.getOrDefault("PortNo", "");
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        remarks = map.getOrDefault("Remarks", "");
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        uploadDate = map.getOrDefault("UploadDate", "");
                     }
                 }
 
+                // Directly navigate to next activity if result exists, ignoring outdated status
+                navigateToNextScreen(generalRemarks);
 
-
-
-                }
-                else {
-              Toast.makeText(context, "Server not responding! Please try again", Toast.LENGTH_SHORT).show();
-                progressBar.stopProgress();
-                progressBar.setVisibility(View.GONE);
-                tryagain.setVisibility(View.VISIBLE);
+            } else {
+                // If server not responding, handle gracefully and navigate to next screen
+                //Toast.makeText(context, "Server not responding. Proceeding to next screen.", Toast.LENGTH_SHORT).show();
+                navigateToNextScreen(null);
             }
-
-
         }
+
+        // Helper method to navigate to next screen
+        private void navigateToNextScreen(String generalRemarks) {
+            if (generalRemarks == null || generalRemarks.isEmpty() || "null".equalsIgnoreCase(generalRemarks)) {
+                // Proceed directly to login activity if no general remarks
+                Intent intent = new Intent(MainActivity.this, Login_Activity.class);
+                startActivity(intent);
+                MainActivity.this.finish();
+            } else {
+                // Show general remarks dialog before navigating
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(generalRemarks)
+                        .setTitle("Notice")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, id) -> {
+                            Intent intent = new Intent(MainActivity.this, Login_Activity.class);
+                            startActivity(intent);
+                            MainActivity.this.finish();
+                        });
+                builder.create().show();
+            }
+        }
+
+    }
+}
+
 
 //        @Override
 //        protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
@@ -597,8 +542,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }
 
-    }
-}
+
     /* // mTextMessage = (TextView) findViewById(R.id.message);
       Button button= (Button) findViewById(R.id.Next);
       BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

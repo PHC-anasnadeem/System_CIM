@@ -13,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.core.view.GravityCompat;
@@ -21,6 +22,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.phc.cim.Activities.Common.DesealListing;
 import com.phc.cim.Activities.Common.FilterActivity;
 import com.phc.cim.Activities.Common.HearingStatusActivity;
@@ -37,9 +42,12 @@ import com.phc.cim.Activities.Common.RegistrationStatus;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
 import com.phc.cim.Activities.Licensing.PWSFilterActivity;
 import com.phc.cim.Fragments.CloseSealInspDaywiseFragment;
+import com.phc.cim.Fragments.CloseSealedInspectionFragment;
 import com.phc.cim.Fragments.ClosedSealedFragment;
 import com.phc.cim.Fragments.FunctionalSealedFragment;
 import com.phc.cim.Extra.HomeFragment;
+import com.phc.cim.Fragments.L_AFragment;
+import com.phc.cim.Fragments.NonRegisterHCEFragment;
 import com.phc.cim.Fragments.NotSealedFragment;
 import com.phc.cim.Extra.NotificationFragment;
 import com.phc.cim.Extra.PhotosFragment;
@@ -47,6 +55,8 @@ import com.phc.cim.Extra.SettingFragment;
 import com.phc.cim.Extra.VideosFragment;
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
+import com.phc.cim.Fragments.SealTemperedFragment;
+import com.phc.cim.Fragments.visitOnComplaint;
 import com.phc.cim.Others.Logout;
 import com.phc.cim.R;
 
@@ -61,7 +71,7 @@ import java.util.List;
 public class ReportingTabActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private ViewPager2 viewPager;
     Bundle bundle;
     String dataType;
     String registrationType;
@@ -102,7 +112,8 @@ public class ReportingTabActivity extends AppCompatActivity {
     private static final String LOG_TAG = "AppUpgrade";
     private String activityTitles;
     private int versionCode = 0;
-    String NotSealedID,NotSealed,NotSealedcount,CloseSealedID,CloseSealed,ClosedSealedcount,PlanID,index,team,totalvisits,totalfir,startdat,enddate,FunctionalSealedID,FunctionalSealed,FunctionalSealedcount,CloseSealedInspectionID,CloseSealedInspection,CloseSealedInspectioncount;
+    String NotSealedID,NotSealed,NotSealedcount,CloseSealedID,CloseSealed,ClosedSealedcount,PlanID,index,team,totalvisits,totalfir,startdat,enddate,FunctionalSealedID,FunctionalSealed,FunctionalSealedcount,CloseSealedInspectionID,CloseSealedInspection,CloseSealedInspectioncount,
+    L_A_ID, L_A, L_Acount, visitOnComplaintID, visitOnComplaint, VisitOnComplaintcount, SealTemperedID, SealTempered, SealTemperedcount, NonRegisterHCEID, NonRegisterHCE, NonRegisterHCEcount;
     String appURI = "";
     String time1;
     String password;
@@ -142,9 +153,21 @@ public class ReportingTabActivity extends AppCompatActivity {
         CloseSealedID= (String) intent.getSerializableExtra("CloseSealedID");
         CloseSealed= (String) intent.getSerializableExtra("CloseSealed");
         ClosedSealedcount= (String) intent.getSerializableExtra("ClosedSealedcount");
-//        CloseSealedInspectionID= (String) intent.getSerializableExtra("CloseSealedInspectionID");
-//        CloseSealedInspection= (String) intent.getSerializableExtra("CloseSealedInspection");
-//        CloseSealedInspectioncount= (String) intent.getSerializableExtra("CloseSealedInspectioncount");
+        CloseSealedInspectionID= (String) intent.getSerializableExtra("CloseSealedInspectionID");
+        CloseSealedInspection= (String) intent.getSerializableExtra("CloseSealedInspection");
+        CloseSealedInspectioncount= (String) intent.getSerializableExtra("CloseSealedInspectioncount");
+        L_A_ID= (String) intent.getSerializableExtra("L_A_ID");
+        L_A= (String) intent.getSerializableExtra("L_A");
+        L_Acount= (String) intent.getSerializableExtra("L_Acount");
+        visitOnComplaintID= (String) intent.getSerializableExtra("visitOnComplaintID");
+        visitOnComplaint= (String) intent.getSerializableExtra("visitOnComplaint");
+        VisitOnComplaintcount= (String) intent.getSerializableExtra("VisitOnComplaintcount");
+        SealTemperedID= (String) intent.getSerializableExtra("SealTemperedID");
+        SealTempered= (String) intent.getSerializableExtra("SealTempered");
+        SealTemperedcount= (String) intent.getSerializableExtra("SealTemperedcount");
+        NonRegisterHCEID= (String) intent.getSerializableExtra("NonRegisterHCEID");
+        NonRegisterHCE= (String) intent.getSerializableExtra("NonRegisterHCE");
+        NonRegisterHCEcount= (String) intent.getSerializableExtra("NonRegisterHCEcount");
         PlanID= (String) intent.getSerializableExtra("PlanID");
         index= (String) intent.getSerializableExtra("index");
         team= (String) intent.getSerializableExtra("team");
@@ -193,7 +216,11 @@ public class ReportingTabActivity extends AppCompatActivity {
         bundle.putString("FunctionalSealedID",FunctionalSealedID);
         bundle.putString("NotSealedID",NotSealedID);
         bundle.putString("CloseSealedID",CloseSealedID);
-//        bundle.putString("CloseSealedInspectionID",CloseSealedInspectionID);
+        bundle.putString("CloseSealedInspectionID",CloseSealedInspectionID);
+        bundle.putString("L_A_ID",L_A_ID);
+        bundle.putString("visitOnComplaintID",visitOnComplaintID);
+        bundle.putString("SealTemperedID",SealTemperedID);
+        bundle.putString("NonRegisterHCEID",NonRegisterHCEID);
 
         bundle.putString("email",email);
         bundle.putString("password",password);
@@ -251,73 +278,83 @@ public class ReportingTabActivity extends AppCompatActivity {
         }
         //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        // TabLayout and ViewPager2 initialization
+        tabLayout = findViewById(R.id.tabs);
 
-        viewPager.setOffscreenPageLimit(3);
-        setupViewPager(viewPager);
+        viewPager = findViewById(R.id.viewpager);
+        viewPager.setOffscreenPageLimit(3);  // Limit to keep previous and next pages in memory
+        setupViewPager(viewPager);  // Initialize the adapter here
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        // TabLayout customization
         tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#00a652"));
         tabLayout.setSelectedTabIndicatorHeight((int) (3 * getResources().getDisplayMetrics().density));
         tabLayout.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#00a652"));
-    /*    View root = tabLayout.getChildAt(0);
-        if (root instanceof LinearLayout) {
-            ((LinearLayout) root).setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setColor(Color.parseColor("#727272"));
-            drawable.setSize(2, 1);
-            ((LinearLayout) root).setDividerPadding(10);
-            ((LinearLayout) root).setDividerDrawable(drawable);
-        }*/
+
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), bundle);
+    private void setupViewPager(ViewPager2 viewPager) {
+        // Adapter ko create karna aur fragments ko add karna
+        ReportingViewPagerAdapter adapter = new ReportingViewPagerAdapter(this, bundle);
         adapter.addFragment(new FunctionalSealedFragment(), FunctionalSealed + " (" + FunctionalSealedcount + ")");
         adapter.addFragment(new ClosedSealedFragment(), CloseSealed + " (" + ClosedSealedcount + ")");
         adapter.addFragment(new NotSealedFragment(), NotSealed + " (" + NotSealedcount + ")");
-//        adapter.addFragment(new CloseSealInspDaywiseFragment(),CloseSealedInspection+ " (" + CloseSealedInspectioncount + ")");
+        adapter.addFragment(new CloseSealedInspectionFragment(), CloseSealedInspection + " (" + CloseSealedInspectioncount + ")");
+        adapter.addFragment(new L_AFragment(), L_A + " (" + L_Acount + ")");
+        adapter.addFragment(new visitOnComplaint(), visitOnComplaint + " (" + VisitOnComplaintcount + ")");
+        adapter.addFragment(new SealTemperedFragment(), SealTempered + " (" + SealTemperedcount + ")");
+        adapter.addFragment(new NonRegisterHCEFragment(), NonRegisterHCE + " (" + NonRegisterHCEcount + ")");
 
-
-       // adapter.addFragment(new ThreeFragment(), "THREE");
+        // ViewPager2 ko adapter assign karna
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(0);
+
+        // Attach TabLayout with ViewPager2 and set tab titles
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            tab.setText(adapter.getPageTitle(position));
+        });
+
+        // Detach previous mediator if exists
+        if (tabLayoutMediator != null) {
+            tabLayoutMediator.detach();
+        }
+
+        // Attach the new mediator
+        tabLayoutMediator.attach();
+
+        viewPager.setCurrentItem(0); // Default page
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    class ReportingViewPagerAdapter extends FragmentStateAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
         private final Bundle fragmentBundle;
 
-        public ViewPagerAdapter(FragmentManager manager, Bundle bundle) {
-            super(manager);
-            fragmentBundle=bundle;
+        public ReportingViewPagerAdapter(FragmentActivity activity, Bundle bundle) {
+            super(activity);  // Passing the activity to the FragmentStateAdapter
+            this.fragmentBundle = bundle;
         }
 
         @Override
-        public Fragment getItem(int position) {
-            //final MapFragment f = new MapFragment();
-            //f.setArguments(this.fragmentBundle);
-            mFragmentList.get(position).setArguments(fragmentBundle);
-            return mFragmentList.get(position);
+        public Fragment createFragment(int position) {
+            Fragment fragment = mFragmentList.get(position);
+            fragment.setArguments(fragmentBundle); // Set the arguments (bundle) to the fragment
+            return fragment;
         }
 
         @Override
-        public int getCount() {
-            return mFragmentList.size();
+        public int getItemCount() {
+            return mFragmentList.size(); // Number of fragments in the list
         }
 
         public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            mFragmentTitleList.add(title); // Add fragment and its title
         }
 
-        @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return mFragmentTitleList.get(position); // Return the title for each fragment
         }
     }
+
 
 
     private void loadNavHeader() {
@@ -419,7 +456,7 @@ public class ReportingTabActivity extends AppCompatActivity {
         Menu menu = navigationView.getMenu();
 
         // Check if the username matches
-        if (username.equals("Faizan Niazi") || username.equals("Ali Abdul Mateen") || username.equals("Sami Ullah Khan")) {
+        if (username.equals("Faizan Niazi") || username.equals("Anas Nadeem") || username.equals("Sami Ullah Khan")) {
             menu.findItem(R.id.nav_registration).setVisible(true); // Show the item
         } else {
             menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item

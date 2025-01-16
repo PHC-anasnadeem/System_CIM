@@ -700,7 +700,7 @@ public class RouteMapsActivity extends AppCompatActivity implements OnMapReadyCa
         Menu menu = navigationView.getMenu();
 
         // Check if the username matches
-        if (username.equals("Faizan Niazi") || username.equals("Ali Abdul Mateen") || username.equals("Sami Ullah Khan")) {
+        if (username.equals("Faizan Niazi") || username.equals("Anas Nadeem") || username.equals("Sami Ullah Khan")) {
             menu.findItem(R.id.nav_registration).setVisible(true); // Show the item
         } else {
             menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item
