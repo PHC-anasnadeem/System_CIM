@@ -826,36 +826,36 @@ public class ActionActivity extends AppCompatActivity {
                 }
             }
         });
-        Button camera = (Button) findViewById(R.id.take_pic);
+//        Button camera = (Button) findViewById(R.id.take_pic);
 
-        camera.setOnClickListener(new Button.OnClickListener() {
-
-
-            public void onClick(View v) {
-                if(Build.VERSION.SDK_INT>=24){
-                    try{
-                        Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
-                        m.invoke(null);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-
-                }
-                count=2;
-                requestRuntimePermission();
-                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
-                String currentDateandTime = sdf.format(new Date());
-                String pictureName=final_id+"_"+currentDateandTime;//here you can get picture name from user. I supposed Test name
-                Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File photo = new File(context.getExternalFilesDir(null),  pictureName+".jpg");//save picture (.jpg) on SD Card
-                u= Uri.fromFile(photo);
-                intentcamera.putExtra(MediaStore.EXTRA_OUTPUT,u);
-                intentcamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                filePath = photo.getAbsolutePath();
-                startActivityForResult(intentcamera, REQUEST_CODE);
-
-            }
-        });
+//        camera.setOnClickListener(new Button.OnClickListener() {
+//
+//
+//            public void onClick(View v) {
+//                if(Build.VERSION.SDK_INT>=24){
+//                    try{
+//                        Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+//                        m.invoke(null);
+//                    }catch(Exception e){
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//                count=2;
+//                requestRuntimePermission();
+//                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
+//                String currentDateandTime = sdf.format(new Date());
+//                String pictureName=final_id+"_"+currentDateandTime;//here you can get picture name from user. I supposed Test name
+//                Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                File photo = new File(context.getExternalFilesDir(null),  pictureName+".jpg");//save picture (.jpg) on SD Card
+//                u= Uri.fromFile(photo);
+//                intentcamera.putExtra(MediaStore.EXTRA_OUTPUT,u);
+//                intentcamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                filePath = photo.getAbsolutePath();
+//                startActivityForResult(intentcamera, REQUEST_CODE);
+//
+//            }
+//        });
         Button attachment = (Button) findViewById(R.id.attach_pic);
 
         attachment.setOnClickListener(new Button.OnClickListener() {

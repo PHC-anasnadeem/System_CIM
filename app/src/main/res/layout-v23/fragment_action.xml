@@ -376,15 +376,15 @@
                 android:textAlignment="center"
                 android:text="Attach Picture"/>
             <!-- Find Button -->
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/take_pic"
-                android:layout_width="150dp"
-                android:layout_marginLeft="10dp"
-                android:layout_height="wrap_content"
-                android:textColor="#ffffff"
-                android:background="#229954"
-                android:textAlignment="center"
-                android:text="Take Picture"/>
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:id="@+id/take_pic"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="#ffffff"-->
+<!--                android:background="#229954"-->
+<!--                android:textAlignment="center"-->
+<!--                android:text="Take Picture"/>-->
 
         </LinearLayout>
 

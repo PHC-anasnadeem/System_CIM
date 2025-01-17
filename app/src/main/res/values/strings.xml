@@ -12,15 +12,15 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="view_homework">HCEs</string>
-    <string name="baseurl">https://www.cim.phc.org.pk:8099/PHCCensusData.svc/</string>
+    <string name="baseurl">https://cim.phc.org.pk:8099/PHCCensusData.svc/</string>
     <string name="CensusBaseUrl">https://census.phc.org.pk/assets</string>
     <!--    <string name="ftpbaseurl">116.58.56.236</string>-->
-    <string name="ftpbaseurl">www.cim.phc.org.pk</string>
+    <string name="ftpbaseurl">cim.phc.org.pk</string>
     <string name="ftpUser">mobile</string>
     <string name="ftpPass">Document2</string>
     <!--<string name="ftpbaseurl">116.58.56.236</string>-->
     <!--<string name="Imagesbaseurl">http://116.58.56.236:9091/</string>-->
-    <string name="Imagesbaseurl">https://www.cim.phc.org.pk:9092/</string>
+    <string name="Imagesbaseurl">https://cim.phc.org.pk:9092/</string>
 
     <string name="token">7b00d46262f2fa9cc4730414660d6c452619881e34f272c3f1c07ad512bea0ae</string>
     <string name="header_value">TapdspMYvB50Y0ogCGOe3ZESTo97R4Cp98oC9zi+h+w=_5Bc</string>

@@ -349,41 +349,18 @@
                     android:textAlignment="center"
                     android:text="Attach Picture"/>
                 <!-- Find Button -->
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/take_pic"
-                    android:layout_width="150dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:background="#229954"
-                    android:textAlignment="center"
-                    android:text="Take Picture"/>
+<!--                <androidx.appcompat.widget.AppCompatButton-->
+<!--                    android:id="@+id/take_pic"-->
+<!--                    android:layout_width="150dp"-->
+<!--                    android:layout_marginLeft="10dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#ffffff"-->
+<!--                    android:background="#229954"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:text="Take Picture"/>-->
 
             </LinearLayout>
-            <!--    <Button
-            android:id="@+id/markasdone"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:background="#229954"
-            android:text="Submit"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp" />-->
-            <!-- Signup Button -->
-            <!--      <ImageView
-                      android:id="@+id/Imageprev"
-      android:layout_width="wrap_content"
-      android:layout_height="100dp"
-      android:layout_gravity="center_horizontal" />
-                 <android.support.v7.widget.AppCompatButton
-                     android:id="@+id/btn_camera"
-                     android:layout_width="fill_parent"
-                     android:layout_height="wrap_content"
-                     android:layout_marginBottom="5dp"
-                     android:layout_marginTop="20dp"
-                     android:background="#225499"
-                     android:text="Take picture"
-                     android:textColor="#FFFFFF" />-->
+
             <TextView
                 android:id="@+id/errortext"
                 android:layout_width="wrap_content"
