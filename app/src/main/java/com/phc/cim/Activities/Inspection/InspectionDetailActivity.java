@@ -35,6 +35,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -165,6 +167,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
     String ftpbaseurl;
     ProgressDialog pDialog;
     EditText loctimePickerEdit;
+    TextView services_names_view;
     EditText locDateTimeEdit;
     EditText bedsEdit;
     String hce_nameText = "";
@@ -210,7 +213,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
     Button btn_info, btn_loc, btn_save,btn_cancel;
     LinearLayout layout_submit,errortextlayout,infolayout,loclayout,imageslayout;
     TextInputLayout loc_layout,reg_layout,Sector_layout,hce_name_layout,Address_layout,hcetype_layout,HCSP_Name_layout,Mobile_layout,
-            beds_layout,txtDateTime_layout,timePicker1_layout,lat_layout,lng_layout,locDatelayout,loctimelayout, Email_Layout,EmailSP_Layout;
+            beds_layout,txtDateTime_layout,timePicker1_layout,lat_layout,lng_layout,locDatelayout,loctimelayout, Email_Layout,EmailSP_Layout, hce_services_layout;
     TextView indicatelabel;
     TextView locindlabel,latvisitinfo,latvisitloc;
     Spinner currloc_spinner;
@@ -369,6 +372,8 @@ public class InspectionDetailActivity extends AppCompatActivity {
         latvisitloc = (TextView) findViewById(R.id.latvisitloc);
         latvisitinfo = (TextView) findViewById(R.id.latvisitinfo);
 
+        services_names_view = (TextView) findViewById(R.id.services_names_view);
+
         currloc_spinner = (Spinner) findViewById(R.id.currloc_spinner);
         //-------buttons-----------------
         btn_info = (Button) findViewById(R.id.btn_info);
@@ -402,6 +407,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
         lng_layout = (TextInputLayout) findViewById(R.id.lng_layout);
         locDatelayout = (TextInputLayout) findViewById(R.id.locDatelayout);
         loctimelayout = (TextInputLayout) findViewById(R.id.loctimelayout);
+        hce_services_layout = (TextInputLayout) findViewById(R.id.hce_services_layout);
 
 
         Intent intent = getIntent();
@@ -466,6 +472,11 @@ public class InspectionDetailActivity extends AppCompatActivity {
         hcetypespinner.setText(hceTypetext);
         timePicker1.setText(BasicInfoVisitedTime);
         loctimePickerEdit.setText(LoctionVisitedTime);
+        services_names_view.setText(Services_Names);
+
+        // Enable scrolling
+        services_names_view.setMovementMethod(new ScrollingMovementMethod());
+
         if(infoVisitBytext.equals("0")){
             latvisitinfo.setVisibility(View.GONE);
         }

@@ -13,6 +13,7 @@
         <color name="green">#FF00A652</color>
         <color name="red">#c21807</color>
         <color name="lightblue">#000080</color>
+        <color name="black">#000</color>
 
 
 </resources>

@@ -145,6 +145,36 @@
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- HCE Services Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/hce_services_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:hint="HCE Services"
+                app:boxStrokeColor="#000000"
+                app:hintTextColor="@color/black">
+
+                <!-- Multiline and Scrollable TextView -->
+                <TextView
+                    android:id="@+id/services_names_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:scrollbars="vertical"
+                    android:inputType="textMultiLine"
+                    android:gravity="start|top"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000"
+                    android:lineSpacingExtra="2dp"
+                    android:overScrollMode="always"
+                    android:scrollHorizontally="false" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
             <!-- Address Label -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/Address_layout"
@@ -651,14 +681,14 @@ layout="@layout/navdrawer_main"
 android:layout_width="match_parent"
 android:layout_height="match_parent" />
 
-<!--<com.google.android.material.navigation.NavigationView-->
-<!--android:id="@+id/nav_view"-->
-<!--android:layout_width="wrap_content"-->
-<!--android:layout_height="match_parent"-->
-<!--android:layout_gravity="start"-->
-<!--android:fitsSystemWindows="true"-->
-<!--app:headerLayout="@layout/navheader"-->
-<!--app:menu="@menu/activity_main_drawer"-->
-<!--    />-->
+<com.google.android.material.navigation.NavigationView
+android:id="@+id/nav_view"
+android:layout_width="wrap_content"
+android:layout_height="match_parent"
+android:layout_gravity="start"
+android:fitsSystemWindows="true"
+app:headerLayout="@layout/navheader"
+app:menu="@menu/activity_main_drawer"
+    />
 
     </androidx.drawerlayout.widget.DrawerLayout>
