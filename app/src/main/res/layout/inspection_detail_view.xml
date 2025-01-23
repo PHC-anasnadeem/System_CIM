@@ -145,36 +145,6 @@
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- HCE Services Label -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/hce_services_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:hint="HCE Services"
-                app:boxStrokeColor="#000000"
-                app:hintTextColor="@color/black">
-
-                <!-- Multiline and Scrollable TextView -->
-                <TextView
-                    android:id="@+id/services_names_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:scrollbars="vertical"
-                    android:inputType="textMultiLine"
-                    android:gravity="start|top"
-                    android:textColor="#000000"
-                    android:textColorHighlight="#000000"
-                    android:lineSpacingExtra="2dp"
-                    android:overScrollMode="always"
-                    android:scrollHorizontally="false" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
             <!-- Address Label -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/Address_layout"
@@ -333,6 +303,7 @@
                     android:textColor="#000000"
                     android:hint="Visit Date *"/>
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/timePicker1_layout"
                 android:layout_width="match_parent"
@@ -352,6 +323,38 @@
                     android:textColor="#000000"
                     android:hint="Visit time *"/>
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/hce_services_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:hint="HCE Services"
+                app:boxStrokeColor="#000000"
+                app:hintTextColor="@color/black">
+
+                <!-- Read-Only Multiline EditText -->
+                <EditText
+                    android:id="@+id/services_names_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:scrollbars="vertical"
+                    android:inputType="textMultiLine"
+                    android:gravity="start|top"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000"
+                    android:lineSpacingExtra="2dp"
+                    android:overScrollMode="always"
+                    android:scrollHorizontally="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:background="@null" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!-- Find Button -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_info"

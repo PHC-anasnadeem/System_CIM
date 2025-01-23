@@ -416,13 +416,6 @@ if(count<1) {
     private void setUpNavigationView() {
         Menu menu = navigationView.getMenu();
 
-        // Check if the username matches
-        if (username.equals("Faizan Niazi") || username.equals("Anas Nadeem") || username.equals("Sami Ullah Khan")) {
-            menu.findItem(R.id.nav_registration).setVisible(true); // Show the item
-        } else {
-            menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item
-        }
-
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
@@ -439,10 +432,6 @@ if(count<1) {
                    return true;
                     case R.id.nav_reportquack:
                         startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_quack:
-                        startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_actionsummary:
@@ -475,19 +464,6 @@ if(count<1) {
                         startActivity(new Intent(context, PWSFilterActivity.class));
                         drawer.closeDrawers();
                         return true;
-                    case R.id.nav_list:
-                        startActivity(new Intent(context, DesealListing.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_hearing:
-                        startActivity(new Intent(context, HearingStatusActivity.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_registration:
-                        startActivity(new Intent(context, RegistrationStatus.class));
-                        drawer.closeDrawers();
-                        return true;
-
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, AboutusActivity.class));

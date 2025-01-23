@@ -167,7 +167,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
     String ftpbaseurl;
     ProgressDialog pDialog;
     EditText loctimePickerEdit;
-    TextView services_names_view;
+    EditText services_names_view;
     EditText locDateTimeEdit;
     EditText bedsEdit;
     String hce_nameText = "";
@@ -372,7 +372,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
         latvisitloc = (TextView) findViewById(R.id.latvisitloc);
         latvisitinfo = (TextView) findViewById(R.id.latvisitinfo);
 
-        services_names_view = (TextView) findViewById(R.id.services_names_view);
+        services_names_view = (EditText) findViewById(R.id.services_names_view);
 
         currloc_spinner = (Spinner) findViewById(R.id.currloc_spinner);
         //-------buttons-----------------
