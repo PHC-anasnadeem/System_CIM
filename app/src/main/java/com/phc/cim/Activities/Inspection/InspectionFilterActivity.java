@@ -457,32 +457,12 @@ if(count<1) {
                             Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
                         }
                         return true;
-                    /*     case R.id.nav_photos:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_PHOTOS;
-                        break;
-                    case R.id.nav_movies:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_MOVIES;
-                        break;
-                    case R.id.nav_notifications:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_NOTIFICATIONS;
-                        break;*/
-                /*    case R.id.nav_settings:
-                        // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, Setting.class));
-                        drawer.closeDrawers();
-                        return true;*/
-
                     case R.id.nav_actiondesc:
                         if(Roleid.equals("3")){
                             startActivity(new Intent(context, InspectionVisitsActivity.class));
-
                         }
                         else {
                             startActivity(new Intent(context, IndReportingActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
-
                         }
                          drawer.closeDrawers();
                         return true;

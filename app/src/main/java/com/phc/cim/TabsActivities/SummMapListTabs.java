@@ -247,7 +247,7 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         adapter.addFragment(new MapFragment(), "Map View");
         adapter.addFragment(new HCEListFragment(), "List View");
         if (indtabresult != null) {
-            if (REGfilterstatus.equals("5") || REGfilterstatus.equals("6")) {
+            if (REGfilterstatus.equals("5")) {
                 adapter.addFragment(new QuackClusterListFragment(), "Clusters");
             } else if (REGfilterstatus.equals("4")) {
                 adapter.addFragment(new NotRegClusterListFragment(), "Clusters");

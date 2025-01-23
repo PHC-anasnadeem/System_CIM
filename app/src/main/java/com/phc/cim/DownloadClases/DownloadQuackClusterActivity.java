@@ -136,7 +136,7 @@ public class DownloadQuackClusterActivity {
         String token = context.getResources().getString(R.string.token);
         String url = null;
         if(hcestatusID.equals("5")){
-            url = baseurl + "GetAllQuackClusters?strToken="+token+"&RegistrationStatusID=0&District="+districtText+"&Tehsil="+tehsilText+"&Distance=0&ClusterType=0";
+            url = baseurl + "GetAllQuackClusters?strToken="+token+"&RegistrationStatusID="+hcestatusID+"&District="+districtText+"&Tehsil="+tehsilText+"&Distance=0&ClusterType=0";
 
         }
         else if(hcestatusID.equals("4")){

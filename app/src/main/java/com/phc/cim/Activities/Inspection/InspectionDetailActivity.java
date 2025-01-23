@@ -183,6 +183,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
     String UserID;
     String RoleID;
     String recID;
+    String Services_Names;
     String HCEEmail;
     String HCEEmailSP;
     String infoVisitDatetext = "";
@@ -425,6 +426,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
             total_beds = BasicInfoDetail.get(0).get("bedStrength");
             final_id = BasicInfoDetail.get(0).get("FinalId");
             recID = BasicInfoDetail.get(0).get("recID");
+            Services_Names = BasicInfoDetail.get(0).get("Services_Names");
         }
         if(!LocationDetail.equals(null)&& !LocationDetail.equals("null")&& !LocationDetail.equals("") && LocationDetail.size()>0){
             LoctionVisitedBy = LocationDetail.get(0).get("LoctionVisitedBy");

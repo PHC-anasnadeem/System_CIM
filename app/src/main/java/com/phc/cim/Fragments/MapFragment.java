@@ -107,6 +107,7 @@ public class MapFragment extends Fragment {
     String unRegAddress;
     String VisitStatus;
     String ActionType;
+    String Source;
     String council;
     String HCEType;
     String Beds;
@@ -730,6 +731,7 @@ public class MapFragment extends Fragment {
                         map.put("uu_db_id", e.getString("uu_db_id"));
                         map.put("ActionType", e.getString("ActionType"));
                         map.put("VisitStatus", e.getString("VisitStatus"));
+                        map.put("Source", e.getString("Source"));
 //                            map.put("hcsp_cnic", e.getString("hcsp_cnic"));
 //                            map.put("hcsp_phone", e.getString("hcsp_phone"));
 
@@ -780,6 +782,7 @@ public class MapFragment extends Fragment {
                         RegType = result.get(i).get("RegType");
                         VisitStatus = result.get(i).get("VisitStatus");
                         ActionType = result.get(i).get("ActionType");
+                        Source = result.get(i).get("Source");
                         if (latitude != 0 && longitude != 0) {
                             latLngzoom = new LatLng(latitude, longitude);
                         }
@@ -793,6 +796,9 @@ public class MapFragment extends Fragment {
 
                                 if (VisitStatus.equals("1") && (ActionType.equals("1") || ActionType.equals("3") || ActionType.equals("9") || ActionType.equals("10") || ActionType.equals("12"))) {
                                     mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_yellow)).snippet(RegType));
+
+                                } else if (VisitStatus.equals("1") && ActionType.equals("13")) {
+                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_not_reg)).snippet(RegType));
 
                                 } else if (VisitStatus.equals("1") && ActionType.equals("2")) {
                                     mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_visited_yellow)).snippet(RegType));
@@ -812,6 +818,9 @@ public class MapFragment extends Fragment {
                                 if (VisitStatus.equals("1") && (ActionType.equals("1") || ActionType.equals("3") || ActionType.equals("9") || ActionType.equals("10") || ActionType.equals("12"))) {
                                     mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_green)).snippet(RegType));
 
+                                } else if (VisitStatus.equals("1") && ActionType.equals("13")) {
+                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_not_reg)).snippet(RegType));
+
                                 } else if (VisitStatus.equals("1") && ActionType.equals("2")) {
                                     mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_visited_green)).snippet(RegType));
 
@@ -825,8 +834,11 @@ public class MapFragment extends Fragment {
                             if (latitude != 0 && longitude != 0) {
 
                                 LatLng latLng = new LatLng(latitude, longitude);
-                                if (VisitStatus.equals("1") && (ActionType.equals("1") || ActionType.equals("3") || ActionType.equals("9") || ActionType.equals("10") || ActionType.equals("12") || ActionType.equals("13"))) {
+                                if (VisitStatus.equals("1") && (ActionType.equals("1") || ActionType.equals("3") || ActionType.equals("9") || ActionType.equals("10") || ActionType.equals("12"))) {
                                     mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_blue)).snippet(RegType));
+
+                                } else if (VisitStatus.equals("1") && ActionType.equals("13")) {
+                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_not_reg)).snippet(RegType));
 
                                 } else if (VisitStatus.equals("1")) {
                                     mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_visited_blue)).snippet(RegType));
@@ -836,43 +848,43 @@ public class MapFragment extends Fragment {
                                 }
                             }
 
-                        } else if (RegType.equals("Quack")) {
-                            if (latitude != 0 && longitude != 0) {
+                        } else if (RegType.equals("Quack") && Source.equals("Census-2024")) {
+                        if (latitude != 0 && longitude != 0) {
 
-                                LatLng latLng = new LatLng(latitude, longitude);
-                                if (VisitStatus.equals("1") && (ActionType.equals("1") || ActionType.equals("3") || ActionType.equals("9") || ActionType.equals("10") || ActionType.equals("12"))) {
-                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_red)).snippet(RegType));
+                            LatLng latLng = new LatLng(latitude, longitude);
+                            if (VisitStatus.equals("1") && (ActionType.equals("1") || ActionType.equals("3") || ActionType.equals("9") || ActionType.equals("10") || ActionType.equals("12"))) {
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_purple)).snippet(RegType));
 
-                                } else if (VisitStatus.equals("1") && ActionType.equals("13")) {
-                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_purple)).snippet(RegType));
+                            } else if (VisitStatus.equals("1") && ActionType.equals("13")) {
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_not_reg)).snippet(RegType));
 
-                                } else if (VisitStatus.equals("1") && ActionType.equals("2")) {
-                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_visited_red)).snippet(RegType));
+                            } else if (VisitStatus.equals("1") && ActionType.equals("2")) {
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_visited_purple)).snippet(RegType));
 
-                                } else {
-                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.defaultMarker(hue_red)).snippet(RegType));
+                            } else {
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.defaultMarker(hue_red)).snippet(RegType));
 
-                                }
                             }
                         }
-//                        else if (RegType.equals("Quack")) {
-//                            if (latitude != 0 && longitude != 0) {
-//
-//                                LatLng latLng = new LatLng(latitude, longitude);
-//                                if (VisitStatus.equals("1") && (ActionType.equals("13"))) {
-//                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_purple)).snippet(RegType));
-//
-//                                } else if (VisitStatus.equals("1")) {
-//                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_visited_purple)).snippet(RegType));
-//
-//                                } else {
-//                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.defaultMarker(hue_blue)).snippet(RegType));
-//                                }
-//                            }
-//
-//                        }
+                    } else if (RegType.equals("Quack")) {
+                        if (latitude != 0 && longitude != 0) {
 
+                            LatLng latLng = new LatLng(latitude, longitude);
+                            if (VisitStatus.equals("1") && (ActionType.equals("1") || ActionType.equals("3") || ActionType.equals("9") || ActionType.equals("10") || ActionType.equals("12"))) {
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sealed_red)).snippet(RegType));
 
+                            } else if (VisitStatus.equals("1") && ActionType.equals("13")) {
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_not_reg)).snippet(RegType));
+
+                            } else if (VisitStatus.equals("1") && ActionType.equals("2")) {
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_visited_red)).snippet(RegType));
+
+                            } else {
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.defaultMarker(hue_red)).snippet(RegType));
+
+                            }
+                        }
+                    }
 
                         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 

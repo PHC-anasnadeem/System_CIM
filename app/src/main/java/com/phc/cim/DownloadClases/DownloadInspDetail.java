@@ -186,17 +186,12 @@ private class ParserTask extends AsyncTask<Object, Object, ArrayList<HashMap<Str
                     map.put("orgType", e.getString("orgType"));
                     map.put("phcRegistrationNumber", e.getString("phcRegistrationNumber"));
                     map.put("recID", e.getString("recID"));
+                    map.put("Services_Names", e.getString("Services_Names"));
                     mylist.add(map);
                 }
 
-                // adding contact to contact list
-                //contactList.add(contact);
-
             } catch (final JSONException e) {
-
                 e.printStackTrace();
-
-
             }
         } else {
             Log.e("exception", "Couldn't get json from server.");

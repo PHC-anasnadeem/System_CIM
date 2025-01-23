@@ -228,7 +228,7 @@ public class summaryFragment extends Fragment {
         BarEntryLabels.add("");
         BarEntryLabels.add("");
         BarEntryLabels.add("");
-      BarEntryLabels.add("");
+        BarEntryLabels.add("");
 //      BarEntryLabels.add("");
 
     }

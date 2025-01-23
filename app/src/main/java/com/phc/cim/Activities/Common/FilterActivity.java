@@ -1103,7 +1103,7 @@ public class FilterActivity extends AppCompatActivity {
                         actionText = "";
                     }
 
-                if((!districtText.equals("") || !tehsilText.equals(""))&& (hcestatusID.equals("5")|| hcestatusID.equals("4")) ) {
+                if((!districtText.equals("") || !tehsilText.equals(""))&& (hcestatusID.equals("4")|| hcestatusID.equals("5")) ) {
                     if(tehsilText.equals("")){
                         Toast.makeText(context, "Please select tehsil", Toast.LENGTH_SHORT).show();
 
@@ -1556,15 +1556,15 @@ public class FilterActivity extends AppCompatActivity {
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_list:
-                        startActivity(new Intent(context, DesealListing.class));
+                        startActivity(new Intent(context, DesealListing.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_hearing:
-                        startActivity(new Intent(context, HearingStatusActivity.class));
+                        startActivity(new Intent(context, HearingStatusActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_registration:
-                        startActivity(new Intent(context, RegistrationStatus.class));
+                        startActivity(new Intent(context, RegistrationStatus.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_resetPassword:
