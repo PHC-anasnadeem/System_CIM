@@ -111,6 +111,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 
 import butterknife.ButterKnife;
 
@@ -485,7 +486,11 @@ public class InspectionDetailActivity extends AppCompatActivity {
         hcetypespinner.setText(hceTypetext);
         timePicker1.setText(BasicInfoVisitedTime);
         loctimePickerEdit.setText(LoctionVisitedTime);
-        services_names_view.setText(Services_Names);
+        if (Services_Names != null && !Services_Names.equals("null")) {
+            services_names_view.setText(Services_Names);
+        } else {
+            services_names_view.setText("");
+        }
 
         // Enable scrolling
         services_names_view.setMovementMethod(new ScrollingMovementMethod());
