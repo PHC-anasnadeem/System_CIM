@@ -166,8 +166,19 @@ public class InspectionFilterActivity extends AppCompatActivity {
         errortextlayout= (LinearLayout) findViewById(R.id.errortextlayout);
 
 
-        if(Roleid.equals("1") || Roleid.equals("3")) {
+        if (Roleid.equals("1") ){
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_hearing).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_list).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_registration).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_quack).setVisible(true);
+
+            if (Roleid.equals("3")) {
+                navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
+            } else {
+                navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
+            }
+
             if (isStat.equals("true") && Roleid.equals("1")) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
 
@@ -175,10 +186,13 @@ public class InspectionFilterActivity extends AppCompatActivity {
             } else {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
             }
-        }
-        else {
+        } else {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_hearing).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_list).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_registration).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_quack).setVisible(false);
         }
 
 

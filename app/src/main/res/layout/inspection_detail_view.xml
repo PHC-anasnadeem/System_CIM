@@ -334,7 +334,7 @@
                 android:paddingRight="24dp"
                 android:hint="HCE Services"
                 app:boxStrokeColor="#000000"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="#000000">
 
                 <!-- Read-Only Multiline EditText -->
                 <EditText

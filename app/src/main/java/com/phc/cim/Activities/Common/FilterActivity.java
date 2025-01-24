@@ -332,6 +332,10 @@ public class FilterActivity extends AppCompatActivity {
 
         if(Roleid.equals("1")) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_hearing).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_list).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_registration).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_quack).setVisible(true);
             if (isStat.equals("true")) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
 
@@ -343,6 +347,10 @@ public class FilterActivity extends AppCompatActivity {
         else {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_hearing).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_list).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_registration).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_quack).setVisible(false);
         }
 
 

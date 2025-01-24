@@ -32,7 +32,7 @@ public class L_AFragment extends Fragment{
         listView = (ListView) rootView.findViewById(R.id.list);
         final Bundle args = getArguments();
         indtabresult= (ArrayList<HashMap<String, String>>) args.getSerializable("indtabresult");
-        L_A_ID= args.getString("CloseSealedInspectionID");
+        L_A_ID= args.getString("L_A_ID");
         email= args.getString("email");
         password= args.getString("password");
         username= args.getString("username");

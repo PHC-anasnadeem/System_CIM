@@ -251,8 +251,19 @@ public class InspectionVisitsActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);*/
         // load toolbar titles from string resources
         activityTitles = getResources().getString(R.string.nav_insp_visits);
-        if (RoleID.equals("1") || RoleID.equals("3")) {
+        if (RoleID.equals("1") ) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_hearing).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_list).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_registration).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_quack).setVisible(true);
+
+        if (RoleID.equals("3")) {
+            navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
+        } else {
+            navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
+        }
+
             if (isStat.equals("true") && RoleID.equals("1")) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
 
@@ -263,6 +274,10 @@ public class InspectionVisitsActivity extends AppCompatActivity {
         } else {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_hearing).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_list).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_registration).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_quack).setVisible(false);
         }
 
         loadNavHeader();
@@ -501,10 +516,6 @@ public class InspectionVisitsActivity extends AppCompatActivity {
                         startActivity(new Intent(context, InspectionFilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
-                    case R.id.nav_reportquack:
-                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
-                        drawer.closeDrawers();
-                        return true;
                     case R.id.nav_quack:
                         startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
@@ -540,18 +551,6 @@ public class InspectionVisitsActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_pwssearch:
                         startActivity(new Intent(context, PWSFilterActivity.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_list:
-                        startActivity(new Intent(context, DesealListing.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_hearing:
-                        startActivity(new Intent(context, HearingStatusActivity.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_registration:
-                        startActivity(new Intent(context, RegistrationStatus.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_about_us:

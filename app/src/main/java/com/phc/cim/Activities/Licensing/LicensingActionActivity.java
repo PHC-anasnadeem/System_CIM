@@ -1140,10 +1140,6 @@ public class LicensingActionActivity extends AppCompatActivity {
                         startActivity(new Intent(context, FilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
-                    case R.id.nav_reportquack:
-                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
-                        drawer.closeDrawers();
-                        return true;
                     case R.id.nav_quack:
                         startActivity(new Intent(context, QuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
@@ -1236,19 +1232,6 @@ public class LicensingActionActivity extends AppCompatActivity {
                         startActivity(new Intent(context, PWSFilterActivity.class));
                         drawer.closeDrawers();
                         return true;
-                    case R.id.nav_list:
-                        startActivity(new Intent(context, DesealListing.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_hearing:
-                        startActivity(new Intent(context, HearingStatusActivity.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_registration:
-                        startActivity(new Intent(context, RegistrationStatus.class));
-                        drawer.closeDrawers();
-                        return true;
-
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, AboutusActivity.class));

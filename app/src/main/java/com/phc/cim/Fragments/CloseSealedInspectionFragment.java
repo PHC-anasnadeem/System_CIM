@@ -20,7 +20,7 @@ public class CloseSealedInspectionFragment extends Fragment {
     ArrayList<HashMap<String, String>> indtabresult;
     ArrayList<HashMap<String, String>> CloseSealedInspectionlist;
     int count=1;
-    String L_A_ID;
+    String CloseSealedInspectionID;
     ProgressDialog pDialog;
     String email,password,username,isEdit;
 
@@ -33,7 +33,7 @@ public class CloseSealedInspectionFragment extends Fragment {
         listView = (ListView) rootView.findViewById(R.id.list);
         final Bundle args = getArguments();
         indtabresult= (ArrayList<HashMap<String, String>>) args.getSerializable("indtabresult");
-        L_A_ID= args.getString("L_A_ID");
+        CloseSealedInspectionID= args.getString("CloseSealedInspectionID");
         email= args.getString("email");
         password= args.getString("password");
         username= args.getString("username");
@@ -42,7 +42,7 @@ public class CloseSealedInspectionFragment extends Fragment {
         if(indtabresult!=null) {
             for (int i = 0; i < indtabresult.size(); i++) {
 
-                if (indtabresult.get(i).get("ActionType").equals(L_A_ID)) {
+                if (indtabresult.get(i).get("ActionType").equals(CloseSealedInspectionID)) {
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put("index", String.valueOf(count));
                     map.put("Action", indtabresult.get(i).get("Action"));
@@ -64,7 +64,7 @@ public class CloseSealedInspectionFragment extends Fragment {
                 }
             }
         }
-        NotSealedAdapter notSealedAdapter=new NotSealedAdapter(getContext(),CloseSealedInspectionlist,L_A_ID,email,password,username,isEdit);
+        NotSealedAdapter notSealedAdapter=new NotSealedAdapter(getContext(),CloseSealedInspectionlist,CloseSealedInspectionID,email,password,username,isEdit);
         listView.setAdapter(notSealedAdapter);
         notSealedAdapter.notifyDataSetChanged();
         return rootView;
