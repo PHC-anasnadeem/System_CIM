@@ -46,6 +46,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.phc.cim.Activities.Licensing.PWSFilterActivity;
+import com.phc.cim.Activities.Notification.NotificationManager;
+import com.phc.cim.Activities.Notification.NotificationApiClient;
+import com.phc.cim.Activities.Notification.NotificationModel;
+import com.phc.cim.Activities.Notification.NotificationReceiver;
 import com.phc.cim.DataElements.ActionType;
 import com.phc.cim.DataElements.CouncilType;
 import com.phc.cim.DataElements.Distance;
@@ -85,8 +89,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class FilterActivity extends AppCompatActivity {
+public class FilterActivity extends AppCompatActivity implements NotificationReceiver.NotificationCountListener {
     Spinner sectortypespinner;
     Spinner hcetypespinner;
     Spinner counciltypespiner;
@@ -222,8 +227,11 @@ public class FilterActivity extends AppCompatActivity {
     private int notificationCounter = 0;
     private static final int REQUEST_CODE_INSTALL_PERMISSION = 1001;
 
+    // Notification manager
+    private NotificationManager notificationManager;
+
     @Override
-        protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         context=this;
@@ -1153,10 +1161,88 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize notification manager
+        notificationManager = NotificationManager.getInstance(this);
+        
+        // Start notification service
+        notificationManager.startNotificationService();
+        
+        // Register for notification count updates
+        notificationManager.registerNotificationCountListener(this);
+        
+        // Fetch notifications initially
+        fetchNotifications();
     }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        // Register for notification count updates
+        if (notificationManager != null) {
+            notificationManager.registerNotificationCountListener(this);
+        }
+        
+        // Fetch notifications
+        fetchNotifications();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        // Unregister notification count listener
+        if (notificationManager != null) {
+            notificationManager.unregisterNotificationCountListener();
+        }
+    }
+    
+    /**
+     * Fetch notifications from the API
+     */
+    private void fetchNotifications() {
+        if (notificationManager != null) {
+            notificationManager.fetchNotifications(new NotificationApiClient.NotificationResponseListener() {
+                @Override
+                public void onResponse(List<NotificationModel> notifications) {
+                    // Update notification count
+                    updateNotificationCount(notifications.size());
+                }
+                
+                @Override
+                public void onError(String error) {
+                    Log.e("FilterActivity", "Error fetching notifications: " + error);
+                }
+            });
+        }
+    }
+    
+    /**
+     * Handle notification count updates from the broadcast receiver
+     */
+    @Override
+    public void onNotificationCountUpdated(int count) {
+        updateNotificationCount(count);
+    }
+    
+    /**
+     * Update the notification count badge
+     */
+    private void updateNotificationCount(int count) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (notificationCount != null) {
+                    if (count > 0) {
+                        notificationCount.setVisibility(View.VISIBLE);
+                        notificationCount.setText(String.valueOf(count));
+                    } else {
+                        notificationCount.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -1670,6 +1756,26 @@ public class FilterActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        
+        // Get notification menu item
+        final MenuItem menuItem = menu.findItem(R.id.action_notification);
+        
+        // Get notification icon view
+        View actionView = menuItem.getActionView();
+        notificationIcon = actionView.findViewById(R.id.notification_icon);
+        notificationCount = actionView.findViewById(R.id.notification_count);
+        
+        // Set click listener for notification icon
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open notification list activity
+                Intent intent = new Intent(FilterActivity.this, com.phc.cim.Activities.Notification.NotificationListActivity.class);
+                startActivity(intent);
+            }
+        });
+        
         return true;
     }
 

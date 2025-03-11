@@ -8,30 +8,7 @@
         android:background="@drawable/splash_screen"
         tools:context="com.phc.cim.Activities.Common.MainActivity">
 
-<!--
-            <ImageView
-                android:id="@+id/logoImage"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:paddingTop="50dp"
-                android:layout_gravity="center"
-                android:src="@drawable/app_screen_logo" />
-    <ImageView
-        android:id="@+id/cimImage"
-        android:layout_width="150dp"
-        android:layout_height="80dp"
-        android:paddingTop="10dp"
-        android:layout_gravity="center"
-        android:src="@drawable/cim_icon" />-->
 
-        <!--    <ProgressBar
-                android:id="@+id/login_progress"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:visibility="gone" />-->
     <com.trncic.library.DottedProgressBar
         android:id="@+id/progress"
         android:layout_width="match_parent"

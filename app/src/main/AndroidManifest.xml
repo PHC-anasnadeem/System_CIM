@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.phc.cim"
-    android:versionCode="35"
-    android:versionName="1.2.9.4">
+    android:versionCode="36"
+    android:versionName="1.2.9.6">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -21,6 +21,8 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 
     <uses-feature
@@ -48,6 +50,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        
+        <!-- Notification List Activity -->
+        <activity
+            android:name=".Activities.Notification.NotificationListActivity"
+            android:exported="false"
+            android:label="Notifications"
+            android:theme="@style/AppTheme.NoActionBar" />
+        
+        <!-- Notification Background Service -->
+        <service
+            android:name=".Activities.Notification.NotificationBackgroundService"
+            android:enabled="true"
+            android:exported="false" />
+            
+        <!-- Boot Receiver to start notification service on device boot -->
+        <receiver
+            android:name=".BroadcastService.BootReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        
         <activity
             android:name=".Activities.Common.RegistrationStatus"
             android:exported="false" />
