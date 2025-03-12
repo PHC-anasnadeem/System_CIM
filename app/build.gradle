@@ -24,6 +24,16 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    // Add this block to allow ButterKnife to access internal Java compiler modules
+    tasks.withType(JavaCompile) {
+        options.fork = true
+        options.forkOptions.jvmArgs += [
+            '--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
+            '--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
+            '--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
+            '--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED'
+        ]
+    }
 }
 
 dependencies {

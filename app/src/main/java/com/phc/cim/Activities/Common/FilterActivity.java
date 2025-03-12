@@ -1938,16 +1938,6 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
 
     }
 
-    // Method to update notification count
-    private void updateNotificationCount(int count) {
-        if (count > 0) {
-            notificationCount.setVisibility(View.VISIBLE);
-            notificationCount.setText(String.valueOf(count));
-        } else {
-            notificationCount.setVisibility(View.GONE);
-        }
-    }
-
     // increment notification count
     private void incrementNotificationCount() {
         notificationCounter++;
