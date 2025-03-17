@@ -1,10 +1,5 @@
 package com.phc.cim.Activities.Common;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -16,14 +11,19 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.phc.cim.Adapters.DiaryEntryAdapter;
 import com.phc.cim.DataElements.DiaryEntry;
@@ -33,7 +33,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,48 +41,74 @@ import java.util.List;
 
 public class DesealListing extends AppCompatActivity {
 
-    private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private DiaryEntryAdapter diaryEntryAdapter;
     private List<DiaryEntry> diaryEntryList;
+    private DiaryEntryAdapter diaryEntryAdapter;
     private RequestQueue requestQueue;
-    private EditText etFinalID, etDistrict, etStartDate, etEndDate;
+    private EditText etFinalID;
     private Button btnFetch;
-    String savedToken,savedUsername,savedEmail;
-    int savedHceUserIdSeq;
-    ProgressBar progressBar;
-    String finalID;
-    Context context;
+    private ProgressBar progressBar;
+    private TextView tvNoResults;
+    private Toolbar toolbar;
+    private String finalID;
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deseal_listing);
 
-        etFinalID = findViewById(R.id.FinalID);
-        btnFetch = findViewById(R.id.btnFetch);
+        // Initialize UI components
+        initializeViews();
+        
+        // Set up toolbar
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
-        progressBar = findViewById(R.id.progressBar);
-
-
-        recyclerView = findViewById(R.id.recyclerView);
+        // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         diaryEntryList = new ArrayList<>();
         diaryEntryAdapter = new DiaryEntryAdapter(diaryEntryList);
         recyclerView.setAdapter(diaryEntryAdapter);
 
+        // Initialize Volley request queue
         requestQueue = Volley.newRequestQueue(this);
 
+        // Set click listener for fetch button
         btnFetch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isInternetAvailable()) {
-                    fetchDiaryEntries(DesealListing.this);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Internet not available. Please check your connection.", Toast.LENGTH_SHORT).show();
+                if (validateInput()) {
+                    if (isInternetAvailable()) {
+                        fetchDiaryEntries(DesealListing.this);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Internet not available. Please check your connection.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
+    }
+
+    private void initializeViews() {
+        toolbar = findViewById(R.id.toolbar);
+        etFinalID = findViewById(R.id.FinalID);
+        btnFetch = findViewById(R.id.btnFetch);
+        progressBar = findViewById(R.id.progressBar);
+        recyclerView = findViewById(R.id.recyclerView);
+        tvNoResults = findViewById(R.id.tvNoResults);
+    }
+
+    private boolean validateInput() {
+        String finalIDInput = etFinalID.getText().toString().trim();
+        if (finalIDInput.isEmpty()) {
+            etFinalID.setError("Please enter a Final ID");
+            etFinalID.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     private void fetchDiaryEntries(Context context) {
@@ -93,12 +118,20 @@ public class DesealListing extends AppCompatActivity {
 
         // Retrieve user input
         finalID = etFinalID.getText().toString().trim();
+        
+        // Show progress and hide no results message
         progressBar.setVisibility(View.VISIBLE);
+        tvNoResults.setVisibility(View.GONE);
+        
+        // Clear previous results
+        diaryEntryList.clear();
+        diaryEntryAdapter.notifyDataSetChanged();
 
         // Construct the URL with FinalID parameter
         String baseurl = context.getResources().getString(R.string.baseurl);
-        String token = context.getResources().getString(R.string.token);
         String url = baseurl + "GetDeSealOrders?FinalID=" + finalID;
+
+        Log.d("DesealListing", "Fetching data from URL: " + url);
 
         // Create JSON array request
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -108,41 +141,41 @@ public class DesealListing extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         try {
                             if (response.length() == 0) {
-                                Toast.makeText(DesealListing.this, "This final ID has not been de-sealed yet", Toast.LENGTH_SHORT).show();
+                                tvNoResults.setVisibility(View.VISIBLE);
                                 return;
                             }
+                            
                             List<DiaryEntry> newDiaryEntries = new ArrayList<>();
 
                             // Parse JSON response and create DiaryEntry objects
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject item = response.getJSONObject(i);
-                                int finalID = item.getInt("finalID");
-                                int aqcFileNo = item.getInt("caseFileID");
-                                String comments = item.optString("Comments", "");
-                                String diaryNo = item.getString("OrderNo");
-                                String district = item.getString("District");
-                                String outletName = item.getString("OutletName");
-                                String formattedDate = item.getString("DesealDate");
+                                
+                                // Extract data with null/error handling
+                                int finalID = item.optInt("finalID", 0);
+                                int aqcFileNo = item.optInt("caseFileID", 0);
+                                String comments = item.optString("Comments", "No comments available");
+                                String diaryNo = item.optString("OrderNo", "N/A");
+                                String district = item.optString("District", "N/A");
+                                String outletName = item.optString("OutletName", "N/A");
+                                String desealDate = item.optString("DesealDate", "");
 
-                                // Extract the timestamp from the formattedDate
-                                long timestamp = extractTimestamp(formattedDate);
-                                Date date = new Date(timestamp);
-
-                                // Format the date
-                                SimpleDateFormat targetFormat = new SimpleDateFormat("dd MMM yyyy");
-                                String desealDate = targetFormat.format(date);
-
-                                // Assuming DiaryEntry has the appropriate constructor
+                                // Create DiaryEntry object and add to list
                                 DiaryEntry diaryEntry = new DiaryEntry(finalID, aqcFileNo, comments, diaryNo, district, outletName, desealDate);
                                 newDiaryEntries.add(diaryEntry);
                             }
 
                             // Update diaryEntryList and notify adapter
-                            diaryEntryList.clear();
                             diaryEntryList.addAll(newDiaryEntries);
                             diaryEntryAdapter.notifyDataSetChanged();
+                            
+                            // Scroll to top if results are found
+                            if (!diaryEntryList.isEmpty()) {
+                                recyclerView.smoothScrollToPosition(0);
+                            }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Log.e("DesealListing", "JSON parsing error: " + e.getMessage());
+                            Toast.makeText(DesealListing.this, "Error parsing data. Please try again.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
@@ -150,9 +183,18 @@ public class DesealListing extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressBar.setVisibility(View.GONE);
-                        Log.e("Volley Error", error.toString());
-                        // Handle error response
-                        Toast.makeText(DesealListing.this, "Failed to fetch data. Please try again later.", Toast.LENGTH_SHORT).show();
+                        Log.e("DesealListing", "Volley Error: " + error.toString());
+                        
+                        // Show appropriate error message based on error type
+                        String errorMessage = "Failed to fetch data. Please try again later.";
+                        if (error.networkResponse != null) {
+                            if (error.networkResponse.statusCode == 404) {
+                                errorMessage = "Data not found. Please check the Final ID.";
+                            } else if (error.networkResponse.statusCode >= 500) {
+                                errorMessage = "Server error. Please try again later.";
+                            }
+                        }
+                        Toast.makeText(DesealListing.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -167,8 +209,6 @@ public class DesealListing extends AppCompatActivity {
         return Long.parseLong(timestampStr);
     }
 
-
-
     private boolean isInternetAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
@@ -182,21 +222,5 @@ public class DesealListing extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-
-    private void showDatePickerDialog(final EditText dateField) {
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(DesealListing.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                String selectedDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                dateField.setText(selectedDate);
-            }
-        }, year, month, day);
-        datePickerDialog.show();
     }
 }

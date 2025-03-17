@@ -1,6 +1,6 @@
 package com.phc.cim.Adapters;
 
-
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +32,37 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Di
     @Override
     public void onBindViewHolder(@NonNull DiaryEntryViewHolder holder, int position) {
         DiaryEntry diaryEntry = diaryEntryList.get(position);
+        
+        // Set Final ID
         holder.tvFinalID.setText("Final ID: " + diaryEntry.getFinalID());
-        holder.tvAqcFileNo.setText("AQC File No: " + diaryEntry.getAqcFileNo());
-        holder.tvComments.setText("Comments: " + diaryEntry.getComments());
-        holder.tvDiaryNo.setText("Diary No: " + diaryEntry.getDiaryNo());
-        holder.tvDistrict.setText("District: " + diaryEntry.getDistrict());
-        holder.tvOutletName.setText("Outlet Name: " + diaryEntry.getOutletName());
-        holder.tvdeseal.setText("De-seal Date: " + diaryEntry.getDesealDate());
+        
+        // Set De-seal Date
+        holder.tvDesealDate.setText(diaryEntry.getDesealDate());
+        
+        // Set Outlet Name (with fallback)
+        String outletName = diaryEntry.getOutletName();
+        if (TextUtils.isEmpty(outletName) || "N/A".equals(outletName)) {
+            holder.tvOutletName.setText("Outlet Name not available");
+        } else {
+            holder.tvOutletName.setText(outletName);
+        }
+        
+        // Set AQC File No
+        holder.tvAqcFileNo.setText(String.valueOf(diaryEntry.getAqcFileNo()));
+        
+        // Set Diary No
+        holder.tvDiaryNo.setText(diaryEntry.getDiaryNo());
+        
+        // Set District
+        holder.tvDistrict.setText(diaryEntry.getDistrict());
+        
+        // Set Comments (with fallback)
+        String comments = diaryEntry.getComments();
+        if (TextUtils.isEmpty(comments) || "No comments available".equals(comments)) {
+            holder.tvComments.setText("No comments available");
+        } else {
+            holder.tvComments.setText(comments);
+        }
     }
 
     @Override
@@ -47,7 +71,7 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Di
     }
 
     static class DiaryEntryViewHolder extends RecyclerView.ViewHolder {
-        TextView tvFinalID, tvAqcFileNo, tvComments, tvDiaryNo, tvDistrict, tvOutletName, tvdeseal;
+        TextView tvFinalID, tvAqcFileNo, tvComments, tvDiaryNo, tvDistrict, tvOutletName, tvDesealDate;
 
         public DiaryEntryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,7 +81,7 @@ public class DiaryEntryAdapter extends RecyclerView.Adapter<DiaryEntryAdapter.Di
             tvDiaryNo = itemView.findViewById(R.id.tvDiaryNo);
             tvDistrict = itemView.findViewById(R.id.tvDistrict);
             tvOutletName = itemView.findViewById(R.id.tvOutletName);
-            tvdeseal = itemView.findViewById(R.id.tvdeseal);
+            tvDesealDate = itemView.findViewById(R.id.tvdeseal);
         }
     }
 }

@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -96,52 +97,53 @@ public class NotificationManager {
      * Fetch notifications manually
      */
     public void fetchNotifications(final NotificationApiClient.NotificationResponseListener listener) {
-        // Get user ID and token from SharedPreferences
-        SharedPreferences prefs = context.getSharedPreferences("PHCPrefs", Context.MODE_PRIVATE);
-        int userId = prefs.getInt("userId", -1);
-        String token = prefs.getString("authToken", "");
+        // Get user ID from SharedPreferences
+        SharedPreferences prefs = context.getSharedPreferences("MyPrefsFile", Context.MODE_PRIVATE);
+        String userIdStr = prefs.getString("UserID", null);
         
-        if (userId == -1 || token.isEmpty()) {
-            Log.e(TAG, "User ID or token not found");
+        if (userIdStr == null || userIdStr.isEmpty()) {
+            Log.e(TAG, "User ID not found");
             if (listener != null) {
-                listener.onError("User ID or token not found");
+                listener.onError("User ID not found");
             }
             return;
         }
         
-        apiClient.getNotifications(userId, token, new NotificationApiClient.NotificationResponseListener() {
-            @Override
-            public void onResponse(List<NotificationModel> notifications) {
-                if (listener != null) {
-                    listener.onResponse(notifications);
+        try {
+            // Convert userId to integer since the API expects an integer
+            apiClient.getNotifications(userIdStr, new NotificationApiClient.NotificationResponseListener() {
+                @Override
+                public void onResponse(List<NotificationModel> notifications) {
+                    if (listener != null) {
+                        // Ensure we never pass null to the listener
+                        if (notifications == null) {
+                            listener.onResponse(new ArrayList<>());
+                        } else {
+                            listener.onResponse(notifications);
+                        }
+                    }
                 }
-            }
-            
-            @Override
-            public void onError(String error) {
-                if (listener != null) {
-                    listener.onError(error);
+                
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "Error fetching notifications: " + error);
+                    if (listener != null) {
+                        listener.onError(error);
+                    }
                 }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Exception while fetching notifications: " + e.getMessage(), e);
+            if (listener != null) {
+                listener.onError("Error: " + e.getMessage());
             }
-        });
+        }
     }
     
     /**
      * Mark a notification as read
      */
     public void markNotificationAsRead(int notificationId, final NotificationApiClient.NotificationResponseListener listener) {
-        // Get token from SharedPreferences
-        SharedPreferences prefs = context.getSharedPreferences("PHCPrefs", Context.MODE_PRIVATE);
-        String token = prefs.getString("authToken", "");
-        
-        if (token.isEmpty()) {
-            Log.e(TAG, "Token not found");
-            if (listener != null) {
-                listener.onError("Token not found");
-            }
-            return;
-        }
-        
-        apiClient.markNotificationAsRead(notificationId, token, listener);
+        apiClient.markNotificationAsRead(notificationId, listener);
     }
 } 

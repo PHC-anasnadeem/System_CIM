@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,7 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-
 import com.phc.cim.Adapters.HearingAdapter;
 
 import com.phc.cim.DataElements.Hearing;
@@ -44,142 +44,181 @@ import java.util.Locale;
 
 public class HearingStatusActivity extends AppCompatActivity {
 
-
     private RecyclerView recyclerView;
     private HearingAdapter hearingAdapter;
-    private List<Hearing> HearingList;
+    private List<Hearing> hearingList;
     private RequestQueue requestQueue;
     private EditText etFinalID;
     private Button btnFetch;
-    ProgressBar progressBar;
-    String finalID;
-    Context context;
+    private ProgressBar progressBar;
+    private TextView tvNoResults;
+    private Toolbar toolbar;
+    private String finalID;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hearing_status);
 
-        etFinalID = findViewById(R.id.FinalID);
-        btnFetch = findViewById(R.id.btnFetch);
+        // Initialize UI components
+        initializeViews();
+        
+        // Set up toolbar
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
-        progressBar = findViewById(R.id.progressBar);
-
-
-        recyclerView = findViewById(R.id.recyclerView);
+        // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        HearingList = new ArrayList<>();
-        hearingAdapter = new HearingAdapter(context, HearingList);
+        hearingList = new ArrayList<>();
+        hearingAdapter = new HearingAdapter(this, hearingList);
         recyclerView.setAdapter(hearingAdapter);
 
+        // Initialize Volley request queue
         requestQueue = Volley.newRequestQueue(this);
 
-        btnFetch.setOnClickListener(v -> {
-            if (isInternetAvailable()) {
-                fetchDiaryEntries(HearingStatusActivity.this);
-            } else {
-                Toast.makeText(getApplicationContext(), "Internet not available. Please check your connection.", Toast.LENGTH_SHORT).show();
+        // Set click listener for fetch button
+        btnFetch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateInput()) {
+                    if (isInternetAvailable()) {
+                        fetchHearingStatus(HearingStatusActivity.this);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Internet not available. Please check your connection.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
-    private void fetchDiaryEntries(Context context) {
+
+    private void initializeViews() {
+        toolbar = findViewById(R.id.toolbar);
+        etFinalID = findViewById(R.id.FinalID);
+        btnFetch = findViewById(R.id.btnFetch);
+        progressBar = findViewById(R.id.progressBar);
+        recyclerView = findViewById(R.id.recyclerView);
+        tvNoResults = findViewById(R.id.tvNoResults);
+    }
+
+    private boolean validateInput() {
+        String finalIDInput = etFinalID.getText().toString().trim();
+        if (finalIDInput.isEmpty()) {
+            etFinalID.setError("Please enter a Final ID");
+            etFinalID.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private void fetchHearingStatus(Context context) {
         if (context == null) {
             throw new IllegalArgumentException("Context cannot be null");
         }
 
         // Retrieve user input
         finalID = etFinalID.getText().toString().trim();
+        
+        // Show progress and hide no results message
         progressBar.setVisibility(View.VISIBLE);
+        tvNoResults.setVisibility(View.GONE);
+        
+        // Clear previous results
+        hearingList.clear();
+        hearingAdapter.notifyDataSetChanged();
 
         // Construct the URL with FinalID parameter
         String baseurl = context.getResources().getString(R.string.baseurl);
-
         String url = baseurl + "GetHearingStatus?FinalID=" + finalID;
+
+        Log.d("HearingStatusActivity", "Fetching data from URL: " + url);
 
         // Create JSON array request
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    progressBar.setVisibility(View.GONE);
-                    try {
-                        if (response.length() == 0) {
-                            Toast.makeText(HearingStatusActivity.this, "This final ID has not been de-sealed yet", Toast.LENGTH_SHORT).show();
-                            return;
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        progressBar.setVisibility(View.GONE);
+                        try {
+                            if (response.length() == 0) {
+                                tvNoResults.setVisibility(View.VISIBLE);
+                                return;
+                            }
+                            
+                            List<Hearing> newHearingEntries = new ArrayList<>();
+
+                            // Parse JSON response and create Hearing objects
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject item = response.getJSONObject(i);
+                                
+                                // Extract data with null/error handling
+                                String district = item.optString("District", "N/A");
+                                String activeStatus = item.optString("activestatus", "N/A");
+                                String caseFileId = item.optString("casefileid", "N/A");
+                                String comments = item.optString("comments", "No comments available");
+                                String committees = item.optString("committees", "N/A");
+                                String hearingStatusDesc = item.optString("hearingstatus_desc", "N/A");
+                                String outletAddress = item.optString("outletaddress", "N/A");
+                                String outletName = item.optString("outletname", "N/A");
+                                int finalId = item.optInt("final_id", 0);
+                                String fineImposed = item.optString("fineimposed", "N/A");
+                                Integer isFineImposed = item.isNull("isfineimposed") ? null : item.optInt("isfineimposed");
+
+                                String createDateFormatted = item.getString("create_date");
+                                String hearingScheduledDateFormatted = item.getString("hearingscheduledate");
+
+                                // Create Hearing object
+                                Hearing hearing = new Hearing(
+                                        district, activeStatus,
+                                        caseFileId, comments, committees,
+                                        createDateFormatted, finalId, fineImposed,
+                                        hearingScheduledDateFormatted, hearingStatusDesc,
+                                        isFineImposed, outletAddress, outletName);
+
+                                newHearingEntries.add(hearing);
+                            }
+
+                            // Update hearingList and notify adapter
+                            hearingList.addAll(newHearingEntries);
+                            hearingAdapter.notifyDataSetChanged();
+                            
+                            // Scroll to top if results are found
+                            if (!hearingList.isEmpty()) {
+                                recyclerView.smoothScrollToPosition(0);
+                            }
+                        } catch (JSONException e) {
+                            Log.e("HearingStatusActivity", "JSON parsing error: " + e.getMessage());
+                            Toast.makeText(HearingStatusActivity.this, "Error parsing data. Please try again.", Toast.LENGTH_SHORT).show();
                         }
-                        List<Hearing> hearingEntries = new ArrayList<>();
-
-                        // Parse JSON response and create Hearing objects
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject item = response.getJSONObject(i);
-
-                            String district = item.getString("District");
-                            String phcQuackSealedFileNo = item.getString("PHCQUACKSEALEDFILENO");
-                            String activeStatus = item.getString("activestatus");
-                            String caseFileId = item.getString("casefileid");
-                            String comments = item.getString("comments");
-                            String committees = item.getString("committees");
-                            String hearingStatusDesc = item.getString("hearingstatus_desc");
-                            String outletAddress = item.getString("outletaddress");
-                            String outletName = item.getString("outletname");
-                            int finalId = item.getInt("final_id");
-                            String fineImposed = item.getString("fineimposed");
-                            Integer isFineImposed = item.isNull("isfineimposed") ? null : item.getInt("isfineimposed");
-
-                            String createDateString = item.getString("create_date");
-                            String createDate = createDateString.replaceAll("[^0-9]", "");
-
-                            String hearingScheduledDateString = item.getString("hearingscheduledate");
-                            String hearingScheduledDate = hearingScheduledDateString.replaceAll("[^0-9]", "");
-
-                            // Convert the numeric strings to long
-                            long createDateMillis = Long.parseLong(createDate);
-                            long hearingScheduledDateMillis = Long.parseLong(hearingScheduledDate);
-
-                            // Create Date objects from milliseconds
-                            Date createDateObj = new Date(createDateMillis);
-                            Date hearingScheduledDateObj = new Date(hearingScheduledDateMillis);
-
-                            // Debug: Print Date objects
-                            System.out.println("Create Date Obj: " + createDateObj);
-                            System.out.println("Hearing Scheduled Date Obj: " + hearingScheduledDateObj);
-
-                            // Format the dates
-                            SimpleDateFormat targetFormat = new SimpleDateFormat("dd-MM-yyy", Locale.ENGLISH);
-                            String createDateFormatted = targetFormat.format(createDateObj);
-                            String hearingScheduledDateFormatted = targetFormat.format(hearingScheduledDateObj);
-
-
-                            // Create Hearing object
-                            Hearing hearing = new Hearing(
-                                    district, activeStatus,
-                                    caseFileId, comments, committees,
-                                    createDateFormatted, finalId, fineImposed,
-                                    hearingScheduledDateFormatted, hearingStatusDesc,
-                                    isFineImposed, outletAddress, outletName);
-
-                            hearingEntries.add(hearing);
-                        }
-
-                        // Update hearingList and notify adapter
-                        HearingList.clear();
-                        HearingList.addAll(hearingEntries);
-                        hearingAdapter.notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
                 },
-                error -> {
-                    progressBar.setVisibility(View.GONE);
-                    Log.e("Volley Error", error.toString());
-                    // Handle error response
-                    Toast.makeText(HearingStatusActivity.this, "Failed. Please try again later.", Toast.LENGTH_SHORT).show();
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.e("HearingStatusActivity", "Volley Error: " + error.toString());
+                        
+                        // Show appropriate error message based on error type
+                        String errorMessage = "Failed to fetch data. Please try again later.";
+                        if (error.networkResponse != null) {
+                            if (error.networkResponse.statusCode == 404) {
+                                errorMessage = "Data not found. Please check the Final ID.";
+                                tvNoResults.setVisibility(View.VISIBLE);
+                            } else if (error.networkResponse.statusCode >= 500) {
+                                errorMessage = "Server error. Please try again later.";
+                            }
+                        }
+                        Toast.makeText(HearingStatusActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
                 }
         );
 
         // Add the request to the RequestQueue
         requestQueue.add(jsonArrayRequest);
     }
-
 
     private boolean isInternetAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -189,23 +228,10 @@ public class HearingStatusActivity extends AppCompatActivity {
         }
         return false;
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
-
-    private void showDatePickerDialog(final EditText dateField) {
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(HearingStatusActivity.this, (view, year1, monthOfYear, dayOfMonth) -> {
-            String selectedDate = year1 + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-            dateField.setText(selectedDate);
-        }, year, month, day);
-        datePickerDialog.show();
-    }
-
 }

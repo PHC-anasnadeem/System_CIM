@@ -1,6 +1,7 @@
 package com.phc.cim.Adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,87 @@ public class HearingAdapter extends RecyclerView.Adapter<HearingAdapter.HearingV
     @Override
     public void onBindViewHolder(@NonNull HearingViewHolder holder, int position) {
         Hearing hearing = hearingList.get(position);
-        holder.bind(hearing);
+        
+        // Set Final ID
+        holder.tvFinalid.setText("Final ID: " + hearing.getFinalId());
+        
+        // Set Hearing Status Description
+        String hearingStatus = hearing.getHearingStatusDesc();
+        if (!TextUtils.isEmpty(hearingStatus) && !"N/A".equals(hearingStatus)) {
+            holder.tvHearingStatusDesc.setText(hearingStatus);
+        } else {
+            holder.tvHearingStatusDesc.setText("Pending");
+        }
+        
+        // Set Outlet Name
+        String outletName = hearing.getOutletName();
+        if (!TextUtils.isEmpty(outletName) && !"N/A".equals(outletName)) {
+            holder.tvOutletName.setText(outletName);
+        } else {
+            holder.tvOutletName.setText("Outlet name not available");
+        }
+        
+        // Set Outlet Address
+        String outletAddress = hearing.getOutletAddress();
+        if (!TextUtils.isEmpty(outletAddress) && !"N/A".equals(outletAddress)) {
+            holder.tvOutletAddress.setText(outletAddress);
+        } else {
+            holder.tvOutletAddress.setText("Address not available");
+        }
+        
+        // Set District
+        String district = hearing.getDistrict();
+        if (!TextUtils.isEmpty(district) && !"N/A".equals(district)) {
+            holder.tvDistrict.setText(district);
+        } else {
+            holder.tvDistrict.setText("N/A");
+        }
+        
+        // Set Case File ID
+        String caseFileId = hearing.getCaseFileId();
+        if (!TextUtils.isEmpty(caseFileId) && !"N/A".equals(caseFileId)) {
+            holder.tvCaseFileId.setText(caseFileId);
+        } else {
+            holder.tvCaseFileId.setText("N/A");
+        }
+        
+        // Set Active Status
+        String activeStatus = hearing.getActiveStatus();
+        if (!TextUtils.isEmpty(activeStatus) && !"N/A".equals(activeStatus)) {
+            holder.tvActiveStatus.setText(activeStatus);
+        } else {
+            holder.tvActiveStatus.setText("N/A");
+        }
+        
+        // Set Create Date
+        holder.tvCreateDate.setText(hearing.getCreateDate());
+        
+        // Set Hearing Scheduled Date
+        holder.tvHearingScheduledDate.setText(hearing.getHearingScheduleDate());
+        
+        // Set Fine Imposed
+        String fineImposed = hearing.getFineImposed();
+        if (!TextUtils.isEmpty(fineImposed) && !"N/A".equals(fineImposed)) {
+            holder.tvfineimposed.setText(fineImposed);
+        } else {
+            holder.tvfineimposed.setText("Not specified");
+        }
+        
+        // Set Committees
+        String committees = hearing.getCommittees();
+        if (!TextUtils.isEmpty(committees) && !"N/A".equals(committees)) {
+            holder.tvCommittees.setText(committees);
+        } else {
+            holder.tvCommittees.setText("Not specified");
+        }
+        
+        // Set Comments
+        String comments = hearing.getComments();
+        if (!TextUtils.isEmpty(comments) && !"No comments available".equals(comments)) {
+            holder.tvComments.setText(comments);
+        } else {
+            holder.tvComments.setText("No comments available");
+        }
     }
 
     @Override
@@ -45,12 +126,14 @@ public class HearingAdapter extends RecyclerView.Adapter<HearingAdapter.HearingV
     }
 
     public class HearingViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvDistrict, tvPHCQuackSealedFileNo, tvActiveStatus, tvCaseFileId, tvComments, tvCommittees, tvHearingStatusDesc, tvOutletAddress, tvOutletName, tvCreateDate, tvHearingScheduledDate, tvfineimposed, tvFinalid;
+        private TextView tvDistrict, tvActiveStatus, tvCaseFileId, tvComments, tvCommittees, 
+                         tvHearingStatusDesc, tvOutletAddress, tvOutletName, tvCreateDate, 
+                         tvHearingScheduledDate, tvfineimposed, tvFinalid;
 
         public HearingViewHolder(@NonNull View itemView) {
             super(itemView);
+            tvFinalid = itemView.findViewById(R.id.tvFinalid);
             tvDistrict = itemView.findViewById(R.id.tvDistrict);
-            //tvPHCQuackSealedFileNo = itemView.findViewById(R.id.tvPHCQuackSealedFileNo);
             tvActiveStatus = itemView.findViewById(R.id.tvActiveStatus);
             tvCaseFileId = itemView.findViewById(R.id.tvCaseFileId);
             tvComments = itemView.findViewById(R.id.tvComments);
@@ -61,25 +144,7 @@ public class HearingAdapter extends RecyclerView.Adapter<HearingAdapter.HearingV
             tvCreateDate = itemView.findViewById(R.id.tvCreateDate);
             tvHearingScheduledDate = itemView.findViewById(R.id.tvHearingScheduledDate);
             tvfineimposed = itemView.findViewById(R.id.tvfineimposed);
-            tvFinalid = itemView.findViewById(R.id.tvFinalid);
         }
-
-        public void bind(Hearing hearing) {
-            tvDistrict.setText("District: " + hearing.getDistrict());
-           // tvPHCQuackSealedFileNo.setText("File #: " + hearing.getPhcQuackSealedFileNo());
-            tvActiveStatus.setText("Status: " + hearing.getActiveStatus());
-            tvCaseFileId.setText("File ID: " + hearing.getCaseFileId());
-            tvComments.setText("Comments: " + hearing.getComments());
-            tvCommittees.setText("Committee: " + hearing.getCommittees());
-            tvHearingStatusDesc.setText("Hearing Status: " + hearing.getHearingStatusDesc());
-            tvOutletAddress.setText("Outlet Address: " + hearing.getOutletAddress());
-            tvOutletName.setText("Outlet Name: " + hearing.getOutletName());
-            tvCreateDate.setText("Created Date: " + hearing.getCreateDate());
-            tvHearingScheduledDate.setText("Schedule Date: " + hearing.getHearingScheduleDate());
-            tvfineimposed.setText("Fine Imposed: " + hearing.getFineImposed());
-            tvFinalid.setText("Final Id: " + hearing.getFinalId());
-        }
-
     }
 }
 

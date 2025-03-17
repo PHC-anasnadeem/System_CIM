@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.phc.cim.Activities.Common.NotificationActivity;
 import com.phc.cim.R;
+import com.phc.cim.BuildConfig;
 
 import java.util.List;
 
@@ -146,11 +147,25 @@ public class NotificationListActivity extends AppCompatActivity implements
     }
     
     /**
-     * Show error message
+     * Show error state
      * @param error Error message
      */
     private void showError(String error) {
-        Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
+        // Show a more user-friendly message
+        String userMessage = "Unable to load notifications";
+        
+        // Only show technical details in debug builds or if it's a specific error
+        if (BuildConfig.DEBUG || error.contains("User ID")) {
+            userMessage += ": " + error;
+        }
+        
+        Toast.makeText(this, userMessage, Toast.LENGTH_SHORT).show();
+        
+        // Show empty state with a message
+        emptyView.setText("Unable to load notifications.\nPull down to refresh.");
+        emptyView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        
         Log.e(TAG, "Error loading notifications: " + error);
     }
     

@@ -141,41 +141,53 @@ public class NotificationBackgroundService extends Service {
     private void fetchNotifications() {
         Log.d(TAG, "Fetching notifications");
         
-        // Get user ID and token from SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("PHCPrefs", MODE_PRIVATE);
-        int userId = prefs.getInt("userId", -1);
-        String token = prefs.getString("authToken", "");
+        // Get user ID from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
+        String userIdStr = prefs.getString("UserID", null);
         
-        if (userId == -1 || token.isEmpty()) {
-            Log.e(TAG, "User ID or token not found");
+        if (userIdStr == null || userIdStr.isEmpty()) {
+            Log.e(TAG, "User ID not found");
             return;
         }
         
-        apiClient.getNotifications(userId, token, new NotificationApiClient.NotificationResponseListener() {
-            @Override
-            public void onResponse(List<NotificationModel> notifications) {
-                Log.d(TAG, "Received " + notifications.size() + " notifications");
-                
-                // Check for new notifications
-                List<NotificationModel> newNotifications = findNewNotifications(notifications);
-                
-                // Update last notifications
-                lastNotifications = notifications;
-                
-                // Show notifications for new items
-                for (NotificationModel notification : newNotifications) {
-                    showNotification(notification);
+        try {
+            // Convert userId to integer since the API expects an integer
+            apiClient.getNotifications(userIdStr, new NotificationApiClient.NotificationResponseListener() {
+                @Override
+                public void onResponse(List<NotificationModel> notifications) {
+                    if (notifications == null) {
+                        Log.w(TAG, "Received null notifications list");
+                        return;
+                    }
+                    
+                    Log.d(TAG, "Received " + notifications.size() + " notifications");
+                    
+                    // Check for new notifications
+                    List<NotificationModel> newNotifications = findNewNotifications(notifications);
+                    
+                    // Update last notifications
+                    lastNotifications = notifications;
+                    
+                    // Show notifications for new items
+                    for (NotificationModel notification : newNotifications) {
+                        showNotification(notification);
+                    }
+                    
+                    // Update notification count in FilterActivity
+                    updateNotificationCount(notifications.size());
                 }
                 
-                // Update notification count in FilterActivity
-                updateNotificationCount(notifications.size());
-            }
-            
-            @Override
-            public void onError(String error) {
-                Log.e(TAG, "Error fetching notifications: " + error);
-            }
-        });
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "Error fetching notifications: " + error);
+                    // Don't update UI or show error notifications to the user
+                    // Just log the error and continue with the service
+                }
+            });
+        } catch (Exception e) {
+            // Catch any exceptions to prevent service from crashing
+            Log.e(TAG, "Exception while fetching notifications: " + e.getMessage(), e);
+        }
     }
     
     /**

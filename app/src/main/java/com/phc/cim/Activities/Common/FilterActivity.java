@@ -1555,6 +1555,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
 
         // refresh toolbar menu
         invalidateOptionsMenu();
+
     }
 
 

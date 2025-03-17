@@ -81,18 +81,21 @@
             android:exported="false" />
         <activity
             android:name=".Activities.Common.HearingStatusActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.Common.NotificationActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.Common.DesealListing"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.Common.QuackActivity"
-            android:exported="false" /> <!-- android:networkSecurityConfig="network_security_config.xml" -->
-        <!-- tools:targetApi="n"> -->
-        <activity android:name=".Extra.FTPActivity" />
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Extra.FTPActivity" />
 
         <provider
             android:name="com.activeandroid.content.ContentProvider"
@@ -150,7 +153,7 @@
             android:label="@string/title_activity_tab"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="LockedOrientationActivity" /> <!-- android:screenOrientation="portrait" -->
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".Activities.Common.FilterActivity"
             android:exported="true"
@@ -159,13 +162,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".Activities.Inspection.InspectionFilterActivity"
@@ -209,6 +205,7 @@
             android:name=".Activities.Common.Login_Activity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity" />
         <activity
@@ -232,6 +229,7 @@
             android:name=".Activities.Common.ChangePasswordActivity"
             android:label="@string/nav_reset_password"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".Others.Setting"
