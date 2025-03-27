@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Looper;
 import android.util.Log;
@@ -43,6 +44,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ReportQuackActivity extends AppCompatActivity {
 
@@ -114,7 +116,14 @@ public class ReportQuackActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newquack);
         context = this;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+        // Initialize and set up the toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        
         dataManager = new DataManager(context);
         gps = new CurrentLocation(this);
         //refreshbtn = (ImageButton) findViewById(R.id.btn_refresh);

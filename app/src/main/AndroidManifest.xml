@@ -78,7 +78,8 @@
         
         <activity
             android:name=".Activities.Common.RegistrationStatus"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.Common.HearingStatusActivity"
             android:exported="false"
@@ -194,6 +195,7 @@
         <activity
             android:name=".Activities.Common.ReportQuackActivity"
             android:label="@string/title_report_quack"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

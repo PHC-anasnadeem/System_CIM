@@ -28,8 +28,8 @@ import java.util.Map;
  */
 public class NotificationApiClient {
     private static final String TAG = "NotificationApiClient";
-    private static final String BASE_URL = "https://www.phc.org.pk:8099/"; // PHC API URL
-    private static final String NOTIFICATIONS_ENDPOINT = "PHCCensusData.svc/GetNotifications";
+    private static final String BASE_URL = "https://www.phc.org.pk:8099/PHCCensusData.svc/"; // PHC API URL
+    private static final String NOTIFICATIONS_ENDPOINT = "GetNotifications";
     
     private RequestQueue requestQueue;
     private Context context;

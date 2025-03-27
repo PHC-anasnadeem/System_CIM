@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 
 
 public class ChangePasswordActivity extends AppCompatActivity {
@@ -45,11 +47,17 @@ public class ChangePasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.changepassword);
         context = this;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+        // Initialize and set up the toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-          oldPass = (EditText) findViewById(R.id.old_password);
-          newPass = (EditText) findViewById(R.id.new_password);
-          confirmPass = (EditText) findViewById(R.id.confirm_password);
+        oldPass = (EditText) findViewById(R.id.old_password);
+        newPass = (EditText) findViewById(R.id.new_password);
+        confirmPass = (EditText) findViewById(R.id.confirm_password);
 
         pDialog = new ProgressDialog(this);
 

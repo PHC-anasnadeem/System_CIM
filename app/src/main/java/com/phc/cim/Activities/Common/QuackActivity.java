@@ -1,6 +1,7 @@
 package com.phc.cim.Activities.Common;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -42,6 +43,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class QuackActivity extends AppCompatActivity {
 
@@ -112,7 +114,14 @@ public class QuackActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quack);
 
         context = this;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+        // Initialize and set up the toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        
         dataManager = new DataManager(context);
         gps = new CurrentLocation(this);
 
