@@ -107,13 +107,14 @@ public class NotificationApiClient {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
+                headers.put("Cache-Control", "public, max-age=300"); // Cache for 5 minutes
                 return headers;
             }
         };
 
         // ⬇️ SET RETRY POLICY HERE
         request.setRetryPolicy(new com.android.volley.DefaultRetryPolicy(
-                30000, // timeout in milliseconds
+                10000, // timeout in milliseconds
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
