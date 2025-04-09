@@ -318,6 +318,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Service Provider CNIC"
+                    android:maxLength="13"
                     android:inputType="number"
                     android:textColor="#000000" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -335,7 +336,9 @@
                     android:layout_height="wrap_content"
                     android:hint="Service Provider Mobile"
                     android:inputType="phone"
-                    android:textColor="#000000" />
+                    android:maxLength="11"
+                    android:textColor="#000000"
+                    android:importantForAccessibility="yes"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--  Registration Y/N Label -->

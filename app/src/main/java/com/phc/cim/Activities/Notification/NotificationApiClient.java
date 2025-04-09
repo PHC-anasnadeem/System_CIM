@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -109,6 +110,13 @@ public class NotificationApiClient {
                 return headers;
             }
         };
+
+        // ⬇️ SET RETRY POLICY HERE
+        request.setRetryPolicy(new com.android.volley.DefaultRetryPolicy(
+                30000, // timeout in milliseconds
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
         
         // Set retry policy to avoid long timeouts
         request.setShouldRetryServerErrors(false);

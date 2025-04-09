@@ -82,12 +82,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         NotificationModel notification = notifications.get(position);
         
-        holder.titleTextView.setText(notification.getTitle());
+        holder.titleTextView.setText(notification.getOutletName());
         holder.messageTextView.setText(notification.getMessage());
         
         // Format the date as a relative time span (e.g., "2 hours ago")
-        if (notification.getCreatedDate() != null) {
-            String timeAgo = getRelativeTimeSpan(notification.getCreatedDate());
+        if (notification.getInsertedDate() != null) {
+//            String timeAgo = getRelativeTimeSpan(notification.getInsertedDate());
+            String timeAgo = notification.getInsertedDate();
             holder.dateTextView.setText(timeAgo);
         } else {
             holder.dateTextView.setText("");

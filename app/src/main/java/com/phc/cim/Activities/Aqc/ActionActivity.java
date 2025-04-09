@@ -2494,7 +2494,9 @@ public class ActionActivity extends AppCompatActivity {
 
     private void fetchImages(String final_id) {
         String CensusBaseUrl=context.getResources().getString(R.string.CensusBaseUrl);
-        String url = "https://www.phc.org.pk:8099/PHCCensusData.svc/GetCensusAttachmentList?FinalID=" + final_id;
+        String baseurl=context.getResources().getString(R.string.baseurl);
+//        String url = "https://www.phc.org.pk:8099/PHCCensusData.svc/GetCensusAttachmentList?FinalID=" + final_id;
+        String url= baseurl+ "GetCensusAttachmentList?FinalID=" + final_id;
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {

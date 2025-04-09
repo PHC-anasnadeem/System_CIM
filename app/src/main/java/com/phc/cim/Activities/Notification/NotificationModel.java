@@ -1,76 +1,167 @@
 package com.phc.cim.Activities.Notification;
 
-import java.util.Date;
-
 /**
  * Model class for notifications fetched from C# API
  */
 public class NotificationModel {
-    private int id;
-    private String title;
-    private String message;
-    private String type;
-    private Date createdDate;
+    private String CaseFileID;
+    private String CategoryType;
+    private String DistrictName;
+    private String EvidenceMaterial;
+    private int FinalID;
+    private String InsertedDate;
+    private String Message;
+    private int NotificationId;
+    private String OutletAddress;
+    private String OutletName;
+    private String Revisit_Assign_Date;
+    private String SealDateTime;
+    private String SealType;
+    private String SealedBy;
+    private String SummonIssueDate;
     private boolean isRead;
-    private String targetUrl;
-    private String imageUrl;
-    private int userId;
 
     public NotificationModel() {
     }
 
-    public NotificationModel(int id, String title, String message, String type, Date createdDate, boolean isRead, String targetUrl, String imageUrl, int userId) {
-        this.id = id;
-        this.title = title;
-        this.message = message;
-        this.type = type;
-        this.createdDate = createdDate;
+    public NotificationModel(String caseFileID, String categoryType, String districtName, String evidenceMaterial, int finalID, String insertedDate, String message, int notificationId, String outletAddress, String outletName, String revisit_Assign_Date, String sealDateTime, String sealType, String sealedBy, String summonIssueDate, boolean isRead) {
+        CaseFileID = caseFileID;
+        CategoryType = categoryType;
+        DistrictName = districtName;
+        EvidenceMaterial = evidenceMaterial;
+        FinalID = finalID;
+        InsertedDate = insertedDate;
+        Message = message;
+        NotificationId = notificationId;
+        OutletAddress = outletAddress;
+        OutletName = outletName;
+        Revisit_Assign_Date = revisit_Assign_Date;
+        SealDateTime = sealDateTime;
+        SealType = sealType;
+        SealedBy = sealedBy;
+        SummonIssueDate = summonIssueDate;
         this.isRead = isRead;
-        this.targetUrl = targetUrl;
-        this.imageUrl = imageUrl;
-        this.userId = userId;
     }
 
-    public int getId() {
-        return id;
+    public String getCaseFileID() {
+        return CaseFileID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCaseFileID(String caseFileID) {
+        CaseFileID = caseFileID;
     }
 
-    public String getTitle() {
-        return title;
+    public String getCategoryType() {
+        return CategoryType;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCategoryType(String categoryType) {
+        CategoryType = categoryType;
+    }
+
+    public String getDistrictName() {
+        return DistrictName;
+    }
+
+    public void setDistrictName(String districtName) {
+        DistrictName = districtName;
+    }
+
+    public String getEvidenceMaterial() {
+        return EvidenceMaterial;
+    }
+
+    public void setEvidenceMaterial(String evidenceMaterial) {
+        EvidenceMaterial = evidenceMaterial;
+    }
+
+    public int getFinalID() {
+        return FinalID;
+    }
+
+    public void setFinalID(int finalID) {
+        FinalID = finalID;
+    }
+
+    public String getInsertedDate() {
+        return InsertedDate;
+    }
+
+    public void setInsertedDate(String insertedDate) {
+        InsertedDate = insertedDate;
     }
 
     public String getMessage() {
-        return message;
+        return Message;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        Message = message;
     }
 
-    public String getType() {
-        return type;
+    public int getNotificationId() {
+        return NotificationId;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setNotificationId(int notificationId) {
+        NotificationId = notificationId;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public String getOutletAddress() {
+        return OutletAddress;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setOutletAddress(String outletAddress) {
+        OutletAddress = outletAddress;
     }
 
+    public String getOutletName() {
+        return OutletName;
+    }
+
+    public void setOutletName(String outletName) {
+        OutletName = outletName;
+    }
+
+    public String getRevisit_Assign_Date() {
+        return Revisit_Assign_Date;
+    }
+
+    public void setRevisit_Assign_Date(String revisit_Assign_Date) {
+        Revisit_Assign_Date = revisit_Assign_Date;
+    }
+
+    public String getSealDateTime() {
+        return SealDateTime;
+    }
+
+    public void setSealDateTime(String sealDateTime) {
+        SealDateTime = sealDateTime;
+    }
+
+    public String getSealType() {
+        return SealType;
+    }
+
+    public void setSealType(String sealType) {
+        SealType = sealType;
+    }
+
+    public String getSealedBy() {
+        return SealedBy;
+    }
+
+    public void setSealedBy(String sealedBy) {
+        SealedBy = sealedBy;
+    }
+
+    public String getSummonIssueDate() {
+        return SummonIssueDate;
+    }
+
+    public void setSummonIssueDate(String summonIssueDate) {
+        SummonIssueDate = summonIssueDate;
+    }
     public boolean isRead() {
         return isRead;
     }
@@ -78,28 +169,4 @@ public class NotificationModel {
     public void setRead(boolean read) {
         isRead = read;
     }
-
-    public String getTargetUrl() {
-        return targetUrl;
-    }
-
-    public void setTargetUrl(String targetUrl) {
-        this.targetUrl = targetUrl;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-} 
+}

@@ -25,6 +25,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -828,6 +830,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         Button markasdone = (Button) findViewById(R.id.btn_submit);
         markasdone.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
+                boolean isValid = true;
                 Location loc1 = new Location("");
                 loc1.setLatitude(latitude);
                 loc1.setLongitude(longitude);
@@ -842,8 +845,25 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                 AddressText = AddressEdit.getText().toString();
                 HCSP_nameText = HCSP_nameEdit.getText().toString();
                 HCSP_SOText = HCSP_SOEdit.getText().toString();
+
                 CNIC_Text = CNIC_Edit.getText().toString();
+                String cleanedCnic = HCSP_ContactText.replaceAll("[^\\d]", "");
+                if (cleanedCnic.length() != 13) {
+                    CNIC_Edit.setError("CNIC must be exactly 13 digits (without dashes)");
+                    isValid = false;
+                } else {
+                    CNIC_Edit.setError(null); // Clear error if valid
+                }
+
                 HCSP_ContactText = HCSP_ContactEdit.getText().toString();
+                String cleanedMobile = HCSP_ContactText.replaceAll("[^\\d]", "");
+                if (cleanedMobile.length() != 11) {
+                    HCSP_ContactEdit.setError("Mobile number is required and must be 11 digits");
+                    isValid = false;
+                } else {
+                    HCSP_ContactEdit.setError(null); // Clear error if valid
+                }
+
                 Reg_NoText = Reg_NoEdit.getText().toString();
                 coun_NoText = coun_NoEdit.getText().toString();
 

@@ -206,7 +206,7 @@ public class NotificationBackgroundService extends Service {
             boolean isNew = true;
             
             for (NotificationModel lastNotification : lastNotifications) {
-                if (notification.getId() == lastNotification.getId()) {
+                if (notification.getNotificationId() == lastNotification.getNotificationId()) {
                     isNew = false;
                     break;
                 }
@@ -225,10 +225,10 @@ public class NotificationBackgroundService extends Service {
      */
     private void showNotification(NotificationModel notification) {
         Intent intent = new Intent(this, NotificationActivity.class);
-        intent.putExtra("notificationId", notification.getId());
+        intent.putExtra("notificationId", notification.getNotificationId());
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
-                notification.getId(),
+                notification.getNotificationId(),
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0)
         );
@@ -238,14 +238,14 @@ public class NotificationBackgroundService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.phclogo1)
                 .setLargeIcon(largeIcon)
-                .setContentTitle(notification.getTitle())
+                .setContentTitle(notification.getOutletName())
                 .setContentText(notification.getMessage())
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notification.getMessage()))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
         
-        notificationManager.notify(notification.getId(), builder.build());
+        notificationManager.notify(notification.getNotificationId(), builder.build());
     }
     
     /**

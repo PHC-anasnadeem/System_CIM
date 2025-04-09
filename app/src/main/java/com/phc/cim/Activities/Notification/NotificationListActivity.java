@@ -176,7 +176,7 @@ public class NotificationListActivity extends AppCompatActivity implements
     @Override
     public void onNotificationClick(NotificationModel notification) {
         // Mark notification as read
-        notificationManager.markNotificationAsRead(notification.getId(), new NotificationApiClient.NotificationResponseListener() {
+        notificationManager.markNotificationAsRead(notification.getNotificationId(), new NotificationApiClient.NotificationResponseListener() {
             @Override
             public void onResponse(List<NotificationModel> notifications) {
                 // Update notification in the list
@@ -202,10 +202,10 @@ public class NotificationListActivity extends AppCompatActivity implements
      */
     private void openNotificationDetail(NotificationModel notification) {
         Intent intent = new Intent(this, NotificationActivity.class);
-        intent.putExtra("notificationId", notification.getId());
-        intent.putExtra("notificationTitle", notification.getTitle());
+        intent.putExtra("notificationId", notification.getNotificationId());
+        intent.putExtra("notificationTitle", notification.getOutletName());
         intent.putExtra("notificationMessage", notification.getMessage());
-        intent.putExtra("notificationType", notification.getType());
+        intent.putExtra("notificationType", notification.getDistrictName());
         startActivity(intent);
     }
     
