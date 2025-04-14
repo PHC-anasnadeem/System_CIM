@@ -37,7 +37,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         NotificationItem notification = notificationList.get(position);
         holder.outletNameTextView.setText(notification.getOutletName());
-        holder.districtTextView.setText(notification.getDistrict());
+        holder.districtTextView.setText(notification.getDistrictName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,21 +71,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         builder.setView(view);
 
         // Set notification details in the dialog
-        ((TextView) view.findViewById(R.id.detailTitleTextView)).setText(notification.getTitle());
         ((TextView) view.findViewById(R.id.detailOutletNameTextView)).setText(notification.getOutletName());
-        ((TextView) view.findViewById(R.id.detailComplainantAddressTextView)).setText(notification.getComplainantAddress());
-        ((TextView) view.findViewById(R.id.detailComplaintDateTextView)).setText(notification.getComplaintDate());
-        ((TextView) view.findViewById(R.id.detailComplainantContactNoTextView)).setText(notification.getComplainantContactNo());
-        ((TextView) view.findViewById(R.id.detailAqcComplaintsSourceDescTextView)).setText(notification.getAQC_ComplaintsSource_Desc());
-        ((TextView) view.findViewById(R.id.detailDistrictTextView)).setText(notification.getDistrict());
-        ((TextView) view.findViewById(R.id.detailTehsilDescTextView)).setText(notification.getTehsilDesc());
-        ((TextView) view.findViewById(R.id.detailPhcRegistrationNoTextView)).setText(notification.getPHC_RegistrationNo());
-        ((TextView) view.findViewById(R.id.detailCommentsTextView)).setText(notification.getComments());
+        ((TextView) view.findViewById(R.id.detailComplainantAddressTextView)).setText(notification.getOutletAddress());
+        ((TextView) view.findViewById(R.id.detailComplaintDateTextView)).setText(notification.getInsertedDate());
+        ((TextView) view.findViewById(R.id.detailDistrictTextView)).setText(notification.getDistrictName());
+        ((TextView) view.findViewById(R.id.detailPhcRegistrationNoTextView)).setText(notification.getCaseFileID());
         ((TextView) view.findViewById(R.id.detailFinalIdTextView)).setText(notification.getFinalID());
-        ((TextView) view.findViewById(R.id.detailTypeDescTextView)).setText(notification.getTypeDesc());
-        ((TextView) view.findViewById(R.id.detailIsRegWithPHCTextView)).setText(notification.getIsRegWithPHC());
-        ((TextView) view.findViewById(R.id.detailUserNameTextView)).setText(notification.getUser_Name());
-        ((TextView) view.findViewById(R.id.detailLastUpdatedByTextView)).setText(notification.getLastUpdatedBy());
+        ((TextView) view.findViewById(R.id.SealType)).setText(notification.getSealType());
+        ((TextView) view.findViewById(R.id.CategoryType)).setText(notification.getCategoryType());
+        ((TextView) view.findViewById(R.id.SummonIssueDate)).setText(notification.getSummonIssueDate());
+        ((TextView) view.findViewById(R.id.sealedBy)).setText(notification.getSealedBy());
 
         builder.setPositiveButton("OK", null);
 

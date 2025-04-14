@@ -20,11 +20,13 @@ public class NotificationModel {
     private String SealedBy;
     private String SummonIssueDate;
     private boolean isRead;
+    private String Quack_ContactNumber;
+    private String Quack_CNIC;
 
     public NotificationModel() {
     }
 
-    public NotificationModel(String caseFileID, String categoryType, String districtName, String evidenceMaterial, int finalID, String insertedDate, String message, int notificationId, String outletAddress, String outletName, String revisit_Assign_Date, String sealDateTime, String sealType, String sealedBy, String summonIssueDate, boolean isRead) {
+    public NotificationModel(String caseFileID, String categoryType, String districtName, String evidenceMaterial, int finalID, String insertedDate, String message, int notificationId, String outletAddress, String outletName, String revisit_Assign_Date, String sealDateTime, String sealType, String sealedBy, String summonIssueDate, boolean isRead, String quack_ContactNumber, String quack_CNIC) {
         CaseFileID = caseFileID;
         CategoryType = categoryType;
         DistrictName = districtName;
@@ -41,6 +43,8 @@ public class NotificationModel {
         SealedBy = sealedBy;
         SummonIssueDate = summonIssueDate;
         this.isRead = isRead;
+        Quack_ContactNumber = quack_ContactNumber;
+        Quack_CNIC = quack_CNIC;
     }
 
     public String getCaseFileID() {
@@ -168,5 +172,21 @@ public class NotificationModel {
 
     public void setRead(boolean read) {
         isRead = read;
+    }
+
+    public String getQuack_ContactNumber() {
+        return Quack_ContactNumber;
+    }
+
+    public void setQuack_ContactNumber(String quack_ContactNumber) {
+        Quack_ContactNumber = quack_ContactNumber;
+    }
+
+    public String getQuack_CNIC() {
+        return Quack_CNIC;
+    }
+
+    public void setQuack_CNIC(String quack_CNIC) {
+        Quack_CNIC = quack_CNIC;
     }
 }

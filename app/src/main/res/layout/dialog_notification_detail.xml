@@ -90,28 +90,28 @@
             android:textColor="@android:color/darker_gray"/>
 
         <TextView
-            android:id="@+id/detailTypeDescTextView"
+            android:id="@+id/SealType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"/>
 
         <TextView
-            android:id="@+id/detailIsRegWithPHCTextView"
+            android:id="@+id/CategoryType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"/>
 
         <TextView
-            android:id="@+id/detailUserNameTextView"
+            android:id="@+id/SummonIssueDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"/>
 
         <TextView
-            android:id="@+id/detailLastUpdatedByTextView"
+            android:id="@+id/sealedBy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"

@@ -1,5 +1,6 @@
 package com.phc.cim.Activities.Notification;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.phc.cim.Activities.Common.NotificationActivity;
 import com.phc.cim.R;
 import com.phc.cim.BuildConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +41,10 @@ public class NotificationListActivity extends AppCompatActivity implements
     private ProgressBar progressBar;
     
     private NotificationManager notificationManager;
-    
+    private List<NotificationModel> notificationList = new ArrayList<>();
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +61,10 @@ public class NotificationListActivity extends AppCompatActivity implements
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         emptyView = findViewById(R.id.empty_view);
         progressBar = findViewById(R.id.progress_bar);
-        
+
+//        notificationManager = NotificationManager.getInstance(this);
+
+
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -77,7 +85,12 @@ public class NotificationListActivity extends AppCompatActivity implements
         notificationManager = NotificationManager.getInstance(this);
         
         // Load notifications
-        loadNotifications();
+        if (notificationList != null && !notificationList.isEmpty()) {
+            showNotifications(notificationList);
+        } else {
+            loadNotifications(); // <-- your method to fetch notifications
+        }
+
     }
     
     @Override
@@ -91,6 +104,9 @@ public class NotificationListActivity extends AppCompatActivity implements
      * Load notifications from the API
      */
     private void loadNotifications() {
+
+        progressBar.setVisibility(View.VISIBLE);
+
         showLoading();
         
         notificationManager.fetchNotifications(new NotificationApiClient.NotificationResponseListener() {
@@ -100,7 +116,7 @@ public class NotificationListActivity extends AppCompatActivity implements
                 
                 if (notifications != null && !notifications.isEmpty()) {
                     adapter.setNotifications(notifications);
-                    showNotifications();
+                    showNotifications(notifications);
                 } else {
                     showEmpty();
                 }
@@ -133,11 +149,26 @@ public class NotificationListActivity extends AppCompatActivity implements
     /**
      * Show notifications
      */
-    private void showNotifications() {
+//    private void showNotifications() {
+//        recyclerView.setVisibility(View.VISIBLE);
+//        emptyView.setVisibility(View.GONE);
+//    }
+
+    private void showNotifications(List<NotificationModel> notifications) {
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
+
+        if (adapter == null) {
+            adapter = new NotificationAdapter(this, this);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+            recyclerView.setAdapter(adapter);
+        }
+        adapter.setNotifications(notifications); // <--- use your existing method
     }
-    
+
+
+
     /**
      * Show empty state
      */
@@ -215,6 +246,7 @@ public class NotificationListActivity extends AppCompatActivity implements
     @Override
     public void onRefresh() {
         loadNotifications();
+        swipeRefreshLayout.setRefreshing(false);
     }
     
     /**
