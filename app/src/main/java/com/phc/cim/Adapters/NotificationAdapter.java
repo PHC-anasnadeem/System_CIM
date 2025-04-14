@@ -73,7 +73,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         // Set notification details in the dialog
         ((TextView) view.findViewById(R.id.detailOutletNameTextView)).setText(notification.getOutletName());
         ((TextView) view.findViewById(R.id.detailComplainantAddressTextView)).setText(notification.getOutletAddress());
-        ((TextView) view.findViewById(R.id.detailComplaintDateTextView)).setText(notification.getInsertedDate());
         ((TextView) view.findViewById(R.id.detailDistrictTextView)).setText(notification.getDistrictName());
         ((TextView) view.findViewById(R.id.detailPhcRegistrationNoTextView)).setText(notification.getCaseFileID());
         ((TextView) view.findViewById(R.id.detailFinalIdTextView)).setText(notification.getFinalID());

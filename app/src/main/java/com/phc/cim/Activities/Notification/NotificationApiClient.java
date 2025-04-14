@@ -127,10 +127,10 @@ public class NotificationApiClient {
     
     /**
      * Mark a notification as read
-     * @param notificationId The notification ID to mark as read
+     * @param NotificationId The notification ID to mark as read
      * @param listener Response listener
      */
-    public void markNotificationAsRead(int notificationId, final NotificationResponseListener listener) {
+    public void markNotificationAsRead(int NotificationId, final NotificationResponseListener listener) {
         // For now, we'll just return an empty list since the actual endpoint is not provided
         // You can update this with the correct endpoint when available
         listener.onResponse(new ArrayList<>());

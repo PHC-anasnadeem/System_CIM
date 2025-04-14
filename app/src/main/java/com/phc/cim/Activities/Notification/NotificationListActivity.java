@@ -1,6 +1,8 @@
 package com.phc.cim.Activities.Notification;
 
+import android.app.AlertDialog;
 import android.app.Notification;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -220,7 +222,7 @@ public class NotificationListActivity extends AppCompatActivity implements
             
             @Override
             public void onError(String error) {
-                Log.e(TAG, "Error marking notification as read: " + error);
+//                Log.e(TAG, "Error marking notification as read: " + error);
                 // Still open notification detail even if marking as read fails
                 openNotificationDetail(notification);
             }
@@ -231,15 +233,53 @@ public class NotificationListActivity extends AppCompatActivity implements
      * Open notification detail
      * @param notification Notification to open
      */
+//    private void openNotificationDetail(NotificationModel notification) {
+//        Intent intent = new Intent(this, NotificationActivity.class);
+//        intent.putExtra("notificationId", notification.getNotificationId());
+//        intent.putExtra("notificationTitle", notification.getOutletName());
+//        intent.putExtra("notificationMessage", notification.getMessage());
+//        intent.putExtra("notificationType", notification.getDistrictName());
+//        startActivity(intent);
+//    }
+
     private void openNotificationDetail(NotificationModel notification) {
-        Intent intent = new Intent(this, NotificationActivity.class);
-        intent.putExtra("notificationId", notification.getNotificationId());
-        intent.putExtra("notificationTitle", notification.getOutletName());
-        intent.putExtra("notificationMessage", notification.getMessage());
-        intent.putExtra("notificationType", notification.getDistrictName());
-        startActivity(intent);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_notification_detail, null);
+
+        TextView titleTextView = dialogView.findViewById(R.id.detailOutletNameTextView);
+        TextView addressTextView = dialogView.findViewById(R.id.detailComplainantAddressTextView);
+        TextView contactTextView = dialogView.findViewById(R.id.detailComplainantContactNoTextView);
+        TextView DistrictTextView = dialogView.findViewById(R.id.detailDistrictTextView);
+        TextView RegTextView = dialogView.findViewById(R.id.detailPhcRegistrationNoTextView);
+        TextView FinalIDTextView = dialogView.findViewById(R.id.detailFinalIdTextView);
+        TextView SealTypeTextView = dialogView.findViewById(R.id.SealType);
+        TextView CategoryTypeTextView = dialogView.findViewById(R.id.CategoryType);
+        TextView SummonIssueDateTextView = dialogView.findViewById(R.id.SummonIssueDate);
+        TextView sealedByTextView = dialogView.findViewById(R.id.sealedBy);
+
+        titleTextView.setText("Outlet Name: " +notification.getOutletName());
+        addressTextView.setText("Address: " +notification.getOutletAddress());
+        contactTextView.setText("Contact #: " +notification.getQuack_ContactNumber());
+        DistrictTextView.setText("District: " +notification.getDistrictName());
+        RegTextView.setText("Case File #: " +notification.getCaseFileID());
+        FinalIDTextView.setText("Final ID: " +notification.getFinalID());
+        SealTypeTextView.setText("Seal Type: " +notification.getSealType());
+        CategoryTypeTextView.setText("Category Type: " +notification.getCategoryType());
+        SummonIssueDateTextView.setText("Suumon Issue Date: " +notification.getSummonIssueDate());
+        sealedByTextView.setText("Sealed By: " +notification.getSealedBy());
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builder.show();
     }
-    
+
     /**
      * Handle swipe to refresh
      */
