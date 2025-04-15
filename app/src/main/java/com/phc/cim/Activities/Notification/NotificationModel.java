@@ -22,11 +22,12 @@ public class NotificationModel {
     private boolean isRead;
     private String Quack_ContactNumber;
     private String Quack_CNIC;
+    private String Comments;
 
     public NotificationModel() {
     }
 
-    public NotificationModel(String caseFileID, String categoryType, String districtName, String evidenceMaterial, int finalID, String insertedDate, String message, int notificationId, String outletAddress, String outletName, String revisit_Assign_Date, String sealDateTime, String sealType, String sealedBy, String summonIssueDate, boolean isRead, String quack_ContactNumber, String quack_CNIC) {
+    public NotificationModel(String caseFileID, String categoryType, String districtName, String evidenceMaterial, int finalID, String insertedDate, String message, int notificationId, String outletAddress, String outletName, String revisit_Assign_Date, String sealDateTime, String sealType, String sealedBy, String summonIssueDate, boolean isRead, String quack_ContactNumber, String quack_CNIC, String comments) {
         CaseFileID = caseFileID;
         CategoryType = categoryType;
         DistrictName = districtName;
@@ -45,6 +46,7 @@ public class NotificationModel {
         this.isRead = isRead;
         Quack_ContactNumber = quack_ContactNumber;
         Quack_CNIC = quack_CNIC;
+        Comments = comments;
     }
 
     public String getCaseFileID() {
@@ -188,5 +190,13 @@ public class NotificationModel {
 
     public void setQuack_CNIC(String quack_CNIC) {
         Quack_CNIC = quack_CNIC;
+    }
+
+    public String getComments() {
+        return Comments;
+    }
+
+    public void setComments(String comments) {
+        Comments = comments;
     }
 }

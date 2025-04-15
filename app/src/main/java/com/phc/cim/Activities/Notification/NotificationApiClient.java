@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.phc.cim.R;
 
 import org.json.JSONArray;
 
@@ -29,7 +30,6 @@ import java.util.Map;
  */
 public class NotificationApiClient {
     private static final String TAG = "NotificationApiClient";
-    private static final String BASE_URL = "https://www.phc.org.pk:8099/PHCCensusData.svc/"; // PHC API URL
     private static final String NOTIFICATIONS_ENDPOINT = "GetNotifications";
     
     private RequestQueue requestQueue;
@@ -55,6 +55,7 @@ public class NotificationApiClient {
      * @param listener Response listener
      */
     public void getNotifications(String userId, final NotificationResponseListener listener) {
+        String BASE_URL = context.getResources().getString(R.string.baseurl);
         String url = BASE_URL + NOTIFICATIONS_ENDPOINT + "?UserId=" + userId;
         
         JsonArrayRequest request = new JsonArrayRequest(

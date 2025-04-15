@@ -255,17 +255,19 @@ public class NotificationListActivity extends AppCompatActivity implements
         TextView CategoryTypeTextView = dialogView.findViewById(R.id.CategoryType);
         TextView SummonIssueDateTextView = dialogView.findViewById(R.id.SummonIssueDate);
         TextView sealedByTextView = dialogView.findViewById(R.id.sealedBy);
+        TextView CommentsTextView = dialogView.findViewById(R.id.Comments);
 
         titleTextView.setText("Outlet Name: " +notification.getOutletName());
         addressTextView.setText("Address: " +notification.getOutletAddress());
         contactTextView.setText("Contact #: " +notification.getQuack_ContactNumber());
         DistrictTextView.setText("District: " +notification.getDistrictName());
         RegTextView.setText("Case File #: " +notification.getCaseFileID());
-        FinalIDTextView.setText("Final ID: " +notification.getFinalID());
+        FinalIDTextView.setText("    Final ID: " +notification.getFinalID());
         SealTypeTextView.setText("Seal Type: " +notification.getSealType());
         CategoryTypeTextView.setText("Category Type: " +notification.getCategoryType());
         SummonIssueDateTextView.setText("Suumon Issue Date: " +notification.getSummonIssueDate());
         sealedByTextView.setText("Sealed By: " +notification.getSealedBy());
+        CommentsTextView.setText("Comments: " +notification.getComments());
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

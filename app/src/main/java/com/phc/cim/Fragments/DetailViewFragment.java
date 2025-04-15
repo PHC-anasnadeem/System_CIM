@@ -422,7 +422,8 @@ public class DetailViewFragment extends Fragment {
 
     private void fetchImages(String final_id) {
         String CensusBaseUrl=getContext().getResources().getString(R.string.CensusBaseUrl);
-        String url = "https://www.phc.org.pk:8099/PHCCensusData.svc/GetCensusAttachmentList?FinalID=" + final_id;
+        String BASE_URL = getContext().getResources().getString(R.string.baseurl);
+        String url = BASE_URL + "GetCensusAttachmentList?FinalID=" + final_id;
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
