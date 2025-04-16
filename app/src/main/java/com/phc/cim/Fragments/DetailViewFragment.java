@@ -421,42 +421,59 @@ public class DetailViewFragment extends Fragment {
     }
 
     private void fetchImages(String final_id) {
-        String CensusBaseUrl=getContext().getResources().getString(R.string.CensusBaseUrl);
-        String BASE_URL = getContext().getResources().getString(R.string.baseurl);
-        String url = BASE_URL + "GetCensusAttachmentList?FinalID=" + final_id;
+        try {
+            if (getContext() == null || final_id == null) {
+                Toast.makeText(getContext(), "Context or Final ID is null", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        imageUrls.clear();
+            String CensusBaseUrl = getContext().getResources().getString(R.string.CensusBaseUrl);
+            String BASE_URL = getContext().getResources().getString(R.string.baseurl);
+            String url = "https://cim.phc.org.pk:8099/PHCCensusData.svc/GetCensusAttachmentList?FinalID=" + final_id;
 
-                        try {
-                            // Loop through each item in the JSON array
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject item = response.getJSONObject(i);
-                                String filePath = item.getString("File_Path");
-                                String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
-                                String imageUrl = CensusBaseUrl + "/" + filePath;
-                                imageUrls.add(imageUrl);  // Add each image URL to the list
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            imageUrls.clear();
+
+                            try {
+                                if (response != null) {
+                                    for (int i = 0; i < response.length(); i++) {
+                                        JSONObject item = response.getJSONObject(i);
+                                        if (item != null && item.has("File_Path")) {
+                                            String filePath = item.getString("File_Path");
+                                            String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+                                            String imageUrl = CensusBaseUrl + "/" + filePath;
+                                            imageUrls.add(imageUrl);
+                                        }
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getContext(), "JSON error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
+                            imageAdapter.notifyDataSetChanged();
                         }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getContext(), "Volley error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                        imageAdapter.notifyDataSetChanged(); // Notify adapter of data change
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+            Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
 
-        // Add the request to the RequestQueue.
-        Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (getContext() != null) {
+                Toast.makeText(getContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
+
 
 
 
