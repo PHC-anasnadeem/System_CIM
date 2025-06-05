@@ -3,6 +3,7 @@ package com.phc.cim.Activities.Common;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -189,6 +190,8 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
     private DownloadManager downloadManager;
     private long downloadReference;
     private static int ACTIVITY_TIME_OUT = 5000;
+    EditText startTimeEditText, endTimeEditText;
+    String startTimeText, endTimeText;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -231,6 +234,8 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         quackloc_spinner = (Spinner) findViewById(R.id.quackloc_spinner);
         currloc_spinner = (Spinner) findViewById(R.id.curloc_spinner);
         editTextLatLng = (EditText) findViewById(R.id.editTextLatLng); //ADD editTextLatLng
+        startTimeEditText = findViewById(R.id.Start_Time);
+        endTimeEditText = findViewById(R.id.End_Time);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -326,9 +331,6 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
 
         if (LastVisitedDate != null && LastVisitedDate.equals("null")) {
             vistedtext.setText("Last updated by: " + UserName);
-
-
-
     } else if (LastVisitedDate != null) {
             String ackwardDate = LastVisitedDate;
             Calendar calendar = Calendar.getInstance();
@@ -845,10 +847,12 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                 AddressText = AddressEdit.getText().toString();
                 HCSP_nameText = HCSP_nameEdit.getText().toString();
                 HCSP_SOText = HCSP_SOEdit.getText().toString();
+                startTimeText = startTimeEditText.getText().toString();
+                endTimeText = endTimeEditText.getText().toString();
 
                 CNIC_Text = CNIC_Edit.getText().toString();
                 String cleanedCnic = HCSP_ContactText.replaceAll("[^\\d]", "");
-                if (cleanedCnic.length() != 13) {
+                if (cleanedCnic.length() != 15) {
                     CNIC_Edit.setError("CNIC must be exactly 13 digits (without dashes)");
                     isValid = false;
                 } else {
@@ -857,7 +861,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
 
                 HCSP_ContactText = HCSP_ContactEdit.getText().toString();
                 String cleanedMobile = HCSP_ContactText.replaceAll("[^\\d]", "");
-                if (cleanedMobile.length() != 11) {
+                if (cleanedMobile.length() != 12) {
                     HCSP_ContactEdit.setError("Mobile number is required and must be 11 digits");
                     isValid = false;
                 } else {
@@ -888,6 +892,14 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                 }
                 if ("Please Select".equals(currloc_text)) {
                     setSpinnerError(currloc_spinner, "Please select");
+                    count++;
+                }
+                if (startTimeText.isEmpty()) {
+                    startTimeEditText.setError("Please select start time");
+                    count++;
+                }
+                if (endTimeText.isEmpty()) {
+                    endTimeEditText.setError("Please select end time");
                     count++;
                 }
 
@@ -1119,7 +1131,25 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
             }
         });
 
+        startTimeEditText.setOnClickListener(v -> showTimePicker(startTimeEditText));
+        endTimeEditText.setOnClickListener(v -> showTimePicker(endTimeEditText));
 
+
+    }
+
+    private void showTimePicker(EditText targetEditText) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePicker = new TimePickerDialog(this,
+                (view, selectedHour, selectedMinute) -> {
+                    String formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute);
+                    targetEditText.setText(formattedTime);
+                },
+                hour, minute, true);
+
+        timePicker.show();
     }
 
     private void loadNavHeader() {
@@ -1526,7 +1556,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                 "&OrgType" + hceTypetext + "&HCSPType=" + HCSPTypeText + "&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&RegistrationNo=" + Reg_NoText +
                 "&RegistrationStatus=" + RegstatusID + "&CouncilStatus=" + counStatusID + "&CouncilNo=" + coun_NoText + "&CouncilName=" + counciltypetext + "&UpdateStatus=&UpdateSubStatus=&lat=" + latitude + "&lng=" + longitude + "&emailAddress=" + email +
                 "&Comments=" + comnt + "&final_id=" + final_id + "&NoticeIssued=0&NoticeNo=&UpdateStatusID=0&UpdateSubStatusID=0&ActionID=0&RoleID=" + RoleID +
-                "&UserLat=" + cur_latitude + "&UserLng=" + cur_longitude + "&CorrectLoc=" + currloc_ID + "&CurrentLoc=" + quacklocID + "&DistanceDiff=" + distCurrPrevInMeters;
+                "&UserLat=" + cur_latitude + "&UserLng=" + cur_longitude + "&CorrectLoc=" + currloc_ID + "&CurrentLoc=" + quacklocID + "&DistanceDiff=" + distCurrPrevInMeters + "&Start_Time=" + startTimeText + "&End_Time=" + endTimeText;
 
 
         url = url.replaceAll(" ", "%20");

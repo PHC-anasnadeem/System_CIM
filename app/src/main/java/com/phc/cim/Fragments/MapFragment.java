@@ -649,7 +649,7 @@ public class MapFragment extends Fragment {
         String url = null;
         String baseurl = getContext().getResources().getString(R.string.baseurl);
         String token = getContext().getResources().getString(R.string.token);
-        url = baseurl + "GetHCEs?strToken=" + token + "&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText + "&Lvs=&RegNum=" + RegnoText + "&HCEName=" + hcenameText + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude + "&Distance=" + distancetext + "&finalid=" + finalidText + "&ActionType=" + lastvisitedText + "&QuackCategory=" + QuackType + "&QuackSubCategory=&SubActionType=" + subactionTypeID + "&Cnic" + Cnic + "&Phone" + Phone;
+        url = baseurl + "GetHCEs?strToken=" + token + "&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText + "&Lvs=&RegNum=" + RegnoText + "&HCEName=" + hcenameText + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude + "&Distance=" + distancetext + "&finalid=" + finalidText + "&ActionType=" + lastvisitedText + "&QuackCategory=" + QuackType + "&QuackSubCategory=&SubActionType=" + subactionTypeID+"&Cnic="+Cnic+"&Phone="+Phone;
         url = url.replaceAll(" ", "%20");
         return url;
     }
@@ -754,7 +754,7 @@ public class MapFragment extends Fragment {
                         map.put("VisitStatus", e.getString("VisitStatus"));
                         map.put("Source", e.getString("Source"));
                         map.put("hcsp_cnic", e.getString("hcsp_cnic"));
-                        map.put("hcsp_phone", e.getString("hcsp_phone"));
+                        map.put("hce_mobile", e.getString("hce_mobile"));
 
                         mylist.add(map);
                     }

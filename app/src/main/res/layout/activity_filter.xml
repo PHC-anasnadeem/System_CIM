@@ -638,8 +638,7 @@
                     android:id="@+id/cniclayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/cniclabel"
@@ -663,6 +662,9 @@
                             android:id="@+id/cnicEdit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:maxLength="15"
+                            android:digits="0123456789-"
                             android:singleLine="true"
                             android:textColor="#000000" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -672,8 +674,7 @@
                     android:id="@+id/phonelayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/phoneNolabel"
@@ -697,6 +698,9 @@
                             android:id="@+id/phoneNoEdit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:maxLength="12"
+                            android:digits="0123456789-"
                             android:singleLine="true"
                             android:textColor="#000000" />
                     </com.google.android.material.textfield.TextInputLayout>
