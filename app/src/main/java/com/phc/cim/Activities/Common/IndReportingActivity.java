@@ -731,17 +731,18 @@ public class IndReportingActivity extends AppCompatActivity {
                     for (int i = 0; i < json.length(); i++) {
                         HashMap<String, String> map = new HashMap<String, String>();
                         JSONObject e = json.getJSONObject(i);
-                            map.put("index", String.valueOf(i+1));
-                            map.put("District", e.getString("District"));
-                            map.put("PKID", e.getString("PKID"));
-                            map.put("PlanCode", e.getString("PlanCode"));
-                            map.put("PlanEndDate", e.getString("PlanEndDate"));
-                            map.put("PlanStartDate", e.getString("PlanStartDate"));
-                            map.put("Team", e.getString("Team"));
-                            map.put("TotalFIR", e.getString("TotalFIR"));
-                            map.put("TotalImages", e.getString("TotalImages"));
-                            map.put("TotalVisits", e.getString("TotalVisits"));
-                            map.put("UserName", e.getString("UserName"));
+                        map.put("index", String.valueOf(i + 1));
+                        map.put("District", e.optString("District", "N/A"));
+                        map.put("TehsilDesc", e.optString("TehsilDesc", "N/A"));
+                        map.put("PKID", e.optString("PKID", ""));
+                        map.put("PlanCode", e.optString("PlanCode", ""));
+                        map.put("PlanEndDate", e.optString("PlanEndDate", ""));
+                        map.put("PlanStartDate", e.optString("PlanStartDate", ""));
+                        map.put("Team", e.optString("Team", ""));
+                        map.put("TotalFIR", e.optString("TotalFIR", "0"));
+                        map.put("TotalImages", e.optString("TotalImages", "0"));
+                        map.put("TotalVisits", e.optString("TotalVisits", "0"));
+                        map.put("UserName", e.optString("UserName", "N/A"));
 
                         mylist.add(map);
                     }

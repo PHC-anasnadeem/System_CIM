@@ -39,6 +39,7 @@
     <string name="title_activity_comments">Update</string>
     <string name="title_report_quack">Report New Quack</string>
     <string name="report_quack">Report Quack</string>
+    <string name="case_register">Case Register</string>
     <string name="title_pws_search">PWS Search</string>
     <string name="no_data_found">No data found</string>
     <string name="about_us_text">Census Information Manager\n
@@ -97,6 +98,7 @@ Powered by PHC ICT Team
     <string name="nav_item_action_history">Action History</string>
     <string name="nav_item_drawroute_titles">Route</string>
     <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_case_register">Case Register</string>
 
     <string name="action_logout">Logout</string>
     <string name="privacy_policy">Privacy Policy</string>

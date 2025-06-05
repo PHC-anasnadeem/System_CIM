@@ -541,11 +541,15 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
             drawer.closeDrawers();
             return;
         }
-        showExitConfirmationDialog();
-//        super.onBackPressed();
+        showExitConfirmationDialog(); // Show dialog BEFORE calling super
     }
 
+
     private void showExitConfirmationDialog() {
+        if (isFinishing() || isDestroyed()) {
+            return; // Avoid showing dialog if activity is already finishing
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to exit?");
         builder.setCancelable(true);

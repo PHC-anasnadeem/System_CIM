@@ -111,7 +111,7 @@
             android:singleLine="true"
 
             />
-        />
+
     </com.google.android.material.textfield.TextInputLayout>
 
 

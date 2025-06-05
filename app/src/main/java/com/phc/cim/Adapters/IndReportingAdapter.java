@@ -75,6 +75,7 @@ public class IndReportingAdapter extends BaseAdapter {
         TextView hceNo;
         TextView planidtext;
         TextView districttext;
+        TextView tehsiltext;
         TextView startdate;
         TextView enddate;
         TextView teame;
@@ -94,6 +95,7 @@ public class IndReportingAdapter extends BaseAdapter {
         hceNo = (TextView) convertView.findViewById(R.id.hce_no);
         planidtext = (TextView) convertView.findViewById(R.id.planidtext);
         districttext = (TextView) convertView.findViewById(R.id.districttext);
+        tehsiltext = (TextView) convertView.findViewById(R.id.tehsiltext);
         startdate = (TextView) convertView.findViewById(R.id.startdate);
         enddate = (TextView) convertView.findViewById(R.id.enddate);
         teame = (TextView) convertView.findViewById(R.id.teame);
@@ -107,6 +109,7 @@ public class IndReportingAdapter extends BaseAdapter {
         hceNo.setText(arrayList.get(position).get("index"));
         planidtext.setText(arrayList.get(position).get("PlanCode"));
         districttext.setText("District:  " +arrayList.get(position).get("District"));
+        tehsiltext.setText("Tehsil:  " +arrayList.get(position).get("TehsilDesc"));
         String ackwardDate = arrayList.get(position).get("PlanStartDate");
         String ackwardRipOff = ackwardDate.replace("/Date(", "").replace("+0500", "").replace(")/", "");
         Long timeInMillis = Long.valueOf(ackwardRipOff);

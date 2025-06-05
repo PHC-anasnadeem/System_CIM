@@ -323,9 +323,12 @@ public class MapFragment extends Fragment {
                     // DataManager dataManager = new DataManager(this);
                     // hces = dataManager.getHCEArray();
 
-                    pDialog.setMessage("Loading Data, Please wait...");
-                    pDialog.setCancelable(false);
-                    pDialog.show();
+                    if (getActivity() != null && !getActivity().isFinishing() && !getActivity().isDestroyed()) {
+                        pDialog.setMessage("Loading Data, Please wait...");
+                        pDialog.setCancelable(false);
+                        pDialog.show();
+                    }
+
                     final Bundle args = getArguments();
 
                     dataType = args.getString("dataType");
@@ -347,8 +350,8 @@ public class MapFragment extends Fragment {
                     isEdit = args.getString("isEdit");
                     finalidText = args.getString("finalidText");
                     QuackType = args.getString("QuackType");
-//                    Cnic= args.getString("Cnic");
-//                    Phone= args.getString("Phone");
+                    Cnic= args.getString("Cnic");
+                    Phone= args.getString("Phone");
                     indtabresult = (ArrayList<HashMap<String, String>>) args.getSerializable("indtabresult");
 
 
@@ -448,6 +451,24 @@ public class MapFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
     }
 
     private void openReportQuackActivity(double manuallySelectedLatitude, double manuallySelectedLongitude) {
@@ -628,7 +649,7 @@ public class MapFragment extends Fragment {
         String url = null;
         String baseurl = getContext().getResources().getString(R.string.baseurl);
         String token = getContext().getResources().getString(R.string.token);
-        url = baseurl + "GetHCEs?strToken=" + token + "&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText + "&Lvs=&RegNum=" + RegnoText + "&HCEName=" + hcenameText + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude + "&Distance=" + distancetext + "&finalid=" + finalidText + "&ActionType=" + lastvisitedText + "&QuackCategory=" + QuackType + "&QuackSubCategory=&SubActionType=" + subactionTypeID;
+        url = baseurl + "GetHCEs?strToken=" + token + "&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText + "&Lvs=&RegNum=" + RegnoText + "&HCEName=" + hcenameText + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude + "&Distance=" + distancetext + "&finalid=" + finalidText + "&ActionType=" + lastvisitedText + "&QuackCategory=" + QuackType + "&QuackSubCategory=&SubActionType=" + subactionTypeID + "&Cnic" + Cnic + "&Phone" + Phone;
         url = url.replaceAll(" ", "%20");
         return url;
     }
@@ -732,8 +753,8 @@ public class MapFragment extends Fragment {
                         map.put("ActionType", e.getString("ActionType"));
                         map.put("VisitStatus", e.getString("VisitStatus"));
                         map.put("Source", e.getString("Source"));
-//                            map.put("hcsp_cnic", e.getString("hcsp_cnic"));
-//                            map.put("hcsp_phone", e.getString("hcsp_phone"));
+                        map.put("hcsp_cnic", e.getString("hcsp_cnic"));
+                        map.put("hcsp_phone", e.getString("hcsp_phone"));
 
                         mylist.add(map);
                     }
@@ -884,7 +905,18 @@ public class MapFragment extends Fragment {
 
                             }
                         }
-                    }
+                    }else if (RegType.equals("deRegistered HCEs")) {
+                            if (latitude != 0 && longitude != 0) {
+
+                                LatLng latLng = new LatLng(latitude, longitude);
+                                if (VisitStatus.equals("1")) {
+                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_deregistered_hce)).snippet(RegType));
+                                } else {
+                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).icon(BitmapDescriptorFactory.defaultMarker(hue_red)).snippet(RegType));
+
+                                }
+                            }
+                        }
 
                         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
@@ -1068,6 +1100,50 @@ public class MapFragment extends Fragment {
                                         circlelayout.setVisibility(View.GONE);
                                         linearLayout.setVisibility(View.VISIBLE);
                                         curr = "Quack";
+                                        // mTextMessage.setText(status);
+                                        //mTextMessage.setTextColor(RED);
+
+                                    }else if (arg0.getSnippet().equals("deRegistered HCEs")) {
+                                        for (int i = 0; i < result.size(); i++) {
+                                            double _latitude = Double.parseDouble(result.get(i).get("lat"));
+                                            double _longitude = Double.parseDouble(result.get(i).get("lng"));
+                                            LatLng latLng = new LatLng(_latitude, _longitude);
+                                            String title_name = result.get(i).get("Name");
+                                            if (arg0.getTitle().equals(title_name)) {
+
+                                                marker_latitude = _latitude;
+                                                marker_longitude = _longitude;
+                                                marker_address = result.get(i).get("Address");
+                                                marker_name = result.get(i).get("Name");
+                                                mobile_number = result.get(i).get("hce_mobile");
+                                                marker_status = result.get(i).get("RegType");
+                                                status = marker_status;
+                                                district = result.get(i).get("district");
+                                                final_id = result.get(i).get("final_id");
+                                                index = result.get(i).get("index");
+                                                council = result.get(i).get("councils");
+                                                HCEType = result.get(i).get("HCE_Cat_Type");
+                                                Beds = result.get(i).get("total_beds");
+                                                sectortype = result.get(i).get("sector_type");
+                                                VisitStatus = result.get(i).get("VisitStatus");
+                                                HCSPname = result.get(i).get("hcsp_name");
+                                                HCSPSO = result.get(i).get("hcsp_sodowo");
+                                                hcspname.setText(result.get(i).get("hcsp_name") + " - " + result.get(i).get("hcsp_sodowo"));
+                                                mname.setText(marker_name + "( " + sectortype + " )");
+                                                hcetypetext.setText(result.get(i).get("HCE_Cat_Type") + " (" + result.get(i).get("total_beds") + " beds)" + " - " + result.get(i).get("councils"));
+                                                mTextMessage.setText(marker_status);
+                                                hceNo.setText(index);
+                                                mobile.setText(mobile_number);
+                                                maddress.setText(marker_address);
+                                                mname.setVisibility(View.VISIBLE);
+                                                maddress.setVisibility(View.VISIBLE);
+//                                                    hcsp_cnic = result.get(i).get("hcsp_cnic");
+//                                                    hcsp_phone = result.get(i).get("hcsp_phone");
+                                            }
+                                        }
+                                        circlelayout.setVisibility(View.GONE);
+                                        linearLayout.setVisibility(View.VISIBLE);
+                                        curr = "deRegistered HCEs";
                                         // mTextMessage.setText(status);
                                         //mTextMessage.setTextColor(RED);
 

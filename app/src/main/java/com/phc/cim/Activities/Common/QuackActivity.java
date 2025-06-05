@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,6 +44,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class QuackActivity extends AppCompatActivity {
@@ -107,6 +109,9 @@ public class QuackActivity extends AppCompatActivity {
     private TextInputEditText longitudeEditText;
     double latitude;
     double longitude;
+    EditText startTimeEditText, endTimeEditText;
+    String startTimeText, endTimeText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +144,8 @@ public class QuackActivity extends AppCompatActivity {
         district_spinner = (Spinner) findViewById(R.id.district);
         tehsil_spinner = (Spinner) findViewById(R.id.Tehsil_spinner);
         quackloc_spinner = (Spinner) findViewById(R.id.quackloc_spinner);
+        startTimeEditText = findViewById(R.id.Start_Time);
+        endTimeEditText = findViewById(R.id.End_Time);
         errortext.setVisibility(View.GONE);
 
         Intent intent = getIntent();
@@ -166,6 +173,9 @@ public class QuackActivity extends AppCompatActivity {
 
         Button markasdone = findViewById(R.id.btn_submit);
         markasdone.setOnClickListener(v -> handleSubmit());
+
+        startTimeEditText.setOnClickListener(v -> showTimePicker(startTimeEditText));
+        endTimeEditText.setOnClickListener(v -> showTimePicker(endTimeEditText));
 
 
         //-------------------------Current Location----------------------------
@@ -197,6 +207,22 @@ public class QuackActivity extends AppCompatActivity {
 
 
     }
+
+    private void showTimePicker(EditText targetEditText) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePicker = new TimePickerDialog(this,
+                (view, selectedHour, selectedMinute) -> {
+                    String formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute);
+                    targetEditText.setText(formattedTime);
+                },
+                hour, minute, true);
+
+        timePicker.show();
+    }
+
 
 
     private void setupQuackLocationSpinner() {
@@ -268,6 +294,8 @@ public class QuackActivity extends AppCompatActivity {
         CNIC_Text = CNIC_Edit.getText().toString();
         HCSP_ContactText = HCSP_ContactEdit.getText().toString();
         comnt = coments.getText().toString();
+        startTimeText = startTimeEditText.getText().toString();
+        endTimeText = endTimeEditText.getText().toString();
 
             latitude = cur_latitude;
             longitude = cur_longitude;
@@ -304,6 +332,15 @@ public class QuackActivity extends AppCompatActivity {
             setSpinnerError(quackloc_spinner, ("Please select Quack location"));
             count++;
         }
+        if (startTimeText.isEmpty()) {
+            startTimeEditText.setError("Please select start time");
+            count++;
+        }
+        if (endTimeText.isEmpty()) {
+            endTimeEditText.setError("Please select end time");
+            count++;
+        }
+
         if (count > 0) {
             errortext.setVisibility(View.VISIBLE);
         }
@@ -353,7 +390,7 @@ public class QuackActivity extends AppCompatActivity {
                 boolean running = true;
                 while (running) {
                     try {
-                        Thread.sleep(10000); // Update every 10 seconds to reduce frequency
+                        Thread.sleep(30000); // Update every 30 seconds to reduce frequency
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                         running = false; // Exit loop on interruption
@@ -674,7 +711,7 @@ public class QuackActivity extends AppCompatActivity {
         // Building the url to the web service
         String baseurl = context.getResources().getString(R.string.baseurl);
         String token = context.getResources().getString(R.string.token);
-        String url = baseurl + "ReportQuack?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&Division=" + divisionText + "&District=" + districtText + "&Tehsil=" + tehsilText + "&SectorType=Private&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&lat=" + cur_latitude + "&lng=" + cur_longitude + "&emailAddress=" + email + "&Comments=" + comnt + "&Userlat=" + user_latitude + "&Userlng=" + user_longitude + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid;
+        String url = baseurl + "ReportQuack?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&Division=" + divisionText + "&District=" + districtText + "&Tehsil=" + tehsilText + "&SectorType=Private&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&lat=" + cur_latitude + "&lng=" + cur_longitude + "&emailAddress=" + email + "&Comments=" + comnt + "&Userlat=" + user_latitude + "&Userlng=" + user_longitude + "&Start_Time=" + startTimeText + "&End_Time=" + endTimeText + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid;
         url = url.replaceAll(" ", "%20");
         url = url.replaceAll("#", "%23");
         url = url.replaceAll(",", "%2C");

@@ -6,7 +6,6 @@
     android:background="#fff"
     android:orientation="vertical">
 
-    >
   <LinearLayout
       android:id="@+id/namelayout"
       android:layout_width="match_parent"

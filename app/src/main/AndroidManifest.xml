@@ -25,7 +25,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
-
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
@@ -51,21 +50,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        
+
         <!-- Notification List Activity -->
         <activity
             android:name=".Activities.Notification.NotificationListActivity"
             android:exported="false"
             android:label="Notifications"
-            android:theme="@style/AppTheme.NoActionBar" />
-        
-        <!-- Notification Background Service -->
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- Notification Background Service -->
         <service
             android:name=".Activities.Notification.NotificationBackgroundService"
             android:enabled="true"
-            android:exported="false" />
-            
-        <!-- Boot Receiver to start notification service on device boot -->
+            android:exported="false" /> <!-- Boot Receiver to start notification service on device boot -->
         <receiver
             android:name=".BroadcastService.BootReceiver"
             android:enabled="true"
@@ -73,10 +68,11 @@
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-        
+
         <activity
             android:name=".Activities.Common.RegistrationStatus"
             android:exported="false"
@@ -96,15 +92,14 @@
             android:name=".Activities.Common.QuackActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Extra.FTPActivity" />
+
+        <activity android:name=".Extra.FTPActivity" />
 
         <provider
             android:name="com.activeandroid.content.ContentProvider"
             android:authorities="com.phc.cim"
             android:enabled="true"
             android:exported="false" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -114,7 +109,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -127,7 +121,6 @@
         <activity
             android:name=".Activities.Common.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity">
@@ -140,7 +133,6 @@
         <activity
             android:name=".Extra.MapsActivity"
             android:icon="@drawable/phclogo"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
@@ -163,8 +155,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"
-            tools:ignore="LockedOrientationActivity">
-        </activity>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".Activities.Inspection.InspectionFilterActivity"
             android:label="@string/nav_item_filter_titles"
@@ -196,8 +187,8 @@
         <activity
             android:name=".Activities.Common.ReportQuackActivity"
             android:label="@string/title_report_quack"
-            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".Extra.HCEListActivity"
@@ -361,6 +352,12 @@
             android:name=".Activities.Common.PolygonActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".Activities.Common.CaseRegisterActivity"
+            android:label="@string/nav_dashboard"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".BroadcastService.BroadCastService" />
         <service

@@ -420,8 +420,8 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                                     hcenameLayout.setVisibility(View.VISIBLE);
                                     bed_layout.setVisibility(View.VISIBLE);
                                     finalidlayout.setVisibility(View.VISIBLE);
-                                    cniclayout.setVisibility(View.GONE);
-                                    phonelayout.setVisibility(View.GONE);
+                                    cniclayout.setVisibility(View.VISIBLE);
+                                    phonelayout.setVisibility(View.VISIBLE);
 
            /*     }
                 else {
@@ -1630,6 +1630,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                         startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
                         drawer.closeDrawers();
                         return true;
+
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.

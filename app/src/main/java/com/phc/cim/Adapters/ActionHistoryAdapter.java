@@ -145,9 +145,6 @@ public class ActionHistoryAdapter extends BaseAdapter {
         actiontype.setText("Action Type:  "+actiontseltext);
         subaction.setText("Quack Type:  "+subactiontseltext);
 
-
-
-
         return convertView;
     }
     private String getactionsel() {
