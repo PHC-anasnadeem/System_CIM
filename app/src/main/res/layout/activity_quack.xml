@@ -189,7 +189,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:hint="Start Time"
                 android:textColorHint="#000000">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -208,7 +207,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:hint="End Time"
                 android:textColorHint="#000000">
 
                 <com.google.android.material.textfield.TextInputEditText
