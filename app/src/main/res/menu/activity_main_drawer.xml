@@ -21,16 +21,16 @@
             android:id="@+id/nav_actiondesc"
             android:icon="@drawable/action_reports"
             android:title="@string/nav_action_status" />
-        <item
-            android:id="@+id/nav_reportquack"
-            android:icon="@drawable/report"
-            android:title="@string/title_report_quack" />
+
+<!--        <item-->
+<!--            android:id="@+id/nav_reportquack"-->
+<!--            android:icon="@drawable/report"-->
+<!--            android:title="@string/title_report_quack" />-->
+
         <item
             android:id="@+id/nav_quack"
             android:icon="@drawable/report"
             android:title="@string/report_quack" />
-
-
 
         <item
             android:id="@+id/nav_pwssearch"

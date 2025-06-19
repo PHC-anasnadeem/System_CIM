@@ -332,14 +332,14 @@ public class QuackActivity extends AppCompatActivity {
             setSpinnerError(quackloc_spinner, ("Please select Quack location"));
             count++;
         }
-        if (startTimeText.isEmpty()) {
-            startTimeEditText.setError("Please select start time");
-            count++;
-        }
-        if (endTimeText.isEmpty()) {
-            endTimeEditText.setError("Please select end time");
-            count++;
-        }
+//        if (startTimeText.isEmpty()) {
+//            startTimeEditText.setError("Please select start time");
+//            count++;
+//        }
+//        if (endTimeText.isEmpty()) {
+//            endTimeEditText.setError("Please select end time");
+//            count++;
+//        }
 
         if (count > 0) {
             errortext.setVisibility(View.VISIBLE);

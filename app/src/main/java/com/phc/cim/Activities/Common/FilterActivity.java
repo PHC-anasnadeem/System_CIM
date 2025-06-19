@@ -1631,11 +1631,6 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                         drawer.closeDrawers();
                         return true;
 
-                    case R.id.nav_caseReg:
-                        startActivity(new Intent(context, CaseRegisterActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
-                        drawer.closeDrawers();
-                        return true;
-
                     case R.id.nav_actionsummary:
                         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
