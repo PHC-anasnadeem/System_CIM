@@ -95,11 +95,11 @@
 
         <activity android:name=".Extra.FTPActivity" />
 
-        <provider
-            android:name="com.activeandroid.content.ContentProvider"
-            android:authorities="com.phc.cim"
-            android:enabled="true"
-            android:exported="false" />
+<!--        <provider-->
+<!--            android:name="com.activeandroid.content.ContentProvider"-->
+<!--            android:authorities="com.phc.cim"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false" />-->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -352,12 +352,6 @@
             android:name=".Activities.Common.PolygonActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity
-            android:name=".Activities.Common.CaseRegisterActivity"
-            android:label="@string/nav_dashboard"
-            android:exported="false"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".BroadcastService.BroadCastService" />
         <service
