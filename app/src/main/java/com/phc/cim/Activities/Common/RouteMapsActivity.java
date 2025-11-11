@@ -1086,7 +1086,7 @@ public class RouteMapsActivity extends AppCompatActivity implements OnMapReadyCa
                 String sensor = "sensor=false";
                 String mode = "mode=driving";
 
-                String url="https://maps.googleapis.com/maps/api/directions/json?origin="+ cur_latitude + "," + cur_longitude +"&destination="+ des_lat +","+des_lng+ "&" + sensor + "&" + mode + "&key=AIzaSyBxDdbatLHZH5q77InR1Oua_bzNuXcZzEY";
+                String url="https://maps.googleapis.com/maps/api/directions/json?origin="+ cur_latitude + "," + cur_longitude +"&destination="+ des_lat +","+des_lng+ "&" + sensor + "&" + mode + "&key=AIzaSyAXS6oT1zr3W9nTfq75FPZeR4FfaTkjWe0";
 
                 return url;
             }

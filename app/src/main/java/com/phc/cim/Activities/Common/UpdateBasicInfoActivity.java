@@ -73,6 +73,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -830,6 +831,17 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         });
 
         Button markasdone = (Button) findViewById(R.id.btn_submit);
+
+        markasdone.setOnClickListener(v -> {
+            String regNoInput = Reg_NoEdit.getText().toString().trim();
+            if (regNoInput.startsWith("PL")) {
+                fetchRNumberForPLAndConfirm(regNoInput); // handle PL
+            } else {
+                markAsDoneSubmit(); // normal submission
+            }
+        });
+
+
         markasdone.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 boolean isValid = true;
@@ -869,6 +881,14 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                 }
 
                 Reg_NoText = Reg_NoEdit.getText().toString();
+                // Check if it starts with "PL"
+                if (Reg_NoText.startsWith("PL")) {
+                    // Stop submission and fetch R number
+                    fetchRNumberForPLAndConfirm(Reg_NoText);
+                    return; // Prevent normal submission until user confirms
+                }
+
+
                 coun_NoText = coun_NoEdit.getText().toString();
 
                 int count = 0;
@@ -1263,126 +1283,128 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
             menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item
         }
 
-        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        // Setting Navigation View Item Selected Listener to handle item click
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
 
-            // This method will trigger on item Click of navigation menu
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+            int id = menuItem.getItemId();
 
-                //Check to see which item was being clicked and perform appropriate action
-                switch (menuItem.getItemId()) {
-                    //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.nav_home:
-                        startActivity(new Intent(context, FilterActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
-                        drawer.closeDrawers();
-                        return true;
-//                    case R.id.nav_reportquack:
-//                        startActivity(new Intent(context, ReportQuackActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
-//                        drawer.closeDrawers();
-//                        return true;
-                    case R.id.nav_quack:
-                        startActivity(new Intent(context, QuackActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_actionsummary:
-                        if (isStat.equals("true")) {
-                            startActivity(new Intent(context, DashboardTabs.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
-                            drawer.closeDrawers();
-                        } else {
-                            Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
-                        }
-                        return true;
-                    case R.id.nav_actiondesc:
-                        startActivity(new Intent(context, IndReportingActivity.class).putExtra("email", email).putExtra("password", password).putExtra("username", username).putExtra("isEdit", isEdit));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_resetPassword:
-                        // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, ChangePasswordActivity.class).putExtra("email", email).putExtra("password", password));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_pwssearch:
-                        startActivity(new Intent(context, PWSFilterActivity.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_list:
-                        startActivity(new Intent(context, DesealListing.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_hearing:
-                        startActivity(new Intent(context, HearingStatusActivity.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_registration:
-                        startActivity(new Intent(context, RegistrationStatus.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_about_us:
-                        // launch new intent instead of loading fragment
-                        startActivity(new Intent(context, AboutusActivity.class));
-                        drawer.closeDrawers();
-                        return true;
-                    case R.id.nav_Logout:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setMessage("Are you sure to exit CIM?")
-                                .setTitle("Exit")
-                                .setCancelable(false)
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // launch new intent instead of loading fragment
-                                        startActivity(new Intent(context, Logout.class));
-                                        drawer.closeDrawers();
-                                    }
-                                })
-                                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        return true;
-                    // default:
-                    //     navItemIndex = 0;
-                }
+            if (id == R.id.nav_home) {
+                startActivity(new Intent(context, FilterActivity.class)
+                        .putExtra("email", email)
+                        .putExtra("password", password)
+                        .putExtra("username", username)
+                        .putExtra("isEdit", isEdit));
+                drawer.closeDrawers();
+                return true;
 
-                //Checking if the item is in checked state or not, if not make it in checked state
-                if (menuItem.isChecked()) {
-                    menuItem.setChecked(false);
+            } else if (id == R.id.nav_quack) {
+                startActivity(new Intent(context, QuackActivity.class)
+                        .putExtra("email", email)
+                        .putExtra("password", password)
+                        .putExtra("username", username)
+                        .putExtra("isEdit", isEdit));
+                drawer.closeDrawers();
+                return true;
+
+            } else if (id == R.id.nav_actionsummary) {
+                if (isStat.equals("true")) {
+                    startActivity(new Intent(context, DashboardTabs.class)
+                            .putExtra("email", email)
+                            .putExtra("password", password)
+                            .putExtra("username", username)
+                            .putExtra("isEdit", isEdit));
+                    drawer.closeDrawers();
                 } else {
-                    menuItem.setChecked(true);
+                    Toast.makeText(context, "You are not authorised!", Toast.LENGTH_SHORT).show();
                 }
-                menuItem.setChecked(true);
+                return true;
 
-                loadHomeFragment();
+            } else if (id == R.id.nav_actiondesc) {
+                startActivity(new Intent(context, IndReportingActivity.class)
+                        .putExtra("email", email)
+                        .putExtra("password", password)
+                        .putExtra("username", username)
+                        .putExtra("isEdit", isEdit));
+                drawer.closeDrawers();
+                return true;
 
+            } else if (id == R.id.nav_resetPassword) {
+                startActivity(new Intent(context, ChangePasswordActivity.class)
+                        .putExtra("email", email)
+                        .putExtra("password", password));
+                drawer.closeDrawers();
+                return true;
+
+            } else if (id == R.id.nav_pwssearch) {
+                startActivity(new Intent(context, PWSFilterActivity.class));
+                drawer.closeDrawers();
+                return true;
+
+            } else if (id == R.id.nav_list) {
+                startActivity(new Intent(context, DesealListing.class));
+                drawer.closeDrawers();
+                return true;
+
+            } else if (id == R.id.nav_hearing) {
+                startActivity(new Intent(context, HearingStatusActivity.class));
+                drawer.closeDrawers();
+                return true;
+
+            } else if (id == R.id.nav_registration) {
+                startActivity(new Intent(context, RegistrationStatus.class));
+                drawer.closeDrawers();
+                return true;
+
+            } else if (id == R.id.nav_about_us) {
+                startActivity(new Intent(context, AboutusActivity.class));
+                drawer.closeDrawers();
+                return true;
+
+            } else if (id == R.id.nav_Logout) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you sure to exit CIM?")
+                        .setTitle("Exit")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            startActivity(new Intent(context, Logout.class));
+                            drawer.closeDrawers();
+                        })
+                        .setNegativeButton("CANCEL", (dialog, which) -> dialog.cancel());
+                builder.create().show();
                 return true;
             }
+
+            // Default case
+            if (menuItem.isChecked()) {
+                menuItem.setChecked(false);
+            } else {
+                menuItem.setChecked(true);
+            }
+            menuItem.setChecked(true);
+
+            loadHomeFragment();
+
+            return true;
         });
 
-
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
-
+        // Drawer toggle setup
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override
             public void onDrawerClosed(View drawerView) {
-                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
                 super.onDrawerClosed(drawerView);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
             }
         };
 
-        //Setting the actionbarToggle to drawer layout
-        drawer.setDrawerListener(actionBarDrawerToggle);
-
-        //calling sync state is necessary or else your hamburger icon wont show up
+        drawer.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
+
 
 
     @Override
@@ -1678,5 +1700,242 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
 
     }
 
+    private void fetchRNumberForPLAndConfirm(String plNumber) {
+        new DownloadRNumberTask(plNumber).execute();
+    }
+
+    private class DownloadRNumberTask extends AsyncTask<Void, Void, String> {
+        private String plNumber;
+
+        public DownloadRNumberTask(String plNumber) {
+            this.plNumber = plNumber;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null;
+
+            try {
+                String apiUrl = "https://cim.phc.org.pk:8099/PHCCensusData.svc/GetRNumberByPL?plNumber="
+                        + URLEncoder.encode(plNumber, "UTF-8");
+
+                URL url = new URL(apiUrl);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setConnectTimeout(10000);
+                urlConnection.setReadTimeout(10000);
+                urlConnection.connect();
+
+                int responseCode = urlConnection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = urlConnection.getInputStream();
+                    if (inputStream == null) return null;
+
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder buffer = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    String jsonResponse = buffer.toString().trim();
+                    Log.d("API_RESPONSE", jsonResponse);
+
+                    // 🔍 Handle if API returns null (no record)
+                    if (jsonResponse.equalsIgnoreCase("null") || jsonResponse.isEmpty()) {
+                        return null;
+                    }
+
+                    // ✅ Parse the JSON to extract R number
+                    JSONObject obj = new JSONObject(jsonResponse);
+                    return obj.optString("Registration_number", null);
+                } else {
+                    Log.e("API_ERROR", "Server returned: " + responseCode);
+                    return null;
+                }
+            } catch (Exception e) {
+                Log.e("API_EXCEPTION", "Error fetching R number", e);
+                return null;
+            } finally {
+                if (urlConnection != null) urlConnection.disconnect();
+                if (reader != null) {
+                    try { reader.close(); } catch (IOException ignored) {}
+                }
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String rNumber) {
+            super.onPostExecute(rNumber);
+
+            if (rNumber != null && !rNumber.isEmpty()) {
+                showRNumberPopup(plNumber, rNumber);
+            } else {
+                Toast.makeText(context, "No corresponding R number found for this PL.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showRNumberPopup(String plNumber, String rNumber) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Confirm Replacement")
+                .setMessage("This PL number: " + plNumber +
+                        " corresponds to R number: " + rNumber +
+                        ".\nDo you want to replace it?")
+                .setCancelable(false)
+                .setPositiveButton("YES", (dialog, which) -> {
+                    Reg_NoEdit.setText(rNumber);
+                    markAsDoneSubmit(); // call your existing submit method
+                })
+                .setNegativeButton("NO", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+
+    private void markAsDoneSubmit() {
+            boolean isValid = true;
+            Location loc1 = new Location("");
+            loc1.setLatitude(latitude);
+            loc1.setLongitude(longitude);
+
+            Location loc2 = new Location("");
+            loc2.setLatitude(cur_latitude);
+            loc2.setLongitude(cur_longitude);
+            distCurrPrevInMeters = String.valueOf(loc1.distanceTo(loc2));
+
+            latLngInput = editTextLatLng.getText().toString(); // Add latLngInput
+            hce_nameText = hce_nameEdit.getText().toString();
+            AddressText = AddressEdit.getText().toString();
+            HCSP_nameText = HCSP_nameEdit.getText().toString();
+            HCSP_SOText = HCSP_SOEdit.getText().toString();
+            startTimeText = startTimeEditText.getText().toString();
+            endTimeText = endTimeEditText.getText().toString();
+
+            CNIC_Text = CNIC_Edit.getText().toString();
+            String cleanedCnic = HCSP_ContactText.replaceAll("[^\\d]", "");
+            if (cleanedCnic.length() != 15) {
+                CNIC_Edit.setError("CNIC must be exactly 13 digits (without dashes)");
+                isValid = false;
+            } else {
+                CNIC_Edit.setError(null); // Clear error if valid
+            }
+
+            HCSP_ContactText = HCSP_ContactEdit.getText().toString();
+            String cleanedMobile = HCSP_ContactText.replaceAll("[^\\d]", "");
+            if (cleanedMobile.length() != 12) {
+                HCSP_ContactEdit.setError("Mobile number is required and must be 11 digits");
+                isValid = false;
+            } else {
+                HCSP_ContactEdit.setError(null); // Clear error if valid
+            }
+
+            Reg_NoText = Reg_NoEdit.getText().toString();
+            coun_NoText = coun_NoEdit.getText().toString();
+
+            int count = 0;
+            comnt = coments.getText().toString();
+
+            if (hce_nameText.isEmpty()) {
+                hce_nameEdit.setError("Please enter name");
+                count++;
+            }
+            if (AddressText.isEmpty()) {
+                AddressEdit.setError("Please enter address");
+                count++;
+            }
+            if (HCSP_nameText.isEmpty()) {
+                HCSP_nameEdit.setError("Please enter name");
+                count++;
+            }
+            if ("Please Select".equals(quackloctext)) {
+                setSpinnerError(quackloc_spinner, "Please select");
+                count++;
+            }
+            if ("Please Select".equals(currloc_text)) {
+                setSpinnerError(currloc_spinner, "Please select");
+                count++;
+            }
+//                if (startTimeText.isEmpty()) {
+//                    startTimeEditText.setError("Please select start time");
+//                    count++;
+//                }
+//                if (endTimeText.isEmpty()) {
+//                    endTimeEditText.setError("Please select end time");
+//                    count++;
+//                }
+
+            // Check if the AddressText is empty when "No" is selected
+            if ("0".equals(quacklocID) && AddressText.isEmpty()) {
+                editTextLatLng.setError("Please enter address"); // Show error message
+                count++;
+            }
+
+            if (count > 0) {
+                errortext.setVisibility(View.VISIBLE);
+            } else {
+                errortext.setVisibility(View.GONE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Do you want to save the changes?")
+                        .setTitle("Save")
+                        .setCancelable(false)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if ("No".equals(counStatusText)) {
+                                    coun_NoText = "";
+                                    counciltypetext = "";
+                                    counStatusID = "0";
+                                }
+                                if ("No".equals(RegstatusText)) {
+                                    Reg_NoText = "";
+                                    RegstatusID = "0";
+                                }
+                                if ("Yes".equals(counStatusText)) {
+                                    counStatusID = "1";
+                                }
+                                if ("Yes".equals(RegstatusText)) {
+                                    RegstatusID = "1";
+                                }
+
+                                if ("Please Select".equals(districtText)) {
+                                    districtText = "";
+                                }
+                                if ("Please Select".equals(sectortypetext)) {
+                                    sectortypetext = "";
+                                }
+                                if ("Please Select".equals(hceTypetext)) {
+                                    hceTypetext = "";
+                                }
+                                if ("Please Select".equals(counciltypetext)) {
+                                    counciltypetext = "";
+                                }
+                                if ("Please Select".equals(HCSPTypeText)) {
+                                    HCSPTypeText = "";
+                                }
+                                if ("Please Select".equals(RegstatusText)) {
+                                    RegstatusText = "";
+                                }
+                                if ("Please Select".equals(counStatusText)) {
+                                    counStatusText = "";
+                                }
+
+                                pDialog.setMessage("Submitting your update, Please wait...");
+                                pDialog.setCancelable(false);
+                                pDialog.show();
+                                String url = getDirectionsUrl(context);
+                                DownloadTask downloadTask = new DownloadTask();
+                                // Start downloading json data from Google Directions API
+                                downloadTask.execute(url);
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        }
 
 }
