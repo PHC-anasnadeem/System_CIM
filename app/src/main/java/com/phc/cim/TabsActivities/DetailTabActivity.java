@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
@@ -26,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -758,29 +760,7 @@ public class DetailTabActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-         /*       case R.id.navigation_home:
-                    Intent filteintent = new Intent(context, FilterActivity.class);
-                    filteintent.putExtra("email", email);
-                    filteintent.putExtra("Password", password);
-                    filteintent.putExtra("username", username);
-                    filteintent.putExtra("isEdit", isEdit);
-                    context.startActivity(filteintent);
-               *//*     IntentIntegrator intentIntegrator=new IntentIntegrator(activity);
-                    intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                    intentIntegrator.setPrompt("scan");
-                    intentIntegrator.setCameraId(0);
-                    intentIntegrator.setBeepEnabled(false);
-                    intentIntegrator.setBarcodeImageEnabled(false);
-                    intentIntegrator.initiateScan();*//*
-                    // firstpage.putExtra("stop",result);
-                    // firstpage.putExtra("des_latitude",getDes_latitude());
-                    // firstpage.putExtra("des_longitude",getDes_longitude());
 
-
-                    //mapsActivity.startActivity(firstpage);
-
-                    //mTextMessage.setText(R.string.title_home);
-                    return true;*/
                 case R.id.navigation_dashboard:
                     if(latitude!=0 && longitude!=0){
 
@@ -840,11 +820,6 @@ public class DetailTabActivity extends AppCompatActivity {
                     else if(isEdit.equals("false")){
                         Toast.makeText(context, "You are not authorized to edit the information", Toast.LENGTH_SHORT).show();
                     }
-                /*    else if(isEdit.equals("true") && RecordLockedForUpdate.equals("Yes")){
-
-                        Toast.makeText(context, "HCE information is under review and is locked for Edit", Toast.LENGTH_SHORT).show();
-                    }*/
-
                     return true;
 
                 case R.id.navigation_attachement:
@@ -857,28 +832,28 @@ public class DetailTabActivity extends AppCompatActivity {
 
                     return true;
                 case R.id.navigation_camera:
-                    if(Build.VERSION.SDK_INT>=24){
-                        try{
-                            Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
-                            m.invoke(null);
-                        }catch(Exception e){
-                            e.printStackTrace();
-                        }
-
-                    }
                     requestRuntimePermission();
-                    count=2;
+                    count = 2;
+
                     SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
                     String currentDateandTime = sdf.format(new Date());
-                    String pictureName=final_id+"_"+currentDateandTime;//here you can get picture name from user. I supposed Test name
-                    Intent intentcamera = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    File photo = new File(context.getExternalFilesDir(null),  pictureName+".jpg");//save picture (.jpg) on SD Card
-                    u= Uri.fromFile(photo);
-                    intentcamera.putExtra(MediaStore.EXTRA_OUTPUT,u);
+                    String pictureName = final_id + "_" + currentDateandTime;
+
+                    Intent intentcamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    File photo = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), pictureName + ".jpg");
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        u = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", photo);
+                    } else {
+                        u = Uri.fromFile(photo);
+                    }
+
+                    intentcamera.putExtra(MediaStore.EXTRA_OUTPUT, u);
                     filePath = photo.getAbsolutePath();
                     startActivityForResult(intentcamera, REQUEST_CODE);
-
                     return true;
+
                 case R.id.navigation_history:
                 startActivity(new Intent(context, ActionHistoryActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit).putExtra("index", index).putExtra("hce_nameText",hce_nameText ).putExtra("final_id",final_id ));
                     return true;
@@ -891,39 +866,36 @@ public class DetailTabActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(count==2) {
+        if (count == 2 && requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             try {
+                picTaken = true;
+                picAttachement = false;
 
-               // context.getContentResolver().notifyChange(u, null);
-               // ContentResolver cr = context.getContentResolver();
-              //  Bitmap bm = android.provider.MediaStore.Images.Media.getBitmap(cr, u);
-//ImageView to set the picture taken from camera.
-                //   mImageView.setImageBitmap(bm);
-                picAttachement=false;
-                picTaken = true; //to ensure picture is taken
+                // filePath already set in intent, check existence
+                File file = new File(filePath);
+                if (!file.exists()) {
+                    Toast.makeText(context, "Camera image file not found", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 pDialog = new ProgressDialog(context);
                 pDialog.setMessage("Uploading image, Please wait...");
                 pDialog.setCancelable(false);
                 pDialog.show();
+
                 upLoadPicture();
             } catch (Exception e) {
-
                 e.printStackTrace();
-
             }
         }
         else if(count==1) {
             if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-               // fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-               //filePath= fileUri.getPath();
+
                 filePathURI =data.getData();
 
 
                filePath= getRealPathFromUri(context ,filePathURI);
 
-             //  String fileName=   filePath.substring(filePath.indexOf("0"));;
-             //   filePath=context.getExternalFilesDir(null) + "/" +fileName;
-                //filePath=   getRealPathFromURI_API19(context ,filePathURI);
                 try {
                     picAttachement=true;
                     picTaken = false;
@@ -931,647 +903,188 @@ public class DetailTabActivity extends AppCompatActivity {
                     pDialog.setMessage("Uploading image, Please wait...");
                     pDialog.setCancelable(false);
                     pDialog.show();
-                    //getting image from gallery
-                    //Bitmap bm = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(filePath));
+
                     upLoadPicture();
-                    //Setting image to ImageView
-                    //  mImageView.setImageBitmap(bitmap);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
 
-/*        // if the result is capturing Image
-        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-
-                // successfully captured the image
-                // launching upload activity
-                launchUploadActivity(true);
-
-
-            } else if (resultCode == RESULT_CANCELED) {
-
-                // user cancelled Image capture
-                Toast.makeText(getContext(),
-                        "User cancelled image capture", Toast.LENGTH_SHORT)
-                        .show();
-
-            } else {
-                // failed to capture image
-                Toast.makeText(getContext(),
-                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
-                        .show();
-            }
-
-        } else if (requestCode == CAMERA_CAPTURE_VIDEO_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-
-                // video successfully recorded
-                // launching upload activity
-                launchUploadActivity(false);
-
-            } else if (resultCode == RESULT_CANCELED) {
-
-                // user cancelled recording
-                Toast.makeText(getContext(),
-                        "User cancelled video recording", Toast.LENGTH_SHORT)
-                        .show();
-
-            } else {
-                // failed to record video
-                Toast.makeText(getContext(),
-                        "Sorry! Failed to record video", Toast.LENGTH_SHORT)
-                        .show();
-            }
-        }*/
     }
     public void upLoadPicture() {
 
         if (picTaken) {
+            // upload camera picture
             RetrieveFeedTask downloadTask = new RetrieveFeedTask();
             downloadTask.execute();
-       /*     final ProgressDialog pd = ProgressDialog.show(context, "Please wait", "Uploading Picture ...", true);
-            Thread thread = new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-
-                    String extension = filePath.substring(filePath.lastIndexOf("."));
-                    File file = new File(filePath);
-                    FileInputStream fis = null;
-                    // BufferedInputStream buffIn = null;
-
-                    try {
-                        picUploaded=false;
-                        imagepath = null;
-                        imageNAme=null;
-                        directoryPath=null;
-                        picreceved = true;
-                        FTPClient client = new FTPClient();
-
-
-                        try {
-                            client.setFileType(FTP.BINARY_FILE_TYPE);
-                            // buffIn = new BufferedInputStream(new FileInputStream(file));
-                            fis = new FileInputStream(file);
-                            client.enterLocalPassiveMode();
-                            client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
-                            client.makeDirectory("HCEImages/" + final_id + "/" + username);
-                            client.makeDirectory("HCEImages/" + final_id + "/" + username + "/Camera");
-                            directoryPath="HCEImages/" + final_id + "/" + username + "/Camera";
-                            //client.sendCommand("OPTS UTF8 ON");
-
-                        } catch (Exception e) {
-                            if (pDialog.isShowing())
-                                pDialog.dismiss();
-                            picreceved = false;
-                            Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
-                            //client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
-                            //client.makeDirectory("HCEImages/" + final_id+"/Camera");
-
-                        }
-
-                        if (picreceved) {
-                            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
-                            String currentDateandTime = sdf.format(new Date());
-                            imageNAme=final_id + "_" + currentDateandTime+extension;
-                            imagepath = final_id + "/" + username + "/Camera/" + imageNAme;
-
-                            try
-                            {
-                                if (!client.storeFile("HCEImages/" + imagepath, fis))//this is actual file uploading on FtpServer in specified directory/folder
-                                {
-                                    throw new Exception("Unable to write file to FTP server");
-                                }
-                                //Make sure to always close the inputStream
-                            }
-                            finally
-                            {
-                                fis.close();
-                            }
-                            InputStream inputStream = client.retrieveFileStream("/"+directoryPath+"/"+imageNAme);
-                            int returnCode = client.getReplyCode();
-                            if (inputStream == null || returnCode == 550) {
-                                picUploaded=false;
-                                if (pDialog.isShowing())
-                                    pDialog.dismiss();
-                                Toast.makeText(context, "Picture not uploaded! Please try again", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                String url = getDirectionsUrl2(context);
-                                DownloadTask2 downloadTask = new DownloadTask2();
-                                //Start downloading json data from Google Directions API
-                                downloadTask.execute(url);
-                            }
-                        }
-
-                        try
-                        {
-
-                            //10 seconds to log off.  Also 10 seconds to disconnect.
-                            client.setSoTimeout(10000);
-                            client.logout();
-
-                            //depending on the state of the server the .logout() may throw an exception,
-                            //we want to ensure complete disconnect.
-                        }
-                        catch(Exception innerException)
-                        {
-
-                            //You potentially just want to log that there was a logout exception.
-
-                        }
-                        finally
-                        {
-                            //Make sure to always disconnect.  If not, there is a chance you will leave hanging sockects
-                            client.disconnect();
-                        }
-
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-            });
-            thread.start();
-            pd.dismiss();*/
-
-        }
-        else
-        {
-            // Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
-
+            return;   // IMPORTANT: stop here so second block does NOT run
         }
 
         if (picAttachement) {
+            // upload attachment picture
             RetrieveFeedTask downloadTask = new RetrieveFeedTask();
             downloadTask.execute();
-         /*   final ProgressDialog pd = ProgressDialog.show(context, "Please wait", "Uploading Picture ...", true);
-            Thread thread = new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-
-                    String extension = filePath.substring(filePath.lastIndexOf("."));
-                    File file = new File(filePath);
-                    FileInputStream fis = null;
-                    // BufferedInputStream buffIn = null;
-
-             *//*       try {
-                        picUploaded=false;
-                        imagepath = null;
-                        imageNAme=null;
-                        directoryPath=null;
-                        picreceved=true;
-                        FTPSClient client = new FTPSClient();
-                        client.setNeedClientAuth(true);
-                        TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
-                            @Override
-                            public X509Certificate[] getAcceptedIssuers() {
-                                return null;
-                            }
-
-                            @Override
-                            public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                            }
-
-                            @Override
-                            public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                            }
-                        } };
-
-                        client.setTrustManager(trustManager[0]);
-                        InputStream  caFileInputStream = context.getResources().openRawResource(R.raw.ali);
-
-                        // We're going to put our certificates in a Keystore
-
-                        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-                        keyStore.load(caFileInputStream,"123456789".toCharArray());
-                        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-                        kmf.init(keyStore, "123456789".toCharArray());
-                        // kmf.init(null, null);
-                        KeyManager km = kmf.getKeyManagers()[0];
-                        client.setKeyManager(km);
-                        client.setBufferSize(1024 * 1024);
-                        client.setConnectTimeout(100000);
-                        SSLContext sc = SSLContext.getInstance("TLS");
-                        sc.init(kmf.getKeyManagers(), trustManager, new java.security.SecureRandom());
-                        //   client.setSocketFactory(sc.getSocketFactory());
-                   {
-                            client.execPBSZ(0);
-                            client.execPROT("P");
-
-                        }
-                        try {
-                            client.setFileType(FTP.BINARY_FILE_TYPE);
-                            // buffIn = new BufferedInputStream(new FileInputStream(file));
-                            fis = new FileInputStream(file);
-                            client.enterLocalPassiveMode();
-                            client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
-                            client.makeDirectory("HCEImages/" + final_id+"/"+username);
-                            client.makeDirectory("HCEImages/" + final_id+"/"+username+"/Attachments");
-                            directoryPath="HCEImages/" + final_id+"/"+username+"/Attachments";
-                        } catch (Exception e) {
-                            if (pDialog.isShowing())
-                                pDialog.dismiss();
-                            picreceved=false;
-                            Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
-                        }
-
-                        if(picreceved) {
-                            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
-                            String currentDateandTime = sdf.format(new Date());
-                            imageNAme=final_id + "_" + currentDateandTime+extension;
-                            imagepath = final_id +"/"+username+"/Attachments/" + imageNAme;
-                            try
-                            {
-                                if (!client.storeFile("HCEImages/" + imagepath, fis))//this is actual file uploading on FtpServer in specified directory/folder
-                                {
-                                    throw new Exception("Unable to write file to FTP server");
-                                }
-                                //Make sure to always close the inputStream
-                            }
-                            finally
-                            {
-                                fis.close();
-                            }
-                            InputStream inputStream = client.retrieveFileStream("/"+directoryPath+"/"+imageNAme);
-                            int  returnCode = client.getReplyCode();
-                            if (inputStream == null || returnCode == 550) {
-                                picUploaded=false;
-                                if (pDialog.isShowing())
-                                    pDialog.dismiss();
-                                Toast.makeText(context, "Picture not uploaded! Please try again", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                String url = getDirectionsUrl2(context);
-                                DownloadTask2 downloadTask = new DownloadTask2();
-                                //Start downloading json data from Google Directions API
-                                downloadTask.execute(url);
-                            }
-                        }
-                        try
-                        {
-
-                            //10 seconds to log off.  Also 10 seconds to disconnect.
-                            client.setSoTimeout(10000);
-                            client.logout();
-
-                            //depending on the state of the server the .logout() may throw an exception,
-                            //we want to ensure complete disconnect.
-                        }
-                        catch(Exception innerException)
-                        {
-
-                            //You potentially just want to log that there was a logout exception.
-
-                        }
-                        finally
-                        {
-                            //Make sure to always disconnect.  If not, there is a chance you will leave hanging sockects
-                            client.disconnect();
-                        }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*//*
-                    if(picUploaded) {
-
-                       *//*
-                        String hostname = "202.142.147.36";
-                        String username = "mobile";
-                        String password = "Document2";
-                        String dirPath = directoryPath;
-                        String filePath = "/"+directoryPath+"/"+imageNAme;;
-
-                        FTPCheckFileExists ftpApp = new FTPCheckFileExists();
-
-                        try {
-                            ftpApp.connect(hostname, username, password);
-
-                            boolean exist = ftpApp.checkDirectoryExists(dirPath);
-                            System.out.println("Is directory " + dirPath + " exists? " + exist);
-
-                            exist = ftpApp.checkFileExists(filePath);
-                            System.out.println("Is file " + filePath + " exists? " + exist);
-                            if(exist){
-                                String url = getDirectionsUrl2(context);
-                                DownloadTask2 downloadTask = new DownloadTask2();
-                                //Start downloading json data from Google Directions API
-                                downloadTask.execute(url);
-                            }
-                            else {
-                                if (pDialog.isShowing())
-                                    pDialog.dismiss();
-                                Toast.makeText(context, "Picture not uploaded! Please Verify", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        } finally {
-                            try {
-                                ftpApp.logout();
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
-                        }*//*
-                    }
-                }
-
-            });
-            thread.start();
-            pd.dismiss();
-*/
+            return;
         }
-        else
-        {
-            //   Toast.makeText(context, "Please Take Picture First than Upload.", Toast.LENGTH_LONG).show();
 
-        }
+        // if neither picture is taken
+        Toast.makeText(context, "Please Take Picture First then Upload.", Toast.LENGTH_LONG).show();
     }
-    class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
+
+    class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
         private Exception exception;
 
-        protected Void doInBackground(String... urls) {
-            String extension = filePath.substring(filePath.lastIndexOf("."));
+        @Override
+        protected String doInBackground(Void... params) {
+            String extension = null;
+            try {
+                if (filePath == null) {
+                    return "Local filePath is null";
+                }
+                extension = filePath.substring(filePath.lastIndexOf("."));
+            } catch (Exception e) {
+                return "Invalid filePath: " + e.getMessage();
+            }
+
             File file = new File(filePath);
+            if (!file.exists()) {
+                return "File not found: " + filePath;
+            }
+
             InputStream fis = null;
             FTPSClient client = new FTPSClient("TLS", true);
-            if (picTaken) {
 
             try {
-                picUploaded=false;
+                picUploaded = false;
                 imagepath = null;
-                imageNAme=null;
-                directoryPath=null;
+                imageNAme = null;
+                directoryPath = null;
                 picreceved = true;
+
+                // ---------- TRUST / KEY MANAGER ----------
+                TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
+                    @Override public X509Certificate[] getAcceptedIssuers() { return null; }
+                    @Override public void checkClientTrusted(X509Certificate[] certs, String authType) { }
+                    @Override public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+                }};
+                client.setTrustManager(trustManager[0]);
+
+                KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                kmf.init(null, null);
+                KeyManager km = kmf.getKeyManagers()[0];
+                client.setKeyManager(km);
+
+                client.setBufferSize(1024 * 1024);
+                client.setConnectTimeout(100000);
+
+                // ---------- CONNECT & AUTH ----------
+                client.connect(InetAddress.getByName(ftpbaseurl), 990);
                 try {
-                    TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
-                        @Override
-                        public X509Certificate[] getAcceptedIssuers() {
-                            return null;
-                        }
-
-                        @Override
-                        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                        }
-
-                        @Override
-                        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                        }
-                    }};
-
-                    client.setTrustManager(trustManager[0]);
-                    KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-                    kmf.init(null, null);
-                    KeyManager km = kmf.getKeyManagers()[0];
-                    client.setKeyManager(km);
-                    client.setBufferSize(1024 * 1024);
-                    client.setConnectTimeout(100000);
-                    client.connect(InetAddress.getByName(ftpbaseurl), 990);
-                    client.setSoTimeout(100000);
-
-                    if (client.login(ftpUser, ftpPas)) {
-                        client.execPBSZ(0);
-                        client.execPROT("P");
-                    }
-                }
-                     catch (SocketException e) {
-                        Log.e("APPTAG", e.getStackTrace().toString());
-                    } catch (UnknownHostException e) {
-                        Log.e("APPTAG", e.getStackTrace().toString());
-                    } catch (IOException e) {
-                        Log.e("APPTAG", e.getStackTrace().toString());
-                    } catch (Exception e) {
-                        Log.e("APPTAG", e.getStackTrace().toString());
-                    }
-                try {
-                    client.setFileType(FTP.BINARY_FILE_TYPE);
-                    // buffIn = new BufferedInputStream(new FileInputStream(file));
-
-                    fis = new FileInputStream(file);
-
-                    client.enterLocalPassiveMode();
-                    client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
-                    client.makeDirectory("HCEImages/" + final_id + "/" + username);
-                    client.makeDirectory("HCEImages/" + final_id + "/" + username + "/Camera");
-                    directoryPath="HCEImages/" + final_id + "/" + username + "/Camera";
-                    //client.sendCommand("OPTS UTF8 ON");
-
+                    client.execAUTH("TLS");
                 } catch (Exception e) {
-                    if (pDialog.isShowing())
-                        pDialog.dismiss();
-                    picreceved = false;
-                    Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
-                    //client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
-                    //client.makeDirectory("HCEImages/" + final_id+"/Camera");
-
+                    Log.d("FTP", "execAUTH exception (may be ok for implicit TLS): " + e.getMessage());
                 }
 
-                if (picreceved) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
-                    String currentDateandTime = sdf.format(new Date());
-                    imageNAme=final_id + "_" + currentDateandTime+extension;
-                    imagepath = final_id + "/" + username + "/Camera/" + imageNAme;
+                if (client.login(ftpUser, ftpPas)) {
+                    client.execPBSZ(0);
+                    client.execPROT("P");
+                } else {
+                    return "FTP login failed: " + client.getReplyString();
+                }
 
-                    try
-                    {
-                        if (!client.storeFile("HCEImages/" + imagepath, fis))//this is actual file uploading on FtpServer in specified directory/folder
-                        {
-                            if (pDialog.isShowing())
-                                pDialog.dismiss();
-                         //   Toast.makeText(context, "Unable to write file on server", Toast.LENGTH_SHORT).show();
-                            throw new Exception("Unable to write file to FTP server");
-                        }
-                        //Make sure to always close the inputStream
+                client.setFileType(FTP.BINARY_FILE_TYPE);
+                client.enterLocalPassiveMode();
+
+                // ---------- Prepare remote directories and names ----------
+                String safeUsername = username.trim().replace(" ", "_"); // Remove leading/trailing spaces & replace spaces
+                String folderName = picTaken ? "Camera" : "Attachments";
+                String remoteBasePath = "/HCEImages/" + final_id + "/" + safeUsername + "/" + folderName;
+
+                // create directories if not exist
+                try { client.makeDirectory("/HCEImages"); } catch (Exception ignored) {}
+                try { client.makeDirectory("/HCEImages/" + final_id); } catch (Exception ignored) {}
+                try { client.makeDirectory("/HCEImages/" + final_id + "/" + safeUsername); } catch (Exception ignored) {}
+                try { client.makeDirectory(remoteBasePath); } catch (Exception ignored) {}
+
+                // change working directory
+                boolean cwdOk = client.changeWorkingDirectory(remoteBasePath);
+                if (!cwdOk) {
+                    cwdOk = client.changeWorkingDirectory("HCEImages/" + final_id + "/" + safeUsername + "/" + folderName);
+                }
+                if (!cwdOk) {
+                    return "Unable to change to remote directory: " + remoteBasePath + "  Reply: " + client.getReplyString();
+                }
+
+                // generate filename
+                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
+                String currentDateandTime = sdf.format(new Date());
+                imageNAme = final_id + "_" + currentDateandTime + extension;
+                imagepath = final_id + "/" + safeUsername + "/" + folderName + "/" + imageNAme;
+
+                // open local stream
+                fis = new FileInputStream(file);
+
+                // upload file
+                boolean stored = client.storeFile(imageNAme, fis);
+                if (!stored) {
+                    String reply = client.getReplyString();
+                    return "Upload failed: " + reply;
+                }
+
+                // verify upload
+                InputStream inputStream = client.retrieveFileStream("/" + remoteBasePath.replaceFirst("^/+", "") + "/" + imageNAme);
+                if (inputStream != null) {
+                    byte[] buffer = new byte[1024];
+                    while (inputStream.read(buffer) != -1) { }
+                    inputStream.close();
+                    boolean complete = client.completePendingCommand();
+                    if (!complete) {
+                        return "Uploaded but server did not complete retrieveFileStream. Reply: " + client.getReplyString();
                     }
-                    finally
-                    {
-                        fis.close();
-                    }
-                    InputStream inputStream = client.retrieveFileStream("/"+directoryPath+"/"+imageNAme);
-                    int returnCode = client.getReplyCode();
-                    if (inputStream == null || returnCode == 550) {
-                        picUploaded=false;
-                        if (pDialog.isShowing())
-                            pDialog.dismiss();
-                        Toast.makeText(context, "Picture not uploaded! Please try again", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        String url3 = getDirectionsUrl2(context);
-                        DownloadTask2 downloadTask = new DownloadTask2();
-                        //Start downloading json data from Google Directions API
-                        downloadTask.execute(url3);
+                } else {
+                    int code = client.getReplyCode();
+                    if (code == 550) {
+                        return "Upload verification failed: 550 (file not found or permission denied)";
+                    } else {
+                        return "Upload verification failed. FTP reply: " + client.getReplyString();
                     }
                 }
 
-                try
-                {
-
-                    //10 seconds to log off.  Also 10 seconds to disconnect.
-                    client.setSoTimeout(10000);
-                    client.logout();
-
-                    //depending on the state of the server the .logout() may throw an exception,
-                    //we want to ensure complete disconnect.
-                }
-                catch(Exception innerException)
-                {
-
-                    //You potentially just want to log that there was a logout exception.
-
-                }
-                finally
-                {
-                    //Make sure to always disconnect.  If not, there is a chance you will leave hanging sockects
-                    client.disconnect();
-                }
+                picUploaded = true;
+                return "OK";
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("FTP", "Exception: " + e.getMessage(), e);
+                return "Exception: " + e.getMessage();
+            } finally {
+                try { if (fis != null) fis.close(); } catch (Exception ignored) {}
+                try { client.logout(); } catch (Exception ignored) {}
+                try { client.disconnect(); } catch (Exception ignored) {}
             }
-
-            }
-
-
-            if (picAttachement) {
-                try {
-                   // String dstPath = context.getExternalFilesDir(null) + File.separator;
-                    //File dst = new File(dstPath);
-
-                //  File newFile=  exportFile(file, dst);
-                    picUploaded = false;
-                    imagepath = null;
-                    imageNAme = null;
-                    directoryPath = null;
-                    picreceved = true;
-                    try {
-                        TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
-                            @Override
-                            public X509Certificate[] getAcceptedIssuers() {
-                                return null;
-                            }
-
-                            @Override
-                            public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                            }
-
-                            @Override
-                            public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                            }
-                        }};
-
-                        client.setTrustManager(trustManager[0]);
-                        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-                        kmf.init(null, null);
-                        KeyManager km = kmf.getKeyManagers()[0];
-                        client.setKeyManager(km);
-                        client.setBufferSize(1024 * 1024);
-                        client.setConnectTimeout(100000);
-                        client.connect(InetAddress.getByName(ftpbaseurl), 990);
-                        client.setSoTimeout(100000);
-
-                        if (client.login(ftpUser, ftpPas)) {
-                            client.execPBSZ(0);
-                            client.execPROT("P");
-                        }
-                    } catch (SocketException e) {
-                        Log.e("APPTAG", e.getStackTrace().toString());
-                    } catch (UnknownHostException e) {
-                        Log.e("APPTAG", e.getStackTrace().toString());
-                    } catch (IOException e) {
-                        Log.e("APPTAG", e.getStackTrace().toString());
-                    } catch (Exception e) {
-                        Log.e("APPTAG", e.getStackTrace().toString());
-                    }
-                    try {
-                        client.setFileType(FTP.BINARY_FILE_TYPE);
-                        // buffIn = new BufferedInputStream(new FileInputStream(file));
-                        Uri mUri = Uri.fromFile(file);
-                        fis= getContentResolver().openInputStream(mUri);
-                      //  fis = new FileInputStream(newFile);
-                         client.enterLocalPassiveMode();
-                        client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
-                        client.makeDirectory("HCEImages/" + final_id + "/" + username);
-                        client.makeDirectory("HCEImages/" + final_id + "/" + username + "/Attachments");
-                        directoryPath = "HCEImages/" + final_id + "/" + username + "/Attachments";
-                    } catch (Exception e) {
-                        if (pDialog.isShowing())
-                            pDialog.dismiss();
-                        picreceved = false;
-                        throw new Exception(e);
-                       // Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
-                    }
-
-                    if (picreceved) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_HHmmss");
-                        String currentDateandTime = sdf.format(new Date());
-                        imageNAme = final_id + "_" + currentDateandTime + extension;
-                        imagepath = final_id + "/" + username + "/Attachments/" + imageNAme;
-                        try {
-
-
-                            if (!client.storeFile("HCEImages/" + imagepath, fis))//this is actual file uploading on FtpServer in specified directory/folder
-                            {
-                                if (pDialog.isShowing())
-                                    pDialog.dismiss();
-                                picreceved = false;
-                                throw new Exception("Unable to write file to FTP server");
-                            }
-                            //Make sure to always close the inputStream
-                        } finally {
-                            fis.close();
-                        }
-                        InputStream inputStream = client.retrieveFileStream("/" + directoryPath + "/" + imageNAme);
-                        int returnCode = client.getReplyCode();
-                        if (inputStream == null || returnCode == 550) {
-                            picUploaded = false;
-                            if (pDialog.isShowing())
-                                pDialog.dismiss();
-                            Toast.makeText(context, "Picture not uploaded! Please try again", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String url2 = getDirectionsUrl2(context);
-                            DownloadTask2 downloadTask = new DownloadTask2();
-                            //Start downloading json data from Google Directions API
-                            downloadTask.execute(url2);
-                        }
-                    }
-                    try {
-
-                        //10 seconds to log off.  Also 10 seconds to disconnect.
-                        client.setSoTimeout(10000);
-                        client.logout();
-
-                        //depending on the state of the server the .logout() may throw an exception,
-                        //we want to ensure complete disconnect.
-                    } catch (Exception innerException) {
-
-                        //You potentially just want to log that there was a logout exception.
-
-                    } finally {
-                        //Make sure to always disconnect.  If not, there is a chance you will leave hanging sockects
-                        client.disconnect();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-
-            return null;
         }
 
-        protected void onPostExecute(String feed) {
-            // TODO: check this.exception
-            // TODO: do something with the feed
+        @Override
+        protected void onPostExecute(String result) {
+            if (pDialog != null && pDialog.isShowing()) {
+                try { pDialog.dismiss(); } catch (Exception ignored) {}
+            }
+
+            if (result == null) result = "Unknown result";
+
+            if (result.equals("OK")) {
+                String url = getDirectionsUrl2(context);
+                DownloadTask2 downloadTask = new DownloadTask2();
+                downloadTask.execute(url);
+            } else {
+                Toast.makeText(context, "Image upload failed: " + result, Toast.LENGTH_LONG).show();
+                Log.e("UPLOAD_ERROR", result);
+            }
         }
     }
-    // @RequiresApi(api = Build.VERSION_CODES.M)
+
+
     public void requestRuntimePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
 
@@ -1582,11 +1095,6 @@ public class DetailTabActivity extends AppCompatActivity {
             }
         }
     }
-
-
-    /**
-     * Creating file uri to store image/video
-     */
 
     private String getRealPathFromUri(Context context, Uri uri) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1628,42 +1136,6 @@ public class DetailTabActivity extends AppCompatActivity {
         }
     }
 
-//    public static String getRealPathFromUri(Context context, Uri contentUri) {
-//        Cursor cursor = null;
-//        try {
-//            String[] proj = { MediaStore.Images.Media.DATA };
-//
-//            cursor = context.getApplicationContext().getContentResolver().query(contentUri, proj, null, null, null);
-//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//            cursor.moveToFirst();
-//            return cursor.getString(column_index);
-//        } finally {
-//            if (cursor != null) {
-//                cursor.close();
-//            }
-//        }
-//    }
-    public String getFileName(Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
     private class DownloadTask2 extends AsyncTask<String, Void, String> {
 
 
@@ -1753,7 +1225,6 @@ public class DetailTabActivity extends AppCompatActivity {
         }
         return data;
     }
-
     private class ParserTask2 extends AsyncTask<Object, Object, String> {
 
         @Override
