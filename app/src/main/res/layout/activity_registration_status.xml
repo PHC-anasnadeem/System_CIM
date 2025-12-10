@@ -1,79 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:orientation="vertical"
+    android:background="#F5F5F5"
     tools:context=".Activities.Common.RegistrationStatus">
 
-    <!-- Search Field 1 -->
-    <EditText
-        android:id="@+id/searchField1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Search by Name"
-        android:padding="12dp"
-        android:background="@drawable/search_field_background"
-        android:drawableEnd="@drawable/ic_search"
-        android:drawablePadding="8dp"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:imeOptions="actionSearch"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Registration Status"
+        app:titleTextColor="#FFFFFF" />
 
+    <!-- Main Scroll Area -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <!-- Search Field 2 -->
-    <EditText
-        android:id="@+id/searchField2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Search by ID"
-        android:padding="12dp"
-        android:background="@drawable/search_field_background"
-        android:drawableEnd="@drawable/ic_search"
-        android:drawablePadding="8dp"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:imeOptions="actionSearch"
-        app:layout_constraintTop_toBottomOf="@id/searchField1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <!-- Search Field 3 -->
-    <EditText
-        android:id="@+id/searchField3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Search by Status"
-        android:padding="12dp"
-        android:background="@drawable/search_field_background"
-        android:drawableEnd="@drawable/ic_search"
-        android:drawablePadding="8dp"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:imeOptions="actionSearch"
-        app:layout_constraintTop_toBottomOf="@id/searchField2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+            <!-- CardView Search Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/searchField3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/registration_item_layout" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <!-- Title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Search Registration Records"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
 
+                    <!-- Search Field 1 -->
+                    <EditText
+                        android:id="@+id/searchField1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/edit_text_background"
+                        android:padding="12dp"
+                        android:hint="Search"
+                        android:textSize="16sp"
+                        android:autofillHints="" />
 
+                    <!-- Buttons Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="end"
+                        android:orientation="horizontal">
 
+                        <!-- Clear Button -->
+                        <Button
+                            android:id="@+id/btnClear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@android:color/holo_red_dark"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:text="Clear"
+                            android:textColor="#FFFFFF" />
+
+                        <!-- Spacing -->
+                        <Space
+                            android:layout_width="12dp"
+                            android:layout_height="wrap_content" />
+
+                        <!-- Search Button -->
+                        <Button
+                            android:id="@+id/btnSearch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:text="Search"
+                            android:textColor="#FFFFFF" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Progress Loader -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
+
+            <!-- No Results Text -->
+            <TextView
+                android:id="@+id/tvNoResults"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:gravity="center"
+                android:text="No records found"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <!-- RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:clipToPadding="false"
+                android:paddingBottom="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

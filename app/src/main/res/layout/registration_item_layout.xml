@@ -1,40 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_margin="10dp"
+    card_view:cardCornerRadius="10dp"
+    card_view:cardElevation="5dp"
+    card_view:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/itemTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Item Title"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/itemSubtitle1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Item Subtitle"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"/>
+        <!-- Registration Number (Title) -->
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="R-12345"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#000000" />
 
-    <TextView
-        android:id="@+id/itemSubtitle2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Item Subtitle"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"/>
+        <!-- HCE Name -->
+        <TextView
+            android:id="@+id/itemSubtitle1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="HCE Name: ABC Hospital"
+            android:textSize="15sp"
+            android:textColor="#444444" />
 
-    <TextView
-        android:id="@+id/itemSubtitle3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Item Subtitle"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"/>
-</LinearLayout>
+        <!-- License Type -->
+        <TextView
+            android:id="@+id/itemSubtitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="License Type: Provisional"
+            android:textSize="15sp"
+            android:textColor="#444444" />
+
+        <!-- District -->
+        <TextView
+            android:id="@+id/itemSubtitle3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="District: Lahore"
+            android:textSize="15sp"
+            android:textColor="#444444" />
+
+        <!-- Registration Date -->
+        <TextView
+            android:id="@+id/itemSubtitle4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Registration Date: 2025-01-01"
+            android:textSize="15sp"
+            android:textColor="#444444" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -251,26 +251,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
 
-        // Find notification views
-//        notificationIcon = findViewById(R.id.notificationIcon);
-//        notificationCount = findViewById(R.id.notificationCount);
-
         int notificationCount = getIntent().getIntExtra("notificationCount", 0);
-
-        // Set click listener for notification icon
-//        notificationIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent notifyIntent = new Intent(FilterActivity.this, NotificationActivity.class);
-//                startActivity(notifyIntent);
-////                Toast.makeText(FilterActivity.this, "Notifications clicked", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        incrementNotificationCount();
-
-
-
-
 
     // Navigation view header
         navHeader = navigationView.getHeaderView(0);
@@ -1600,14 +1581,6 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     private void setUpNavigationView() {
 
         Menu menu = navigationView.getMenu();
-
-        // Check if the username matches Anas Nadeem or Faizan Niazi or Sami Ullah Khan
-        if (username.equals("Faizan Niazi") || username.equals("Anas Nadeem") || username.equals("Sami Ullah Khan")) {
-            menu.findItem(R.id.nav_registration).setVisible(true); // Show the item
-        } else {
-            menu.findItem(R.id.nav_registration).setVisible(false); // Hide the item
-        }
-
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 

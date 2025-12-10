@@ -3,7 +3,9 @@ package com.phc.cim.Adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.phc.cim.DataElements.RegistrationItem;
@@ -13,59 +15,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationItemAdapter extends RecyclerView.Adapter<RegistrationItemAdapter.ViewHolder> {
-    private List<RegistrationItem> items;
-    private List<RegistrationItem> filteredItems;
 
-    public RegistrationItemAdapter(List<RegistrationItem> items) {
-        this.items = items;
-        this.filteredItems = new ArrayList<>(items);
+    private List<RegistrationItem> itemList = new ArrayList<>();
+
+    public RegistrationItemAdapter(List<RegistrationItem> list) {
+        this.itemList = list;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // Define your view holder
-        public ViewHolder(View view) {
-            super(view);
-            // Initialize your views here
+        TextView tvRegNo, tvName, tvType, tvDistrict, tvDate;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            tvRegNo = itemView.findViewById(R.id.itemTitle);       // Registration_Number
+            tvName = itemView.findViewById(R.id.itemSubtitle1);    // HCE_Name
+            tvType = itemView.findViewById(R.id.itemSubtitle2);    // HCE_License_Type
+            tvDistrict = itemView.findViewById(R.id.itemSubtitle3);// HCE_District
+            tvDate = itemView.findViewById(R.id.itemSubtitle4);    // Registration_Date
         }
     }
 
+    @NonNull
     @Override
-    public RegistrationItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RegistrationItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.registration_item_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        RegistrationItem item = filteredItems.get(position);
-        // Bind your data to the views
+    public void onBindViewHolder(@NonNull RegistrationItemAdapter.ViewHolder holder, int position) {
+
+        RegistrationItem item = itemList.get(position);
+
+        holder.tvRegNo.setText(item.getRegistrationNumber());
+        holder.tvName.setText("HCE Name: " + item.getHceName());
+        holder.tvType.setText("License Type: " + item.getHceLicenseType());
+        holder.tvDistrict.setText("HCE District: " + item.getHceDistrict());
+        holder.tvDate.setText("Registration Date: " + item.getRegistrationDate());
     }
 
     @Override
     public int getItemCount() {
-        return filteredItems.size();
+        return itemList.size();
     }
 
-    public void filter(String nameQuery, String idQuery, String statusQuery) {
-        filteredItems.clear();
-        for (RegistrationItem item : items) {
-            // Apply your filtering logic
-            boolean matches = true;
-            if (!nameQuery.isEmpty() && !item.getName().toLowerCase().contains(nameQuery.toLowerCase())) {
-                matches = false;
-            }
-            if (!idQuery.isEmpty() && !item.getId().toLowerCase().contains(idQuery.toLowerCase())) {
-                matches = false;
-            }
-            if (!statusQuery.isEmpty() && !item.getStatus().toLowerCase().contains(statusQuery.toLowerCase())) {
-                matches = false;
-            }
-            if (matches) {
-                filteredItems.add(item);
-            }
-        }
+    public void updateList(List<RegistrationItem> newList) {
+        this.itemList = newList;
         notifyDataSetChanged();
     }
 }
-

@@ -3,29 +3,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="8dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@android:color/white">
 
+        <!-- Header: Notification Type -->
+        <TextView
+            android:id="@+id/typeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REVISIT"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/design_default_color_primary"
+            android:background="@drawable/rounded_type_bg"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:layout_gravity="start"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Message -->
+        <TextView
+            android:id="@+id/messageTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You have a new notification regarding Final ID: 1234."
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Outlet Name -->
         <TextView
             android:id="@+id/outletNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Outlet Name"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             android:layout_marginBottom="2dp"/>
 
+        <!-- District -->
         <TextView
             android:id="@+id/districtTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="District Name"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"/>
 

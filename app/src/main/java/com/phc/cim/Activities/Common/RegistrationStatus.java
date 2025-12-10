@@ -5,87 +5,187 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.inputmethod.EditorInfo;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.phc.cim.Adapters.RegistrationItemAdapter;
 import com.phc.cim.DataElements.RegistrationItem;
 import com.phc.cim.R;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationStatus extends AppCompatActivity {
 
-    private EditText searchField1, searchField2, searchField3;
+    private EditText searchField1;
+    private Button btnSearch, btnClear;
     private RecyclerView recyclerView;
-    private RegistrationItemAdapter adapter; // adapter class
-    private List<RegistrationItem> itemList; // The original data list
+    private TextView tvNoResults;
+    private RegistrationItemAdapter adapter;
+
+    private List<RegistrationItem> itemList = new ArrayList<>();
+    private ProgressDialog progressDialog;
+
+    private String baseurl;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_status);
 
+        // ---------------- TOOLBAR ----------------
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        // ---------------- INIT -------------------
         searchField1 = findViewById(R.id.searchField1);
-        searchField2 = findViewById(R.id.searchField2);
-        searchField3 = findViewById(R.id.searchField3);
+        btnSearch = findViewById(R.id.btnSearch);
+        btnClear = findViewById(R.id.btnClear);
+        tvNoResults = findViewById(R.id.tvNoResults);
         recyclerView = findViewById(R.id.recyclerView);
 
-        // Initialize itemList with your data
-        itemList = getData(); // Replace with your method to get data
+        // Optional: Force uppercase input
+        searchField1.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
-        // Set up RecyclerView and adapter
+        // Add TextWatcher to validate prefix
+        searchField1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String input = s.toString();
+                if (!input.isEmpty() && !input.startsWith("OAP") && !input.startsWith("R-") &&
+                        !input.startsWith("PL-") && !input.startsWith("RL-")) {
+                    searchField1.setError("Must start with OAP, R-, PL-, or RL-");
+                }
+            }
+        });
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+
+        baseurl = getResources().getString(R.string.baseurl);
+        token = getResources().getString(R.string.token);
+
+        // ---------------- RECYCLER VIEW ----------------
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RegistrationItemAdapter(itemList);
         recyclerView.setAdapter(adapter);
 
-        // Set up search functionality
-        setupSearchListeners();
+        // ---------------- BUTTON LISTENERS ----------------
+        btnSearch.setOnClickListener(v -> performSearch());
+        btnClear.setOnClickListener(v -> clearSearch());
     }
 
-    private void setupSearchListeners() {
-        // Set up OnEditorActionListener for the search field
-        searchField1.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                String nameQuery = searchField1.getText().toString();
-                String idQuery = searchField2.getText().toString();
-                String statusQuery = searchField3.getText().toString();
+    // ---------------- SEARCH ----------------
+    private void performSearch() {
+        String query = searchField1.getText().toString().trim();
 
-                // Filter the adapter with the search queries
-                adapter.filter(nameQuery, idQuery, statusQuery);
+        if (query.isEmpty()) {
+            Toast.makeText(this, "Enter Registration Number / License No / OAP", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                // Hide the keyboard after searching
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(searchField1.getWindowToken(), 0);
-                }
-                return true; // Indicates the action was handled
+        hideKeyboard();
+        callApi(query);
+    }
+
+    // ---------------- API CALL ----------------
+    private void callApi(String search) {
+        progressDialog.show();
+
+        String url ="https://cim.phc.org.pk:8099/PHCCensusData.svc/GetHCERegistrationData?Search_String=" + search;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    progressDialog.dismiss();
+                    parseResponse(response);
+                },
+                error -> {
+                    progressDialog.dismiss();
+
+                    String message = "Unknown error occurred";
+                    if (error.networkResponse != null) {
+                        message = "Error Code: " + error.networkResponse.statusCode;
+                    } else if (error.getMessage() != null) {
+                        message = error.getMessage();
+                    }
+
+                    Toast.makeText(this, "API Error: " + message, Toast.LENGTH_LONG).show();
+                });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
+    }
+
+    // ---------------- PARSE RESPONSE ----------------
+    private void parseResponse(JSONArray response) {
+        itemList.clear();
+
+        try {
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject obj = response.getJSONObject(i);
+
+                RegistrationItem item = new RegistrationItem(
+                        obj.optString("Registration_Number", ""),
+                        obj.optString("HCE_Name", ""),
+                        obj.optString("HCE_License_Type", ""),
+                        obj.optString("HCE_District", ""),
+                        obj.optString("Registration_Date", "")
+                );
+
+                itemList.add(item);
             }
-            return false;
-        });
 
-        // Optionally, add similar listeners for the other search fields if needed
-        searchField2.setOnEditorActionListener((v, actionId, event) -> {
-            // Similar logic for searchField2 if you want it to trigger search
-            return false; // Return false to let the system handle other actions
-        });
+            adapter.updateList(itemList);
 
-        searchField3.setOnEditorActionListener((v, actionId, event) -> {
-            // Similar logic for searchField3 if you want it to trigger search
-            return false; // Return false to let the system handle other actions
-        });
+            tvNoResults.setVisibility(itemList.isEmpty() ? View.VISIBLE : View.GONE);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Parsing error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private List<RegistrationItem> getData() {
-        // Implement your data fetching logic here
-        return new ArrayList<>(); // Return your data
+    // ---------------- CLEAR SEARCH ----------------
+    private void clearSearch() {
+        searchField1.setText("");
+        itemList.clear();
+        adapter.updateList(itemList);
+        tvNoResults.setVisibility(View.GONE);
+        hideKeyboard();
+    }
+
+    // ---------------- HIDE KEYBOARD ----------------
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null && getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }
-

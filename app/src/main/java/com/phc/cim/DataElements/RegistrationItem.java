@@ -1,49 +1,38 @@
 package com.phc.cim.DataElements;
 
 public class RegistrationItem {
-    private String name;
-    private String id;
-    private String status;
 
-    // Constructor
-    public RegistrationItem(String name, String id, String status) {
-        this.name = name;
-        this.id = id;
-        this.status = status;
+    private String Registration_Number;
+    private String HCE_Name;
+    private String HCE_License_Type;
+    private String HCE_District;
+    private String Registration_Date;
+
+    public RegistrationItem(String registration_Number, String HCE_Name, String HCE_License_Type, String HCE_District, String registration_Date) {
+        Registration_Number = registration_Number;
+        this.HCE_Name = HCE_Name;
+        this.HCE_License_Type = HCE_License_Type;
+        this.HCE_District = HCE_District;
+        Registration_Date = registration_Date;
     }
 
-    // Getters and Setters
-    public String getName() {
-        return name;
+    public String getRegistrationNumber() {
+        return Registration_Number;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getHceName() {
+        return HCE_Name;
     }
 
-    public String getId() {
-        return id;
+    public String getHceLicenseType() {
+        return HCE_License_Type;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getHceDistrict() {
+        return HCE_District;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "RegistrationItem{" +
-                "name='" + name + '\'' +
-                ", id='" + id + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+    public String getRegistrationDate() {
+        return Registration_Date;
     }
 }
-

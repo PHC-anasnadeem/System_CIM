@@ -13,6 +13,7 @@
         android:orientation="horizontal"
         android:padding="12dp">
 
+        <!-- Notification Icon -->
         <ImageView
             android:id="@+id/notification_icon"
             android:layout_width="40dp"
@@ -28,6 +29,22 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
+            <!-- Notification Type Badge -->
+            <TextView
+                android:id="@+id/typeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="REVISIT"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/design_default_color_primary"
+                android:background="@drawable/rounded_type_bg"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:layout_gravity="start"
+                android:layout_marginBottom="4dp"/>
+
+            <!-- Title + Date -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,6 +71,19 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
+            <!-- Subtitle: DiaryNo / FinalID -->
+            <TextView
+                android:id="@+id/notification_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Diary #: 12345"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                android:ellipsize="end"
+                android:maxLines="1" />
+
+            <!-- Message Preview -->
             <TextView
                 android:id="@+id/notification_message"
                 android:layout_width="match_parent"
@@ -65,6 +95,7 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="14sp" />
 
+            <!-- Unread Indicator -->
             <View
                 android:id="@+id/unread_indicator"
                 android:layout_width="8dp"
@@ -75,4 +106,4 @@
                 android:visibility="visible" />
         </LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView> 
+</androidx.cardview.widget.CardView>

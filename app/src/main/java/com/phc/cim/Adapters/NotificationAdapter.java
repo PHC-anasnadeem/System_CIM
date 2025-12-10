@@ -35,14 +35,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
-        NotificationItem notification = notificationList.get(position);
-        holder.outletNameTextView.setText(notification.getOutletName());
-        holder.districtTextView.setText(notification.getDistrictName());
+        NotificationItem item = notificationList.get(position);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDetailDialog(notification);
+        holder.typeTextView.setText(item.getType());
+        holder.outletNameTextView.setText(item.getMessage()); // show message
+        holder.districtTextView.setText(item.getInsertedDate()); // show date
+        holder.districtTextView.setText(item.getDistrictName());
+
+        holder.itemView.setOnClickListener(v -> {
+            int pos = holder.getAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION) {
+                showDetailDialog(notificationList.get(pos));
             }
         });
     }
@@ -53,37 +56,57 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     public static class NotificationViewHolder extends RecyclerView.ViewHolder {
-        TextView outletNameTextView;
-        TextView districtTextView;
+        TextView typeTextView, messageTextView, districtTextView, outletNameTextView;
 
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            typeTextView = itemView.findViewById(R.id.typeTextView);
+            messageTextView = itemView.findViewById(R.id.messageTextView);
             outletNameTextView = itemView.findViewById(R.id.outletNameTextView);
             districtTextView = itemView.findViewById(R.id.districtTextView);
         }
+
     }
 
-    private void showDetailDialog(NotificationItem notification) {
+    private void showDetailDialog(NotificationItem item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Notification Details");
+        builder.setTitle(item.getType().equals("COMPLAINT") ? "Complaint Details" : "Revisit Details");
 
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_notification_detail, null);
         builder.setView(view);
 
-        // Set notification details in the dialog
-        ((TextView) view.findViewById(R.id.detailOutletNameTextView)).setText(notification.getOutletName());
-        ((TextView) view.findViewById(R.id.detailComplainantAddressTextView)).setText(notification.getOutletAddress());
-        ((TextView) view.findViewById(R.id.detailDistrictTextView)).setText(notification.getDistrictName());
-        ((TextView) view.findViewById(R.id.detailPhcRegistrationNoTextView)).setText(notification.getCaseFileID());
-        ((TextView) view.findViewById(R.id.detailFinalIdTextView)).setText(notification.getFinalID());
-        ((TextView) view.findViewById(R.id.SealType)).setText(notification.getSealType());
-        ((TextView) view.findViewById(R.id.CategoryType)).setText(notification.getCategoryType());
-        ((TextView) view.findViewById(R.id.SummonIssueDate)).setText(notification.getSummonIssueDate());
-        ((TextView) view.findViewById(R.id.sealedBy)).setText(notification.getSealedBy());
+        // COMMON FIELDS
+        ((TextView) view.findViewById(R.id.detailOutletNameTextView))
+                .setText(item.getOutletName() != null ? item.getOutletName() : item.getComplainantName());
+        ((TextView) view.findViewById(R.id.detailDistrictTextView)).setText(item.getDistrict());
+
+        if ("REVISIT".equals(item.getType())) {
+            ((TextView) view.findViewById(R.id.detailPhcRegistrationNoTextView)).setText(item.getCaseFileID());
+            ((TextView) view.findViewById(R.id.detailFinalIdTextView)).setText(String.valueOf(item.getFinalID()));
+            ((TextView) view.findViewById(R.id.CategoryType)).setText(item.getCategoryType());
+            ((TextView) view.findViewById(R.id.SealType)).setText(item.getSealType());
+            ((TextView) view.findViewById(R.id.SummonIssueDate)).setText(item.getSummonIssueDate());
+            ((TextView) view.findViewById(R.id.sealedBy)).setText(item.getSealedBy());
+            ((TextView) view.findViewById(R.id.Comments)).setText(item.getComments());
+        } else { // COMPLAINT
+            ((TextView) view.findViewById(R.id.detailPhcRegistrationNoTextView)).setText(item.getPHC_RegistrationNo());
+            ((TextView) view.findViewById(R.id.detailFinalIdTextView)).setText(item.getDiaryNo());
+            ((TextView) view.findViewById(R.id.CategoryType)).setText(item.getTitle());
+            ((TextView) view.findViewById(R.id.SealType)).setText(item.getComplaintDetail());
+            ((TextView) view.findViewById(R.id.SummonIssueDate)).setText(item.getInsertedDate()); // ComplaintDate
+            ((TextView) view.findViewById(R.id.sealedBy)).setText(item.getComplainantName());
+            ((TextView) view.findViewById(R.id.Comments)).setText(item.getComments());
+
+            // Additional complaint fields
+            ((TextView) view.findViewById(R.id.detailOutletNameTextView)).setText(item.getOutletName());
+            ((TextView) view.findViewById(R.id.detailComplainantAddressTextView)).setText(item.getComplainantAddress());
+            ((TextView) view.findViewById(R.id.detailComplainantContactNoTextView)).setText(item.getComplainantContactNo());
+        }
 
         builder.setPositiveButton("OK", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
+
+
 }

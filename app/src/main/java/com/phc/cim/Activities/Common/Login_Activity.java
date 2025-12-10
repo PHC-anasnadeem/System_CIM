@@ -44,11 +44,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import androidx.biometric.BiometricPrompt;
+import androidx.biometric.BiometricManager;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 
 public class Login_Activity extends AppCompatActivity {
-
-
-
 
     // UI references.
     private EditText mEmailView;
@@ -84,6 +87,9 @@ public class Login_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         context=this;
+
+        // Init progress view here
+        mProgressView = findViewById(R.id.login_progress);
 
          emailEditor = getSharedPreferences("Emails", MODE_PRIVATE).edit();
         // Set up the login form.
@@ -136,13 +142,20 @@ public class Login_Activity extends AppCompatActivity {
                     set.addAll(emailset);
                     emailEditor.putStringSet("emaillist", set);
                     emailEditor.apply();
-                    mProgressView = findViewById(R.id.login_progress);
                     mProgressView.setVisibility(View.VISIBLE);
                     String url = getDirectionsUrl();
                     DownloadTask downloadTask = new DownloadTask();
                     //Start downloading json data from Google Directions API
                     downloadTask.execute(url);
                 }
+            }
+        });
+
+        Button btnFingerprint = findViewById(R.id.btnFingerprint);
+        btnFingerprint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkBiometricSupportAndLogin();
             }
         });
 
@@ -425,6 +438,73 @@ public class Login_Activity extends AppCompatActivity {
 
     }
 
+    private void checkBiometricSupportAndLogin() {
+        BiometricManager biometricManager = BiometricManager.from(this);
+
+        switch (biometricManager.canAuthenticate()) {
+            case BiometricManager.BIOMETRIC_SUCCESS:
+                showBiometricPrompt();
+                break;
+
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                Toast.makeText(this, "No fingerprint hardware available", Toast.LENGTH_SHORT).show();
+                break;
+
+            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                Toast.makeText(this, "No fingerprint enrolled", Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                Toast.makeText(this, "Fingerprint not supported", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showBiometricPrompt() {
+        Executor executor = Executors.newSingleThreadExecutor();
+
+        BiometricPrompt biometricPrompt = new BiometricPrompt(
+                Login_Activity.this,
+                executor,
+                new BiometricPrompt.AuthenticationCallback() {
+                    @Override
+                    public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                        super.onAuthenticationSucceeded(result);
+                        runOnUiThread(() -> fingerprintAutoLogin());
+                    }
+                }
+        );
+
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Login with Fingerprint")
+                .setDescription("Use your fingerprint to login")
+                .setNegativeButtonText("Cancel")
+                .build();
+
+        biometricPrompt.authenticate(promptInfo);
+    }
+
+    private void fingerprintAutoLogin() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String savedEmail = prefs.getString("email", null);
+        String savedPassword = prefs.getString("password", null);
+
+        if (savedEmail == null || savedPassword == null) {
+            Toast.makeText(this, "Please login once normally first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Fill UI (optional)
+        autocomplete.setText(savedEmail);
+        mPasswordView.setText(savedPassword);
+
+        // Call your login API
+        email = savedEmail;
+        password = savedPassword;
+
+        String url = getDirectionsUrl();
+        DownloadTask downloadTask = new DownloadTask();
+        downloadTask.execute(url);
+    }
 
 }
 
