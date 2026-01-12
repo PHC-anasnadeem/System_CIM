@@ -359,6 +359,11 @@
             android:foregroundServiceType="location" />
         <service android:name=".Extra.NotificationService" />
 
+        <service
+            android:name=".Extra.MyLocationService"
+            android:foregroundServiceType="location"
+            android:exported="false"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

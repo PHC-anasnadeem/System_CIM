@@ -163,6 +163,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent intent = getIntent();
         email= (String) intent.getSerializableExtra("email");
 
+
     }
 
     @Override
@@ -892,45 +893,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
-//-------------------------------------Tabs View-------------------------------------------->>>>>>>>>>>>>
-  /*  private void setupViewPager(ViewPager viewPager) {
-        MapsActivity.ViewPagerAdapter adapter = new MapsActivity.ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new LocateUsFragment(), "List View");
-          adapter.addActivity(new MapsActivity(),"Map");
-        viewPager.setAdapter(adapter);
-    }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-        private final List<Activity> mActivityList = new ArrayList<>();
-
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-        public void addActivity(Activity activity, String title) {
-            mActivityList.add(activity);
-            mFragmentTitleList.add(title);
-        }
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }*/
 }

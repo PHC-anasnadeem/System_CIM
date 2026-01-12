@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import com.phc.cim.Activities.Inspection.InspectionFilterActivity;
 import com.phc.cim.DataElements.Role;
+import com.phc.cim.Extra.MyLocationService;
 import com.phc.cim.Managers.DataManager;
 import com.phc.cim.R;
 
@@ -368,17 +370,14 @@ public class Login_Activity extends AppCompatActivity {
                     UserID= result.get(i).get("UserID");
                 }
                 if (status.equals("1")) {
-                   // count++;
-                 /*   if(count<10) {
-                        for(int i=0; i<10; i++) {
-
-                            WebApiManager webApiManager = new WebApiManager(context, count);
-                            count++;
-                        }
-                    }*/
-                   // DataManager dataManager = new DataManager(context);
                     SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
                     editor.clear().commit();
+                    editor.putBoolean("fingerprint_enabled", true);
+
+                    // Fingerprint ke liye alag credentials save karein
+                    editor.putString("fp_email_" + email, email);
+                    editor.putString("fp_password_" + email, password);
+
                     editor.putString("email", email);
                     editor.putString("password", password);
                     editor.putString("username", username);
@@ -401,10 +400,16 @@ public class Login_Activity extends AppCompatActivity {
                         context.startActivity(firstpage);
                     }
 
+                    // --- START LOCATION SERVICE HERE ---
+                    Intent serviceIntent = new Intent(context, MyLocationService.class);
+                    serviceIntent.putExtra("UserID", UserID);
+                    serviceIntent.putExtra("username", username);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        context.startForegroundService(serviceIntent);
+                    } else {
+                        context.startService(serviceIntent);
+                    }
 
-                    // Intent firstpage = new Intent(context, .class);
-                    //  firstpage.putExtra("StudentList",(Serializable) result);
-                    //  context.startActivity(firstpage);
                 }
                 else {
                     AlertDialog alertDialog = new AlertDialog.Builder(
@@ -485,26 +490,41 @@ public class Login_Activity extends AppCompatActivity {
 
     private void fingerprintAutoLogin() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String savedEmail = prefs.getString("email", null);
-        String savedPassword = prefs.getString("password", null);
+
+        boolean enabled = prefs.getBoolean("fingerprint_enabled", false);
+        if (!enabled) {
+            Toast.makeText(this, "Fingerprint login not activated for this user", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Use the selected email from autocomplete to fetch credentials
+        String selectedEmail = autocomplete.getText().toString();
+        if (TextUtils.isEmpty(selectedEmail)) {
+            Toast.makeText(this, "Select email first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String savedEmail = prefs.getString("fp_email_" + selectedEmail, null);
+        String savedPassword = prefs.getString("fp_password_" + selectedEmail, null);
 
         if (savedEmail == null || savedPassword == null) {
             Toast.makeText(this, "Please login once normally first", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Fill UI (optional)
+        // Auto fill
         autocomplete.setText(savedEmail);
         mPasswordView.setText(savedPassword);
 
-        // Call your login API
+        // Call login API
         email = savedEmail;
         password = savedPassword;
 
         String url = getDirectionsUrl();
-        DownloadTask downloadTask = new DownloadTask();
-        downloadTask.execute(url);
+        new DownloadTask().execute(url);
     }
+
+
 
 }
 

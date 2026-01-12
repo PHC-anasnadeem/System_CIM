@@ -281,6 +281,8 @@ public class ActionActivity extends AppCompatActivity {
     private GridView gridView;
     private ImageAdapter imageAdapter;
     private ArrayList<String> imageUrls;
+    private int surveillanceCount = 0;
+    Button btn_submit;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -290,6 +292,7 @@ public class ActionActivity extends AppCompatActivity {
 
 
         pDialog = new ProgressDialog(context);
+
         actionType_spinner = (Spinner) findViewById(R.id.actionType_spinner);
         subactionType_spinner = (Spinner) findViewById(R.id.subactionType_spinner);
         counciltypespiner = (Spinner) findViewById(R.id.counType_spinner);
@@ -445,6 +448,8 @@ public class ActionActivity extends AppCompatActivity {
             Reg_no_edit.setText(Reg_NoText);
         }
 
+        fetchImages(final_id);
+        callGetSurveillanceCount(final_id);
 
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
         roleid = prefs.getString("RoleID", null);//"No name defined" is the default value.
@@ -745,13 +750,24 @@ public class ActionActivity extends AppCompatActivity {
         imageAdapter = new ImageAdapter(this, imageUrls);
         gridView.setAdapter(imageAdapter);
 
-        fetchImages(final_id);
 
-        Button btn_submit = (Button) findViewById(R.id.btn_submit);
+
+        btn_submit = (Button) findViewById(R.id.btn_submit);
 
         btn_submit.setOnClickListener(new Button.OnClickListener() {
 
             public void onClick(View v) {
+
+                // ❗ Sirf Marked for Surveillance ke liye block
+                if (subactionTypeText != null
+                        && subactionTypeText.equals("Marked for Surveillance")
+                        && surveillanceCount >= 3) {
+
+                    errortext.setText("This Final ID has already been marked for surveillance 3 times.");
+                    errortext.setVisibility(View.VISIBLE);
+                    return; // ❌ SAVE STOP
+                }
+
                 int errorcount = 0;
                 coun_NoText = coun_NoEdit.getText().toString();
                 Reg_NoText  = Reg_no_edit.getText().toString();
@@ -2533,5 +2549,64 @@ public class ActionActivity extends AppCompatActivity {
                 .error(R.drawable.error)               // Error image if loading fails
                 .into(imageView);
     }
+
+    private void callGetSurveillanceCount(String finalID) {
+
+        new Thread(() -> {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                String urlStr = "https://cim.phc.org.pk:8099/PHCCensusData.svc/GetSurveillanceCount?FinalID=" + finalID;
+                URL url = new URL(urlStr);
+
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(15000);
+                connection.setReadTimeout(15000);
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+                // 🔹 API returns plain integer
+                surveillanceCount = Integer.parseInt(response.toString().trim());
+
+            } catch (Exception e) {
+                surveillanceCount = 0;
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (reader != null) reader.close();
+                    if (connection != null) connection.disconnect();
+                } catch (Exception ignored) {}
+            }
+
+            runOnUiThread(() -> handleSurveillanceResponse(surveillanceCount));
+
+        }).start();
+    }
+
+    private void handleSurveillanceResponse(int count) {
+        // Save count for reference
+        surveillanceCount = count;
+
+        // Show message if 3+ Marked for Surveillance already exists
+        if (count >= 3) {
+            errortext.setText("This Final ID has already been marked for surveillance 3 times.");
+            errortext.setVisibility(View.VISIBLE);
+        } else {
+            errortext.setVisibility(View.GONE);
+        }
+    }
+
+
+
 
 }
