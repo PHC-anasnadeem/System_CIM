@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -410,11 +411,26 @@ public class DownloadHCEDetail {
                         //ArrayList<String> map = new ArrayList<String>();
                         JSONObject e = json.getJSONObject(i);
 
-                        //   map.put("FinalID", e.getString("FinalID"));
-                        //  map.add(e.getString("ImagePath"));
-                        // map.put("ImagePath", e.getString("ImagePath"));
+                        String imagePath = e.getString("ImagePath");
+                        // 🔥 YAHIN CONCAT + ENCODE
+                        Uri originalUri = Uri.parse(imagePath);
+                        Uri finalUri = originalUri.buildUpon()
+                                .path("/HCEImages" + originalUri.getPath())
+                                .build();
 
-                        mylist2.add(e.getString("ImagePath"));
+                        mylist2.add(finalUri.toString());
+
+//                        String imagePath = e.getString("ImagePath");
+//                        imagePath = imagePath.replace(
+//                                "https://cim.phc.org.pk:9092/",
+//                                "https://cim.phc.org.pk:9092/HCEImages/"
+//                        );
+//                        imagePath = imagePath.replace(" ", "%20");
+//
+//                        mylist2.add(imagePath);
+
+
+//                        mylist2.add(e.getString("ImagePath"));
                     }
 
                     // adding contact to contact list

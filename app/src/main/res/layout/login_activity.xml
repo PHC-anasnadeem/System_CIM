@@ -1,154 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    android:background="@color/backgroundcolor"
     tools:context="com.phc.cim.Activities.Common.Login_Activity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
-
-    <ImageView
-        android:src="@drawable/app_screen_logo"
-        android:layout_width="wrap_content"
-        android:id="@+id/logo"
-        android:layout_height="130dp"
-        android:layout_gravity="center_horizontal" />
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
+        android:padding="@dimen/spacing_large">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
+            android:src="@drawable/app_screen_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/start_text"
+            android:layout_marginTop="@dimen/spacing_xlarge"
+            android:contentDescription="App Logo" />
 
         <TextView
             android:id="@+id/start_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:layout_below="@+id/logo"
-            android:text="Sign in to your account "
-            android:textColor="#005FAB" />
+            android:text="Sign in to your account"
+            android:textColor="#005FAB"
+            android:textSize="@dimen/text_size_heading"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/spacing_large" />
 
-        <LinearLayout
+        <ProgressBar
+            android:id="@+id/login_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/start_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            android:id="@+id/rolelayout"
-            android:layout_width="250dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/rolelabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:textSize="15dp"
-                android:text="Role "
-                android:textColor="#000000" />
-            <!-- District Label -->
-            <com.google.android.material.textfield.TextInputLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/login_form_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/CIM.CardView"
+            android:layout_marginTop="@dimen/spacing_large"
+            app:layout_constraintTop_toBottomOf="@+id/start_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_max="400dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                >
+                <TextView
+                    android:id="@+id/rolelabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Role"
+                    style="@style/CIM.TextView.Subtitle"
+                    android:layout_marginBottom="@dimen/spacing_small"/>
+
                 <Spinner
                     android:id="@+id/roleSpinner"
                     android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_field_height"
+                    android:background="@drawable/bg_edittext"
+                    android:spinnerMode="dropdown"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:hint="Select Role"/>
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+                    android:layout_marginTop="@dimen/spacing_medium">
 
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteTextView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_field_height"
+                        android:background="@drawable/bg_edittext"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/spacing_medium"
+                        android:paddingEnd="@dimen/spacing_medium"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium">
 
-        <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:textColorHint="#000000"
-        >
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/prompt_email"
-                android:textColor="#000"
-                android:textColorHint="#000"
-                android:singleLine="true"
-                android:ems="10" />
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_field_height"
+                        android:background="@drawable/bg_edittext"
+                        android:hint="@string/prompt_password"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/spacing_medium"
+                        android:paddingEnd="@dimen/spacing_medium"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:textColorHint="#000000"
-        >
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/prompt_password"
-            android:textColorHint="#000"
-            android:textColor="#000"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true"
-
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/login_button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/map_next_btn_full" />
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:background="@drawable/map_next_btn_full"
+            app:layout_constraintTop_toBottomOf="@+id/login_form_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
-        android:id="@+id/Next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingTop="10dp"
-        android:text="Next"
-        android:textColor="#000" />
+            android:id="@+id/Next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            style="@style/CIM.TextView.Caption"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/spacing_small"
+            app:layout_constraintTop_toBottomOf="@+id/login_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/btnFingerprint"
-            android:layout_width="250dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="25dp"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/spacing_large"
             android:background="@drawable/bg_fingerprint_button"
             android:text="Login with Fingerprint"
             android:textAllCaps="false"
             android:textColor="#005FAB"
             android:textStyle="bold"
-            android:padding="10dp"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical|center"
-            android:drawableLeft="@drawable/ic_fingerprint_black_24dp" />
+            android:drawableStart="@drawable/ic_fingerprint_black_24dp"
+            android:paddingStart="@dimen/spacing_medium"
+            android:paddingEnd="@dimen/spacing_medium"
+            app:layout_constraintTop_toBottomOf="@+id/Next"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_max="300dp" />
 
-
-        <!--</FrameLayout>-->
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

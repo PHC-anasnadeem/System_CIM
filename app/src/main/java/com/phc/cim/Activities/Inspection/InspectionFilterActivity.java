@@ -39,6 +39,7 @@ import com.phc.cim.Activities.Common.IndReportingActivity;
 import com.phc.cim.Activities.Common.QuackActivity;
 import com.phc.cim.Activities.Common.RegistrationStatus;
 import com.phc.cim.Activities.Common.ReportQuackActivity;
+import com.phc.cim.Activities.Common.UserLocationsActivity;
 import com.phc.cim.Activities.Licensing.PWSFilterActivity;
 import com.phc.cim.DownloadClases.DownloadInspDetail;
 import com.phc.cim.Extra.HomeFragment;
@@ -193,6 +194,13 @@ public class InspectionFilterActivity extends AppCompatActivity {
             navigationView.getMenu().findItem(R.id.nav_list).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_registration).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_quack).setVisible(false);
+        }
+
+        String UserID = prefs.getString("UserID", null);
+        if (UserID != null && UserID.equals("3")) {
+            navigationView.getMenu().findItem(R.id.nav_user_locations).setVisible(true);
+        } else {
+            navigationView.getMenu().findItem(R.id.nav_user_locations).setVisible(false);
         }
 
 
@@ -481,6 +489,10 @@ if(count<1) {
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(context, AboutusActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_user_locations:
+                        startActivity(new Intent(context, UserLocationsActivity.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_Logout:

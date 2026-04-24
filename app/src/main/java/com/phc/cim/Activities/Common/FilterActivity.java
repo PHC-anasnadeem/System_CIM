@@ -318,6 +318,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
         Roleid = prefs.getString("RoleID", null); //0 is the default value.
+        String UserID = prefs.getString("UserID", null);
 
         if(Roleid.equals("1")) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
@@ -340,6 +341,12 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
             navigationView.getMenu().findItem(R.id.nav_list).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_registration).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_quack).setVisible(false);
+        }
+
+        if (UserID != null && UserID.equals("3")) {
+            navigationView.getMenu().findItem(R.id.nav_user_locations).setVisible(true);
+        } else {
+            navigationView.getMenu().findItem(R.id.nav_user_locations).setVisible(false);
         }
 
 
@@ -1649,6 +1656,11 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                     case R.id.nav_update:
                         // Show a dialog asking the user if they want to update
                         showUpdateDialog(); // Show the confirmation dialog
+                        drawer.closeDrawers();
+                        return true;
+
+                    case R.id.nav_user_locations:
+                        startActivity(new Intent(context, UserLocationsActivity.class));
                         drawer.closeDrawers();
                         return true;
 

@@ -230,6 +230,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         CNIC_Edit = (EditText) findViewById(R.id.CNIC);
         HCSP_ContactEdit = (EditText) findViewById(R.id.Mobile);
         Reg_NoEdit = (EditText) findViewById(R.id.reg_no);
+
         coun_NoEdit = (EditText) findViewById(R.id.council_no);
         coments = (EditText) findViewById(R.id.comments);
         quackloc_spinner = (Spinner) findViewById(R.id.quackloc_spinner);
@@ -1568,7 +1569,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         // Building the url to the web service
         String baseurl = context.getResources().getString(R.string.baseurl);
         String token = context.getResources().getString(R.string.token);
-        String url = baseurl + "UpdateHCEBasicInfo?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&District=" + districtText + "&SectorType=" + sectortypetext + "&OrgType" + hceTypetext + "&HCSPType=" + HCSPTypeText + "&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&RegistrationNo=" + Reg_NoText + "&RegistrationStatus=" + RegstatusID + "&CouncilStatus=" + counStatusID + "&CouncilNo=" + coun_NoText + "&CouncilName=" + counciltypetext + "&UpdateStatus=&UpdateSubStatus=&lat=" + latitude + "&lng=" + longitude + "&emailAddress=" + email + "&Comments=" + comnt + "&final_id=" + final_id + "&NoticeIssued=0&NoticeNo=&UpdateStatusID=0&UpdateSubStatusID=0&ActionID=0&RoleID=" + RoleID + "&UserLat=" + cur_latitude + "&UserLng=" + cur_longitude + "&CorrectLoc=" + currloc_ID + "&CurrentLoc=" + quacklocID + "&DistanceDiff=" + distCurrPrevInMeters + "&Start_Time=" + startTimeText + "&End_Time=" + endTimeText;
+        String url = baseurl + "UpdateHCEBasicInfo?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&District=" + districtText + "&SectorType=" + sectortypetext + "&OrgType=" + hceTypetext + "&HCSPType=" + HCSPTypeText + "&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&RegistrationNo=" + Reg_NoText + "&RegistrationStatus=" + RegstatusID + "&CouncilStatus=" + counStatusID + "&CouncilNo=" + coun_NoText + "&CouncilName=" + counciltypetext + "&UpdateStatus=&UpdateSubStatus=&lat=" + latitude + "&lng=" + longitude + "&emailAddress=" + email + "&Comments=" + comnt + "&final_id=" + final_id + "&NoticeIssued=0&NoticeNo=&UpdateStatusID=0&UpdateSubStatusID=0&ActionID=0&RoleID=" + RoleID + "&UserLat=" + cur_latitude + "&UserLng=" + cur_longitude + "&CorrectLoc=" + currloc_ID + "&CurrentLoc=" + quacklocID + "&DistanceDiff=" + distCurrPrevInMeters + "&Start_Time=" + startTimeText + "&End_Time=" + endTimeText;
 
 
         url = url.replaceAll(" ", "%20");

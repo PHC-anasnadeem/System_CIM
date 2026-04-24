@@ -2504,7 +2504,6 @@ public class ActionActivity extends AppCompatActivity {
     private void fetchImages(String final_id) {
         String CensusBaseUrl=context.getResources().getString(R.string.CensusBaseUrl);
         String baseurl=context.getResources().getString(R.string.baseurl);
-//        String url = "https://www.phc.org.pk:8099/PHCCensusData.svc/GetCensusAttachmentList?FinalID=" + final_id;
         String url= baseurl+ "GetCensusAttachmentList?FinalID=" + final_id;
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -2532,7 +2531,7 @@ public class ActionActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ActionActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActionActivity.this, "Census Images Loading Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -2557,7 +2556,8 @@ public class ActionActivity extends AppCompatActivity {
             BufferedReader reader = null;
 
             try {
-                String urlStr = "https://cim.phc.org.pk:8099/PHCCensusData.svc/GetSurveillanceCount?FinalID=" + finalID;
+                String baseurl=context.getResources().getString(R.string.baseurl);
+                String urlStr = baseurl+ "GetSurveillanceCount?FinalID=" + finalID;
                 URL url = new URL(urlStr);
 
                 connection = (HttpURLConnection) url.openConnection();
@@ -2605,8 +2605,5 @@ public class ActionActivity extends AppCompatActivity {
             errortext.setVisibility(View.GONE);
         }
     }
-
-
-
 
 }

@@ -200,11 +200,6 @@ public class DetailViewFragment extends Fragment {
     //private static final String urlProfileImg = "https://lh3.googleusercontent.com/eCtE_G34M9ygdkmOpYvCag1vBARCmZwnVS6rS5t4JLzJ6QgQSBquM0nuTsCpLhYbKljoyS-txg";
     public static int navItemIndex = 0;
 
-
-
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -429,7 +424,7 @@ public class DetailViewFragment extends Fragment {
 
             String CensusBaseUrl = getContext().getResources().getString(R.string.CensusBaseUrl);
             String BASE_URL = getContext().getResources().getString(R.string.baseurl);
-            String url = "https://cim.phc.org.pk:8099/PHCCensusData.svc/GetCensusAttachmentList?FinalID=" + final_id;
+            String url = BASE_URL + "GetCensusAttachmentList?FinalID=" + final_id;
 
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONArray>() {
@@ -473,10 +468,6 @@ public class DetailViewFragment extends Fragment {
             }
         }
     }
-
-
-
-
 
     public class GalleryPagerAdapter extends PagerAdapter {
 

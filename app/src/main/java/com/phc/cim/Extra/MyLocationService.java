@@ -36,7 +36,9 @@ public class MyLocationService extends Service {
     private String userID;
     private String username;
 
-    private static final long INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
+    // Update interval
+    private static final long INTERVAL_MS = 30 * 1000; // 30 seconds
+    private static final long FASTEST_INTERVAL_MS = 10 * 1000; // 10 seconds
 
     @Override
     public void onCreate() {
@@ -46,7 +48,6 @@ public class MyLocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         if (intent != null) {
             userID = intent.getStringExtra("UserID");
             username = intent.getStringExtra("username");
@@ -64,7 +65,7 @@ public class MyLocationService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     channelId,
-                    "Location Service",
+                    "Live Location Service",
                     NotificationManager.IMPORTANCE_LOW
             );
             NotificationManager manager = getSystemService(NotificationManager.class);
@@ -73,7 +74,7 @@ public class MyLocationService extends Service {
 
         Notification notification = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle("Live Tracking Active")
-                .setContentText("Sending location every 1 minute")
+                .setContentText("Sending location every 30 seconds")
                 .setSmallIcon(android.R.drawable.ic_menu_mylocation)
                 .build();
 
@@ -82,22 +83,21 @@ public class MyLocationService extends Service {
 
     private void startLocationUpdates() {
 
-        // Check permissions
+        // Permissions check
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e("LocationService", "Location permission not granted!");
             return;
         }
 
-        // Check if GPS is enabled
+        // GPS enabled check
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Log.e("LocationService", "GPS is turned off!");
-            // Optionally notify user to turn on GPS
         }
 
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(INTERVAL_MS);
-        locationRequest.setFastestInterval(30 * 1000);
+        locationRequest.setFastestInterval(FASTEST_INTERVAL_MS);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         locationCallback = new LocationCallback() {
@@ -107,10 +107,10 @@ public class MyLocationService extends Service {
                     double lat = locationResult.getLastLocation().getLatitude();
                     double lng = locationResult.getLastLocation().getLongitude();
 
-                    // Handle case when location is 0,0
-                   if (lat == 0.0 && lng == 0.0) {
+                    // Skip invalid coordinates
+                    if (lat == 0.0 && lng == 0.0) {
                         Log.d("LocationService", "Location not ready yet");
-                        return; // skip sending
+                        return;
                     }
 
                     sendLocationToServer(lat, lng);
@@ -124,16 +124,19 @@ public class MyLocationService extends Service {
     private void sendLocationToServer(double lat, double lng) {
         new Thread(() -> {
             try {
-                String urlStr = getString(R.string.baseurl) + "UpdateMyLocation?UserID=" + userID + "&Latitude=" + lat + "&Longitude=" + lng;
+                String urlStr = getString(R.string.baseurl) +
+                        "UpdateMyLocation?UserID=" + userID +
+                        "&Latitude=" + lat +
+                        "&Longitude=" + lng;
                 URL url = new URL(urlStr);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.connect();
-                conn.getResponseCode();
+                conn.getResponseCode(); // trigger request
                 conn.disconnect();
                 Log.d("LocationService", "Location sent: " + lat + ", " + lng);
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("LocationService", "Error sending location", e);
             }
         }).start();
     }

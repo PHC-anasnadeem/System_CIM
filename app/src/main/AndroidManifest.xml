@@ -136,6 +136,12 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
+            android:name=".Activities.Common.UserLocationsActivity"
+            android:label="User Movements"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".Activities.Common.RouteMapsActivity"
             android:icon="@drawable/phclogo"
             android:label="@string/nav_item_drawroute_titles"
