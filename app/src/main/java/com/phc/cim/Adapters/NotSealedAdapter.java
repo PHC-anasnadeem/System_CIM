@@ -148,7 +148,7 @@ public class NotSealedAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 int count = 2;
-                DownloadHCEDetail downloadHceDetail = new DownloadHCEDetail(context, arrayList.get(position).get("Name"), arrayList.get(position).get("FinalID"), email, password, username, isEdit, arrayList.get(position).get("index"), count,"");
+                DownloadHCEDetail downloadHceDetail = new DownloadHCEDetail(context, arrayList.get(position).get("Name"), arrayList.get(position).get("FinalID"), email, password, username, isEdit, arrayList.get(position).get("index"), count,"", arrayList.get(position));
             }
         });
 

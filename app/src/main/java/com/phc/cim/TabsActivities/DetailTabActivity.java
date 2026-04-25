@@ -63,6 +63,7 @@ import com.phc.cim.Fragments.DetailViewFragment;
 import com.phc.cim.Extra.HomeFragment;
 import com.phc.cim.Extra.NotificationFragment;
 import com.phc.cim.Fragments.PWSDetailFragment;
+import com.phc.cim.Fragments.VisitDetailFragment;
 import com.phc.cim.Extra.PhotosFragment;
 import com.phc.cim.Extra.SettingFragment;
 import com.phc.cim.Extra.VideosFragment;
@@ -361,6 +362,9 @@ public class DetailTabActivity extends AppCompatActivity {
         adapter.addFragment(new DetailViewFragment(), "Census");
         adapter.addFragment(new PWSDetailFragment(), "PWS");
 
+        if (bundle != null && bundle.getSerializable("visitDetail") != null) {
+            adapter.addFragment(new VisitDetailFragment(), "Visit Detail");
+        }
 
        // adapter.addFragment(new ThreeFragment(), "THREE");
         viewPager.setAdapter(adapter);

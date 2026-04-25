@@ -64,6 +64,7 @@ public class DownloadHCEDetail {
     int count=0;
     String RecordLockedForUpdate;
     String UserName,LastVisitedDate,MarkSurvCount, HCEName, HCEAddress, District, SectorType, OrgType, HCSPType, HCSPName, HCSPSO ,HCSPCNIC ,HCSPContactNo ,RegStatus ,RegNum ,CouncilStatus ,CouncilName ,CouncilNum,RegType,index,total_beds,RegTypebit;
+    HashMap<String, String> visitDetail;
        double latitude,longitude;
     public DownloadHCEDetail(Context context, String HCEName, String final_id, String email, String password, String username, String isEdit , String index, int count,String RegTypebit){
 
@@ -77,6 +78,29 @@ public class DownloadHCEDetail {
         this.isEdit=isEdit;
         this.index=index;
         this.RegTypebit=RegTypebit;
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Loading Data, Please wait...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+        String url = getDirectionsUrl(final_id);
+        DownloadTask downloadTask = new DownloadTask();
+        //Start downloading json data from Google Directions API
+        downloadTask.execute(url);
+
+    }
+    public DownloadHCEDetail(Context context, String HCEName, String final_id, String email, String password, String username, String isEdit , String index, int count,String RegTypebit, HashMap<String, String> visitDetail){
+
+        this.count=count;
+        this.context=context;
+        this.HCEName=HCEName;
+        this.final_id=final_id;
+        this.email=email;
+        this.password=password;
+        this.username=username;
+        this.isEdit=isEdit;
+        this.index=index;
+        this.RegTypebit=RegTypebit;
+        this.visitDetail = visitDetail;
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading Data, Please wait...");
         pDialog.setCancelable(false);
@@ -526,6 +550,7 @@ public class DownloadHCEDetail {
                         firstpage.putExtra("UserName", UserName);
                         firstpage.putExtra("LastVisitedDate", LastVisitedDate);
 //                        firstpage.putExtra("MarkSurvCount", MarkSurvCount);
+                        firstpage.putExtra("visitDetail", visitDetail);
                         firstpage.putStringArrayListExtra("imageurls", imagespath);
                         context.startActivity(firstpage);
                     }

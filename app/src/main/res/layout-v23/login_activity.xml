@@ -132,21 +132,21 @@
         android:text="Next"
         android:textColor="#000" />
 
-        <Button
-            android:id="@+id/btnFingerprint"
-            android:layout_width="250dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/bg_fingerprint_button"
-            android:text="Login with Fingerprint"
-            android:textAllCaps="false"
-            android:textColor="#005FAB"
-            android:textStyle="bold"
-            android:padding="10dp"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical|center"
-            android:drawableLeft="@drawable/ic_fingerprint_black_24dp" />
+<!--        <Button-->
+<!--            android:id="@+id/btnFingerprint"-->
+<!--            android:layout_width="250dp"-->
+<!--            android:layout_height="55dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginTop="25dp"-->
+<!--            android:background="@drawable/bg_fingerprint_button"-->
+<!--            android:text="Login with Fingerprint"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="#005FAB"-->
+<!--            android:textStyle="bold"-->
+<!--            android:padding="10dp"-->
+<!--            android:drawablePadding="10dp"-->
+<!--            android:gravity="center_vertical|center"-->
+<!--            android:drawableLeft="@drawable/ic_fingerprint_black_24dp" />-->
 
 
 <!--</FrameLayout>-->

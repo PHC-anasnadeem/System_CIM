@@ -150,25 +150,45 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="50dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <RelativeLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_detail"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:id="@+id/footer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="20dp"
-            android:background="#18b464"
-            android:text="Detail View"
-            android:textSize="20dp"
-            android:textAllCaps="false"
-            android:textColor="#fff" />
-    </RelativeLayout>
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
+            android:background="#18b464">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#18b464"
+                android:text="Detail View"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:textColor="#fff" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#fff" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_report"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#18b464"
+                android:text="Generate Report"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:textColor="#fff" />
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

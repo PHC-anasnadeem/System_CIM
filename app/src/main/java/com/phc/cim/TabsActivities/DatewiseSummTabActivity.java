@@ -64,6 +64,7 @@ import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
 import com.phc.cim.Fragments.SealTemperedDaywiseFragment;
 import com.phc.cim.Fragments.VisitOnComplaintDaywiseFragment;
+import com.phc.cim.Fragments.VisitOnSpecialTaskDaywiseFragment;
 import com.phc.cim.Others.Logout;
 import com.phc.cim.R;
 
@@ -129,7 +130,7 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
     String isEdit;
     String Vistdate,TotalImages;
     String username, District, PlanCode,reportlevel;
-    Button btn_detail;
+    Button btn_detail, btn_report;
     Spinner date_spinner;
     TextView visiteddate, teamtext, totalvisittext, planidtext;
     Long startdatmiles,enddatemiles;
@@ -157,6 +158,7 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
         totalvisittext = (TextView) findViewById(R.id.totalvisittext);
         planidtext = (TextView) findViewById(R.id.planidtext);
         btn_detail = (Button) findViewById(R.id.btn_detail);
+        btn_report = (Button) findViewById(R.id.btn_report);
         date_spinner = (Spinner) findViewById(R.id.date_spinner);
         bundle = new Bundle();
         Intent intent;
@@ -371,11 +373,14 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
 
 
         btn_detail.setOnClickListener(new Button.OnClickListener() {
-
             public void onClick(View v) {
+                DownloadVisitsActivity downloadVisitsActivity = new DownloadVisitsActivity(context, PlanID, email, password, username, isEdit, index, team, totalvisits, totalfir, startdat, enddat, District, PlanCode, Vistdate, indtabresult, TotalImages, false);
+            }
+        });
 
-                DownloadVisitsActivity downloadVisitsActivity = new DownloadVisitsActivity(context, PlanID, email, password, username, isEdit, index, team, totalvisits, totalfir, startdat, enddat, District, PlanCode, Vistdate,indtabresult,TotalImages);
-
+        btn_report.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                DownloadVisitsActivity downloadVisitsActivity = new DownloadVisitsActivity(context, PlanID, email, password, username, isEdit, index, team, totalvisits, totalfir, startdat, enddat, District, PlanCode, Vistdate, indtabresult, TotalImages, true);
             }
         });
 
@@ -392,6 +397,7 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
         adapter.addFragment(new VisitOnComplaintDaywiseFragment(), "Visit On Complaint");
         adapter.addFragment(new SealTemperedDaywiseFragment(), "Seal -Tempered and Re-sealed");
         adapter.addFragment(new NonRegisterHCEDaywiseFragment(), "Non-Register HCE Notice Issued");
+        adapter.addFragment(new VisitOnSpecialTaskDaywiseFragment(), "Visit on Special Task");
 
         viewPager.setAdapter(adapter);
 

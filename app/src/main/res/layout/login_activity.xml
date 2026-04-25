@@ -140,23 +140,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <Button
-            android:id="@+id/btnFingerprint"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginTop="@dimen/spacing_large"
-            android:background="@drawable/bg_fingerprint_button"
-            android:text="Login with Fingerprint"
-            android:textAllCaps="false"
-            android:textColor="#005FAB"
-            android:textStyle="bold"
-            android:drawableStart="@drawable/ic_fingerprint_black_24dp"
-            android:paddingStart="@dimen/spacing_medium"
-            android:paddingEnd="@dimen/spacing_medium"
-            app:layout_constraintTop_toBottomOf="@+id/Next"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintWidth_max="300dp" />
+<!--        <Button-->
+<!--            android:id="@+id/btnFingerprint"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="@dimen/button_height"-->
+<!--            android:layout_marginTop="@dimen/spacing_large"-->
+<!--            android:background="@drawable/bg_fingerprint_button"-->
+<!--            android:text="Login with Fingerprint"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="#005FAB"-->
+<!--            android:textStyle="bold"-->
+<!--            android:drawableStart="@drawable/ic_fingerprint_black_24dp"-->
+<!--            android:paddingStart="@dimen/spacing_medium"-->
+<!--            android:paddingEnd="@dimen/spacing_medium"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/Next"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintWidth_max="300dp" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

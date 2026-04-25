@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/nav_update"
-            android:icon="@drawable/baseline_update_24"
-            android:title="Latest Update" />
+<!--        <item-->
+<!--            android:id="@+id/nav_update"-->
+<!--            android:icon="@drawable/baseline_update_24"-->
+<!--            android:title="Latest Update" />-->
 
         <item
             android:id="@+id/nav_home"

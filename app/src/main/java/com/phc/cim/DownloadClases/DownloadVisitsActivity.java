@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.phc.cim.TabsActivities.ReportingTabActivity;
+import com.phc.cim.TabsActivities.PlanReportActivity;
 import com.phc.cim.R;
 
 import org.json.JSONArray;
@@ -55,12 +56,14 @@ public class DownloadVisitsActivity {
     int visitOnComplaintTotal=0;
     int SealTemperedTotal=0;
     int NonRegisterHCETotal=0;
+    int VisitOnSpecialTaskTotal=0;
 
-    String PlanID,CloseSealedID,  NotSealedID  , FunctionalSealedID , index,FunctionalSealed, FunctionalSealedcount, NotSealed, NotSealedcount, CloseSealed, ClosedSealedcount, CloseSealedInspectioncount, L_Acount, VisitOnComplaintcount, SealTemperedcount, NonRegisterHCEcount, team,totalvisits,totalfir,startdat,enddate, District,PlanCode,selVistdate,TotalImages, CloseSealedInspectionID, CloseSealedInspection, L_A_ID, L_A,
-    visitOnComplaintID, visitOnComplaint, SealTemperedID, SealTempered, NonRegisterHCEID, NonRegisterHCE ;
+    String PlanID,CloseSealedID,  NotSealedID  , FunctionalSealedID , index,FunctionalSealed, FunctionalSealedcount, NotSealed, NotSealedcount, CloseSealed, ClosedSealedcount, CloseSealedInspectioncount, L_Acount, VisitOnComplaintcount, SealTemperedcount, NonRegisterHCEcount, VisitOnSpecialTaskcount, team,totalvisits,totalfir,startdat,enddate, District,PlanCode,selVistdate,TotalImages, CloseSealedInspectionID, CloseSealedInspection, L_A_ID, L_A,
+    visitOnComplaintID, visitOnComplaint, SealTemperedID, SealTempered, NonRegisterHCEID, NonRegisterHCE, VisitOnSpecialTaskID, VisitOnSpecialTask;
+    boolean isReport = false;
 
     ArrayList<HashMap<String, String>> indtabresult;
-    public DownloadVisitsActivity(Context context, String PlanID, String email, String password, String username, String isEdit, String index,String team,String totalvisits,String totalfir,String startdat,String enddate,String District, String PlanCode,String Vistdate,ArrayList<HashMap<String, String>> indtabresult, String TotalImages) {
+    public DownloadVisitsActivity(Context context, String PlanID, String email, String password, String username, String isEdit, String index,String team,String totalvisits,String totalfir,String startdat,String enddate,String District, String PlanCode,String Vistdate,ArrayList<HashMap<String, String>> indtabresult, String TotalImages, boolean isReport) {
 
 
         this.context = context;
@@ -80,6 +83,7 @@ public class DownloadVisitsActivity {
         this.selVistdate=Vistdate;
         this.indtabresult=indtabresult;
         this.TotalImages=TotalImages;
+        this.isReport = isReport;
         SharedPreferences prefs = context.getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
         RoleID = prefs.getString("RoleID", null); //0 is the default value.
@@ -136,6 +140,12 @@ public class DownloadVisitsActivity {
                 NonRegisterHCE = indtabresult.get(i).get("TypeDesc");
                 NonRegisterHCETotal = NonRegisterHCETotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
             }
+            if(indtabresult.get(i).get("PKID").equals("14") && (indtabresult.get(i).get("VisitDate").equals(Vistdate) || indtabresult.get(i).get("VisitDate").equals("null"))) {
+
+                VisitOnSpecialTaskID = indtabresult.get(i).get("PKID");
+                VisitOnSpecialTask = indtabresult.get(i).get("TypeDesc");
+                VisitOnSpecialTaskTotal = VisitOnSpecialTaskTotal + Integer.parseInt(indtabresult.get(i).get("TotalSealed"));
+            }
         }
 
         FunctionalSealedcount = String.valueOf(FuncselTotal);
@@ -146,6 +156,7 @@ public class DownloadVisitsActivity {
         VisitOnComplaintcount = String.valueOf(visitOnComplaintTotal);
         SealTemperedcount = String.valueOf(SealTemperedTotal);
         NonRegisterHCEcount = String.valueOf(NonRegisterHCETotal);
+        VisitOnSpecialTaskcount = String.valueOf(VisitOnSpecialTaskTotal);
 
         DateFormat formatter;
         if (Vistdate != null && Vistdate!="All") {
@@ -327,7 +338,50 @@ public class DownloadVisitsActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
             if (result != null && result.size() > 0) {
-                Intent firstpage = new Intent(context, ReportingTabActivity.class);
+
+                int functionalCount = 0;
+                int closeCount = 0;
+                int notCount = 0;
+                int closeInspCount = 0;
+                int laCount = 0;
+                int complaintCount = 0;
+                int sealTemperedCount = 0;
+                int nonRegCount = 0;
+                int specialTaskCount = 0;
+
+                for (HashMap<String, String> map : result) {
+                    String actionType = map.get("ActionType");
+                    if (actionType != null) {
+                        switch (actionType) {
+                            case "1": functionalCount++; break;
+                            case "3": closeCount++; break;
+                            case "2": notCount++; break;
+                            case "9": closeInspCount++; break;
+                            case "10": laCount++; break;
+                            case "11": complaintCount++; break;
+                            case "12": sealTemperedCount++; break;
+                            case "13": nonRegCount++; break;
+                            case "14": specialTaskCount++; break;
+                        }
+                    }
+                }
+
+                FunctionalSealedcount = String.valueOf(functionalCount);
+                ClosedSealedcount = String.valueOf(closeCount);
+                NotSealedcount = String.valueOf(notCount);
+                CloseSealedInspectioncount = String.valueOf(closeInspCount);
+                L_Acount = String.valueOf(laCount);
+                VisitOnComplaintcount = String.valueOf(complaintCount);
+                SealTemperedcount = String.valueOf(sealTemperedCount);
+                NonRegisterHCEcount = String.valueOf(nonRegCount);
+                VisitOnSpecialTaskcount = String.valueOf(specialTaskCount);
+
+                Intent firstpage;
+                if (isReport) {
+                    firstpage = new Intent(context, PlanReportActivity.class);
+                } else {
+                    firstpage = new Intent(context, ReportingTabActivity.class);
+                }
                 firstpage.putExtra("FunctionalSealedID", FunctionalSealedID);
                 firstpage.putExtra("FunctionalSealed",FunctionalSealed);
                 firstpage.putExtra("FunctionalSealedcount",FunctionalSealedcount);
@@ -352,6 +406,9 @@ public class DownloadVisitsActivity {
                 firstpage.putExtra("NonRegisterHCEID", NonRegisterHCEID);
                 firstpage.putExtra("NonRegisterHCE", NonRegisterHCE);
                 firstpage.putExtra("NonRegisterHCEcount", NonRegisterHCEcount);
+                firstpage.putExtra("VisitOnSpecialTaskID", VisitOnSpecialTaskID);
+                firstpage.putExtra("VisitOnSpecialTask", VisitOnSpecialTask);
+                firstpage.putExtra("VisitOnSpecialTaskcount", VisitOnSpecialTaskcount);
                 firstpage.putExtra("email", email);
                 firstpage.putExtra("Password", password);
                 firstpage.putExtra("username", username);

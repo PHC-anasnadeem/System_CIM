@@ -56,6 +56,7 @@ import com.phc.cim.Extra.VideosFragment;
 import com.phc.cim.Activities.Common.AboutusActivity;
 import com.phc.cim.Activities.Common.ChangePasswordActivity;
 import com.phc.cim.Fragments.SealTemperedFragment;
+import com.phc.cim.Fragments.VisitOnSpecialTaskFragment;
 import com.phc.cim.Fragments.visitOnComplaint;
 import com.phc.cim.Others.Logout;
 import com.phc.cim.R;
@@ -113,7 +114,7 @@ public class ReportingTabActivity extends AppCompatActivity {
     private String activityTitles;
     private int versionCode = 0;
     String NotSealedID,NotSealed,NotSealedcount,CloseSealedID,CloseSealed,ClosedSealedcount,PlanID,index,team,totalvisits,totalfir,startdat,enddate,FunctionalSealedID,FunctionalSealed,FunctionalSealedcount,CloseSealedInspectionID,CloseSealedInspection,CloseSealedInspectioncount,
-    L_A_ID, L_A, L_Acount, visitOnComplaintID, visitOnComplaint, VisitOnComplaintcount, SealTemperedID, SealTempered, SealTemperedcount, NonRegisterHCEID, NonRegisterHCE, NonRegisterHCEcount;
+    L_A_ID, L_A, L_Acount, visitOnComplaintID, visitOnComplaint, VisitOnComplaintcount, SealTemperedID, SealTempered, SealTemperedcount, NonRegisterHCEID, NonRegisterHCE, NonRegisterHCEcount, VisitOnSpecialTaskID, VisitOnSpecialTask, VisitOnSpecialTaskcount;
     String appURI = "";
     String time1;
     String password;
@@ -168,6 +169,9 @@ public class ReportingTabActivity extends AppCompatActivity {
         NonRegisterHCEID= (String) intent.getSerializableExtra("NonRegisterHCEID");
         NonRegisterHCE= (String) intent.getSerializableExtra("NonRegisterHCE");
         NonRegisterHCEcount= (String) intent.getSerializableExtra("NonRegisterHCEcount");
+        VisitOnSpecialTaskID= (String) intent.getSerializableExtra("VisitOnSpecialTaskID");
+        VisitOnSpecialTask= (String) intent.getSerializableExtra("VisitOnSpecialTask");
+        VisitOnSpecialTaskcount= (String) intent.getSerializableExtra("VisitOnSpecialTaskcount");
         PlanID= (String) intent.getSerializableExtra("PlanID");
         index= (String) intent.getSerializableExtra("index");
         team= (String) intent.getSerializableExtra("team");
@@ -221,6 +225,7 @@ public class ReportingTabActivity extends AppCompatActivity {
         bundle.putString("visitOnComplaintID",visitOnComplaintID);
         bundle.putString("SealTemperedID",SealTemperedID);
         bundle.putString("NonRegisterHCEID",NonRegisterHCEID);
+        bundle.putString("VisitOnSpecialTaskID",VisitOnSpecialTaskID);
 
         bundle.putString("email",email);
         bundle.putString("password",password);
@@ -303,6 +308,7 @@ public class ReportingTabActivity extends AppCompatActivity {
         adapter.addFragment(new visitOnComplaint(), visitOnComplaint + " (" + VisitOnComplaintcount + ")");
         adapter.addFragment(new SealTemperedFragment(), SealTempered + " (" + SealTemperedcount + ")");
         adapter.addFragment(new NonRegisterHCEFragment(), NonRegisterHCE + " (" + NonRegisterHCEcount + ")");
+        adapter.addFragment(new VisitOnSpecialTaskFragment(), VisitOnSpecialTask + " (" + VisitOnSpecialTaskcount + ")");
 
         // ViewPager2 ko adapter assign karna
         viewPager.setAdapter(adapter);

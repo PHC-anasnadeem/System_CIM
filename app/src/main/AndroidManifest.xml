@@ -298,6 +298,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
+            android:name=".TabsActivities.PlanReportActivity"
+            android:label="Plan Activity Report"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".Activities.Common.HigherReportingActivity"
             android:label="@string/nav_aqc_visits"
             android:screenOrientation="portrait"

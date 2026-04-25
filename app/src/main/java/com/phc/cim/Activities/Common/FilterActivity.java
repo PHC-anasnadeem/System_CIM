@@ -1653,11 +1653,11 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                         startActivity(new Intent(context, AboutusActivity.class));
                         drawer.closeDrawers();
                         return true;
-                    case R.id.nav_update:
-                        // Show a dialog asking the user if they want to update
-                        showUpdateDialog(); // Show the confirmation dialog
-                        drawer.closeDrawers();
-                        return true;
+//                    case R.id.nav_update:
+//                        // Show a dialog asking the user if they want to update
+//                        showUpdateDialog(); // Show the confirmation dialog
+//                        drawer.closeDrawers();
+//                        return true;
 
                     case R.id.nav_user_locations:
                         startActivity(new Intent(context, UserLocationsActivity.class));
@@ -1764,6 +1764,18 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         });
         
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_ai) {
+            Toast.makeText(this, "AI Assistant: Coming Soon!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 //-------------------------DownloadInspDetail Task------------------------------------------------

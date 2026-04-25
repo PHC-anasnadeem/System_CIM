@@ -153,13 +153,13 @@ public class Login_Activity extends AppCompatActivity {
             }
         });
 
-        Button btnFingerprint = findViewById(R.id.btnFingerprint);
-        btnFingerprint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkBiometricSupportAndLogin();
-            }
-        });
+//        Button btnFingerprint = findViewById(R.id.btnFingerprint);
+//        btnFingerprint.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                checkBiometricSupportAndLogin();
+//            }
+//        });
 
 
 ////////////////////////////////////////////////district////////////////////////////////////////
@@ -372,11 +372,11 @@ public class Login_Activity extends AppCompatActivity {
                 if (status.equals("1")) {
                     SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
                     editor.clear().commit();
-                    editor.putBoolean("fingerprint_enabled", true);
-
-                    // Fingerprint ke liye alag credentials save karein
-                    editor.putString("fp_email_" + email, email);
-                    editor.putString("fp_password_" + email, password);
+//                    editor.putBoolean("fingerprint_enabled", true);
+//
+//                    // Fingerprint ke liye alag credentials save karein
+//                    editor.putString("fp_email_" + email, email);
+//                    editor.putString("fp_password_" + email, password);
 
                     editor.putString("email", email);
                     editor.putString("password", password);
@@ -443,6 +443,7 @@ public class Login_Activity extends AppCompatActivity {
 
     }
 
+/*
     private void checkBiometricSupportAndLogin() {
         BiometricManager biometricManager = BiometricManager.from(this);
 
@@ -523,6 +524,7 @@ public class Login_Activity extends AppCompatActivity {
         String url = getDirectionsUrl();
         new DownloadTask().execute(url);
     }
+*/
 
 
 
