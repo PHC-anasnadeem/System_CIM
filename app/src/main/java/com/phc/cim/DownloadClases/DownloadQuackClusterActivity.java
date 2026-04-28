@@ -58,7 +58,9 @@ public class DownloadQuackClusterActivity {
     int count = 0;
     String RecordLockedForUpdate;
     String sectortypetext, counciltypetext, hceTypetext, hcestatusID, districtText, tehsilText, distancetext, BfromText, BtoText, lastvisitedID, RegnoText, hcenameText, email, password, username, isEdit, finalidText, actionText,subactionTypeID,Cnic,Phone;
-    public DownloadQuackClusterActivity(Context context,String sectortypetext,String counciltypetext,String hceTypetext,String hcestatusID,String districtText,String tehsilText,String distancetext,String BfromText,String BtoText,String lastvisitedID,String subactionTypeID,String RegnoText,String hcenameText,String email,String password,String username,String isEdit,String finalidText,String actionText,String Cnic, String Phone) {
+    String dateFromText = "";
+    String dateToText = "";
+    public DownloadQuackClusterActivity(Context context,String sectortypetext,String counciltypetext,String hceTypetext,String hcestatusID,String districtText,String tehsilText,String distancetext,String BfromText,String BtoText,String lastvisitedID,String subactionTypeID,String RegnoText,String hcenameText,String email,String password,String username,String isEdit,String finalidText,String actionText,String Cnic, String Phone, String dateFromText, String dateToText) {
 
 
                 this.context = context;
@@ -83,6 +85,8 @@ public class DownloadQuackClusterActivity {
                 this.actionText=actionText;
                 this.Cnic=Cnic;
                 this.Phone=Phone;
+                this.dateFromText = dateFromText;
+                this.dateToText = dateToText;
 
         SharedPreferences prefs = context.getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
         String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
@@ -277,6 +281,8 @@ public class DownloadQuackClusterActivity {
                 firstpage.putExtra("distancetext", distancetext);
                 firstpage.putExtra("BfromText", BfromText);
                 firstpage.putExtra("BtoText", BtoText);
+                firstpage.putExtra("dateFromText", dateFromText);
+                firstpage.putExtra("dateToText", dateToText);
                 firstpage.putExtra("lastvisitedText", lastvisitedID);
                 firstpage.putExtra("subactionTypeID", subactionTypeID);
                 firstpage.putExtra("RegnoText", RegnoText);

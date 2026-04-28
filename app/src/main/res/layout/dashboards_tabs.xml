@@ -64,12 +64,11 @@ tools:openDrawer="start">
         android:layout_height="25dp"
         android:layout_gravity="center_vertical"
         android:background="@drawable/map_back_btn_full" />-->
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-
     <RelativeLayout
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         >
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_detail"
@@ -83,6 +82,7 @@ tools:openDrawer="start">
             android:textAllCaps="false"
             android:textColor="#fff" />
     </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 <com.google.android.material.navigation.NavigationView
     android:id="@+id/nav_view"

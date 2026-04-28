@@ -7,7 +7,11 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -679,10 +683,12 @@
 
     </ScrollView>
 </RelativeLayout>
-<include
-layout="@layout/navdrawer_main"
-android:layout_width="match_parent"
-android:layout_height="match_parent" />
+    <include
+        layout="@layout/navdrawer_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 <com.google.android.material.navigation.NavigationView
 android:id="@+id/nav_view"

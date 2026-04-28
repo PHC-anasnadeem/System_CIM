@@ -53,6 +53,7 @@ import com.phc.cim.BroadcastService.BroadCastService;
 import com.phc.cim.DataElements.District;
 import com.phc.cim.Others.CurrentLocation;
 import com.phc.cim.ParcelableModel.CarParcelable;
+import com.phc.cim.Extra.DateUtils;
 import com.phc.cim.R;
 
 import org.json.JSONArray;
@@ -100,6 +101,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView mTextMessage;
     private TextView mname;
     private TextView maddress;
+    private TextView visitedDateText;
     String HCE_name = null;
     Button button;
     Marker current_icon;
@@ -155,6 +157,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mTextMessage = (TextView) findViewById(R.id.Reg_text);
         mname = (TextView) findViewById(R.id.Name);
         maddress = (TextView) findViewById(R.id.addrs);
+        visitedDateText = (TextView) findViewById(R.id.visited_date);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -555,6 +558,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             map.put("tehsil", e.getString("tehsil"));
                             map.put("total_beds", e.getString("total_beds"));
                             map.put("uu_db_id", e.getString("uu_db_id"));
+                            map.put("VisitedDate", e.optString("VisitedDate", "N/A"));
                         }
                         else {
                             map.put("id", String.valueOf(i));
@@ -572,6 +576,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             map.put("registrationType", e.getString("registrationType"));
                             map.put("orgType", e.getString("orgType"));
                             map.put("final_id", e.getString("final_id"));
+                            map.put("VisitedDate", e.optString("VisitedDate", "N/A"));
                         }
 
                         mylist.add(map);
@@ -680,6 +685,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         final_id = result.get(i).get("final_id");
                                         mname.setVisibility(View.VISIBLE);
                                         maddress.setVisibility(View.VISIBLE);
+                                        visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
                                     }
                                 }
                                 mname.setText(arg0.getTitle());
@@ -713,6 +719,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         mname.setText(marker_name);
                                         mname.setVisibility(View.VISIBLE);
                                         maddress.setVisibility(View.VISIBLE);
+                                        visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
                                     }
                                 }
                               //  FrameLayout.setVisibility(View.VISIBLE);
@@ -740,6 +747,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             mname.setText(marker_name);
                                             mname.setVisibility(View.VISIBLE);
                                             maddress.setVisibility(View.VISIBLE);
+                                            visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
                                         }
                                     }
                               //  FrameLayout.setVisibility(View.VISIBLE);
@@ -768,6 +776,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         mname.setText(marker_name);
                                         mname.setVisibility(View.VISIBLE);
                                         maddress.setVisibility(View.VISIBLE);
+                                        visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
                                     }
                                 }
                               //  FrameLayout.setVisibility(View.VISIBLE);
@@ -893,5 +902,4 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
-
 }

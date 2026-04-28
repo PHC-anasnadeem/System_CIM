@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.phc.cim.Activities.Licensing.PWSDetailViewActivity;
+import com.phc.cim.Extra.DateUtils;
 import com.phc.cim.R;
 
 import java.util.ArrayList;
@@ -114,6 +115,9 @@ public class PWSListAdapter extends ArrayAdapter {
 
         address.setText(arrayList.get(position).get("Address"));
         hcetypetext.setText(arrayList.get(position).get("HCEType") + " (" + arrayList.get(position).get("bedStrength") + " beds)" + " - " + arrayList.get(position).get("CouncilName"));
+
+        TextView visitedDate = (TextView) convertView.findViewById(R.id.visitdatetext);
+        visitedDate.setText("Visited Date: " + DateUtils.formatMSJsonDate(arrayList.get(position).get("VisitedDate")));
 
 
 

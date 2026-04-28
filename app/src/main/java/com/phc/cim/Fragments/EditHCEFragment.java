@@ -5,6 +5,7 @@ import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
@@ -32,8 +33,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.material.textfield.TextInputEditText;
 
 
+import com.phc.cim.Activities.Common.LocationPickerActivity;
 import com.phc.cim.Adapters.MyCustomPagerAdapter;
 import com.phc.cim.DataElements.Action;
 import com.phc.cim.DataElements.CouncilType;
@@ -175,6 +178,11 @@ public class EditHCEFragment extends Fragment {
     double longitude;
     int countt;
     int backcount=0;
+    private TextInputEditText latitudeEditText;
+    private TextInputEditText longitudeEditText;
+    private android.widget.LinearLayout locationPickerBlock;
+    private Button btnPickLocation;
+    private static final int REQUEST_LOCATION_PICKER = 1001;
     private DownloadManager downloadManager;
     private long downloadReference;
     /**
@@ -207,6 +215,28 @@ public class EditHCEFragment extends Fragment {
         coments = (EditText) obj_view.findViewById(R.id.comments);
         quackloc_spinner = (Spinner) obj_view.findViewById(R.id.quackloc_spinner);
         currloc_spinner = (Spinner) obj_view.findViewById(R.id.curloc_spinner);
+        
+        latitudeEditText = obj_view.findViewById(R.id.lat);
+        longitudeEditText = obj_view.findViewById(R.id.lng);
+        locationPickerBlock = obj_view.findViewById(R.id.location_picker_block);
+        btnPickLocation = obj_view.findViewById(R.id.btn_pick_location);
+
+        btnPickLocation.setOnClickListener(v -> {
+            Intent intentMap = new Intent(getContext(), LocationPickerActivity.class);
+            double currentLat = cur_latitude;
+            double currentLng = cur_longitude;
+            
+            try {
+                if (!latitudeEditText.getText().toString().isEmpty())
+                    currentLat = Double.parseDouble(latitudeEditText.getText().toString());
+                if (!longitudeEditText.getText().toString().isEmpty())
+                    currentLng = Double.parseDouble(longitudeEditText.getText().toString());
+            } catch (Exception ignored) {}
+            
+            intentMap.putExtra("lat", currentLat);
+            intentMap.putExtra("lng", currentLng);
+            startActivityForResult(intentMap, REQUEST_LOCATION_PICKER);
+        });
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -391,14 +421,15 @@ public class EditHCEFragment extends Fragment {
                                        int position, long id) {
                 //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
                 currloc_text = parent.getItemAtPosition(position).toString();
-                if(currloc_text.equals("Yes")){
-                    currloc_ID="1";
-                }
-                else if(currloc_text.equals("No")){
-                    currloc_ID="0";
-                }
-                else {
-                    currloc_ID="-1";
+                if (position == 2) { // "No"
+                    locationPickerBlock.setVisibility(View.VISIBLE);
+                    latitudeEditText.setText(String.valueOf(cur_latitude));
+                    longitudeEditText.setText(String.valueOf(cur_longitude));
+                    currloc_ID = "0";
+                } else {
+                    locationPickerBlock.setVisibility(View.GONE);
+                    if (position == 1) currloc_ID = "1";
+                    else currloc_ID = "-1";
                 }
             }
 
@@ -1064,12 +1095,33 @@ return obj_view;
                 "&Comments="+comnt+"&final_id="+final_id+"&NoticeIssued=0&NoticeNo=&UpdateStatusID=0&UpdateSubStatusID=0&ActionID=0&RoleID=" +RoleID+
                 "&UserLat="+cur_latitude+"&UserLng="+cur_longitude+"&CorrectLoc="+currloc_ID+"&CurrentLoc="+quacklocID+"&DistanceDiff=" +distCurrPrevInMeters;
 
+        if (locationPickerBlock.getVisibility() == View.VISIBLE) {
+            try {
+                double pickedLat = Double.parseDouble(latitudeEditText.getText().toString());
+                double pickedLng = Double.parseDouble(longitudeEditText.getText().toString());
+                url = url.replace("&lat="+latitude, "&lat="+pickedLat);
+                url = url.replace("&lng="+longitude, "&lng="+pickedLng);
+            } catch (Exception ignored) {}
+        }
+
 
         url = url.replaceAll(" ", "%20");
         url = url.replaceAll("#", "%23");
         url = url.replaceAll(",", "%2C");
 
         return url;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOCATION_PICKER && resultCode == -1 && data != null) { // -1 is RESULT_OK
+            double pickedLat = data.getDoubleExtra("lat", 0);
+            double pickedLng = data.getDoubleExtra("lng", 0);
+            
+            latitudeEditText.setText(String.valueOf(pickedLat));
+            longitudeEditText.setText(String.valueOf(pickedLng));
+        }
     }
 
     private String downloadUrl(String strUrl) throws IOException {

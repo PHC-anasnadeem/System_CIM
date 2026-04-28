@@ -8,31 +8,37 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-  <LinearLayout
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="#fff"
-      android:paddingTop="55dp"
-      android:orientation="vertical">
+      android:layout_height="match_parent">
 
-    <ListView
-    android:id="@+id/list"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:scrollbarThumbVertical="@color/colorGreen"
-    android:dividerHeight="1dp"
-    android:scrollbarSize="6dp">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:paddingTop="55dp"
+        android:orientation="vertical">
 
-    </ListView>
+      <ListView
+          android:id="@+id/list"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:scrollbarThumbVertical="@color/colorGreen"
+          android:dividerHeight="1dp"
+          android:scrollbarSize="6dp">
 
-  </LinearLayout>
+      </ListView>
 
-  <include
-      layout="@layout/navdrawer_main"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/navdrawer_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
   <com.google.android.material.navigation.NavigationView
       android:id="@+id/nav_view"

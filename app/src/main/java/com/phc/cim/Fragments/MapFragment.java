@@ -61,6 +61,7 @@ import com.phc.cim.DataElements.MyItem;
 import com.phc.cim.DownloadClases.DownloadHCEDetail;
 import com.phc.cim.Others.CurrentLocation;
 import com.phc.cim.ParcelableModel.CarParcelable;
+import com.phc.cim.Extra.DateUtils;
 import com.phc.cim.R;
 
 import org.json.JSONArray;
@@ -120,6 +121,7 @@ public class MapFragment extends Fragment {
     private TextView mTextMessage;
     private TextView mname;
     private TextView maddress;
+    private TextView visitedDateText;
     String HCE_name = null;
     Button button;
     Button action_button;
@@ -158,6 +160,8 @@ public class MapFragment extends Fragment {
     String subactionTypeID;
     String BfromText = "";
     String BtoText = "";
+    String dateFromText = "";
+    String dateToText = "";
     String email;
     String index;
     String finalidText;
@@ -247,6 +251,7 @@ public class MapFragment extends Fragment {
         mTextMessage = (TextView) rootView.findViewById(R.id.Reg_text);
         mname = (TextView) rootView.findViewById(R.id.Name);
         maddress = (TextView) rootView.findViewById(R.id.addrs);
+        visitedDateText = (TextView) rootView.findViewById(R.id.visited_date);
         hcspname = (TextView) rootView.findViewById(R.id.hcspname);
         linearLayout = (LinearLayout) rootView.findViewById(R.id.maplayout);
         linearLayout.setVisibility(View.GONE);
@@ -341,6 +346,8 @@ public class MapFragment extends Fragment {
                     distancetext = args.getString("distancetext");
                     BfromText = args.getString("BfromText");
                     BtoText = args.getString("BtoText");
+                    dateFromText = args.getString("dateFromText", "");
+                    dateToText = args.getString("dateToText", "");
                     lastvisitedText = args.getString("lastvisitedText");
                     RegnoText = args.getString("RegnoText");
                     hcenameText = args.getString("hcenameText");
@@ -649,7 +656,7 @@ public class MapFragment extends Fragment {
         String url = null;
         String baseurl = getContext().getResources().getString(R.string.baseurl);
         String token = getContext().getResources().getString(R.string.token);
-        url = baseurl + "GetHCEs?strToken=" + token + "&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText + "&Lvs=&RegNum=" + RegnoText + "&HCEName=" + hcenameText + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude + "&Distance=" + distancetext + "&finalid=" + finalidText + "&ActionType=" + lastvisitedText + "&QuackCategory=" + QuackType + "&QuackSubCategory=&SubActionType=" + subactionTypeID+"&Cnic="+Cnic+"&Phone="+Phone;
+        url = baseurl + "GetHCEs?strToken=" + token + "&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText + "&Lvs=&RegNum=" + RegnoText + "&HCEName=" + hcenameText + "&Latitude=" + cur_latitude + "&Longitude=" + cur_longitude + "&Distance=" + distancetext + "&finalid=" + finalidText + "&ActionType=" + lastvisitedText + "&QuackCategory=" + QuackType + "&QuackSubCategory=&SubActionType=" + subactionTypeID+"&Cnic="+Cnic+"&Phone="+Phone+"&DateFrom="+dateFromText+"&DateTo="+dateToText;
         url = url.replaceAll(" ", "%20");
         return url;
     }
@@ -755,6 +762,7 @@ public class MapFragment extends Fragment {
                         map.put("Source", e.getString("Source"));
                         map.put("hcsp_cnic", e.getString("hcsp_cnic"));
                         map.put("hce_mobile", e.getString("hce_mobile"));
+                        map.put("VisitedDate", e.optString("VisitedDate", "N/A"));
 
                         mylist.add(map);
                     }
@@ -960,6 +968,7 @@ public class MapFragment extends Fragment {
 
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
+                                                visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);
@@ -1008,8 +1017,7 @@ public class MapFragment extends Fragment {
                                                 hceNo.setText(index);
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
-//                                                    hcsp_cnic = result.get(i).get("hcsp_cnic");
-//                                                    hcsp_phone = result.get(i).get("hcsp_phone");
+                                                visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);
@@ -1050,8 +1058,7 @@ public class MapFragment extends Fragment {
                                                 hceNo.setText(index);
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
-//                                                    hcsp_cnic = result.get(i).get("hcsp_cnic");
-//                                                    hcsp_phone = result.get(i).get("hcsp_phone");
+                                                visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);
@@ -1093,8 +1100,7 @@ public class MapFragment extends Fragment {
                                                 maddress.setText(marker_address);
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
-//                                                    hcsp_cnic = result.get(i).get("hcsp_cnic");
-//                                                    hcsp_phone = result.get(i).get("hcsp_phone");
+                                                visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);
@@ -1137,8 +1143,7 @@ public class MapFragment extends Fragment {
                                                 maddress.setText(marker_address);
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
-//                                                    hcsp_cnic = result.get(i).get("hcsp_cnic");
-//                                                    hcsp_phone = result.get(i).get("hcsp_phone");
+                                                visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);

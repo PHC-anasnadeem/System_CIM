@@ -7,7 +7,11 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
-    <RelativeLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff"
@@ -761,6 +765,65 @@
                             android:textColorHighlight="#000000" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
+
+                <!-- Date Range Filter -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/date_range_layout">
+                    <TextView
+                        android:id="@+id/date_range_label"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
+                        android:text="Date Range: "
+                        android:textColor="#000000" />
+                    <!-- date From -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp">
+                        <EditText
+                            android:id="@+id/et_date_from"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:hint="From"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:cursorVisible="false"
+                            android:inputType="none"
+                            android:textSize="13dp"
+                            android:textColor="#000000"
+                            android:textColorHighlight="#000000" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <!-- date To -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp">
+                        <EditText
+                            android:id="@+id/et_date_to"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:hint="To"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:cursorVisible="false"
+                            android:inputType="none"
+                            android:textSize="13dp"
+                            android:textColor="#000000"
+                            android:textColorHighlight="#000000" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/errortextlayout"
                     android:layout_width="match_parent"
@@ -813,10 +876,12 @@
         </ScrollView>
     </RelativeLayout>
 
-    <include
-        layout="@layout/navdrawer_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <include
+            layout="@layout/navdrawer_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

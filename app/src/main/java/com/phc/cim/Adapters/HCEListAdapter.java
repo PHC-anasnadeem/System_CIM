@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.phc.cim.DownloadClases.DownloadHCEDetail;
 import com.phc.cim.Activities.Common.RouteMapsActivity;
+import com.phc.cim.Extra.DateUtils;
 import com.phc.cim.R;
 
 import java.util.ArrayList;
@@ -109,6 +110,8 @@ public class HCEListAdapter extends BaseAdapter {
         hcspname.setText(arrayList.get(position).get("hcsp_name")+" - "+arrayList.get(position).get("hcsp_sodowo"));
         hcename.setText(arrayList.get(position).get("name") + " (" + arrayList.get(position).get("sector_type") + ")");
         address.setText(arrayList.get(position).get("address"));
+        TextView visitedDate = (TextView) convertView.findViewById(R.id.visitdatetext);
+        visitedDate.setText("Visited Date: " + DateUtils.formatMSJsonDate(arrayList.get(position).get("VisitedDate")));
         VisitStatus = arrayList.get(position).get("VisitStatus");
         ActionType = arrayList.get(position).get("ActionType");
         // Status.setText(arrayList.get(position).get("RegType"));

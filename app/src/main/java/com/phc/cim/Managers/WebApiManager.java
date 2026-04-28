@@ -235,8 +235,12 @@ public class WebApiManager {
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         } finally {
-            iStream.close();
-            urlConnection.disconnect();
+            if (iStream != null) {
+                try { iStream.close(); } catch (IOException ignored) {}
+            }
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
         return data;
     }

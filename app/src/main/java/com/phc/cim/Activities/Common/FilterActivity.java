@@ -1,6 +1,7 @@
 package com.phc.cim.Activities.Common;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -132,6 +133,8 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     String tehsilText="";
     String BfromText="";
     String BtoText="";
+    String dateFromText="";
+    String dateToText="";
     String email="";
     private Boolean userchangesec=true;
     String lastvisitedText="";
@@ -149,8 +152,11 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     LinearLayout hidelayout;
     LinearLayout subvisit_layout;
     LinearLayout errortextlayout;
+    LinearLayout date_range_layout;
     EditText bed_from;
     EditText bed_to;
+    EditText et_date_from;
+    EditText et_date_to;
     EditText hcenameEdit;
     EditText RegnoEdit;
     EditText plancodeEdit;
@@ -276,11 +282,49 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
 
         bed_from = (EditText) findViewById(R.id.bed_from);
         bed_to = (EditText) findViewById(R.id.bed_to);
+        et_date_from = (EditText) findViewById(R.id.et_date_from);
+        et_date_to = (EditText) findViewById(R.id.et_date_to);
         hcenameEdit = (EditText) findViewById(R.id.hce_name);
         RegnoEdit = (EditText) findViewById(R.id.reg_no);
         finalidEdit = (EditText) findViewById(R.id.finalidEdit);
         cnicEdit = (EditText) findViewById(R.id.cnicEdit);
         phoneNoEdit = (EditText) findViewById(R.id.phoneNoEdit);
+
+        date_range_layout = (LinearLayout) findViewById(R.id.date_range_layout);
+
+        // DatePickerDialog for "From" date
+        et_date_from.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                java.util.Calendar cal = java.util.Calendar.getInstance();
+                int year = cal.get(java.util.Calendar.YEAR);
+                int month = cal.get(java.util.Calendar.MONTH);
+                int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+                DatePickerDialog dpd = new DatePickerDialog(context,
+                        (view, y, m, d) -> {
+                            String picked = String.format(java.util.Locale.US, "%04d-%02d-%02d", y, m + 1, d);
+                            et_date_from.setText(picked);
+                        }, year, month, day);
+                dpd.show();
+            }
+        });
+
+        // DatePickerDialog for "To" date
+        et_date_to.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                java.util.Calendar cal = java.util.Calendar.getInstance();
+                int year = cal.get(java.util.Calendar.YEAR);
+                int month = cal.get(java.util.Calendar.MONTH);
+                int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+                DatePickerDialog dpd = new DatePickerDialog(context,
+                        (view, y, m, d) -> {
+                            String picked = String.format(java.util.Locale.US, "%04d-%02d-%02d", y, m + 1, d);
+                            et_date_to.setText(picked);
+                        }, year, month, day);
+                dpd.show();
+            }
+        });
 
         actionspinner= (Spinner) findViewById(R.id.action_spinner);
         subactionType_spinner = (Spinner) findViewById(R.id.subvisit_spinner);
@@ -316,9 +360,20 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         Action_layout = (LinearLayout) findViewById(R.id.Action_layout);
 
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
-        String isStat = prefs.getString("isStat", null);//"No name defined" is the default value.
-        Roleid = prefs.getString("RoleID", null); //0 is the default value.
+        // Session guard: if SharedPreferences is empty (e.g. process was killed by OS and
+        // restarted cold), redirect to Login rather than crashing with a NullPointerException.
+        String isStat = prefs.getString("isStat", "");
+        Roleid = prefs.getString("RoleID", "");
         String UserID = prefs.getString("UserID", null);
+
+        if (Roleid == null || Roleid.isEmpty()) {
+            // No valid session — send user back to Login cleanly.
+            Intent loginIntent = new Intent(this, Login_Activity.class);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(loginIntent);
+            finish();
+            return;
+        }
 
         if(Roleid.equals("1")) {
             navigationView.getMenu().findItem(R.id.nav_actiondesc).setVisible(true);
@@ -326,10 +381,8 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
             navigationView.getMenu().findItem(R.id.nav_list).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_registration).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_quack).setVisible(true);
-            if (isStat.equals("true")) {
+            if ("true".equals(isStat)) {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(true);
-
-
             } else {
                 navigationView.getMenu().findItem(R.id.nav_actionsummary).setVisible(false);
             }
@@ -362,6 +415,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         regnoLayout.setVisibility(View.GONE);
         hcenameLayout.setVisibility(View.GONE);
         bed_layout.setVisibility(View.GONE);
+        date_range_layout.setVisibility(View.GONE);
         finalidlayout.setVisibility(View.GONE);
         cniclayout.setVisibility(View.GONE);
         phonelayout.setVisibility(View.GONE);
@@ -383,6 +437,8 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                                             actionspinner.setSelection(0);
                                             bed_to.setText("");
                                             bed_from.setText("");
+                                            et_date_from.setText("");
+                                            et_date_to.setText("");
                                             hcenameEdit.setText("");
                                             RegnoEdit.setText("");
                                             finalidEdit.setText("");
@@ -407,6 +463,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                                     regnoLayout.setVisibility(View.VISIBLE);
                                     hcenameLayout.setVisibility(View.VISIBLE);
                                     bed_layout.setVisibility(View.VISIBLE);
+                                    date_range_layout.setVisibility(View.VISIBLE);
                                     finalidlayout.setVisibility(View.VISIBLE);
                                     cniclayout.setVisibility(View.VISIBLE);
                                     phonelayout.setVisibility(View.VISIBLE);
@@ -441,6 +498,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                 hcenameLayout.setVisibility(View.GONE);
                // plancodelayout.setVisibility(View.GONE);
                 bed_layout.setVisibility(View.GONE);
+                date_range_layout.setVisibility(View.GONE);
               //  lastvisit_layout.setVisibility(View.GONE);
                 finalidlayout.setVisibility(View.GONE);
                 cniclayout.setVisibility(View.GONE);
@@ -1049,11 +1107,21 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                 int count=0;
                 BfromText = bed_from.getText().toString();
                 BtoText = bed_to.getText().toString();
+                dateFromText = et_date_from.getText().toString();
+                dateToText = et_date_to.getText().toString();
                 RegnoText=RegnoEdit.getText().toString();
                 hcenameText=hcenameEdit.getText().toString();
                 finalidText = finalidEdit.getText().toString();
                 Cnic = cnicEdit.getText().toString();
                 Phone = phoneNoEdit.getText().toString();
+
+                // Validate date range
+                if (!dateFromText.isEmpty() && !dateToText.isEmpty()) {
+                    if (dateFromText.compareTo(dateToText) > 0) {
+                        Toast.makeText(context, "Date Range: From date must be before To date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
 
              if(finalidText.equals("") && hcenameText.equals("") && Cnic.equals("") && Phone.equals("") && RegnoText.equals("")) {
                  if ((districtText.equals("Please Select") || districtText.equals("")) && (tehsilText.equals("Please Select") || tehsilText.equals("")) && (distancetext.equals("Please Select") || distancetext.equals(""))) {
@@ -1117,7 +1185,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
 
                     }
                     else {
-                        DownloadQuackClusterActivity downloadQuackClusterActivity = new DownloadQuackClusterActivity(context, sectortypetext, counciltypetext, hceTypetext, hcestatusID, districtText, tehsilText, distancetext, BfromText, BtoText, lastvisitedID,subactionTypeID, RegnoText, hcenameText, email, password, username, isEdit, finalidText, actionText,Cnic,Phone);
+                        DownloadQuackClusterActivity downloadQuackClusterActivity = new DownloadQuackClusterActivity(context, sectortypetext, counciltypetext, hceTypetext, hcestatusID, districtText, tehsilText, distancetext, BfromText, BtoText, lastvisitedID,subactionTypeID, RegnoText, hcenameText, email, password, username, isEdit, finalidText, actionText,Cnic,Phone, dateFromText, dateToText);
                     }
                 }
     else {
@@ -1131,6 +1199,8 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         firstpage.putExtra("distancetext", distancetext);
         firstpage.putExtra("BfromText", BfromText);
         firstpage.putExtra("BtoText", BtoText);
+        firstpage.putExtra("dateFromText", dateFromText);
+        firstpage.putExtra("dateToText", dateToText);
         firstpage.putExtra("lastvisitedText", lastvisitedID);
         firstpage.putExtra("subactionTypeID", subactionTypeID);
         firstpage.putExtra("RegnoText", RegnoText);
@@ -1599,7 +1669,15 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                case R.id.nav_home:
-                   startActivity(new Intent(context, FilterActivity.class).putExtra("email",email).putExtra("password",password).putExtra("username", username).putExtra("isEdit", isEdit));
+                   // FLAG_ACTIVITY_CLEAR_TOP + SINGLE_TOP reuses the existing FilterActivity
+                   // instance instead of stacking a new one on every Home tap.
+                   Intent homeIntent = new Intent(context, FilterActivity.class);
+                   homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                   homeIntent.putExtra("email", email);
+                   homeIntent.putExtra("password", password);
+                   homeIntent.putExtra("username", username);
+                   homeIntent.putExtra("isEdit", isEdit);
+                   startActivity(homeIntent);
                    drawer.closeDrawers();
                    return true;
 //                    case R.id.nav_reportquack:
@@ -1736,8 +1814,15 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
             drawer.closeDrawers();
             return;
         }
-
-        super.onBackPressed();
+        // Show exit confirmation so users cannot accidentally leave the app
+        // by an unintended back gesture while they are actively working.
+        new AlertDialog.Builder(this)
+                .setTitle("Exit")
+                .setMessage("Are you sure you want to exit CIM?")
+                .setCancelable(false)
+                .setPositiveButton("OK", (dialog, which) -> finishAffinity())
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                .show();
     }
 
     @Override
@@ -1860,8 +1945,12 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         } finally {
-            iStream.close();
-            urlConnection.disconnect();
+            if (iStream != null) {
+                try { iStream.close(); } catch (IOException ignored) {}
+            }
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
         return data;
     }
@@ -1922,7 +2011,8 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
             super.onPostExecute(result);
 
-            if (pDialog.isShowing())
+            // pDialog is never initialised in FilterActivity, so guard against NPE.
+            if (pDialog != null && pDialog.isShowing())
                 pDialog.dismiss();
             if(count==0){
                 count=1;

@@ -135,12 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Schedule the periodic work request
-        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            // Activity was brought to front and not created,
-            // Thus finishing this will get us to the last viewed activity
-            finish();
-            return;
-        }
 
         PeriodicWorkRequest notificationWorkRequest = new PeriodicWorkRequest.Builder(
                 NotificationWorker.class, 15, TimeUnit.MINUTES)
@@ -322,8 +316,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         } finally {
-            iStream.close();
-            urlConnection.disconnect();
+            if (iStream != null) {
+                try { iStream.close(); } catch (IOException ignored) {}
+            }
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
         return data;
     }

@@ -79,6 +79,8 @@ public class summaryFragment extends Fragment {
     String subactionTypeID;
     String BfromText="";
     String BtoText="";
+    String dateFromText="";
+    String dateToText="";
     String email=null;
     String password;
     String isEdit;
@@ -148,6 +150,8 @@ public class summaryFragment extends Fragment {
         distancetext= args.getString("distancetext");
         BfromText= args.getString("BfromText");
         BtoText= args.getString("BtoText");
+        dateFromText = args.getString("dateFromText", "");
+        dateToText = args.getString("dateToText", "");
         lastvisitedText = args.getString("lastvisitedText");
         RegnoText = args.getString("RegnoText");
         hcenameText = args.getString("hcenameText");
@@ -272,7 +276,7 @@ public class summaryFragment extends Fragment {
 
         String token= getContext().getResources().getString(R.string.token);
 
-        url = baseurl + "GetPercentage?strToken="+token+"&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText+"&Lvs=&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&finalid="+finalidText+"&ActionType="+lastvisitedText+"&QuackCategory="+QuackType+"&QuackSubCategory=&SubActionType="+subactionTypeID;
+        url = baseurl + "GetPercentage?strToken="+token+"&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText+"&Lvs=&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&finalid="+finalidText+"&ActionType="+lastvisitedText+"&QuackCategory="+QuackType+"&QuackSubCategory=&SubActionType="+subactionTypeID+"&DateFrom="+dateFromText+"&DateTo="+dateToText;
 
         url = url.replaceAll(" ", "%20");
 

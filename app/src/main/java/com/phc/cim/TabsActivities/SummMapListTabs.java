@@ -74,6 +74,8 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
     String subactionTypeID;
     String BfromText = "";
     String BtoText = "";
+    String dateFromText = "";
+    String dateToText = "";
     String email;
     String lastvisitedText;
     String RegnoText;
@@ -142,6 +144,8 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         distancetext = (String) intent.getSerializableExtra("distancetext");
         BfromText = (String) intent.getSerializableExtra("BfromText");
         BtoText = (String) intent.getSerializableExtra("BtoText");
+        dateFromText = (String) intent.getSerializableExtra("dateFromText");
+        dateToText = (String) intent.getSerializableExtra("dateToText");
         lastvisitedText = (String) intent.getSerializableExtra("lastvisitedText");
         RegnoText = (String) intent.getSerializableExtra("RegnoText");
         hcenameText = (String) intent.getSerializableExtra("hcenameText");
@@ -164,6 +168,8 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         bundle.putString("distancetext", distancetext);
         bundle.putString("BfromText", BfromText);
         bundle.putString("BtoText", BtoText);
+        bundle.putString("dateFromText", dateFromText);
+        bundle.putString("dateToText", dateToText);
         bundle.putString("lastvisitedText", lastvisitedText);
         bundle.putString("subactionTypeID", subactionTypeID);
         bundle.putString("RegnoText", RegnoText);

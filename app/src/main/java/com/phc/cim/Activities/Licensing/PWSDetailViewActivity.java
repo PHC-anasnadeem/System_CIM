@@ -63,6 +63,7 @@ import com.phc.cim.Extra.VideosFragment;
 import com.phc.cim.Managers.DataManager;
 import com.phc.cim.Others.CurrentLocation;
 import com.phc.cim.Others.Logout;
+import com.phc.cim.Extra.DateUtils;
 import com.phc.cim.R;
 import com.phc.cim.TabsActivities.DashboardTabs;
 
@@ -549,12 +550,12 @@ public class PWSDetailViewActivity extends AppCompatActivity {
         hcetypespinner.setText(hceTypetext);
         HCSP_spinner.setText(HCSPTypeText);
         counciltypespiner.setText(counciltypetext);
-        reg_dateEdit.setText(PHCRegDate);
-        dereg_dateEdit.setText(PHCDeRegDate);
+        reg_dateEdit.setText(DateUtils.formatMSJsonDate(PHCRegDate));
+        dereg_dateEdit.setText(DateUtils.formatMSJsonDate(PHCDeRegDate));
         dereg_noEdit.setText(PHCDeRegNo);
-        pl_dateEdit.setText(PHCPLDate);
+        pl_dateEdit.setText(DateUtils.formatMSJsonDate(PHCPLDate));
         pl_noEdit.setText(PHCPLNo);
-        rl_dateEdit.setText(PHCRLDate);
+        rl_dateEdit.setText(DateUtils.formatMSJsonDate(PHCRLDate));
         rl_noEdit.setText(PHCRLNo);
         fee_rcvdEdit.setText(FeeReceived);
         regcertissuEdit.setText(RegistrationCertificateIssued);

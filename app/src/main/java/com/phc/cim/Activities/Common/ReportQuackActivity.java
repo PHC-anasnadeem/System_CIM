@@ -20,11 +20,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.phc.cim.Activities.Aqc.ActionActivity;
 import com.phc.cim.DataElements.District;
 import com.phc.cim.DataElements.Division;
@@ -107,6 +109,9 @@ public class ReportQuackActivity extends AppCompatActivity {
 
     private TextInputEditText latitudeEditText;
     private TextInputEditText longitudeEditText;
+    private LinearLayout locationPickerBlock;
+    private Button btnPickLocation;
+    private static final int REQUEST_LOCATION_PICKER = 1001;
     double latitude;
     double longitude;
 
@@ -143,7 +148,26 @@ public class ReportQuackActivity extends AppCompatActivity {
         quackloc_spinner = (Spinner) findViewById(R.id.quackloc_spinner);
         latitudeEditText = findViewById(R.id.lat);
         longitudeEditText = findViewById(R.id.lng);
+        locationPickerBlock = findViewById(R.id.location_picker_block);
+        btnPickLocation = findViewById(R.id.btn_pick_location);
 
+        btnPickLocation.setOnClickListener(v -> {
+            Intent intentMap = new Intent(context, LocationPickerActivity.class);
+            double currentLat = cur_latitude;
+            double currentLng = cur_longitude;
+            
+            // If user already typed something, pass that instead
+            try {
+                if (!latitudeEditText.getText().toString().isEmpty())
+                    currentLat = Double.parseDouble(latitudeEditText.getText().toString());
+                if (!longitudeEditText.getText().toString().isEmpty())
+                    currentLng = Double.parseDouble(longitudeEditText.getText().toString());
+            } catch (Exception ignored) {}
+            
+            intentMap.putExtra("lat", currentLat);
+            intentMap.putExtra("lng", currentLng);
+            startActivityForResult(intentMap, REQUEST_LOCATION_PICKER);
+        });
 
         errortext.setVisibility(View.GONE);
         Intent intent = getIntent();
@@ -273,15 +297,15 @@ public class ReportQuackActivity extends AppCompatActivity {
                                        int position, long id) {
                 //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
                 quackloctext = parent.getItemAtPosition(position).toString();
-                // Check if the selected option is "No"
-                if (quackloctext.equals("No")) {
-                    // Show latitudeEditText and longitudeEditText
-                    latitudeEditText.setVisibility(View.VISIBLE);
-                    longitudeEditText.setVisibility(View.VISIBLE);
+                // Check if the selected option is "No" (Position 2)
+                if (position == 2) {
+                    // Show layout block and pre-fill them
+                    locationPickerBlock.setVisibility(View.VISIBLE);
+                    latitudeEditText.setText(String.valueOf(cur_latitude));
+                    longitudeEditText.setText(String.valueOf(cur_longitude));
                 } else {
-                    // Hide latitudeEditText and longitudeEditText
-                    latitudeEditText.setVisibility(View.GONE);
-                    longitudeEditText.setVisibility(View.GONE);
+                    // Hide layout block
+                    locationPickerBlock.setVisibility(View.GONE);
                 }
             }
 
@@ -358,10 +382,10 @@ public class ReportQuackActivity extends AppCompatActivity {
                 user_longitude = longitude;
                 if (count < 1) {
 
-                    if (quackloctext.equals("No")) {
+                    /*if (quackloctext.equals("No")) {
                         latitude = cur_latitude;
                         longitude = cur_longitude;
-                    }
+                    }*/
 
                     if (CNIC_Text.equals("")) {
                         CNIC_Text = "00000-0000000-0";
@@ -975,7 +999,18 @@ public class ReportQuackActivity extends AppCompatActivity {
         // Building the url to the web service
         String baseurl = context.getResources().getString(R.string.baseurl);
         String token = context.getResources().getString(R.string.token);
-        String url = baseurl + "ReportQuack?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&Division=" + divisionText + "&District=" + districtText + "&Tehsil=" + tehsilText + "&SectorType=Private&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&lat=" + cur_latitude + "&lng=" + cur_longitude + "&emailAddress=" + email + "&Comments=" + comnt + "&Userlat=" + user_latitude + "&Userlng=" + user_longitude + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid;
+        
+        double finalLat = cur_latitude;
+        double finalLng = cur_longitude;
+        
+        if (locationPickerBlock.getVisibility() == View.VISIBLE) {
+            try {
+                finalLat = Double.parseDouble(latitudeEditText.getText().toString());
+                finalLng = Double.parseDouble(longitudeEditText.getText().toString());
+            } catch (Exception ignored) {}
+        }
+
+        String url = baseurl + "ReportQuack?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&Division=" + divisionText + "&District=" + districtText + "&Tehsil=" + tehsilText + "&SectorType=Private&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&lat=" + finalLat + "&lng=" + finalLng + "&emailAddress=" + email + "&Comments=" + comnt + "&Userlat=" + user_latitude + "&Userlng=" + user_longitude + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid;
         url = url.replaceAll(" ", "%20");
         url = url.replaceAll("#", "%23");
         url = url.replaceAll(",", "%2C");
@@ -1027,8 +1062,12 @@ public class ReportQuackActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         } finally {
-            iStream.close();
-            urlConnection.disconnect();
+            if (iStream != null) {
+                try { iStream.close(); } catch (IOException ignored) {}
+            }
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
         return data;
     }
@@ -1069,7 +1108,7 @@ public class ReportQuackActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if (pDialog.isShowing())
+            if (pDialog != null && pDialog.isShowing())
                 pDialog.dismiss();
             if (result != null) {
                 if (MID.equals("0")) {
@@ -1119,10 +1158,21 @@ public class ReportQuackActivity extends AppCompatActivity {
             else {
                 Toast.makeText(context, "Server error! Please try again", Toast.LENGTH_SHORT).show();
             }
-
-
         }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOCATION_PICKER && resultCode == RESULT_OK && data != null) {
+            double pickedLat = data.getDoubleExtra("lat", 0.0);
+            double pickedLng = data.getDoubleExtra("lng", 0.0);
+
+            latitudeEditText.setText(String.valueOf(pickedLat));
+            longitudeEditText.setText(String.valueOf(pickedLng));
+
+            Toast.makeText(context, "Location updated from map", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

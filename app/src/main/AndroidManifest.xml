@@ -364,6 +364,11 @@
             android:name=".Activities.Common.PolygonActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".Activities.Common.LocationPickerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
 
         <service android:name=".BroadcastService.BroadCastService" />
         <service

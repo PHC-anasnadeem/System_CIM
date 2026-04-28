@@ -301,8 +301,12 @@ public class Login_Activity extends AppCompatActivity {
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         } finally {
-            iStream.close();
-            urlConnection.disconnect();
+            if (iStream != null) {
+                try { iStream.close(); } catch (IOException ignored) {}
+            }
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
         return data;
     }
@@ -399,6 +403,9 @@ public class Login_Activity extends AppCompatActivity {
                         firstpage.putExtra("UserID", UserID);
                         context.startActivity(firstpage);
                     }
+                    // Remove Login_Activity from back-stack so pressing Back
+                    // from the main screen does not return the user to Login.
+                    ((Login_Activity) context).finish();
 
                     // --- START LOCATION SERVICE HERE ---
                     Intent serviceIntent = new Intent(context, MyLocationService.class);

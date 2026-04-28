@@ -831,6 +831,7 @@ public class PWSDetailListActivity extends AppCompatActivity {
                         map.put("bedStrength", e.getString("bedStrength"));
                         map.put("TotalRec", e.getString("TotalRec"));
                         map.put("PageSize", e.getString("PageSize"));
+                        map.put("VisitedDate", e.optString("VisitedDate", "N/A"));
                         indtabresult.add(map);
                     }
 
