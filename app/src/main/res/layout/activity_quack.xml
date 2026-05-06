@@ -122,7 +122,6 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_pick_location"
-                    style="@style/CIM.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -372,7 +371,6 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_submit"
-                style="@style/CIM.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

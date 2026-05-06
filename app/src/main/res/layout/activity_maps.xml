@@ -16,7 +16,7 @@
             android:id="@+id/container4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.phc.cim.Extra.MapsActivity">
+            tools:context="com.phc.cimplus.Extra.MapsActivity">
 
             <fragment
                 android:id="@+id/map"

@@ -3,7 +3,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"
-        tools:context="com.phc.cim.Extra.LocateUsFragment">
+        tools:context="com.phc.cimplus.Extra.LocateUsFragment">
 
 
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.phc.cim.Activities.Common.ReportQuackActivity">
+    tools:context="com.phc.cimplus.Activities.Common.ReportQuackActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -126,7 +126,6 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_pick_location"
-                    style="@style/CIM.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -342,7 +341,6 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_submit"
-                style="@style/CIM.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="40dp"

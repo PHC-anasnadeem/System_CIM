@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/splash_screen"
-        tools:context="com.phc.cim.Activities.Common.MainActivity">
+        tools:context="com.phc.cimplus.Activities.Common.MainActivity">
 
 
     <com.trncic.library.DottedProgressBar

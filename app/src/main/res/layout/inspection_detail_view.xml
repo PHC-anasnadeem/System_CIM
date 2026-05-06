@@ -16,7 +16,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.phc.cim.Activities.Inspection.InspectionDetailActivity">
+    tools:context="com.phc.cimplus.Activities.Inspection.InspectionDetailActivity">
 
 
     <ScrollView xmlns:tools="http://schemas.android.com/tools"

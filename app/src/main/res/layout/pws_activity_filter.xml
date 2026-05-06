@@ -24,7 +24,7 @@
                 android:paddingTop="50dp"
                 android:orientation="vertical"
                 android:layout_gravity="center"
-                tools:context="com.phc.cim.Activities.Common.FilterActivity">
+                tools:context="com.phc.cimplus.Activities.Common.FilterActivity">
 
 
 

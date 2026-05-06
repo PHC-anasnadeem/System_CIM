@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.phc.cim.TabsActivities.EditTabActivity">
+    tools:context="com.phc.cimplus.TabsActivities.EditTabActivity">
 
 
         <LinearLayout
@@ -140,7 +140,6 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_pick_location"
-                    style="@style/CIM.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -599,7 +598,6 @@
                 <!-- Find Button -->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_cancel"
-                    style="@style/CIM.Button"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -611,7 +609,6 @@
                 <!-- Find Button -->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_submit"
-                    style="@style/CIM.Button"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="10dp"

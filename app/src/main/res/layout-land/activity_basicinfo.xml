@@ -12,14 +12,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.phc.cim.Activities.Common.UpdateBasicInfoActivity">
+        tools:context="com.phc.cimplus.Activities.Common.UpdateBasicInfoActivity">
 <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="60dp"
-        tools:context="com.phc.cim.Activities.Common.ReportQuackActivity"
+        tools:context="com.phc.cimplus.Activities.Common.ReportQuackActivity"
    >
 
 

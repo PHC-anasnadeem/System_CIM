@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-    tools:context="com.phc.cim.Extra.Vist_Memb_Fragment">
+    tools:context="com.phc.cimplus.Extra.Vist_Memb_Fragment">
 
         <FrameLayout
             android:id="@+id/content1"
