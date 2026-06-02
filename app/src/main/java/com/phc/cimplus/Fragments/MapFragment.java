@@ -122,6 +122,7 @@ public class MapFragment extends Fragment {
     private TextView mname;
     private TextView maddress;
     private TextView visitedDateText;
+    private TextView ucs_text;
     String HCE_name = null;
     Button button;
     Button action_button;
@@ -150,6 +151,7 @@ public class MapFragment extends Fragment {
     String marker_name;
     String marker_status;
     String mobile_number;
+    String marker_ucs;
     String dataType;
     String registrationType;
     String orgType;
@@ -252,6 +254,7 @@ public class MapFragment extends Fragment {
         mname = (TextView) rootView.findViewById(R.id.Name);
         maddress = (TextView) rootView.findViewById(R.id.addrs);
         visitedDateText = (TextView) rootView.findViewById(R.id.visited_date);
+        ucs_text = (TextView) rootView.findViewById(R.id.ucs_text);
         hcspname = (TextView) rootView.findViewById(R.id.hcspname);
         linearLayout = (LinearLayout) rootView.findViewById(R.id.maplayout);
         linearLayout.setVisibility(View.GONE);
@@ -763,6 +766,7 @@ public class MapFragment extends Fragment {
                         map.put("hcsp_cnic", e.getString("hcsp_cnic"));
                         map.put("hce_mobile", e.getString("hce_mobile"));
                         map.put("VisitedDate", e.optString("VisitedDate", "N/A"));
+                        map.put("UCs", e.optString("UCs", ""));
 
                         mylist.add(map);
                     }
@@ -969,6 +973,14 @@ public class MapFragment extends Fragment {
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
                                                 visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
+                                                marker_ucs = result.get(i).get("UCs");
+                                                if (marker_ucs != null && !marker_ucs.isEmpty() && !marker_ucs.equals("null")) {
+                                                    ucs_text.setVisibility(View.VISIBLE);
+                                                    ucs_text.setText("UCs: " + marker_ucs);
+                                                } else {
+                                                    marker_ucs = "";
+                                                    ucs_text.setVisibility(View.GONE);
+                                                }
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);
@@ -1018,6 +1030,14 @@ public class MapFragment extends Fragment {
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
                                                 visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
+                                                marker_ucs = result.get(i).get("UCs");
+                                                if (marker_ucs != null && !marker_ucs.isEmpty() && !marker_ucs.equals("null")) {
+                                                    ucs_text.setVisibility(View.VISIBLE);
+                                                    ucs_text.setText("UCs: " + marker_ucs);
+                                                } else {
+                                                    marker_ucs = "";
+                                                    ucs_text.setVisibility(View.GONE);
+                                                }
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);
@@ -1059,6 +1079,14 @@ public class MapFragment extends Fragment {
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
                                                 visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
+                                                marker_ucs = result.get(i).get("UCs");
+                                                if (marker_ucs != null && !marker_ucs.isEmpty() && !marker_ucs.equals("null")) {
+                                                    ucs_text.setVisibility(View.VISIBLE);
+                                                    ucs_text.setText("UCs: " + marker_ucs);
+                                                } else {
+                                                    marker_ucs = "";
+                                                    ucs_text.setVisibility(View.GONE);
+                                                }
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);
@@ -1101,6 +1129,14 @@ public class MapFragment extends Fragment {
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
                                                 visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
+                                                marker_ucs = result.get(i).get("UCs");
+                                                if (marker_ucs != null && !marker_ucs.isEmpty() && !marker_ucs.equals("null")) {
+                                                    ucs_text.setVisibility(View.VISIBLE);
+                                                    ucs_text.setText("UCs: " + marker_ucs);
+                                                } else {
+                                                    marker_ucs = "";
+                                                    ucs_text.setVisibility(View.GONE);
+                                                }
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);
@@ -1144,6 +1180,14 @@ public class MapFragment extends Fragment {
                                                 mname.setVisibility(View.VISIBLE);
                                                 maddress.setVisibility(View.VISIBLE);
                                                 visitedDateText.setText("Visited Date: " + DateUtils.formatMSJsonDate(result.get(i).get("VisitedDate")));
+                                                marker_ucs = result.get(i).get("UCs");
+                                                if (marker_ucs != null && !marker_ucs.isEmpty() && !marker_ucs.equals("null")) {
+                                                    ucs_text.setVisibility(View.VISIBLE);
+                                                    ucs_text.setText("UCs: " + marker_ucs);
+                                                } else {
+                                                    marker_ucs = "";
+                                                    ucs_text.setVisibility(View.GONE);
+                                                }
                                             }
                                         }
                                         circlelayout.setVisibility(View.GONE);

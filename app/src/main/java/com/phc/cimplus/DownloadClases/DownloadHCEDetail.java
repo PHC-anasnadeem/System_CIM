@@ -63,7 +63,7 @@ public class DownloadHCEDetail {
     double Lng;
     int count=0;
     String RecordLockedForUpdate;
-    String UserName,LastVisitedDate,MarkSurvCount, HCEName, HCEAddress, District, SectorType, OrgType, HCSPType, HCSPName, HCSPSO ,HCSPCNIC ,HCSPContactNo ,RegStatus ,RegNum ,CouncilStatus ,CouncilName ,CouncilNum,RegType,index,total_beds,RegTypebit;
+    String UserName,LastVisitedDate,MarkSurvCount, HCEName, HCEAddress, District, SectorType, OrgType, HCSPType, HCSPName, HCSPSO ,HCSPCNIC ,HCSPContactNo ,RegStatus ,RegNum ,CouncilStatus ,CouncilName ,CouncilNum,RegType,index,total_beds,RegTypebit,UCs;
     HashMap<String, String> visitDetail;
        double latitude,longitude;
     public DownloadHCEDetail(Context context, String HCEName, String final_id, String email, String password, String username, String isEdit , String index, int count,String RegTypebit){
@@ -251,6 +251,11 @@ public class DownloadHCEDetail {
                             map.put("lng", e.getString("lng"));
                             map.put("LastVisitedDate", e.getString("LastVisitedDate"));
                             map.put("UserName", e.getString("UserName"));
+                            if (e.has("UCs")) {
+                                map.put("UCs", e.getString("UCs"));
+                            } else {
+                                map.put("UCs", "");
+                            }
 //                            map.put("MarkSurvCount", e.getString("MarkSurvCount"));
 
                         mylist.add(map);
@@ -298,6 +303,7 @@ public class DownloadHCEDetail {
                         CouncilNum = result.get(i).get("CouncilNum");
                         LastVisitedDate = result.get(i).get("LastVisitedDate");
                         UserName = result.get(i).get("UserName");
+                        UCs = result.get(i).get("UCs");
                         latitude = Double.parseDouble(result.get(i).get("lat"));
                         longitude = Double.parseDouble(result.get(i).get("lng"));
 
@@ -515,6 +521,7 @@ public class DownloadHCEDetail {
                         firstpage.putExtra("count", count);
                         firstpage.putExtra("UserName", UserName);
                         firstpage.putExtra("LastVisitedDate", LastVisitedDate);
+                        firstpage.putExtra("UCs", UCs);
 //                        firstpage.putExtra("MarkSurvCount", MarkSurvCount);
                         firstpage.putStringArrayListExtra("imageurls", imagespath);
                         context.startActivity(firstpage);
@@ -549,6 +556,7 @@ public class DownloadHCEDetail {
                         firstpage.putExtra("index", index);
                         firstpage.putExtra("UserName", UserName);
                         firstpage.putExtra("LastVisitedDate", LastVisitedDate);
+                        firstpage.putExtra("UCs", UCs);
 //                        firstpage.putExtra("MarkSurvCount", MarkSurvCount);
                         firstpage.putExtra("visitDetail", visitDetail);
                         firstpage.putStringArrayListExtra("imageurls", imagespath);

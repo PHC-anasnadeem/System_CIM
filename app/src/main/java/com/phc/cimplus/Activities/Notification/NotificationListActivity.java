@@ -1,6 +1,7 @@
 package com.phc.cimplus.Activities.Notification;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -154,7 +155,14 @@ public class NotificationListActivity extends AppCompatActivity implements
 
     @Override
     public void onNotificationClick(NotificationModel notification) {
-        notificationManager.markNotificationAsRead(notification.getNotificationId(), new NotificationApiClient.NotificationResponseListener() {
+        String uniqueId = "REVISIT".equals(notification.getType()) 
+                ? String.valueOf(notification.getFinalID()) 
+                : notification.getDiaryNo();
+
+        SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
+        String userId = prefs.getString("UserID", "0");
+
+        notificationManager.markNotificationAsRead(uniqueId, userId, new NotificationApiClient.NotificationResponseListener() {
             @Override
             public void onResponse(List<NotificationModel> notifications) {
                 notification.setRead(true);

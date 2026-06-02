@@ -41,10 +41,10 @@
     <string name="title_pws_search">PWS Search</string>
     <string name="no_data_found">No data found</string>
     <string name="about_us_text">Census Information Manager\n
-Version: 1.2.9.9+ \n
+Version: 1.3.2 \n
 Powered by PHC ICT Team
 </string>
-    <string name="splash_bottom">Version 1.2.9.9+ \n
+    <string name="splash_bottom">Version 1.3.2 \n
     Powered by PHC-ICT Team\n
     All Rights Reserved\n
 </string>
@@ -106,4 +106,5 @@ Powered by PHC ICT Team
     <string name="location_disclosure_message">CIM+ collects location data to track your movements during field visits even when the app is closed or not in use. This data is essential for monitoring and reporting purposes by PHC.</string>
     <string name="agree">Agree</string>
     <string name="disagree">Disagree</string>
+    <string name="openai_api_key">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</string>
 </resources>

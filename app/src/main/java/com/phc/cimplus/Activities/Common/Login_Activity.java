@@ -25,6 +25,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.net.Uri;
+import androidx.core.app.ActivityCompat;
+import android.content.pm.PackageManager;
 
 import com.phc.cimplus.Activities.Inspection.InspectionFilterActivity;
 import com.phc.cimplus.DataElements.Role;
@@ -409,13 +412,18 @@ public class Login_Activity extends AppCompatActivity {
                     ((Login_Activity) context).finish();
 
                     // --- START LOCATION SERVICE HERE ---
-                    Intent serviceIntent = new Intent(context, MyLocationService.class);
-                    serviceIntent.putExtra("UserID", UserID);
-                    serviceIntent.putExtra("username", username);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        context.startForegroundService(serviceIntent);
+                    if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Intent serviceIntent = new Intent(context, MyLocationService.class);
+                        serviceIntent.putExtra("UserID", UserID);
+                        serviceIntent.putExtra("username", username);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            context.startForegroundService(serviceIntent);
+                        } else {
+                            context.startService(serviceIntent);
+                        }
                     } else {
-                        context.startService(serviceIntent);
+                        // Professional handling of missing permission at login
+                        showLocationPermissionRequiredDialog();
                     }
 
                 }
@@ -534,16 +542,18 @@ public class Login_Activity extends AppCompatActivity {
     }
 */
 
-
-
+    private void showLocationPermissionRequiredDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Location Permission Required");
+        builder.setMessage("This app requires location permission for movement tracking. Please grant it in Settings to proceed.");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Go to Settings", (dialog, which) -> {
+            Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
 }
-
-
-
-
-
-
-
-
-
-

@@ -173,6 +173,26 @@
                     android:textColor="#000000"
                     android:textColorHighlight="#000000" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- UCs Label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000000">
+
+                <EditText
+                    android:id="@+id/ucs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="UCs"
+                    android:inputType="textMultiLine"
+                    android:focusable="false"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!--  District Label -->
 
 <!--            <android.support.design.widget.TextInputLayout

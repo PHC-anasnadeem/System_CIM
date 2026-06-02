@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.phc.cimplus.Fragments.MapFragment">
 
 
@@ -190,6 +191,21 @@
                     />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/ucslayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/ucs_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:paddingLeft="10dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
                 android:id="@+id/visiteddatelay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -297,7 +313,6 @@
                     />
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/actionlayout"

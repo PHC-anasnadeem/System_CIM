@@ -90,6 +90,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
     CurrentLocation gps;
     EditText hce_nameEdit;
     EditText AddressEdit;
+    EditText ucsEdit;
     EditText HCSP_nameEdit;
     EditText HCSP_SOEdit;
     EditText CNIC_Edit;
@@ -114,6 +115,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
     String currloc_ID;
     String hce_nameText = "";
     String AddressText = "";
+    String UCsText = "";
     String HCSP_nameText = "";
     String HCSP_SOText = "";
     String CNIC_Text = "";
@@ -225,6 +227,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         gps = new CurrentLocation(context);
         hce_nameEdit = (EditText) findViewById(R.id.hce_name);
         AddressEdit = (EditText) findViewById(R.id.Address);
+        ucsEdit = (EditText) findViewById(R.id.ucs);
         HCSP_nameEdit = (EditText) findViewById(R.id.HCSP_Name);
         HCSP_SOEdit = (EditText) findViewById(R.id.HCSP_SO);
         CNIC_Edit = (EditText) findViewById(R.id.CNIC);
@@ -261,6 +264,8 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         intent = getIntent();
         hce_nameText = (String) intent.getSerializableExtra("HCEName");
         AddressText = (String) intent.getSerializableExtra("HCEAddress");
+        UCsText = (String) intent.getSerializableExtra("UCs");
+        if (UCsText == null) UCsText = "";
         districtText = (String) intent.getSerializableExtra("District");
         sectortypetext = (String) intent.getSerializableExtra("SectorType");
         hceTypetext = (String) intent.getSerializableExtra("OrgType");
@@ -340,6 +345,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         }
         hce_nameEdit.setText(hce_nameText);
         AddressEdit.setText(AddressText);
+        if (ucsEdit != null) ucsEdit.setText(UCsText);
         HCSP_nameEdit.setText(HCSP_nameText);
         HCSP_SOEdit.setText(HCSP_SOText);
         CNIC_Edit.setText(CNIC_Text);
@@ -863,6 +869,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         });
 
 
+        /*
         markasdone.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 boolean isValid = true;
@@ -884,8 +891,8 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                 endTimeText = endTimeEditText.getText().toString();
 
                 CNIC_Text = CNIC_Edit.getText().toString();
-                String cleanedCnic = HCSP_ContactText.replaceAll("[^\\d]", "");
-                if (cleanedCnic.length() != 15) {
+                String cleanedCnic = CNIC_Text.replaceAll("[^\\d]", "");
+                if (cleanedCnic.length() != 13) {
                     CNIC_Edit.setError("CNIC must be exactly 13 digits (without dashes)");
                     isValid = false;
                 } else {
@@ -894,7 +901,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
 
                 HCSP_ContactText = HCSP_ContactEdit.getText().toString();
                 String cleanedMobile = HCSP_ContactText.replaceAll("[^\\d]", "");
-                if (cleanedMobile.length() != 12) {
+                if (cleanedMobile.length() != 11) {
                     HCSP_ContactEdit.setError("Mobile number is required and must be 11 digits");
                     isValid = false;
                 } else {
@@ -1017,6 +1024,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                 }
             }
         });
+        */
 
 //        markasdone.setOnClickListener(new Button.OnClickListener() {
 //
@@ -1809,87 +1817,96 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
 
 
     private void markAsDoneSubmit() {
-            boolean isValid = true;
-            Location loc1 = new Location("");
-            loc1.setLatitude(latitude);
-            loc1.setLongitude(longitude);
+        Location loc1 = new Location("");
+        loc1.setLatitude(latitude);
+        loc1.setLongitude(longitude);
 
-            Location loc2 = new Location("");
-            loc2.setLatitude(cur_latitude);
-            loc2.setLongitude(cur_longitude);
-            distCurrPrevInMeters = String.valueOf(loc1.distanceTo(loc2));
+        Location loc2 = new Location("");
+        loc2.setLatitude(cur_latitude);
+        loc2.setLongitude(cur_longitude);
+        distCurrPrevInMeters = String.valueOf(loc1.distanceTo(loc2));
 
-            latLngInput = editTextLatLng.getText().toString(); // Add latLngInput
-            hce_nameText = hce_nameEdit.getText().toString();
-            AddressText = AddressEdit.getText().toString();
-            HCSP_nameText = HCSP_nameEdit.getText().toString();
-            HCSP_SOText = HCSP_SOEdit.getText().toString();
-            startTimeText = startTimeEditText.getText().toString();
-            endTimeText = endTimeEditText.getText().toString();
+        latLngInput = editTextLatLng.getText().toString(); // Add latLngInput
+        hce_nameText = hce_nameEdit.getText().toString();
+        AddressText = AddressEdit.getText().toString();
+        HCSP_nameText = HCSP_nameEdit.getText().toString();
+        HCSP_SOText = HCSP_SOEdit.getText().toString();
+        startTimeText = startTimeEditText.getText().toString();
+        endTimeText = endTimeEditText.getText().toString();
 
-            CNIC_Text = CNIC_Edit.getText().toString();
-            String cleanedCnic = HCSP_ContactText.replaceAll("[^\\d]", "");
-            if (cleanedCnic.length() != 15) {
-                CNIC_Edit.setError("CNIC must be exactly 13 digits (without dashes)");
-                isValid = false;
-            } else {
-                CNIC_Edit.setError(null); // Clear error if valid
-            }
+        Reg_NoText = Reg_NoEdit.getText().toString();
+        coun_NoText = coun_NoEdit.getText().toString();
+        comnt = coments.getText().toString();
 
-            HCSP_ContactText = HCSP_ContactEdit.getText().toString();
-            String cleanedMobile = HCSP_ContactText.replaceAll("[^\\d]", "");
-            if (cleanedMobile.length() != 12) {
-                HCSP_ContactEdit.setError("Mobile number is required and must be 11 digits");
-                isValid = false;
-            } else {
-                HCSP_ContactEdit.setError(null); // Clear error if valid
-            }
+        java.util.List<String> errorMessages = new java.util.ArrayList<>();
+        boolean isValid = true;
 
-            Reg_NoText = Reg_NoEdit.getText().toString();
-            coun_NoText = coun_NoEdit.getText().toString();
+        CNIC_Text = CNIC_Edit.getText().toString();
+        String cleanedCnic = CNIC_Text.replaceAll("[^\\d]", "");
+        if (cleanedCnic.length() != 13) {
+            CNIC_Edit.setError("CNIC must be exactly 13 digits (without dashes)");
+            errorMessages.add("Valid CNIC (13 digits)");
+            isValid = false;
+        } else {
+            CNIC_Edit.setError(null); // Clear error if valid
+        }
 
-            int count = 0;
-            comnt = coments.getText().toString();
+        HCSP_ContactText = HCSP_ContactEdit.getText().toString();
+        String cleanedMobile = HCSP_ContactText.replaceAll("[^\\d]", "");
+        if (cleanedMobile.length() != 11) {
+            HCSP_ContactEdit.setError("Mobile number is required and must be 11 digits");
+            errorMessages.add("Valid Mobile number (11 digits)");
+            isValid = false;
+        } else {
+            HCSP_ContactEdit.setError(null); // Clear error if valid
+        }
 
-            if (hce_nameText.isEmpty()) {
-                hce_nameEdit.setError("Please enter name");
-                count++;
-            }
-            if (AddressText.isEmpty()) {
-                AddressEdit.setError("Please enter address");
-                count++;
-            }
-            if (HCSP_nameText.isEmpty()) {
-                HCSP_nameEdit.setError("Please enter name");
-                count++;
-            }
-            if ("Please Select".equals(quackloctext)) {
-                setSpinnerError(quackloc_spinner, "Please select");
-                count++;
-            }
-            if ("Please Select".equals(currloc_text)) {
-                setSpinnerError(currloc_spinner, "Please select");
-                count++;
-            }
-//                if (startTimeText.isEmpty()) {
-//                    startTimeEditText.setError("Please select start time");
-//                    count++;
-//                }
-//                if (endTimeText.isEmpty()) {
-//                    endTimeEditText.setError("Please select end time");
-//                    count++;
-//                }
+        if (hce_nameText.isEmpty()) {
+            hce_nameEdit.setError("Please enter name");
+            errorMessages.add("HCE Name");
+            isValid = false;
+        }
+        if (AddressText.isEmpty()) {
+            AddressEdit.setError("Please enter address");
+            errorMessages.add("Address");
+            isValid = false;
+        }
+        if (HCSP_nameText.isEmpty()) {
+            HCSP_nameEdit.setError("Please enter name");
+            errorMessages.add("Service Provider Name");
+            isValid = false;
+        }
+        if ("Please Select".equals(quackloctext)) {
+            setSpinnerError(quackloc_spinner, "Please select");
+            errorMessages.add("Location / Address Type");
+            isValid = false;
+        }
+        if ("Please Select".equals(currloc_text)) {
+            setSpinnerError(currloc_spinner, "Please select");
+            errorMessages.add("Current Location");
+            isValid = false;
+        }
 
-            // Check if the AddressText is empty when "No" is selected
-            if ("0".equals(quacklocID) && AddressText.isEmpty()) {
-                editTextLatLng.setError("Please enter address"); // Show error message
-                count++;
-            }
+        // Check if the AddressText is empty when "No" is selected
+        if ("0".equals(quacklocID) && latLngInput.isEmpty()) {
+            editTextLatLng.setError("Please enter address"); // Show error message
+            errorMessages.add("Address details for Location");
+            isValid = false;
+        }
 
-            if (count > 0) {
-                errortext.setVisibility(View.VISIBLE);
-            } else {
-                errortext.setVisibility(View.GONE);
+        if (!isValid) {
+            errortext.setVisibility(View.VISIBLE);
+            String errorList = android.text.TextUtils.join("\n- ", errorMessages);
+            new AlertDialog.Builder(context)
+                    .setTitle("Missing/Invalid Information")
+                    .setMessage("Please provide the following required fields:\n- " + errorList)
+                    .setCancelable(false)
+                    .setPositiveButton("OK", null)
+                    .show();
+            return;
+        }
+
+        errortext.setVisibility(View.GONE);
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage("Do you want to save the changes?")
                         .setTitle("Save")
@@ -1950,7 +1967,6 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
                         });
                 AlertDialog alert = builder.create();
                 alert.show();
-            }
         }
 
 }

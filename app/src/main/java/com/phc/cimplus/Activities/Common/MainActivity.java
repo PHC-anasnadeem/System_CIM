@@ -114,13 +114,23 @@ public class MainActivity extends AppCompatActivity {
     String jsonStr = null;
     Button tryagain;
     DottedProgressBar progressBar;
-    private static final String API_URL = "https://webportal.phc.org.pk:51698/api/Plans/Download";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_main);
         context = this;
+
+        progressBar = (DottedProgressBar) findViewById(R.id.progress);
+        mTextMessage = (TextView) findViewById(R.id.connection);
+        tryagain = (Button) findViewById(R.id.pass_button);
+
+        if (progressBar != null) progressBar.startProgress();
+        if (mTextMessage != null) mTextMessage.setVisibility(View.GONE);
+        if (tryagain != null) {
+            tryagain.setVisibility(View.GONE);
+            tryagain.setOnClickListener(v -> startAppLogic());
+        }
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -156,59 +166,29 @@ public class MainActivity extends AppCompatActivity {
                 notificationWorkRequest);
 
 
+        startAppLogic();
+    }
+
+    private void checkLocationPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 showLocationDisclosure();
             } else {
-                getVersionInfo();
+                proceedToApp();
             }
         } else {
-            getVersionInfo();
+            proceedToApp();
         }
-        progressBar = (DottedProgressBar) findViewById(R.id.progress);
-        progressBar.startProgress();
-        mTextMessage = (TextView) findViewById(R.id.connection);
-        mTextMessage.setVisibility(View.GONE);
-        tryagain = (Button) findViewById(R.id.pass_button);
-        tryagain.setVisibility(View.GONE);
-        tryagain.setOnClickListener(new Button.OnClickListener() {
+    }
 
-            public void onClick(View v) {
-                mTextMessage.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
-                tryagain.setVisibility(View.GONE);
-                progressBar.startProgress();
-                final ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                final NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-                boolean isConnected = networkInfo != null &&
-                        networkInfo.isConnectedOrConnecting();
+    private void proceedToApp() {
+        // This replaces the old direct call to navigateToNextScreen
+        // It will be called after update check AND permission check are done
+        navigateToNextScreen(GeneralRemarks); // Using the class level variable
+    }
 
-                if (isConnected) {
-                    if (count < 16) {
-                        for (int i = 0; i < 16; i++) {
-
-                            WebApiManager webApiManager = new WebApiManager(context, count);
-                            count++;
-                        }
-                    }
-                    String url = getDirectionsUrl();
-                    DownloadTask downloadTask = new DownloadTask();
-                    //Start downloading json data from Google Directions API
-                    downloadTask.execute(url);
-                    //  if(networkInfo.getType()== ConnectivityManager.TYPE_MOBILE)
-
-                } else {
-                    progressBar.stopProgress();
-                    progressBar.setVisibility(View.GONE);
-                    mTextMessage.setVisibility(View.VISIBLE);
-                    tryagain.setVisibility(View.VISIBLE);
-                    // Toast.makeText(context, "Internet connection unavailable", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
-
+    private void startAppLogic() {
+        getVersionInfo();
         final ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         boolean isConnected = networkInfo != null &&
@@ -234,15 +214,13 @@ public class MainActivity extends AppCompatActivity {
             //Start downloading json data from Google Directions API
             downloadTask.execute(url);
         } else {
-            progressBar.stopProgress();
-            progressBar.setVisibility(View.GONE);
+            if (progressBar != null) {
+                progressBar.stopProgress();
+                progressBar.setVisibility(View.GONE);
+            }
             mTextMessage.setVisibility(View.VISIBLE);
             tryagain.setVisibility(View.VISIBLE);
-            //Toast.makeText(context, "Internet connection unavailable", Toast.LENGTH_SHORT).show();
-
         }
-
-
     }
 
     private void getVersionInfo() {
@@ -333,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.d("Exception", e.toString());
+            return null; // Return null on failure
         } finally {
             if (iStream != null) {
                 try { iStream.close(); } catch (IOException ignored) {}
@@ -384,13 +363,12 @@ public class MainActivity extends AppCompatActivity {
                     //contactList.add(contact);
 
                 } catch (final JSONException e) {
-
                     e.printStackTrace();
-
-
+                    return null; // Return null on parsing error
                 }
             } else {
                 Log.e("exception", "Couldn't get json from server.");
+                return null; // Return null if no response
             }
 
             return mylist;
@@ -401,51 +379,82 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
             super.onPostExecute(result);
 
-            // Ensure progress bar stops irrespective of conditions
-            progressBar.stopProgress();
+            // Ensure progress bar stops
+            if (progressBar != null) {
+                progressBar.stopProgress();
+            }
 
-            if (result != null && !result.isEmpty()) {
-                // Initialize variables with default values
-                String generalRemarks = null, mobileAppVerCode = null, mobileAppVerName = null,  outDated = "false";;
-                String pkid = null, portNo = null, remarks = null, uploadDate = null;
-
-                // Extract required data from the result
-                for (HashMap<String, String> map : result) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        generalRemarks = map.getOrDefault("GeneralRemarks", "");
-                    }
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        mobileAppVerCode = map.getOrDefault("MobileAppVerCode", "");
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        mobileAppVerName = map.getOrDefault("MobileAppVerName", "");
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        outDated = map.getOrDefault("OutDated", "false"); // Default to "false" if null
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        pkid = map.getOrDefault("PKID", "");
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        portNo = map.getOrDefault("PortNo", "");
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        remarks = map.getOrDefault("Remarks", "");
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        uploadDate = map.getOrDefault("UploadDate", "");
-                    }
+            if (result != null) {
+                if (result.isEmpty()) {
+                    // Success but empty (typical for new versions not yet in server DB)
+                    checkLocationPermissions();
+                    return;
                 }
 
-                // Directly navigate to next activity if result exists, ignoring outdated status
-                navigateToNextScreen(generalRemarks);
+                String outDated = "false";
+                String generalRemarks = "";
+
+                // Extract data from result
+                for (HashMap<String, String> map : result) {
+                    outDated = map.get("OutDated");
+                    generalRemarks = map.get("GeneralRemarks");
+                    GeneralRemarks = generalRemarks; // Update class level variable
+                }
+
+                // PROFESSIONAL CHECK: If app is outdated, FORCE user to update
+                if ("true".equalsIgnoreCase(outDated)) {
+                    showForceUpdateDialog(generalRemarks);
+                } else {
+                    // App is up-to-date, now check permissions before proceeding
+                    checkLocationPermissions();
+                }
 
             } else {
-                // If server not responding, handle gracefully and navigate to next screen
-                //Toast.makeText(context, "Server not responding. Proceeding to next screen.", Toast.LENGTH_SHORT).show();
-                navigateToNextScreen(null);
+                // result is null: network or server failure
+                showServerErrorDialog();
             }
+        }
+    }
+
+    /**
+         * Shows a non-cancelable dialog that forces the user to the Play Store
+         */
+        private void showForceUpdateDialog(String message) {
+            String dialogMessage = (message == null || message.isEmpty() || "null".equalsIgnoreCase(message)) 
+                    ? "A new version of CIM+ is available. Please update to continue using the app." 
+                    : message;
+
+            new AlertDialog.Builder(context)
+                    .setTitle("Update Required")
+                    .setMessage(dialogMessage)
+                    .setCancelable(false)
+                    .setPositiveButton("Update Now", (dialog, id) -> {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse("market://details?id=com.phc.cimplus"));
+                        try {
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            // Fallback if Play Store app is not installed
+                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.phc.cimplus"));
+                            startActivity(intent);
+                        }
+                        finish(); // Close app so they can't bypass
+                    })
+                    .setNegativeButton("Exit", (dialog, id) -> finish())
+                    .show();
+        }
+
+        /**
+         * Shows a dialog when server fails to respond
+         */
+        private void showServerErrorDialog() {
+            new AlertDialog.Builder(context)
+                    .setTitle("Connection Error")
+                    .setMessage("Unable to check for updates. Please check your internet connection and try again.")
+                    .setCancelable(false)
+                    .setPositiveButton("Retry", (dialog, id) -> startAppLogic())
+                    .setNegativeButton("Exit", (dialog, id) -> finish())
+                    .show();
         }
 
         // Helper method to navigate to next screen
@@ -511,7 +520,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             MainActivity.this.finish();
         }
-    }
 
     private void showLocationDisclosure() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -521,16 +529,55 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.agree, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                getVersionInfo();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{
+                            android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    }, 1001);
+                }
             }
         });
         builder.setNegativeButton(R.string.disagree, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this, "Location permission is required for movement tracking.", Toast.LENGTH_LONG).show();
-                getVersionInfo();
+                showSettingsDialog();
             }
         });
+        builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1001) {
+            boolean allGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+            if (allGranted && grantResults.length > 0) {
+                proceedToApp();
+            } else {
+                showSettingsDialog();
+            }
+        }
+    }
+
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Permission Required");
+        builder.setMessage("Location permission is mandatory to use this app. Please grant it in Settings.");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Go to Settings", (dialog, which) -> {
+            Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
+            finish(); // Close activity, they can restart after granting permission
+        });
+        builder.setNegativeButton("Exit", (dialog, which) -> finish());
         builder.show();
     }
 }

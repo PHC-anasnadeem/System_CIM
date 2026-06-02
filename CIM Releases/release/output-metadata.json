@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.phc.cim",
+  "applicationId": "com.phc.cimplus",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 36,
-      "versionName": "1.2.9.7",
+      "versionCode": 38,
+      "versionName": "1.2.9.9",
       "outputFile": "app-release.apk"
     }
   ],

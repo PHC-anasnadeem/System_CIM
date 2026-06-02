@@ -92,6 +92,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import java.io.OutputStream;
+
 public class FilterActivity extends AppCompatActivity implements NotificationReceiver.NotificationCountListener {
     Spinner sectortypespinner;
     Spinner hcetypespinner;
@@ -252,6 +255,9 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         setSupportActionBar(toolbar);
         gps = new CurrentLocation(context);
         mHandler = new Handler();
+        
+        FloatingActionButton fab_ai = findViewById(R.id.fab_ai);
+        fab_ai.setOnClickListener(v -> showSmartSearchDialog());
 //        TextView t2 = (TextView) findViewById(R.id.text2);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -259,6 +265,21 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         navigationView.setItemIconTintList(null);
 
         int notificationCount = getIntent().getIntExtra("notificationCount", 0);
+        
+        // Initialize notification manager
+        notificationManager = NotificationManager.getInstance(this);
+        
+        // Start notification service
+        notificationManager.startNotificationService();
+        
+        // Register for notification count updates
+        notificationManager.registerNotificationCountListener(this);
+        
+        // Register FCM Token with server
+        registerFCMToken();
+        
+        // Fetch notifications initially to update count
+        fetchNotifications();
 
     // Navigation view header
         navHeader = navigationView.getHeaderView(0);
@@ -1226,11 +1247,63 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         // Start notification service
         notificationManager.startNotificationService();
         
+        // Register FCM Token with server
+        registerFCMToken();
+        
         // Register for notification count updates
         notificationManager.registerNotificationCountListener(this);
         
         // Fetch notifications initially
         fetchNotifications();
+    }
+
+    /**
+     * Register FCM token with server for push notifications
+     */
+    private void registerFCMToken() {
+        com.google.firebase.messaging.FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String token = task.getResult();
+                    android.util.Log.d("FCM", "Token: " + token);
+
+                    // Save locally
+                    SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
+                    prefs.edit().putString("FCMToken", token).apply();
+
+                    // Send to server
+                    String userId = prefs.getString("UserID", null);
+                    if (userId != null && !userId.isEmpty()) {
+                        String encodedToken = "";
+                        try {
+                            encodedToken = java.net.URLEncoder.encode(token, "UTF-8");
+                        } catch (Exception e) {
+                            encodedToken = token;
+                        }
+                        
+                        String url = getResources().getString(R.string.baseurl)
+                                + "RegisterFCMToken?UserId=" + userId + "&Token=" + encodedToken;
+
+                        android.util.Log.d("FCM", "Registering token URL: " + url);
+
+                        com.android.volley.toolbox.StringRequest request = new com.android.volley.toolbox.StringRequest(
+                                com.android.volley.Request.Method.GET, url,
+                                response -> android.util.Log.d("FCM", "Token registration success: " + response),
+                                error -> {
+                                    android.util.Log.e("FCM", "Token registration failed: " + error.getMessage());
+                                    if (error.networkResponse != null) {
+                                        android.util.Log.e("FCM", "Status Code: " + error.networkResponse.statusCode);
+                                    }
+                                }
+                        );
+                        com.android.volley.toolbox.Volley.newRequestQueue(FilterActivity.this).add(request);
+                    } else {
+                        android.util.Log.w("FCM", "UserID is null or empty, cannot register token");
+                    }
+                } else {
+                    android.util.Log.e("FCM", "Token fetch failed", task.getException());
+                }
+            });
     }
 
     @Override
@@ -1257,15 +1330,22 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     }
     
     /**
-     * Fetch notifications from the API
+     * Fetch notifications from the API and update the unread count
      */
     private void fetchNotifications() {
         if (notificationManager != null) {
             notificationManager.fetchNotifications(new NotificationApiClient.NotificationResponseListener() {
                 @Override
                 public void onResponse(List<NotificationModel> notifications) {
-                    // Update notification count
-                    updateNotificationCount(notifications.size());
+                    int unreadCount = 0;
+                    if (notifications != null) {
+                        for (NotificationModel n : notifications) {
+                            if (!n.isRead()) {
+                                unreadCount++;
+                            }
+                        }
+                    }
+                    updateNotificationCount(unreadCount);
                 }
                 
                 @Override
@@ -1869,11 +1949,6 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_ai) {
-            Toast.makeText(this, "AI Assistant: Coming Soon!", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -2164,5 +2239,238 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
+    
+    private void showSmartSearchDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(FilterActivity.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_ai_filter, null);
+        bottomSheetDialog.setContentView(dialogView);
 
+        EditText etAiQuery = dialogView.findViewById(R.id.et_ai_query);
+        Button btnAiSearch = dialogView.findViewById(R.id.btn_ai_search);
+        android.widget.ProgressBar aiProgress = dialogView.findViewById(R.id.ai_progress);
+        TextView tvAiResponse = dialogView.findViewById(R.id.tv_ai_response);
+
+        btnAiSearch.setOnClickListener(v -> {
+            String query = etAiQuery.getText().toString().trim();
+            if (query.isEmpty()) {
+                Toast.makeText(context, "Please enter a question about the summary", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            aiProgress.setVisibility(View.VISIBLE);
+            tvAiResponse.setVisibility(View.GONE);
+            btnAiSearch.setEnabled(false);
+            btnAiSearch.setText("Fetching Data & Thinking...");
+
+            new Thread(() -> {
+                String totalHceData = "No live HCE data could be fetched.";
+                try {
+                    String baseurl = getString(R.string.baseurl);
+                    String apiKey = getString(R.string.openai_api_key);
+
+                    if (apiKey == null || apiKey.isEmpty() || apiKey.equals("YOUR_API_KEY_HERE")) {
+                        runOnUiThread(() -> Toast.makeText(context, "Please set OpenAI API Key in strings.xml", Toast.LENGTH_LONG).show());
+                        return;
+                    }
+                    
+                    // Step 1: Extract parameters from query
+                    String extractionPrompt = "Extract search parameters from this PHC query: '" + query + "'. " +
+                            "Current context: district=" + districtText + ", tehsil=" + tehsilText + ", status=" + hcestatusText + ". " +
+                            "Return a JSON object with: district, tehsil, hce_name, reg_num, cnic, phone, status, final_id. " +
+                            "IMPORTANT RULES:\n" +
+                            "1. If district/tehsil is 'Please Select' or 'All', treat it as empty.\n" +
+                            "2. Convert district and tehsil names to UPPERCASE (e.g. DERA GHAZI KHAN).\n" +
+                            "3. For 'final 32426' or similar 5-digit IDs, put them in 'final_id'.\n" +
+                            "4. Use 'status' for terms like 'functional', 'sealed', 'non-functional'.\n" +
+                            "5. Return empty string if not found.";
+                    
+                    try {
+                        String extractedJson = callOpenAI(extractionPrompt, apiKey, true);
+                        JSONObject params = new JSONObject(extractedJson);
+                        
+                        String d = params.optString("district", districtText).replace("Please Select", "").replace("All", "").trim().toUpperCase();
+                        String t = params.optString("tehsil", tehsilText).replace("Please Select", "").replace("All", "").trim().toUpperCase();
+                        String n = params.optString("hce_name", hcenameText).trim();
+                        String r = params.optString("reg_num", RegnoText).trim();
+                        String c = params.optString("cnic", Cnic).trim();
+                        String p = params.optString("phone", Phone).trim();
+                        String s = params.optString("status", hcestatusText).replace("Please Select", "").replace("All", "").trim();
+                        String fid = params.optString("final_id", "").trim();
+                        
+                        // If user specifically asked for an ID, ensure it's in RegNum too as a fallback
+                        if (!fid.isEmpty() && r.isEmpty()) r = fid;
+
+                        // Fix Dropdowns "Please Select" issue
+                        String secType = sectortypetext.equals("Please Select") ? "" : sectortypetext;
+                        String orgT = hceTypetext.equals("Please Select") ? "" : hceTypetext;
+                        String counType = counciltypetext.equals("Please Select") ? "" : counciltypetext;
+                        String lvs = lastvisitedText.equals("Please Select") ? "" : lastvisitedText;
+                        String dist = distancetext.equals("Please Select") ? "" : distancetext;
+
+                        // URL Encode the parameters safely
+                        d = java.net.URLEncoder.encode(d, "UTF-8");
+                        t = java.net.URLEncoder.encode(t, "UTF-8");
+                        n = java.net.URLEncoder.encode(n, "UTF-8");
+                        r = java.net.URLEncoder.encode(r, "UTF-8");
+                        c = java.net.URLEncoder.encode(c, "UTF-8");
+                        p = java.net.URLEncoder.encode(p, "UTF-8");
+                        s = java.net.URLEncoder.encode(s, "UTF-8");
+                        secType = java.net.URLEncoder.encode(secType, "UTF-8");
+                        orgT = java.net.URLEncoder.encode(orgT, "UTF-8");
+                        counType = java.net.URLEncoder.encode(counType, "UTF-8");
+                        lvs = java.net.URLEncoder.encode(lvs, "UTF-8");
+                        dist = java.net.URLEncoder.encode(dist, "UTF-8");
+
+                        // Step 2: Fetch data with exact matching parameters for GetTotalHCE
+                        String totalHceUrl = baseurl + "GetTotalHCE?District="+d+"&Tehsil="+t+"&DataType="+secType+"&orgType="+orgT+"&Councile="+counType+"&Status="+s+"&Category=&From="+BfromText+"&To="+BtoText+"&Lvs="+lvs+"&RegNum="+r+"&HCEName="+n+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+dist+"&Cnic="+c+"&Phone="+p;
+                        totalHceData = fetchDataFromApi(totalHceUrl);
+                    } catch (Exception ex) {
+                        Log.e("AI_EXTRACTION", "Extraction failed, falling back to UI filters", ex);
+                        // Fallback to UI filters
+                        String d = districtText.replace("Please Select", "").trim();
+                        String t = tehsilText.replace("Please Select", "").trim();
+                        String secType = sectortypetext.equals("Please Select") ? "" : sectortypetext;
+                        String orgT = hceTypetext.equals("Please Select") ? "" : hceTypetext;
+                        String counType = counciltypetext.equals("Please Select") ? "" : counciltypetext;
+                        String lvs = lastvisitedText.equals("Please Select") ? "" : lastvisitedText;
+                        String dist = distancetext.equals("Please Select") ? "" : distancetext;
+                        String statusT = hcestatusText.equals("Please Select") ? "" : hcestatusText;
+
+                        try {
+                            d = java.net.URLEncoder.encode(d, "UTF-8");
+                            t = java.net.URLEncoder.encode(t, "UTF-8");
+                            String n = java.net.URLEncoder.encode(hcenameText, "UTF-8");
+                            String r = java.net.URLEncoder.encode(RegnoText, "UTF-8");
+                            String c = java.net.URLEncoder.encode(Cnic, "UTF-8");
+                            String p = java.net.URLEncoder.encode(Phone, "UTF-8");
+                            String s = java.net.URLEncoder.encode(statusT, "UTF-8");
+                            secType = java.net.URLEncoder.encode(secType, "UTF-8");
+                            orgT = java.net.URLEncoder.encode(orgT, "UTF-8");
+                            counType = java.net.URLEncoder.encode(counType, "UTF-8");
+                            lvs = java.net.URLEncoder.encode(lvs, "UTF-8");
+                            dist = java.net.URLEncoder.encode(dist, "UTF-8");
+
+                            String totalHceUrl = baseurl + "GetTotalHCE?District="+d+"&Tehsil="+t+"&DataType="+secType+"&orgType="+orgT+"&Councile="+counType+"&Status="+s+"&Category=&From="+BfromText+"&To="+BtoText+"&Lvs="+lvs+"&RegNum="+r+"&HCEName="+n+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+dist+"&Cnic="+c+"&Phone="+p;
+                            totalHceData = fetchDataFromApi(totalHceUrl);
+                        } catch (Exception e) {
+                            Log.e("AI_FALLBACK", "URL Encoding failed", e);
+                        }
+                    }
+
+                    // Avoid OpenAI token limit crash if data is too huge
+                    if (totalHceData != null && totalHceData.length() > 50000) {
+                        totalHceData = totalHceData.substring(0, 50000) + "... [Data truncated due to large size. Please use more specific filters.]";
+                    }
+
+                } catch (Exception e) {
+                    Log.e("AI_DASHBOARD", "Failed to fetch data", e);
+                }
+
+                try {
+                    String apiKey = getString(R.string.openai_api_key);
+                    String systemPrompt = "You are an intelligent data assistant for the Punjab Healthcare Commission (PHC) app. " +
+                            "Answer based on this data:\n\n" +
+                            "DATA RECORDS:\n" + totalHceData + "\n\n" +
+                            "CONTEXT:\n" +
+                            "Data contains Name, Final ID (final_id/reg_num), Address, Contact, CNIC, and Status.\n\n" +
+                            "RULES:\n" +
+                            "1. Dashboard-style presentation.\n" +
+                            "2. NO ASTERISKS (*) or Markdown bolding (**). Use <b> tags.\n" +
+                            "3. If multiple records found, summarize them. If one found, show details.\n" +
+                            "4. If no data (empty records []), explain clearly that no matching record was found for the criteria (mentioning District/Tehsil/FinalID used).\n" +
+                            "5. Professional tone in user's language.";
+
+                    String content = callOpenAI(systemPrompt + "\n\nUser Question: " + query, apiKey, false);
+                    
+                    runOnUiThread(() -> {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                            tvAiResponse.setText(android.text.Html.fromHtml(content, android.text.Html.FROM_HTML_MODE_LEGACY));
+                        } else {
+                            tvAiResponse.setText(android.text.Html.fromHtml(content));
+                        }
+                        tvAiResponse.setVisibility(View.VISIBLE);
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> {
+                        tvAiResponse.setText("Error: " + e.getMessage());
+                        tvAiResponse.setTextColor(android.graphics.Color.RED);
+                        tvAiResponse.setVisibility(View.VISIBLE);
+                    });
+                } finally {
+                    runOnUiThread(() -> {
+                        aiProgress.setVisibility(View.GONE);
+                        btnAiSearch.setEnabled(true);
+                        btnAiSearch.setText("Ask Assistant");
+                    });
+                }
+            }).start();
+        });
+
+        bottomSheetDialog.show();
+    }
+
+    private String callOpenAI(String prompt, String apiKey, boolean jsonMode) throws Exception {
+        URL url = new URL("https://api.openai.com/v1/chat/completions");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("model", "gpt-4o-mini");
+        if (jsonMode) {
+            JSONObject respFormat = new JSONObject();
+            respFormat.put("type", "json_object");
+            requestBody.put("response_format", respFormat);
+        }
+
+        JSONArray messages = new JSONArray();
+        JSONObject msg = new JSONObject();
+        msg.put("role", "user");
+        msg.put("content", prompt);
+        messages.put(msg);
+        requestBody.put("messages", messages);
+
+        try(java.io.OutputStream os = conn.getOutputStream()) {
+            os.write(requestBody.toString().getBytes("utf-8"));
+        }
+
+        int code = conn.getResponseCode();
+        if (code == 200) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) sb.append(line);
+            JSONObject jsonResp = new JSONObject(sb.toString());
+            return jsonResp.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
+        } else {
+            throw new Exception("OpenAI Error: " + code);
+        }
+    }
+
+    private String fetchDataFromApi(String apiUrl) {
+        try {
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            int respCode = conn.getResponseCode();
+            if (respCode >= 200 && respCode < 400) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+                br.close();
+                return sb.toString();
+            }
+        } catch (Exception e) {
+            Log.e("API_FETCH", "Error fetching: " + apiUrl, e);
+        }
+        return "No data available";
+    }
 }

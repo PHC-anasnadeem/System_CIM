@@ -157,6 +157,7 @@ public class DetailTabActivity extends AppCompatActivity {
     String total_beds="";
     String index;
     int count=0;
+    String UCs = "";
     Context context;
     public static final int MEDIA_TYPE_IMAGE = 1;
 
@@ -247,6 +248,7 @@ public class DetailTabActivity extends AppCompatActivity {
         index = (String) intent.getSerializableExtra("index");
         UserName= (String) intent.getSerializableExtra("UserName");
         LastVisitedDate = (String) intent.getSerializableExtra("LastVisitedDate");
+        UCs = (String) intent.getSerializableExtra("UCs");
         imageurls = (ArrayList<String>) getIntent().getSerializableExtra("imageurls");
 
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
@@ -283,6 +285,7 @@ public class DetailTabActivity extends AppCompatActivity {
         bundle.putString("RegType", RegType);
         bundle.putString("UserName", UserName);
         bundle.putString("LastVisitedDate", LastVisitedDate);
+        bundle.putString("UCs", UCs);
         bundle.putStringArrayList("imageurls", imageurls);
 
 

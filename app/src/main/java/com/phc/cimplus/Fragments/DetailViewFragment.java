@@ -104,6 +104,7 @@ public class DetailViewFragment extends Fragment {
     TextInputLayout substatusInput;
 
     EditText district_spinner;
+    EditText ucsEdit;
     EditText sectortypespinner;
     EditText hcetypespinner;
     EditText HCSP_spinner;
@@ -132,6 +133,7 @@ public class DetailViewFragment extends Fragment {
     String FinalID;
 
     String districtText = "";
+    String UCsText = "";
     String sectortypetext = "";
     String hceTypetext = "";
     String HCSPTypeText = "";
@@ -228,6 +230,7 @@ public class DetailViewFragment extends Fragment {
         Reg_NoEdit = (EditText) objView.findViewById(R.id.reg_no);
         coun_NoEdit = (EditText) objView.findViewById(R.id.council_no);
         district_spinner = (EditText) objView.findViewById(R.id.district);
+        ucsEdit = (EditText) objView.findViewById(R.id.ucs);
         sectortypespinner = (EditText) objView.findViewById(R.id.Sector_Type);
         hcetypespinner = (EditText) objView.findViewById(R.id.hcetype);
         HCSP_spinner = (EditText) objView.findViewById(R.id.HCSPType);
@@ -255,6 +258,7 @@ public class DetailViewFragment extends Fragment {
         bedsEdit.setEnabled(false);
 
         district_spinner.setEnabled(false);
+        if (ucsEdit != null) ucsEdit.setEnabled(false);
         sectortypespinner.setEnabled(false);
         hcetypespinner.setEnabled(false);
         HCSP_spinner.setEnabled(false);
@@ -268,6 +272,8 @@ public class DetailViewFragment extends Fragment {
         hce_nameText = args.getString("HCEName");
         AddressText = args.getString("HCEAddress");
         districtText = args.getString("District");
+        UCsText = args.getString("UCs");
+        if (UCsText == null) UCsText = "";
         sectortypetext = args.getString("SectorType");
         hceTypetext = args.getString("OrgType");
         HCSPTypeText = args.getString("HCSPType");
@@ -341,6 +347,7 @@ public class DetailViewFragment extends Fragment {
         coun_NoEdit.setText(coun_NoText);
         bedsEdit.setText(total_beds);
         district_spinner.setText(districtText);
+        if (ucsEdit != null) ucsEdit.setText(UCsText);
         sectortypespinner.setText(sectortypetext);
         hcetypespinner.setText(hceTypetext);
         HCSP_spinner.setText(HCSPTypeText);

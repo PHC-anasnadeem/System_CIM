@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.content.pm.ServiceInfo;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -73,7 +74,11 @@ public class NotificationBackgroundService extends Service {
             isServiceRunning = true;
             
             // Start as a foreground service with a persistent notification
-            startForeground(NOTIFICATION_ID, createForegroundNotification());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(NOTIFICATION_ID, createForegroundNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+            } else {
+                startForeground(NOTIFICATION_ID, createForegroundNotification());
+            }
             
             // Start fetching notifications
             handler.post(fetchRunnable);
@@ -173,8 +178,14 @@ public class NotificationBackgroundService extends Service {
                         showNotification(notification);
                     }
                     
-                    // Update notification count in FilterActivity
-                    updateNotificationCount(notifications.size());
+                    // Update notification count in FilterActivity (Only Unread)
+                    int unreadCount = 0;
+                    for (NotificationModel n : notifications) {
+                        if (!n.isRead()) {
+                            unreadCount++;
+                        }
+                    }
+                    updateNotificationCount(unreadCount);
                 }
                 
                 @Override

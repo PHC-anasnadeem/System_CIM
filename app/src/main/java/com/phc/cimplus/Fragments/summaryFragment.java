@@ -59,6 +59,7 @@ public class summaryFragment extends Fragment {
     TextView notReg;
     TextView quacktext;
     TextView desealtext;
+    TextView errortext;
     ImageView licenseicon;
     ImageView registeredicon;
     ImageView notregicon;
@@ -136,6 +137,7 @@ public class summaryFragment extends Fragment {
         quackicon= (ImageView) objview.findViewById(R.id.quackicon);
 //        desealicon= (ImageView) objview.findViewById(R.id.desealicon);
         errortextlayout = (LinearLayout) objview.findViewById(R.id.errortextlayout);
+        errortext = (TextView) objview.findViewById(R.id.errortext);
 
         pDialog = new ProgressDialog(getActivity());
         gps = new CurrentLocation(getContext());
@@ -171,34 +173,20 @@ public class summaryFragment extends Fragment {
 //        desealicon.setVisibility(View.GONE);
         errortextlayout.setVisibility(View.GONE);
 
-        if (gps.canGetLocation()) {
+        // Start data loading
+        pDialog.setMessage("Loading Summary Data...");
+        pDialog.setCancelable(false);
+        pDialog.show();
 
+        // Get location if possible, but don't block if not
+        if (gps.canGetLocation()) {
             cur_latitude = gps.getLatitude();
             cur_longitude = gps.getLongitude();
-
-            if (cur_latitude != 0.0 && cur_longitude != 0.0) {
-                pDialog.setMessage("Loading Data, Please wait...");
-                pDialog.setCancelable(false);
-                pDialog.show();
-                String url = getDirectionsUrl();
-                DownloadTask downloadTask = new DownloadTask();
-                //Start downloading json data from Google Directions API
-                downloadTask.execute(url);
-            }
-            else {
-                cur_latitude = gps.getLatitude();
-                cur_longitude = gps.getLongitude();
-                String url = getDirectionsUrl();
-                DownloadTask downloadTask = new DownloadTask();
-                //Start downloading json data from Google Directions API
-                downloadTask.execute(url);
-            }
-        } else {
-            // Can't get location.
-            // GPS or network is not enabled.
-            // Ask user to enable GPS/network in settings.
-            gps.showSettingsAlert();
         }
+
+        String url = getDirectionsUrl();
+        DownloadTask downloadTask = new DownloadTask();
+        downloadTask.execute(url);
 
 
         BARENTRY1 = new ArrayList<>();
@@ -250,8 +238,9 @@ public class summaryFragment extends Fragment {
 
             try {
                 // Fetching the data from web service
+                Log.d("Summary URL", url[0]);
                 data = downloadUrl(url[0]);
-                Log.d("Background Task data", data.toString());
+                Log.d("Summary Response", data);
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
             }
@@ -276,7 +265,7 @@ public class summaryFragment extends Fragment {
 
         String token= getContext().getResources().getString(R.string.token);
 
-        url = baseurl + "GetPercentage?strToken="+token+"&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText+"&Lvs=&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&finalid="+finalidText+"&ActionType="+lastvisitedText+"&QuackCategory="+QuackType+"&QuackSubCategory=&SubActionType="+subactionTypeID+"&DateFrom="+dateFromText+"&DateTo="+dateToText;
+        url = baseurl + "GetPercentage?strToken="+token+"&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText+"&Lvs=&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&finalid="+finalidText+"&ActionType="+lastvisitedText+"&QuackCategory="+QuackType+"&QuackSubCategory=&SubActionType="+subactionTypeID+"&Cnic="+Cnic+"&Phone="+Phone+"&DateFrom="+dateFromText+"&DateTo="+dateToText;
 
         url = url.replaceAll(" ", "%20");
 
@@ -293,6 +282,8 @@ public class summaryFragment extends Fragment {
             URL url = new URL(strUrl);
 
             urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(30000);
+            urlConnection.setReadTimeout(30000);
 
             urlConnection.connect();
             int statusCode = urlConnection.getResponseCode();
@@ -345,31 +336,34 @@ public class summaryFragment extends Fragment {
 
             if (jsonStr != null) {
                 try {
-                    JSONArray json = new JSONArray(jsonStr);
-// ...
                     mylist = new ArrayList<HashMap<String, String>>();
-                    for (int i = 0; i <json.length(); i++) {
+                    JSONArray jsonArray = null;
+                    if (jsonStr.trim().startsWith("{")) {
+                        JSONObject jsonObj = new JSONObject(jsonStr);
+                        jsonArray = new JSONArray();
+                        jsonArray.put(jsonObj);
+                    } else {
+                        jsonArray = new JSONArray(jsonStr);
+                    }
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         HashMap<String, String> map = new HashMap<String, String>();
-                        JSONObject e = json.getJSONObject(i);
+                        JSONObject e = jsonArray.getJSONObject(i);
                         map.put("index", String.valueOf(i));
-                        map.put("TotalPL", e.getString("TotalPL"));
-                        map.put("TotalQuacks", e.getString("TotalQuacks"));
-                        map.put("TotalRL", e.getString("TotalRL"));
-                        map.put("TotalRecords", e.getString("TotalRecords"));
-                        map.put("TotalReg", e.getString("TotalReg"));
-                        map.put("TotalUnregistered", e.getString("TotalUnregistered"));
+                        
+                        // Handle both CamelCase and snake_case field names
+                        map.put("TotalPL", e.has("TotalPL") ? e.optString("TotalPL", "0") : e.optString("total_pl", "0"));
+                        map.put("TotalQuacks", e.has("TotalQuacks") ? e.optString("TotalQuacks", "0") : e.optString("total_quacks", "0"));
+                        map.put("TotalRL", e.has("TotalRL") ? e.optString("TotalRL", "0") : e.optString("total_rl", "0"));
+                        map.put("TotalRecords", e.has("TotalRecords") ? e.optString("TotalRecords", "0") : e.optString("total_records", "0"));
+                        map.put("TotalReg", e.has("TotalReg") ? e.optString("TotalReg", "0") : e.optString("total_reg", "0"));
+                        map.put("TotalUnregistered", e.has("TotalUnregistered") ? e.optString("TotalUnregistered", "0") : e.optString("total_unregistered", "0"));
 
                         mylist.add(map);
                     }
-
-                    // adding contact to contact list
-                    //contactList.add(contact);
-
                 } catch (final JSONException e) {
-
+                    Log.e("Summary Parsing Error", e.getMessage());
                     e.printStackTrace();
-
-
                 }
             } else {
                 Log.e("exception", "Couldn't get json from server.");
@@ -388,6 +382,7 @@ public class summaryFragment extends Fragment {
 
 
             if (result != null) {
+                Log.d("Summary Result Size", String.valueOf(result.size()));
                 if (result.size() > 0) {
 
                     for(int i = 0; i < result.size(); i++){
@@ -396,17 +391,30 @@ public class summaryFragment extends Fragment {
                         TotalRL =  Float.parseFloat(result.get(i).get("TotalRL"));
                         TotalReg =  Float.parseFloat(result.get(i).get("TotalReg"));
                         TotalUnregistered =  Float.parseFloat(result.get(i).get("TotalUnregistered"));
-//                        TotalQuacks = (int) Float.parseFloat(result.get(i).get("TotalQuacks"));
+                        TotalQuacks = Float.parseFloat(result.get(i).get("TotalQuacks"));
                     }
+
+                    // Clear previous data
+                    bars.clear();
+                    BarEntryLabels.clear();
+                    BARENTRY1.clear();
+                    BARENTRY2.clear();
+                    BARENTRY3.clear();
+                    BARENTRY4.clear();
 
                     TotalRLPL=TotalPL+TotalRL;
 
-
-                     FTotalRLPL=(TotalRLPL/TotalRecords)*100;
-                     FTotalReg=(TotalReg/TotalRecords)*100;
-                      FTotalUnregistered=(TotalUnregistered/TotalRecords)*100;
-                       FTotalQuacks=(TotalQuacks/TotalRecords)*100;
-//                    FTotalDeseal=(TotalQuacks/TotalRecords)*100;
+                    if (TotalRecords > 0) {
+                        FTotalRLPL=(TotalRLPL/TotalRecords)*100;
+                        FTotalReg=(TotalReg/TotalRecords)*100;
+                        FTotalUnregistered=(TotalUnregistered/TotalRecords)*100;
+                        FTotalQuacks=(TotalQuacks/TotalRecords)*100;
+                    } else {
+                        FTotalRLPL = 0;
+                        FTotalReg = 0;
+                        FTotalUnregistered = 0;
+                        FTotalQuacks = 0;
+                    }
 
                     totaltex.setText("Total record found: "+((int) TotalRecords));
                     if(TotalRecords!=0) {
@@ -464,6 +472,15 @@ public class summaryFragment extends Fragment {
                         chart.getXAxis().setAvoidFirstLastClipping(true);
                         chart.setData(BARDATA);
                         chart.animateY(3000);
+                    } else {
+                        licenseicon.setVisibility(View.GONE);
+                        registeredicon.setVisibility(View.GONE);
+                        notregicon.setVisibility(View.GONE);
+                        quackicon.setVisibility(View.GONE);
+                        errortextlayout.setVisibility(View.VISIBLE);
+                        errortext.setText("No distribution data available for this selection.");
+                        chart.clear();
+                        chart.setNoDataText("No chart data available for the selected filters.");
                     }
                 } else {
                     Toast.makeText(getContext(), "No data found", Toast.LENGTH_SHORT).show();

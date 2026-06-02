@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -43,6 +44,7 @@ public class HCEListFragment extends Fragment {
     Context context;
     String jsonStr = null;
     ListView listView;
+    TextView tv_total_records;
     ArrayList<HashMap<String, String>> contactList;
     private ArrayList<CarParcelable> mCarParcelableList;
     private ArrayList<CarParcelable> mCarParcelableListCurrentLation;
@@ -88,6 +90,7 @@ public class HCEListFragment extends Fragment {
 
         //context=this;
         listView = (ListView) rootView.findViewById(R.id.list);
+        tv_total_records = (TextView) rootView.findViewById(R.id.tv_total_records);
         gps = new CurrentLocation(getContext());
         final Bundle args = getArguments();
         dataType= args.getString("dataType");
@@ -442,6 +445,9 @@ public class HCEListFragment extends Fragment {
                     HCEListAdapter adapter = new HCEListAdapter(getContext(), result, email, password, username, isEdit);
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+
+                    tv_total_records.setVisibility(View.VISIBLE);
+                    tv_total_records.setText("Total Records Found: " + result.size());
  /*               for (int i = 0; i < result.size(); i++) {
 
                     double latitude = Double.parseDouble(result.get(i).get("latitude"));

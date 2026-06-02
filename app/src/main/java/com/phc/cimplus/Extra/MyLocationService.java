@@ -53,7 +53,17 @@ public class MyLocationService extends Service {
             username = intent.getStringExtra("username");
         }
 
+        // Start foreground notification immediately to avoid "ForegroundServiceDidNotStartInTimeException"
         startForegroundServiceNotification();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("LocationService", "Location permission not granted! Stopping service.");
+            stopForeground(true);
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+
         startLocationUpdates();
 
         return START_STICKY;

@@ -127,13 +127,46 @@ public class NotificationApiClient {
     }
     
     /**
-     * Mark a notification as read
-     * @param NotificationId The notification ID to mark as read
+     * Mark a notification as read on the server
+     * @param uniqueId The unique ID (FinalID or DiaryNo) to mark as read
+     * @param userId The ID of the user marking it as read
      * @param listener Response listener
      */
-    public void markNotificationAsRead(int NotificationId, final NotificationResponseListener listener) {
-        // For now, we'll just return an empty list since the actual endpoint is not provided
-        // You can update this with the correct endpoint when available
-        listener.onResponse(new ArrayList<>());
+    public void markNotificationAsRead(String uniqueId, String userId, final NotificationResponseListener listener) {
+        String BASE_URL = context.getResources().getString(R.string.baseurl);
+        String url = BASE_URL + "MarkNotificationAsRead?NotificationId=" + uniqueId + "&UserId=" + userId;
+        
+        Log.d(TAG, "Mark as Read URL: " + url);
+        
+        com.android.volley.toolbox.StringRequest request = new com.android.volley.toolbox.StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "Mark as Read Response: " + response);
+                        listener.onResponse(new ArrayList<>());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String errorMessage = "Failed to mark notification as read";
+                        if (error.networkResponse != null) {
+                            errorMessage += " (code " + error.networkResponse.statusCode + ")";
+                        }
+                        Log.e(TAG, errorMessage, error);
+                        listener.onError(errorMessage);
+                    }
+                }
+        );
+        
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        
+        requestQueue.add(request);
     }
 } 

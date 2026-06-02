@@ -1010,7 +1010,7 @@ public class ReportQuackActivity extends AppCompatActivity {
             } catch (Exception ignored) {}
         }
 
-        String url = baseurl + "ReportQuack?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&Division=" + divisionText + "&District=" + districtText + "&Tehsil=" + tehsilText + "&SectorType=Private&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&lat=" + finalLat + "&lng=" + finalLng + "&emailAddress=" + email + "&Comments=" + comnt + "&Userlat=" + user_latitude + "&Userlng=" + user_longitude + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid;
+        String url = baseurl + "ReportQuack?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&Division=" + divisionText + "&District=" + districtText + "&Tehsil=" + tehsilText + "&SectorType=Private&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&lat=" + finalLat + "&lng=" + finalLng + "&emailAddress=" + email + "&Comments=" + comnt + "&Userlat=" + user_latitude + "&Userlng=" + user_longitude + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid + "&UCs=";
         url = url.replaceAll(" ", "%20");
         url = url.replaceAll("#", "%23");
         url = url.replaceAll(",", "%2C");

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "666315751558",
+    "project_id": "cim-plus",
+    "storage_bucket": "cim-plus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666315751558:android:54891b5b4661746b015107",
+        "android_client_info": {
+          "package_name": "com.phc.cimplus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg-1LeGKJZsKAuRbgUCbgrGcS5e6VJb8k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -72,7 +72,11 @@ public class NotificationManager {
         // Register new receiver
         receiver = new NotificationReceiver(listener);
         IntentFilter filter = new IntentFilter("com.phc.cimplus.NOTIFICATION_COUNT_UPDATE");
-        context.registerReceiver(receiver, filter);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            context.registerReceiver(receiver, filter);
+        }
         
         Log.d(TAG, "Registered notification count listener");
     }
@@ -143,7 +147,7 @@ public class NotificationManager {
     /**
      * Mark a notification as read
      */
-    public void markNotificationAsRead(int notificationId, final NotificationApiClient.NotificationResponseListener listener) {
-        apiClient.markNotificationAsRead(notificationId, listener);
+    public void markNotificationAsRead(String notificationId, String userId, final NotificationApiClient.NotificationResponseListener listener) {
+        apiClient.markNotificationAsRead(notificationId, userId, listener);
     }
-} 
+}
