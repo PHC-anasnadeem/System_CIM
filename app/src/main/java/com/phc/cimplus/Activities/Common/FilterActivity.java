@@ -1909,7 +1909,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                     .setTitle("Exit")
                     .setMessage("Are you sure you want to exit CIM?")
                     .setCancelable(false)
-                    .setPositiveButton("OK", (dialog, which) -> finishAffinity())
+                    .setPositiveButton("OK", (dialog, which) -> moveTaskToBack(true))
                     .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
                     .show();
         } else {

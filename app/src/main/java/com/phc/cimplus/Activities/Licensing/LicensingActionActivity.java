@@ -1714,7 +1714,32 @@ public class LicensingActionActivity extends AppCompatActivity {
     /**
      * Creating file uri to store image/video
      */
-    public static String getRealPathFromUri(Context context, Uri contentUri) {
+    private String getRealPathFromUri(Context context, Uri uri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return getFilePathForAndroidQAndAbove(context, uri);
+        } else {
+            return getRealPathFromUriLegacy(context, uri);
+        }
+    }
+
+    private String getFilePathForAndroidQAndAbove(Context context, Uri uri) {
+        try (java.io.InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+            java.io.File tempFile = new java.io.File(context.getCacheDir(), "temp_file.jpg");
+            try (java.io.FileOutputStream outputStream = new java.io.FileOutputStream(tempFile)) {
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, read);
+                }
+            }
+            return tempFile.getAbsolutePath();
+        } catch (Exception e) {
+            Log.e("FILE_PATH", "Error creating temp file", e);
+            return null;
+        }
+    }
+
+    private String getRealPathFromUriLegacy(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
             String[] proj = {MediaStore.Images.Media.DATA};

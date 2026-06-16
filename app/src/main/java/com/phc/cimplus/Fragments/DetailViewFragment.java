@@ -488,6 +488,7 @@ public class DetailViewFragment extends Fragment {
 
         @Override
         public int getCount() {
+            if (_images == null) return 0;
             return _images.size();
         }
 

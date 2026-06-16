@@ -491,7 +491,13 @@ public class RouteMapsActivity extends AppCompatActivity implements OnMapReadyCa
     public void onResume() {
         super.onResume();
         mServiceIntent = new Intent(this, BroadCastService.class);
-        startService(mServiceIntent);//starting the service
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            try {
+                startService(mServiceIntent);//starting the service
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         //IntentFilter filter = new IntentFilter();
         //filter.addAction(BroadCastService.BROADCAST_ACTION);
        // registerReceiver(broadcastReceiver, filter);

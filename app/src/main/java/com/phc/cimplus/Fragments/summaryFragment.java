@@ -376,8 +376,13 @@ public class summaryFragment extends Fragment {
         protected void onPostExecute(final ArrayList<HashMap<String, String>> result) {
             super.onPostExecute(result);
 
-            if (pDialog.isShowing())
-                pDialog.dismiss();
+            if (isAdded() && getActivity() != null && !getActivity().isFinishing()) {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.dismiss();
+                }
+            } else {
+                return;
+            }
 
 
 

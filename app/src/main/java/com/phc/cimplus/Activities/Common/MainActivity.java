@@ -462,16 +462,6 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
             String roleID = prefs.getString("RoleID", "");
             String userID = prefs.getString("UserID", "");
-            long loginTime = prefs.getLong("LoginTime", 0);
-            long currentTime = System.currentTimeMillis();
-            long twelveHours = 12 * 60 * 60 * 1000L;
-
-            if (currentTime - loginTime > twelveHours && !roleID.isEmpty()) {
-                // Session expired, clear data
-                prefs.edit().clear().apply();
-                roleID = "";
-                userID = "";
-            }
 
             if (generalRemarks == null || generalRemarks.isEmpty() || "null".equalsIgnoreCase(generalRemarks)) {
                 if (!roleID.isEmpty() && !userID.isEmpty()) {
