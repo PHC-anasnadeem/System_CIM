@@ -3,6 +3,7 @@ package com.phc.cimplus.Activities.Common;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.phc.cimplus.Extra.MyLocationService;
 import com.phc.cimplus.R;
 
 import org.json.JSONException;
@@ -248,39 +250,37 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 pDialog.dismiss();
             if (result != null) {
                 if (MID.equals("1")) {
-         /*           AlertDialog alertDialog = new AlertDialog.Builder(
-                            context).create();
+                    // Password changed successfully on the server.
+                    // 1. Inform the user.
+                    Toast.makeText(context,
+                            "Password changed successfully. Please log in again with your new password.",
+                            Toast.LENGTH_LONG).show();
 
-                    // Setting Dialog Title
-                    alertDialog.setTitle("Success");
+                    // 2. Clear the locally stored session so that this device
+                    //    is also forced to re-authenticate with the new password.
+                    //    This mirrors what the Logout activity does, ensuring no
+                    //    stale credentials remain on any device.
+                    context.getSharedPreferences("MyPrefsFile", Context.MODE_PRIVATE)
+                            .edit().clear().apply();
 
-                    // Setting Dialog Message
-                    alertDialog.setMessage("Your Comments has been sent to PHC.");
-                    // Setting Icon to Dialog
-                    alertDialog.setIcon(R.drawable.tick);
+                    // 3. Stop the background location service (tied to the old session).
+                    try {
+                        context.stopService(new Intent(context, MyLocationService.class));
+                    } catch (Exception ignored) {}
 
-                    // Setting OK Button
-                    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Write your code here to execute after dialog closed*/
-                    Toast.makeText(context, "Password changed successfully", Toast.LENGTH_SHORT).show();
-          /*              }
-                    });
-
-                    // Showing Alert Message
-                    alertDialog.show();*/
-                }
-                else {
+                    // 4. Redirect to Login_Activity, clearing the entire back-stack
+                    //    so the user cannot press Back to return to a protected screen.
+                    Intent loginIntent = new Intent(context, Login_Activity.class);
+                    loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(loginIntent);
+                } else {
                     Toast.makeText(context, "Old password is not matched", Toast.LENGTH_SHORT).show();
                 }
-                // Updating parsed JSON data into ListView
-
-            }
-            else{
+            } else {
                 Toast.makeText(context, "Internet Connection Error: Please try again.", Toast.LENGTH_SHORT).show();
             }
-
-
         }
 
     }

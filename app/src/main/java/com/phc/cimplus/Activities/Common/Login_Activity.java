@@ -35,6 +35,8 @@ import com.phc.cimplus.Extra.MyLocationService;
 import com.phc.cimplus.Managers.DataManager;
 import com.phc.cimplus.R;
 
+import android.provider.Settings;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -393,7 +395,40 @@ public class Login_Activity extends AppCompatActivity {
                     editor.putString("UserID", UserID);
                     editor.putString("RoleID",roleID);
                     editor.putLong("LoginTime", System.currentTimeMillis());
+
+                    // Save device info for logout tracking
+                    String deviceID   = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                    String deviceName = Build.MANUFACTURER + " " + Build.MODEL;
+                    editor.putString("deviceID",   deviceID);
+                    editor.putString("deviceName", deviceName);
                     editor.apply();
+
+                    // Fire-and-forget: record this login in tblUserLoginHistory
+                    final String finalEmail    = email;
+                    final String finalDevName  = deviceName;
+                    final String finalDevID    = deviceID;
+                    final String finalRoleID   = roleID;
+                    final String baseUrl       = getResources().getString(R.string.baseurl);
+                    final String appVer        = com.phc.cimplus.BuildConfig.VERSION_NAME;
+                    new Thread(() -> {
+                        try {
+                            String url = baseUrl
+                                    + "RecordLogin?username=" + java.net.URLEncoder.encode(finalEmail, "UTF-8")
+                                    + "&deviceName=" + java.net.URLEncoder.encode(finalDevName, "UTF-8")
+                                    + "&deviceID="   + java.net.URLEncoder.encode(finalDevID, "UTF-8")
+                                    + "&appVersion=" + java.net.URLEncoder.encode(appVer, "UTF-8")
+                                    + "&roleID="     + java.net.URLEncoder.encode(finalRoleID, "UTF-8");
+                            java.net.HttpURLConnection conn = (java.net.HttpURLConnection)
+                                    new java.net.URL(url).openConnection();
+                            conn.setRequestMethod("POST");
+                            conn.setConnectTimeout(5000);
+                            conn.setReadTimeout(5000);
+                            conn.getResponseCode(); // fire and forget
+                            conn.disconnect();
+                        } catch (Exception ignored) {
+                            // Non-critical: don't block login if tracking fails
+                        }
+                    }).start();
                     if (roleID.equals("3")){
                         Intent firstpage = new Intent(context, InspectionFilterActivity.class);
                         context.startActivity(firstpage);

@@ -66,6 +66,7 @@ import com.phc.cimplus.DownloadClases.DownloadQuackClusterActivity;
 import com.phc.cimplus.Extra.HomeFragment;
 import com.phc.cimplus.Extra.NotificationFragment;
 import com.phc.cimplus.Extra.PhotosFragment;
+import com.phc.cimplus.Extra.SessionValidator;
 import com.phc.cimplus.Extra.SettingFragment;
 import com.phc.cimplus.Extra.VideosFragment;
 import com.phc.cimplus.Fragments.MapFragment;
@@ -1317,6 +1318,24 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         
         // Fetch notifications
         fetchNotifications();
+
+        // --- SESSION SECURITY CHECK ---
+        // Silently validate the stored credentials with the server each time
+        // the activity becomes visible. This catches the scenario where:
+        //   1. A phone is lost/stolen while the user is logged in.
+        //   2. The real user changes their password on another device.
+        //   3. The stolen phone's app is brought back to the foreground.
+        // The server will reject the old password, and the user will be
+        // forced to log in again.
+        SessionValidator.validateSession(this, isValid -> {
+            if (!isValid) {
+                android.widget.Toast.makeText(this,
+                        "Your session has expired. Please log in again.",
+                        android.widget.Toast.LENGTH_LONG).show();
+                SessionValidator.invalidateAndRedirect(this);
+                finish();
+            }
+        });
     }
     
     @Override

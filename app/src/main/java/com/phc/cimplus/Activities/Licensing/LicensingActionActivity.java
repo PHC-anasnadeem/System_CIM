@@ -1425,7 +1425,7 @@ public class LicensingActionActivity extends AppCompatActivity {
                 public void run() {
 
                     String extension = filePath.substring(filePath.lastIndexOf("."));
-                    File file = new File(filePath);
+                    File file = com.phc.cimplus.Others.ImageCompressor.getCompressedImageIfNeeded(context, filePath);
                     FileInputStream fis = null;
                     // BufferedInputStream buffIn = null;
 
@@ -1509,6 +1509,10 @@ public class LicensingActionActivity extends AppCompatActivity {
 
                     } catch (Exception e) {
                         e.printStackTrace();
+                    } finally {
+                        if (file != null && !file.getAbsolutePath().equals(filePath)) {
+                            try { file.delete(); } catch (Exception ignored) {}
+                        }
                     }
                     if (picUploaded) {
                         String url = getDirectionsUrl2(context);
@@ -1577,7 +1581,7 @@ public class LicensingActionActivity extends AppCompatActivity {
 
 
                     String extension = filePath.substring(filePath.lastIndexOf("."));
-                    File file = new File(filePath);
+                    File file = com.phc.cimplus.Others.ImageCompressor.getCompressedImageIfNeeded(context, filePath);
                     FileInputStream fis = null;
                     // BufferedInputStream buffIn = null;
 
@@ -1653,6 +1657,10 @@ public class LicensingActionActivity extends AppCompatActivity {
 
                     } catch (Exception e) {
                         e.printStackTrace();
+                    } finally {
+                        if (file != null && !file.getAbsolutePath().equals(filePath)) {
+                            try { file.delete(); } catch (Exception ignored) {}
+                        }
                     }
                     if (picUploaded) {
                         String url = getDirectionsUrl2(context);

@@ -1475,9 +1475,8 @@ public class ActionActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
-
                     String extension = filePath.substring(filePath.lastIndexOf("."));
-                    File file = new File(filePath);
+                    File file = com.phc.cimplus.Others.ImageCompressor.getCompressedImageIfNeeded(context, filePath);
                     FileInputStream fis = null;
                     // BufferedInputStream buffIn = null;
                     FTPSClient client = new FTPSClient("TLS", true);
@@ -1580,6 +1579,7 @@ public class ActionActivity extends AppCompatActivity {
                                 DownloadTask2 downloadTask = new DownloadTask2();
                                 //Start downloading json data from Google Directions API
                                 downloadTask.execute(url);
+                                picUploaded=true;
                                 countPictures++;
                             }
                             totalpics.setText("Total pictures uploaded: " + countPictures);
@@ -1610,6 +1610,10 @@ public class ActionActivity extends AppCompatActivity {
                     }
                     catch (Exception e) {
                         e.printStackTrace();
+                    } finally {
+                        if (file != null && !file.getAbsolutePath().equals(filePath)) {
+                            try { file.delete(); } catch (Exception ignored) {}
+                        }
                     }
                     if(picUploaded) {
 
@@ -1638,10 +1642,8 @@ public class ActionActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
-
-
                     String extension = filePath.substring(filePath.lastIndexOf("."));
-                    File file = new File(filePath);
+                    File file = com.phc.cimplus.Others.ImageCompressor.getCompressedImageIfNeeded(context, filePath);
                     InputStream fis = null;
                     // BufferedInputStream buffIn = null;
                     FTPSClient client = new FTPSClient("TLS", true);
@@ -1693,18 +1695,22 @@ public class ActionActivity extends AppCompatActivity {
                         try {
                             client.setFileType(FTP.BINARY_FILE_TYPE);
                             // buffIn = new BufferedInputStream(new FileInputStream(file));
-                            Uri mUri = Uri.fromFile(file);
-                            fis= getContentResolver().openInputStream(mUri);
+                            fis= new FileInputStream(file);
                             client.enterLocalPassiveMode();
                             client.makeDirectory("HCEImages/" + final_id); //I want to upload picture in MyPictures directory/folder. you can use your own.
                             client.makeDirectory("HCEImages/" + final_id+"/"+username);
                             client.makeDirectory("HCEImages/" + final_id+"/"+username+"/Attachments");
                             directoryPath="HCEImages/" + final_id+"/"+username+"/Attachments";
+                            //client.sendCommand("OPTS UTF8 ON");
+
                         } catch (Exception e) {
-                            if (pDialog.isShowing())
-                                pDialog.dismiss();
+                            Handler mainHandler = new Handler(Looper.getMainLooper());
+                            mainHandler.post(() -> {
+                                if (pDialog.isShowing())
+                                    pDialog.dismiss();
+                                Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
+                            });
                             picreceved=false;
-                            Toast.makeText(context, "Picture not found! Please try again", Toast.LENGTH_SHORT).show();
                         }
 
                         if(picreceved) {
@@ -1737,6 +1743,7 @@ public class ActionActivity extends AppCompatActivity {
                                 DownloadTask2 downloadTask = new DownloadTask2();
                                 //Start downloading json data from Google Directions API
                                 downloadTask.execute(url);
+                                picUploaded=true;
                                 countPictures++;
                             }
                             totalpics.setText("Total pictures uploaded: " + countPictures);
@@ -1774,6 +1781,10 @@ public class ActionActivity extends AppCompatActivity {
                     }
                     catch (Exception e) {
                         e.printStackTrace();
+                    } finally {
+                        if (file != null && !file.getAbsolutePath().equals(filePath)) {
+                            try { file.delete(); } catch (Exception ignored) {}
+                        }
                     }
                     if(picUploaded) {
 

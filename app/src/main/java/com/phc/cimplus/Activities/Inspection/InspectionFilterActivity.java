@@ -45,6 +45,7 @@ import com.phc.cimplus.DownloadClases.DownloadInspDetail;
 import com.phc.cimplus.Extra.HomeFragment;
 import com.phc.cimplus.Extra.NotificationFragment;
 import com.phc.cimplus.Extra.PhotosFragment;
+import com.phc.cimplus.Extra.SessionValidator;
 import com.phc.cimplus.Extra.SettingFragment;
 import com.phc.cimplus.Extra.VideosFragment;
 import com.phc.cimplus.Managers.DataManager;
@@ -590,6 +591,32 @@ if(count<1) {
             Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
             backPressedTime = System.currentTimeMillis();
         }
+    }
+
+    /**
+     * Session Security Check on every foreground resumption.
+     *
+     * This is the primary defence against the "stolen device" scenario:
+     *   - The attacker opens or brings the app to the foreground.
+     *   - The real user has already changed their password on another device.
+     *   - This check contacts the server; the old credentials are rejected.
+     *   - The session is immediately cleared and the attacker sees only the login screen.
+     *
+     * If the network is unavailable, the session is preserved (fail-open) to
+     * avoid locking out legitimate field workers in low-connectivity areas.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SessionValidator.validateSession(this, isValid -> {
+            if (!isValid) {
+                Toast.makeText(this,
+                        "Your session has expired. Please log in again.",
+                        Toast.LENGTH_LONG).show();
+                SessionValidator.invalidateAndRedirect(this);
+                finish();
+            }
+        });
     }
 
     @Override

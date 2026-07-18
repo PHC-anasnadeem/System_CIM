@@ -10,6 +10,7 @@ public class NotificationModel {
     private String Type; // REVISIT or COMPLAINT
     private String Message;
     private String InsertedDate;
+    @com.google.gson.annotations.SerializedName("IsRead")
     private boolean isRead;
 
     // Revisit Fields

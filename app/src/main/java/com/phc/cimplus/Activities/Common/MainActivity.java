@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.phc.cimplus.Extra.MyLocationService;
 import com.phc.cimplus.Extra.NotificationWorker;
+import com.phc.cimplus.Extra.SessionValidator;
 import com.phc.cimplus.Managers.WebApiManager;
 import com.phc.cimplus.R;
 import com.trncic.library.DottedProgressBar;
@@ -465,10 +466,12 @@ public class MainActivity extends AppCompatActivity {
 
             if (generalRemarks == null || generalRemarks.isEmpty() || "null".equalsIgnoreCase(generalRemarks)) {
                 if (!roleID.isEmpty() && !userID.isEmpty()) {
-                    // Session exists, auto-login
-                    proceedToMainScreen(roleID, prefs);
+                    // A saved session exists — silently validate credentials with the server
+                    // before granting access. This ensures that if the password was changed
+                    // on another device, the stale session is invalidated immediately.
+                    validateAndProceed(roleID, prefs);
                 } else {
-                    // No session or expired, go to login
+                    // No session found, go to login
                     Intent intent = new Intent(MainActivity.this, Login_Activity.class);
                     startActivity(intent);
                     MainActivity.this.finish();
@@ -483,7 +486,7 @@ public class MainActivity extends AppCompatActivity {
                         .setCancelable(false)
                         .setPositiveButton("OK", (dialog, id) -> {
                             if (!finalRoleID.isEmpty() && !finalUserID.isEmpty()) {
-                                proceedToMainScreen(finalRoleID, prefs);
+                                validateAndProceed(finalRoleID, prefs);
                             } else {
                                 Intent intent = new Intent(MainActivity.this, Login_Activity.class);
                                 startActivity(intent);
@@ -492,6 +495,27 @@ public class MainActivity extends AppCompatActivity {
                         });
                 builder.create().show();
             }
+        }
+
+        /**
+         * Runs a silent background credential check. If the server confirms the
+         * stored credentials are still valid, proceeds to the main screen.
+         * If the server rejects them (password changed on another device), clears
+         * the local session and redirects to Login_Activity.
+         */
+        private void validateAndProceed(String roleID, SharedPreferences prefs) {
+            SessionValidator.validateSession(MainActivity.this, isValid -> {
+                if (isValid) {
+                    proceedToMainScreen(roleID, prefs);
+                } else {
+                    // Credentials rejected by server — password was changed on another device
+                    Toast.makeText(MainActivity.this,
+                            "Your session has expired. Please log in again.",
+                            Toast.LENGTH_LONG).show();
+                    SessionValidator.invalidateAndRedirect(MainActivity.this);
+                    MainActivity.this.finish();
+                }
+            });
         }
 
         private void proceedToMainScreen(String roleID, SharedPreferences prefs) {

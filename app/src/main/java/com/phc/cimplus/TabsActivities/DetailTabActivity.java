@@ -950,10 +950,11 @@ public class DetailTabActivity extends AppCompatActivity {
                 return "Invalid filePath: " + e.getMessage();
             }
 
-            File file = new File(filePath);
-            if (!file.exists()) {
+            File originalFile = new File(filePath);
+            if (!originalFile.exists()) {
                 return "File not found: " + filePath;
             }
+            File file = com.phc.cimplus.Others.ImageCompressor.getCompressedImageIfNeeded(context, filePath);
 
             InputStream fis = null;
             FTPSClient client = new FTPSClient("TLS", true);
@@ -1006,9 +1007,12 @@ public class DetailTabActivity extends AppCompatActivity {
 
                 // create directories if not exist
                 try { client.makeDirectory("/HCEImages"); } catch (Exception ignored) {}
-                try { client.makeDirectory("/HCEImages/" + final_id); } catch (Exception ignored) {}
-                try { client.makeDirectory("/HCEImages/" + final_id + "/" + safeUsername); } catch (Exception ignored) {}
-                try { client.makeDirectory(remoteBasePath); } catch (Exception ignored) {}
+                try { client.changeWorkingDirectory("/HCEImages"); } catch (Exception ignored) {}
+                try { client.makeDirectory(String.valueOf(final_id)); } catch (Exception ignored) {}
+                try { client.changeWorkingDirectory(String.valueOf(final_id)); } catch (Exception ignored) {}
+                try { client.makeDirectory(safeUsername); } catch (Exception ignored) {}
+                try { client.changeWorkingDirectory(safeUsername); } catch (Exception ignored) {}
+                try { client.makeDirectory(folderName); } catch (Exception ignored) {}
 
                 // change working directory
                 boolean cwdOk = client.changeWorkingDirectory(remoteBasePath);
@@ -1064,6 +1068,9 @@ public class DetailTabActivity extends AppCompatActivity {
                 try { if (fis != null) fis.close(); } catch (Exception ignored) {}
                 try { client.logout(); } catch (Exception ignored) {}
                 try { client.disconnect(); } catch (Exception ignored) {}
+                if (file != null && !file.getAbsolutePath().equals(filePath)) {
+                    try { file.delete(); } catch (Exception ignored) {}
+                }
             }
         }
 

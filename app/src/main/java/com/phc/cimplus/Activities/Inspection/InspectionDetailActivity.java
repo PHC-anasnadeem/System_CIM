@@ -1729,7 +1729,7 @@ else if(index==2){
                     }
 
                     String extension = filePath.substring(filePath.lastIndexOf("."));
-                    File file = new File(filePath);
+                    File file = com.phc.cimplus.Others.ImageCompressor.getCompressedImageIfNeeded(context, filePath);
                     FileInputStream fis = null;
 
                     try {
@@ -1814,6 +1814,10 @@ else if(index==2){
                             if (pDialog != null && pDialog.isShowing()) pDialog.dismiss();
                             Toast.makeText(context, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
+                    } finally {
+                        if (file != null && !file.getAbsolutePath().equals(filePath)) {
+                            try { file.delete(); } catch (Exception ignored) {}
+                        }
                     }
                 }
             });
@@ -1840,7 +1844,7 @@ else if(index==2){
                     }
 
                     String extension = filePath.substring(filePath.lastIndexOf("."));
-                    File file = new File(filePath);
+                    File file = com.phc.cimplus.Others.ImageCompressor.getCompressedImageIfNeeded(context, filePath);
                     FileInputStream fis = null;
 
                     try {
@@ -1922,6 +1926,10 @@ else if(index==2){
                             if (pDialog != null && pDialog.isShowing()) pDialog.dismiss();
                             Toast.makeText(context, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
+                    } finally {
+                        if (file != null && !file.getAbsolutePath().equals(filePath)) {
+                            try { file.delete(); } catch (Exception ignored) {}
+                        }
                     }
                 }
             });
