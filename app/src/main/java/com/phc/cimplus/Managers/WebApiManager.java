@@ -19,6 +19,7 @@ import com.phc.cimplus.DataElements.RegStatus;
 import com.phc.cimplus.DataElements.Role;
 import com.phc.cimplus.DataElements.SectorType;
 import com.phc.cimplus.DataElements.Tehsil;
+import com.phc.cimplus.DataElements.UC;
 import com.phc.cimplus.DataElements.UpdateStatL1;
 import com.phc.cimplus.DataElements.UpdateStatL2;
 import com.phc.cimplus.DataElements.subActionType;
@@ -190,6 +191,9 @@ public class WebApiManager {
         }
         else if(count==15){
             url = baseurl + "GetPWSOrgType";
+        }
+        else if(count==16){
+            url = baseurl + "GetAllUCs";
         }
        // url = url.replaceAll(" ", "%20");
 
@@ -382,6 +386,14 @@ public class WebApiManager {
                             PWSOrgType pwsOrgType = new PWSOrgType(PWSorgID,PWSorg);
                             databaseManagerHelper.savePWSOrg(pwsOrgType);
 
+                        }
+                        else if(count==16){
+                            String ucId = e.getString("UC_ID");
+                            String district = e.getString("District");
+                            String tehsil = e.getString("Tehsil");
+                            String ucName = e.getString("UC_Name");
+                            UC uc = new UC(ucId, district, tehsil, ucName);
+                            databaseManagerHelper.saveUC(uc);
                         }
                     }
 

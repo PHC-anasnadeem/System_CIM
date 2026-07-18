@@ -14,6 +14,7 @@ import com.phc.cimplus.DataElements.RegStatus;
 import com.phc.cimplus.DataElements.Role;
 import com.phc.cimplus.DataElements.SectorType;
 import com.phc.cimplus.DataElements.Tehsil;
+import com.phc.cimplus.DataElements.UC;
 import com.phc.cimplus.DataElements.UpdateStatL1;
 import com.phc.cimplus.DataElements.UpdateStatL2;
 import com.phc.cimplus.DataElements.subActionType;
@@ -30,6 +31,7 @@ public class DataManager {
     ArrayList<District> districts = null;
     ArrayList<Division> divisons = null;
     ArrayList<Tehsil> tehsils = null;
+    ArrayList<UC> ucs = null;
     ArrayList<SectorType> sectorTypes = null;
     ArrayList<CouncilType> councilTypes = null;
     ArrayList<OrgType> orgTypes = null;
@@ -80,6 +82,17 @@ public class DataManager {
 
         return tehsils;
     }
+
+    public ArrayList<UC> getUCList(String tehsil) {
+        ucs = databaseManagerHelper.getUCList(tehsil);
+        if (ucs.isEmpty()) {
+            count = 16;
+            webApiManager = new WebApiManager(context, count);
+            ucs = databaseManagerHelper.getUCList(tehsil);
+        }
+        return ucs;
+    }
+
 
     public ArrayList<SectorType> getSectorTypes() {
 

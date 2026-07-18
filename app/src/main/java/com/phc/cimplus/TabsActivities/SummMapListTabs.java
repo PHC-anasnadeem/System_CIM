@@ -84,6 +84,7 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
     String Cnic;
     String Phone;
     String QuackType;
+    String ucText;
     Context context;
 
 
@@ -157,6 +158,7 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         Cnic = (String) intent.getSerializableExtra("Cnic");           ////Add CNIC Here /////
         Phone = (String) intent.getSerializableExtra("Phone");           ////Add Phone Here /////
         QuackType = (String) intent.getSerializableExtra("QuackType");
+        ucText = (String) intent.getSerializableExtra("ucText");
         indtabresult = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("result");
         bundle = new Bundle();
         bundle.putString("dataType", dataType);
@@ -165,6 +167,7 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         bundle.putString("hcestatus", REGfilterstatus);
         bundle.putString("districtText", districtText);
         bundle.putString("tehsilText", TehsilText);
+        bundle.putString("ucText", ucText);
         bundle.putString("distancetext", distancetext);
         bundle.putString("BfromText", BfromText);
         bundle.putString("BtoText", BtoText);

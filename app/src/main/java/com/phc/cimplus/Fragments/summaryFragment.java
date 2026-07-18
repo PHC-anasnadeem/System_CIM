@@ -76,6 +76,7 @@ public class summaryFragment extends Fragment {
     String REGfilterstatus;
     String districtText;
     String TehsilText;
+    String ucText="";
     String distancetext;
     String subactionTypeID;
     String BfromText="";
@@ -148,6 +149,7 @@ public class summaryFragment extends Fragment {
         REGfilterstatus= args.getString("hcestatus");
         districtText= args.getString("districtText");
         TehsilText= args.getString("tehsilText");
+        ucText= args.getString("ucText", "");
         subactionTypeID= args.getString("subactionTypeID");
         distancetext= args.getString("distancetext");
         BfromText= args.getString("BfromText");
@@ -265,7 +267,7 @@ public class summaryFragment extends Fragment {
 
         String token= getContext().getResources().getString(R.string.token);
 
-        url = baseurl + "GetPercentage?strToken="+token+"&District=" + districtText + "&Tehsil=" + TehsilText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText+"&Lvs=&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&finalid="+finalidText+"&ActionType="+lastvisitedText+"&QuackCategory="+QuackType+"&QuackSubCategory=&SubActionType="+subactionTypeID+"&Cnic="+Cnic+"&Phone="+Phone+"&DateFrom="+dateFromText+"&DateTo="+dateToText;
+        url = baseurl + "GetPercentage?strToken="+token+"&District=" + districtText + "&Tehsil=" + TehsilText + "&UC=" + ucText + "&DataType=" + dataType + "&orgType=" + orgType + "&Councile=" + registrationType + "&Status=" + REGfilterstatus + "&Category=&From=" + BfromText + "&To=" + BtoText+"&Lvs=&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&finalid="+finalidText+"&ActionType="+lastvisitedText+"&QuackCategory="+QuackType+"&QuackSubCategory=&SubActionType="+subactionTypeID+"&Cnic="+Cnic+"&Phone="+Phone+"&DateFrom="+dateFromText+"&DateTo="+dateToText;
 
         url = url.replaceAll(" ", "%20");
 

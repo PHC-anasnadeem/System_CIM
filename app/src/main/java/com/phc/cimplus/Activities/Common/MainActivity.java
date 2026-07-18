@@ -197,10 +197,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (isConnected) {
 
-            if (count < 16) {
-                for (int i = 0; i < 16; i++) {
+            if (count < 17) {
+                for (int i = 0; i < 17; i++) {
                     synchronized (MainActivity.class) {
-                        if (count < 16) {
+                        if (count < 17) {
                             WebApiManager webApiManager = new WebApiManager(context, count);
 
                             count++;

@@ -20,6 +20,7 @@ import com.phc.cimplus.DataElements.RegStatus;
 import com.phc.cimplus.DataElements.Role;
 import com.phc.cimplus.DataElements.SectorType;
 import com.phc.cimplus.DataElements.Tehsil;
+import com.phc.cimplus.DataElements.UC;
 import com.phc.cimplus.DataElements.UpdateStatL1;
 import com.phc.cimplus.DataElements.UpdateStatL2;
 import com.phc.cimplus.DataElements.subActionType;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 public class DatabaseManager {
 
 
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
     private static final String DATABASE_NAME = "CIMAllDropDown.db";
     public static final String DISTRICT = "District";
     private static final String TAG_DISTRICT_ID = "Dis_District_id";
@@ -43,6 +44,12 @@ public class DatabaseManager {
     private static final String TAG_TEHSIL_ID = "Teh_Tehsil_id";
     private static final String TAG_TDISTRICT = "Teh_District";
     private static final String TAG_TEHSIL = "Teh_Tehsil";
+
+    public static final String UC_TABLE = "UC";
+    private static final String TAG_UC_ID = "Uc_Id";
+    private static final String TAG_UC_DISTRICT = "Uc_District";
+    private static final String TAG_UC_TEHSIL = "Uc_Tehsil";
+    private static final String TAG_UC_NAME = "Uc_Name";
     public static final String SECTORTYPE = "SectorType";
     private static final String TAG_SECTORTYPE_ID = "Sec_SectorType_id";
     private static final String TAG_SECTORTYPE = "Sec_SectorType";
@@ -130,6 +137,16 @@ public class DatabaseManager {
         database.insert(TEHSIL, null, contentValues);
 
     }
+
+    public void saveUC(UC uc) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TAG_UC_ID, uc.getUcId());
+        contentValues.put(TAG_UC_DISTRICT, uc.getDistrict());
+        contentValues.put(TAG_UC_TEHSIL, uc.getTehsil());
+        contentValues.put(TAG_UC_NAME, uc.getUcName());
+        database.insert(UC_TABLE, null, contentValues);
+    }
+
 
     public void saveSectorType(SectorType sectorType) {
         ContentValues contentValues = new ContentValues();
@@ -437,6 +454,32 @@ public class DatabaseManager {
         cursor.close();
         return tehsils;
     }
+
+    public ArrayList<UC> getUCList(String tehsil) {
+        String selectQuery = null;
+        if (tehsil == null || tehsil.equals("Please Select") || tehsil.equals("")) {
+            selectQuery = "SELECT * FROM " + UC_TABLE;
+        } else {
+            selectQuery = "SELECT * FROM " + UC_TABLE + " WHERE " + TAG_UC_TEHSIL + "='" + tehsil + "' UNION SELECT * FROM " + UC_TABLE + " WHERE " + TAG_UC_NAME + "='Please Select'";
+        }
+
+        database = openHelper.getReadableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        ArrayList<UC> ucs = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                ucs.add(new UC(
+                        cursor.getString(cursor.getColumnIndex(TAG_UC_ID)),
+                        cursor.getString(cursor.getColumnIndex(TAG_UC_DISTRICT)),
+                        cursor.getString(cursor.getColumnIndex(TAG_UC_TEHSIL)),
+                        cursor.getString(cursor.getColumnIndex(TAG_UC_NAME))
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return ucs;
+    }
+
 //
 //    public ArrayList<Tehsil> getTehsilList(String district) {
 //        String selectQuery = null;
@@ -1125,6 +1168,9 @@ public class DatabaseManager {
         if(count==15){
             database.execSQL("delete from "+ PWSORGTYPE);
         }
+        if(count==16){
+            database.execSQL("delete from "+ UC_TABLE);
+        }
     }
 
     public DatabaseManager open() throws SQLException {
@@ -1168,6 +1214,12 @@ public class DatabaseManager {
                     + TAG_TDISTRICT + " TEXT, "
                     + TAG_TEHSIL + " TEXT ) "
                    // + "FOREIGN KEY(category_id) REFERENCES Category(category_id) )"
+            );
+            database.execSQL(" CREATE TABLE " + UC_TABLE + " ( "
+                    + TAG_UC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + TAG_UC_DISTRICT + " TEXT, "
+                    + TAG_UC_TEHSIL + " TEXT, "
+                    + TAG_UC_NAME + " TEXT ) "
             );
             database.execSQL(" CREATE TABLE " + SECTORTYPE + " ( "
                     + TAG_SECTORTYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -1263,6 +1315,7 @@ public class DatabaseManager {
             // TODO Auto-generated method stub
             database.execSQL(" DROP TABLE IF EXISTS "+  DISTRICT);
             database.execSQL(" DROP TABLE IF EXISTS "+  TEHSIL);
+            database.execSQL(" DROP TABLE IF EXISTS "+  UC_TABLE);
             database.execSQL(" DROP TABLE IF EXISTS "+  SECTORTYPE);
             database.execSQL(" DROP TABLE IF EXISTS "+  COUNCILTYPE);
             database.execSQL(" DROP TABLE IF EXISTS "+  ORGTYPE);

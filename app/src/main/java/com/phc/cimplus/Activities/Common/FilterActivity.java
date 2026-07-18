@@ -59,6 +59,7 @@ import com.phc.cimplus.DataElements.OrgType;
 import com.phc.cimplus.DataElements.RegStatus;
 import com.phc.cimplus.DataElements.SectorType;
 import com.phc.cimplus.DataElements.Tehsil;
+import com.phc.cimplus.DataElements.UC;
 import com.phc.cimplus.DataElements.UpdateStatL1;
 import com.phc.cimplus.DataElements.UpdateStatL2;
 import com.phc.cimplus.DataElements.subActionType;
@@ -103,6 +104,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     Spinner status_spinner;
     Spinner district_spinner;
     Spinner tehsil_spinner;
+    Spinner uc_spinner;
     Spinner searchbyspinner;
     Spinner distancespinner;
     Spinner lastvisitedspinner;
@@ -112,6 +114,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     LinearLayout distanceLayout;
     LinearLayout districtLayout;
     LinearLayout TehsilLayout;
+    LinearLayout ucLayout;
     LinearLayout Loc_layout;
     LinearLayout sectortypelayout;
     LinearLayout Council_Typelayout;
@@ -135,6 +138,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     String hcestatusID="";
     String districtText="";
     String tehsilText="";
+    String ucText="";
     String BfromText="";
     String BtoText="";
     String dateFromText="";
@@ -178,6 +182,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     String subactiontseltext;
     ArrayList<District> districts;
     ArrayList<Tehsil> tehsils;
+    ArrayList<UC> ucs;
     ArrayList<SectorType> sectorTypes;
     ArrayList<CouncilType> councilTypes;
     ArrayList<OrgType> orgTypes;
@@ -359,6 +364,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         hcetypespinner = (Spinner) findViewById(R.id.HCE_Typespinner);
         district_spinner = (Spinner) findViewById(R.id.districtSpinner);
         tehsil_spinner = (Spinner) findViewById(R.id.tehsilSpinner);
+        uc_spinner = (Spinner) findViewById(R.id.ucSpinner);
 
         sectortypespinner.setSelection(0);
 
@@ -368,6 +374,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         distanceLayout = (LinearLayout) findViewById(R.id.distanceid);
         districtLayout = (LinearLayout) findViewById(R.id.districtid);
         TehsilLayout = (LinearLayout) findViewById(R.id.tehsilid);
+        ucLayout = (LinearLayout) findViewById(R.id.ucid);
         showlayout = (LinearLayout) findViewById(R.id.showlayout);
         hidelayout = (LinearLayout) findViewById(R.id.hidelayout);
         subvisit_layout = (LinearLayout) findViewById(R.id.subvisit_layout);
@@ -431,6 +438,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         hidelayout.setVisibility(View.GONE);
         districtLayout.setVisibility(View.GONE);
         TehsilLayout.setVisibility(View.GONE);
+        ucLayout.setVisibility(View.GONE);
         sectortypelayout.setVisibility(View.GONE);
         hcetypelayout.setVisibility(View.GONE);
         Council_Typelayout.setVisibility(View.GONE);
@@ -457,6 +465,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                                             hcetypespinner.setSelection(0);
                                             district_spinner.setSelection(0);
                                             tehsil_spinner.setSelection(0);
+                                            uc_spinner.setSelection(0);
                                             actionspinner.setSelection(0);
                                             bed_to.setText("");
                                             bed_from.setText("");
@@ -478,6 +487,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                                    // if (simpleSwitch1.isChecked()) {
                                     districtLayout.setVisibility(View.VISIBLE);
                                     TehsilLayout.setVisibility(View.VISIBLE);
+                                    ucLayout.setVisibility(View.VISIBLE);
                                     sectortypelayout.setVisibility(View.VISIBLE);
                                     hcetypelayout.setVisibility(View.VISIBLE);
                                     Council_Typelayout.setVisibility(View.VISIBLE);
@@ -511,6 +521,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                 // if (simpleSwitch1.isChecked()) {
                 districtLayout.setVisibility(View.GONE);
                 TehsilLayout.setVisibility(View.GONE);
+                ucLayout.setVisibility(View.GONE);
                 sectortypelayout.setVisibility(View.GONE);
                 hcetypelayout.setVisibility(View.GONE);
                 Council_Typelayout.setVisibility(View.GONE);
@@ -595,10 +606,10 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-                searchbytext = parent.getItemAtPosition(position).toString();
-                if(searchbytext=="Distance"){
+                searchbytext = parent.getItemAtPosition(position).toString();                if(searchbytext=="Distance"){
                     districtLayout.setVisibility(View.GONE);
                     TehsilLayout.setVisibility(View.GONE);
+                    ucLayout.setVisibility(View.GONE);
                     distanceLayout.setVisibility(View.VISIBLE);
                     Loc_layout.setVisibility(View.VISIBLE);
                     regnoLayout.setVisibility(View.GONE);
@@ -612,6 +623,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                 else if(searchbytext=="District"){
                     districtLayout.setVisibility(View.VISIBLE);
                     TehsilLayout.setVisibility(View.VISIBLE);
+                    ucLayout.setVisibility(View.VISIBLE);
                     distanceLayout.setVisibility(View.GONE);
                     Loc_layout.setVisibility(View.GONE);
                     regnoLayout.setVisibility(View.GONE);
@@ -627,6 +639,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                     hcenameLayout.setVisibility(View.GONE);
                     districtLayout.setVisibility(View.GONE);
                     TehsilLayout.setVisibility(View.GONE);
+                    ucLayout.setVisibility(View.GONE);
                     distanceLayout.setVisibility(View.GONE);
                     Loc_layout.setVisibility(View.GONE);
                     sectortypelayout.setVisibility(View.GONE);
@@ -640,6 +653,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                     hcenameLayout.setVisibility(View.VISIBLE);
                     districtLayout.setVisibility(View.GONE);
                     TehsilLayout.setVisibility(View.GONE);
+                    ucLayout.setVisibility(View.GONE);
                     distanceLayout.setVisibility(View.GONE);
                     Loc_layout.setVisibility(View.GONE);
                      sectortypelayout.setVisibility(View.GONE);
@@ -647,10 +661,11 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                      HCSstatus_layout.setVisibility(View.GONE);
                      hcetypelayout.setVisibility(View.GONE);
                      bed_layout.setVisibility(View.GONE);
-                }
+                 }
                 if(searchbytext=="Please Select"){
                     districtLayout.setVisibility(View.GONE);
                     TehsilLayout.setVisibility(View.GONE);
+                    ucLayout.setVisibility(View.GONE);
                     distanceLayout.setVisibility(View.GONE);
                     Loc_layout.setVisibility(View.GONE);
                     regnoLayout.setVisibility(View.GONE);
@@ -1219,6 +1234,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         firstpage.putExtra("hcestatus", hcestatusID);
         firstpage.putExtra("districtText", districtText);
         firstpage.putExtra("tehsilText", tehsilText);
+        firstpage.putExtra("ucText", ucText);
         firstpage.putExtra("distancetext", distancetext);
         firstpage.putExtra("BfromText", BfromText);
         firstpage.putExtra("BtoText", BtoText);
@@ -1634,6 +1650,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
                                        int position, long id) {
                 // ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
                 tehsilText = parent.getItemAtPosition(position).toString();
+                getUC();
             }
 
             @Override
@@ -1642,6 +1659,45 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
             }
         });
         return TehsilList;
+    }
+
+    private ArrayList<String> getUC() {
+        ucs = dataManager.getUCList(tehsilText);
+        ArrayList<String> UCList = new ArrayList<String>();
+        for (UC uc : ucs) {
+            String ucName = uc.getUcName();
+            if (ucName != null && !ucName.equals("null")) {
+                UCList.add(ucName);
+            }
+        }
+
+        if (UCList.isEmpty() || !UCList.get(0).equals("Please Select")) {
+            UCList.add(0, "Please Select");
+        }
+
+        ArrayAdapter<String> ucadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, UCList) {
+            @Override
+            public boolean isEnabled(int position) {
+                return true;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                return super.getDropDownView(position, convertView, parent);
+            }
+        };
+        ucadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        uc_spinner.setAdapter(ucadapter);
+        uc_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ucText = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        return UCList;
     }
     private void setSpinnerError(Spinner spinner, String error){
         View selectedView = spinner.getSelectedView();
@@ -2008,7 +2064,7 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         String url=null;
         String baseurl = context.getResources().getString(R.string.baseurl);
 
-        url = baseurl + "GetTotalHCE?District="+districtText+"&Tehsil="+tehsilText+"&DataType="+sectortypetext+"&orgType="+hceTypetext+"&Councile="+counciltypetext+"&Status="+hcestatusText+"&Category=&From="+BfromText+"&To="+BtoText+"&Lvs="+lastvisitedText+"&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&Cnic="+Cnic+"&Phone="+Phone;
+        url = baseurl + "GetTotalHCE?District="+districtText+"&Tehsil="+tehsilText+"&UC="+ucText+"&DataType="+sectortypetext+"&orgType="+hceTypetext+"&Councile="+counciltypetext+"&Status="+hcestatusText+"&Category=&From="+BfromText+"&To="+BtoText+"&Lvs="+lastvisitedText+"&RegNum="+RegnoText+"&HCEName="+hcenameText+"&Latitude="+cur_latitude+"&Longitude="+cur_longitude+"&Distance="+distancetext+"&Cnic="+Cnic+"&Phone="+Phone;
         url = url.replaceAll(" ", "%20");
 
         return url;
