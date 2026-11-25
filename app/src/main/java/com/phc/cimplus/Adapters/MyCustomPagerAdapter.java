@@ -48,7 +48,7 @@ public class MyCustomPagerAdapter extends PagerAdapter{
 
         final SubsamplingScaleImageView imageView = (SubsamplingScaleImageView) itemView.findViewById(R.id.image);
 
-        Glide.with(context).load(images.get(position)).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(context).load(images.get(position)).asBitmap().into(new SimpleTarget<Bitmap>(1080, 1920) {
                     @Override
                     public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
                         imageView.setImage(ImageSource.bitmap(bitmap));

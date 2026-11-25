@@ -187,7 +187,8 @@ public class ReportingTabActivity extends AppCompatActivity {
         PlanCode = (String) intent.getSerializableExtra("PlanCode");
         TotalImages=(String) intent.getSerializableExtra("TotalImages");
         selVistdate = (String) intent.getSerializableExtra("selVistdate");
-        indtabresult = (ArrayList<HashMap<String, String>>)intent.getSerializableExtra("result");
+        // Use IntentDataHolder instead of Intent extras to avoid TransactionTooLargeException
+        indtabresult = com.phc.cimplus.Others.IntentDataHolder.getData();
 
         planidtext.setText(District+" - "+PlanCode);
         visiteddate.setText(startdat+" - "+enddate);
@@ -216,7 +217,8 @@ public class ReportingTabActivity extends AppCompatActivity {
 
         }
         bundle = new Bundle();
-        bundle.putSerializable("indtabresult",indtabresult);
+        // Store large data in IntentDataHolder instead of Bundle to avoid TransactionTooLargeException
+        com.phc.cimplus.Others.IntentDataHolder.setFragmentData(indtabresult);
         bundle.putString("FunctionalSealedID",FunctionalSealedID);
         bundle.putString("NotSealedID",NotSealedID);
         bundle.putString("CloseSealedID",CloseSealedID);

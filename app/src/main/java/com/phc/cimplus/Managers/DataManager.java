@@ -84,11 +84,15 @@ public class DataManager {
     }
 
     public ArrayList<UC> getUCList(String tehsil) {
-        ucs = databaseManagerHelper.getUCList(tehsil);
+        return getUCList(null, tehsil);
+    }
+
+    public ArrayList<UC> getUCList(String district, String tehsil) {
+        ucs = databaseManagerHelper.getUCList(district, tehsil);
         if (ucs.isEmpty()) {
             count = 16;
             webApiManager = new WebApiManager(context, count);
-            ucs = databaseManagerHelper.getUCList(tehsil);
+            ucs = databaseManagerHelper.getUCList(district, tehsil);
         }
         return ucs;
     }

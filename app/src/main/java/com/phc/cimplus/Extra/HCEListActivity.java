@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
@@ -203,13 +204,19 @@ public class HCEListActivity extends AppCompatActivity {
         super.onResume();
         mServiceIntent = new Intent(this, BroadCastService.class);
         startService(mServiceIntent);//starting the service
-        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION));//register the broadcast receiver
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION), Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION));
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (Exception ignored) {}
         stopService(mServiceIntent);
     }
 

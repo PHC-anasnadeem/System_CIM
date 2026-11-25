@@ -103,15 +103,8 @@ public class UploadActivity extends Activity {
         if (isImage) {
             imgPreview.setVisibility(View.VISIBLE);
             vidPreview.setVisibility(View.GONE);
-            // bimatp factory
-            BitmapFactory.Options options = new BitmapFactory.Options();
-
-            // down sizing image as it throws OutOfMemory Exception for larger
-            // images
-            options.inSampleSize = 8;
-
-            final Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
-
+            // Downsample image for preview to save memory
+            final Bitmap bitmap = ImageCompressor.decodeSampledBitmapFromFile(filePath, 1024, 1024);
             imgPreview.setImageBitmap(bitmap);
         } else {
             imgPreview.setVisibility(View.GONE);

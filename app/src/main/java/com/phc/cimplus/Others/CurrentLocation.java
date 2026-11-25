@@ -13,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.net.Uri;
 import android.provider.Settings;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -77,11 +78,8 @@ public class CurrentLocation extends Service implements LocationListener {
                 // First get location from Network Provider
 
                 if (isNetworkEnabled) {
-                    if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 50);
-
-                    } else {
-                        ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 50);
+                    if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                            || ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         locationManager.requestLocationUpdates(
                                 LocationManager.NETWORK_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
@@ -96,16 +94,15 @@ public class CurrentLocation extends Service implements LocationListener {
                                 accuracy=location.getAccuracy();
                             }
                         }
+                    } else if (mContext instanceof Activity) {
+                        ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 50);
                     }
                 }
                 // if GPS Enabled get lat/long using GPS Services
                 if (isGPSEnabled) {
                     if (location == null) {
-                        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 50);
-
-                        } else {
-                            ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 50);
+                        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                                || ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                             locationManager.requestLocationUpdates(
                                     LocationManager.GPS_PROVIDER,
                                     MIN_TIME_BW_UPDATES,
@@ -120,6 +117,8 @@ public class CurrentLocation extends Service implements LocationListener {
                                     accuracy=location.getAccuracy();
                                 }
                             }
+                        } else if (mContext instanceof Activity) {
+                            ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 50);
                         }
                     }
                 }
@@ -214,9 +213,59 @@ public class CurrentLocation extends Service implements LocationListener {
         alertDialog.show();
     }
 
+    public boolean hasLocationPermission() {
+        return ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void showPermissionSettingsDialog() {
+        if (!(mContext instanceof Activity)) return;
+        Activity activity = (Activity) mContext;
+        if (activity.isFinishing()) return;
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        alertDialog.setTitle("Location Permission Required");
+        alertDialog.setMessage("Location permission is needed to detect your location and Union Council. Please grant permission in App Settings.");
+        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", mContext.getPackageName(), null);
+                intent.setData(uri);
+                mContext.startActivity(intent);
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+    }
+
+    public interface OnLocationChangeListener {
+        void onLocationChanged(double lat, double lng, float accuracy);
+    }
+    private OnLocationChangeListener mLocationChangeListener;
+
+    public void setOnLocationChangeListener(OnLocationChangeListener listener) {
+        this.mLocationChangeListener = listener;
+    }
+
+    public Location refreshLocation() {
+        return getLocation();
+    }
+
     @Override
     public void onLocationChanged(Location location) {
-
+        if (location != null) {
+            this.location = location;
+            this.latitude = location.getLatitude();
+            this.longitude = location.getLongitude();
+            this.accuracy = location.getAccuracy();
+            if (mLocationChangeListener != null) {
+                mLocationChangeListener.onLocationChanged(this.latitude, this.longitude, this.accuracy);
+            }
+        }
     }
 
     @Override

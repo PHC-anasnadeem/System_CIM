@@ -59,7 +59,8 @@ public class PlanReportActivity extends AppCompatActivity {
         totalVisits = intent.getStringExtra("totalvisits");
         totalFir = intent.getStringExtra("totalfir");
         totalImages = intent.getStringExtra("TotalImages");
-        visitData = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("result");
+        // Use IntentDataHolder instead of Intent extras to avoid TransactionTooLargeException
+        visitData = com.phc.cimplus.Others.IntentDataHolder.getData();
 
         recyclerView = findViewById(R.id.report_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

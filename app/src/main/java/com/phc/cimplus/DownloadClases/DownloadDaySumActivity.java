@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.phc.cimplus.Others.IntentDataHolder;
+
 import com.phc.cimplus.TabsActivities.DatewiseSummTabActivity;
 import com.phc.cimplus.R;
 
@@ -265,7 +267,8 @@ public class DownloadDaySumActivity {
                     firstpage.putExtra("timeInMillis2",timeInMillis2);
                     firstpage.putExtra("TotalImages",TotalImages);
                     firstpage.putExtra("reportlevel",reportlevel);
-                    firstpage.putExtra("result",result);
+                    // Use IntentDataHolder instead of Intent extras to avoid TransactionTooLargeException
+                    IntentDataHolder.setData(result);
                     context.startActivity(firstpage);
             } else {
                 Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();

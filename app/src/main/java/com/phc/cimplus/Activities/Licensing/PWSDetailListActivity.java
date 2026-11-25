@@ -264,7 +264,7 @@ public class PWSDetailListActivity extends AppCompatActivity {
         RegnoText = (String) intent.getSerializableExtra("RegnoText");
         hcenameText = (String) intent.getSerializableExtra("hcenameText");
         CNICtext = (String) intent.getSerializableExtra("cnicText");
-        indtabresult = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("result");
+        indtabresult = com.phc.cimplus.Others.IntentDataHolder.getData();
         TotalRecord = Integer.parseInt(indtabresult.get(0).get("TotalRec"));
         PageSize = Integer.parseInt(indtabresult.get(0).get("PageSize"));
         int total = (int) Math.ceil((double) TotalRecord / PageSize);
@@ -865,7 +865,7 @@ public class PWSDetailListActivity extends AppCompatActivity {
 
 
                 /*Intent firstpage = new Intent(context, PWSDetailListActivity.class);
-                firstpage.putExtra("result",result);
+                com.phc.cimplus.Others.IntentDataHolder.setData(result);
                 context.startActivity(firstpage);*/
             } else {
                 Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();

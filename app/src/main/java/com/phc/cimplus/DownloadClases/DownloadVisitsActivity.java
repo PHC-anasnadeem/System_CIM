@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.phc.cimplus.Others.IntentDataHolder;
+
 import com.phc.cimplus.TabsActivities.ReportingTabActivity;
 import com.phc.cimplus.TabsActivities.PlanReportActivity;
 import com.phc.cimplus.R;
@@ -424,7 +426,8 @@ public class DownloadVisitsActivity {
                 firstpage.putExtra("PlanCode",PlanCode);
                 firstpage.putExtra("TotalImages",TotalImages);
                 firstpage.putExtra("selVistdate",selVistdate);
-                firstpage.putExtra("result",result);
+                // Use IntentDataHolder instead of Intent extras to avoid TransactionTooLargeException
+                IntentDataHolder.setData(result);
                 context.startActivity(firstpage);
 
             } else {

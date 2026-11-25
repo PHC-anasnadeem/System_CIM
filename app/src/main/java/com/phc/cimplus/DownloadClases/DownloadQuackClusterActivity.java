@@ -293,7 +293,7 @@ public class DownloadQuackClusterActivity {
                 firstpage.putExtra("isEdit", isEdit);
                 firstpage.putExtra("finalidText", finalidText);
                 firstpage.putExtra("QuackType", actionText);
-                firstpage.putExtra("result",result);
+                com.phc.cimplus.Others.IntentDataHolder.setData(result);
                 firstpage.putExtra("Cnic",Cnic);
                 firstpage.putExtra("Phone",Phone);
                 context.startActivity(firstpage);

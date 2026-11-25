@@ -341,6 +341,62 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
+                <!-- Current Detected UC Badge (Option A) -->
+                <LinearLayout
+                    android:id="@+id/layout_current_uc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#E8F5E9"
+                    android:padding="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="📍 Current Detected Location:"
+                            android:textColor="#2E7D32"
+                            android:textStyle="bold"
+                            android:textSize="13sp" />
+
+                        <ImageView
+                            android:id="@+id/btn_refresh_uc"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="4dp"
+                            android:src="@android:drawable/ic_menu_rotate"
+                            android:tint="#2E7D32" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txt_current_uc_display"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="Detecting current UC..."
+                        android:textColor="#1B5E20"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="(Tap to apply to filters)"
+                        android:textColor="#388E3C"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -914,6 +970,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <!-- AI Smart Search FAB (Temporarily Commented Out)
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_ai"
             android:layout_width="wrap_content"
@@ -924,6 +981,7 @@
             app:backgroundTint="@color/colorPrimary"
             app:tint="#FFFFFF"
             android:contentDescription="Smart Search" />
+        -->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

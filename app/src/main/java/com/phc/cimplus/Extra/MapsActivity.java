@@ -367,13 +367,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //IntentFilter filter = new IntentFilter();
         //filter.addAction(BroadCastService.BROADCAST_ACTION);
         // registerReceiver(broadcastReceiver, filter);
-        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION));//register the broadcast receiver
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION), Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION));
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (Exception ignored) {}
         stopService(mServiceIntent);
     }
 

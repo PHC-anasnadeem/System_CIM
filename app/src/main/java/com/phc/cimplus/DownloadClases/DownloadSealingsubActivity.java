@@ -307,7 +307,7 @@ public class DownloadSealingsubActivity {
                 firstpage.putExtra("PlanTitle",PlanTitle);
                 firstpage.putExtra("ActionID",ActionID);
                 firstpage.putExtra("SubActionname",SubActionname);
-                firstpage.putExtra("result",result);
+                com.phc.cimplus.Others.IntentDataHolder.setData(result);
                 context.startActivity(firstpage);
 
             } else {

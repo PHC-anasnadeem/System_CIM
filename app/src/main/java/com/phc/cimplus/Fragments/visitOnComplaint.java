@@ -32,7 +32,7 @@ public class visitOnComplaint extends Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.list);
         final Bundle args = getArguments();
-        indtabresult= (ArrayList<HashMap<String, String>>) args.getSerializable("indtabresult");
+        indtabresult= com.phc.cimplus.Others.IntentDataHolder.getFragmentData();
         visitOnComplaintID= args.getString("visitOnComplaintID");
         email= args.getString("email");
         password= args.getString("password");

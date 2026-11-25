@@ -22,6 +22,7 @@ import androidx.annotation.RequiresApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.view.GravityCompat;
@@ -501,13 +502,19 @@ public class RouteMapsActivity extends AppCompatActivity implements OnMapReadyCa
         //IntentFilter filter = new IntentFilter();
         //filter.addAction(BroadCastService.BROADCAST_ACTION);
        // registerReceiver(broadcastReceiver, filter);
-        registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION));//register the broadcast receiver
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION), Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(broadcastReceiver, new IntentFilter(BroadCastService.BROADCAST_ACTION));
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (Exception ignored) {}
         stopService(mServiceIntent);
     }
 

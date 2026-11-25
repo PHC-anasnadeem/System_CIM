@@ -7,3 +7,7 @@
 /build
 /captures
 .externalNativeBuild
+.vs/
+.idea/caches/
+.idea/deploymentTargetSelector.xml
+

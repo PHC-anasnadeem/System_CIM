@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Footer Button Text Size for normal phones (360dp+) e.g. Galaxy A17, Pixel -->
+    <dimen name="btn_footer_text_size">13sp</dimen>
+</resources>

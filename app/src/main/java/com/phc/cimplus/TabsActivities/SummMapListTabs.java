@@ -159,7 +159,7 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         Phone = (String) intent.getSerializableExtra("Phone");           ////Add Phone Here /////
         QuackType = (String) intent.getSerializableExtra("QuackType");
         ucText = (String) intent.getSerializableExtra("ucText");
-        indtabresult = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("result");
+        indtabresult = com.phc.cimplus.Others.IntentDataHolder.getData();
         bundle = new Bundle();
         bundle.putString("dataType", dataType);
         bundle.putString("registrationType", registrationType);
@@ -185,7 +185,8 @@ public class SummMapListTabs extends AppCompatActivity implements QuackClusterLi
         bundle.putString("QuackType", QuackType);
         bundle.putString("Cnic", Cnic);   ////Add CNIC Here /////
         bundle.putString("Phone", Phone); ////Add Phone Here /////
-        bundle.putSerializable("indtabresult", indtabresult);
+        // Store large data in IntentDataHolder instead of Bundle to avoid TransactionTooLargeException
+        com.phc.cimplus.Others.IntentDataHolder.setFragmentData(indtabresult);
         toolbar = (Toolbar) findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
 

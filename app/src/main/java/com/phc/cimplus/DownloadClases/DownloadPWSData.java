@@ -231,7 +231,7 @@ public class DownloadPWSData {
                 pDialog.dismiss();
             if (result != null && result.size() > 0) {
                 Intent firstpage = new Intent(context, PWSDetailListActivity.class);
-                firstpage.putExtra("result",result);
+                com.phc.cimplus.Others.IntentDataHolder.setData(result);
                 firstpage.putExtra("hceTypetext",hceTypetext);
                 firstpage.putExtra("districtText",districtText);
                 firstpage.putExtra("BfromText",BfromText);

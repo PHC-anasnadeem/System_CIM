@@ -394,16 +394,30 @@ public class MainActivity extends AppCompatActivity {
 
                 String outDated = "false";
                 String generalRemarks = "";
+                int latestServerVerCode = -1;
 
                 // Extract data from result
                 for (HashMap<String, String> map : result) {
-                    outDated = map.get("OutDated");
+                    String od = map.get("OutDated");
+                    if ("true".equalsIgnoreCase(od)) {
+                        outDated = "true";
+                    }
                     generalRemarks = map.get("GeneralRemarks");
                     GeneralRemarks = generalRemarks; // Update class level variable
+
+                    String serverVerCodeStr = map.get("MobileAppVerCode");
+                    if (serverVerCodeStr != null && !serverVerCodeStr.isEmpty() && !"null".equalsIgnoreCase(serverVerCodeStr)) {
+                        try {
+                            int code = Integer.parseInt(serverVerCodeStr.trim());
+                            if (code > latestServerVerCode) {
+                                latestServerVerCode = code;
+                            }
+                        } catch (Exception ignored) {}
+                    }
                 }
 
-                // PROFESSIONAL CHECK: If app is outdated, FORCE user to update
-                if ("true".equalsIgnoreCase(outDated)) {
+                // If app is marked outdated OR server has a newer version code than local app
+                if ("true".equalsIgnoreCase(outDated) || (latestServerVerCode > 0 && latestServerVerCode > versionCode)) {
                     showForceUpdateDialog(generalRemarks);
                 } else {
                     // App is up-to-date, now check permissions before proceeding
@@ -418,32 +432,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-         * Shows a non-cancelable dialog that forces the user to the Play Store
-         */
-        private void showForceUpdateDialog(String message) {
-            String dialogMessage = (message == null || message.isEmpty() || "null".equalsIgnoreCase(message)) 
-                    ? "A new version of CIM+ is available. Please update to continue using the app." 
-                    : message;
+     * Shows a non-cancelable dialog that forces the user to the Play Store
+     */
+    private void showForceUpdateDialog(String message) {
+        String dialogMessage = (message == null || message.isEmpty() || "null".equalsIgnoreCase(message)) 
+                ? "A new version of CIM+ is available on Google Play Store. Please update the app to continue." 
+                : message;
 
-            new AlertDialog.Builder(context)
-                    .setTitle("Update Required")
-                    .setMessage(dialogMessage)
-                    .setCancelable(false)
-                    .setPositiveButton("Update Now", (dialog, id) -> {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse("market://details?id=com.phc.cimplus"));
+        new AlertDialog.Builder(context)
+                .setTitle("Update Required")
+                .setMessage(dialogMessage)
+                .setCancelable(false)
+                .setPositiveButton("Update Now", (dialog, id) -> {
+                    final String packageName = getPackageName();
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("market://details?id=" + packageName));
+                    intent.setPackage("com.android.vending");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    try {
+                        startActivity(intent);
+                    } catch (Exception e) {
                         try {
-                            startActivity(intent);
-                        } catch (Exception e) {
-                            // Fallback if Play Store app is not installed
-                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.phc.cimplus"));
-                            startActivity(intent);
+                            Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
+                            marketIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(marketIntent);
+                        } catch (Exception ex) {
+                            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+                            webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(webIntent);
                         }
-                        finish(); // Close app so they can't bypass
-                    })
-                    .setNegativeButton("Exit", (dialog, id) -> finish())
-                    .show();
-        }
+                    }
+                    finish(); // Close app so they can't bypass
+                })
+                .setNegativeButton("Exit", (dialog, id) -> finish())
+                .show();
+    }
 
         /**
          * Shows a dialog when server fails to respond

@@ -31,7 +31,7 @@ public class L_AFragment extends Fragment{
 
         listView = (ListView) rootView.findViewById(R.id.list);
         final Bundle args = getArguments();
-        indtabresult= (ArrayList<HashMap<String, String>>) args.getSerializable("indtabresult");
+        indtabresult= com.phc.cimplus.Others.IntentDataHolder.getFragmentData();
         L_A_ID= args.getString("L_A_ID");
         email= args.getString("email");
         password= args.getString("password");

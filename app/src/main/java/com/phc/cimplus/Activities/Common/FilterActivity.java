@@ -53,6 +53,8 @@ import com.phc.cimplus.Activities.Notification.NotificationModel;
 import com.phc.cimplus.Activities.Notification.NotificationReceiver;
 import com.phc.cimplus.DataElements.ActionType;
 import com.phc.cimplus.DataElements.CouncilType;
+import com.phc.cimplus.DataElements.CurrentUC;
+import com.phc.cimplus.DownloadClases.DownloadCurrentUC;
 import com.phc.cimplus.DataElements.Distance;
 import com.phc.cimplus.DataElements.District;
 import com.phc.cimplus.DataElements.OrgType;
@@ -115,6 +117,12 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     LinearLayout districtLayout;
     LinearLayout TehsilLayout;
     LinearLayout ucLayout;
+    LinearLayout layout_current_uc;
+    TextView txt_current_uc_display;
+    ImageView btn_refresh_uc;
+    CurrentUC detectedCurrentUC;
+    double lastUCLatitude = 0.0;
+    double lastUCLongitude = 0.0;
     LinearLayout Loc_layout;
     LinearLayout sectortypelayout;
     LinearLayout Council_Typelayout;
@@ -262,8 +270,10 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         gps = new CurrentLocation(context);
         mHandler = new Handler();
         
-        FloatingActionButton fab_ai = findViewById(R.id.fab_ai);
-        fab_ai.setOnClickListener(v -> showSmartSearchDialog());
+        // FloatingActionButton fab_ai = findViewById(R.id.fab_ai);
+        // if (fab_ai != null) {
+        //     fab_ai.setOnClickListener(v -> showSmartSearchDialog());
+        // }
 //        TextView t2 = (TextView) findViewById(R.id.text2);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -375,6 +385,27 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         districtLayout = (LinearLayout) findViewById(R.id.districtid);
         TehsilLayout = (LinearLayout) findViewById(R.id.tehsilid);
         ucLayout = (LinearLayout) findViewById(R.id.ucid);
+        layout_current_uc = (LinearLayout) findViewById(R.id.layout_current_uc);
+        txt_current_uc_display = (TextView) findViewById(R.id.txt_current_uc_display);
+        btn_refresh_uc = (ImageView) findViewById(R.id.btn_refresh_uc);
+        if (btn_refresh_uc != null) {
+            btn_refresh_uc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (gps != null && !gps.hasLocationPermission()) {
+                        gps.showPermissionSettingsDialog();
+                        return;
+                    }
+                    Toast.makeText(context, "Refreshing location...", Toast.LENGTH_SHORT).show();
+                    if (gps != null) {
+                        gps.refreshLocation();
+                        cur_latitude = gps.getLatitude();
+                        cur_longitude = gps.getLongitude();
+                    }
+                    detectAndPreselectUC(true);
+                }
+            });
+        }
         showlayout = (LinearLayout) findViewById(R.id.showlayout);
         hidelayout = (LinearLayout) findViewById(R.id.hidelayout);
         subvisit_layout = (LinearLayout) findViewById(R.id.subvisit_layout);
@@ -563,6 +594,17 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
             else {
                 cur_latitude = gps.getLatitude();
                 cur_longitude = gps.getLongitude();
+            }
+            detectAndPreselectUC(false);
+            if (gps != null) {
+                gps.setOnLocationChangeListener(new CurrentLocation.OnLocationChangeListener() {
+                    @Override
+                    public void onLocationChanged(double lat, double lng, float accuracy) {
+                        cur_latitude = lat;
+                        cur_longitude = lng;
+                        detectAndPreselectUC(false);
+                    }
+                });
             }
         } else {
             // Can't get location.
@@ -1326,6 +1368,13 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (gps != null) {
+            gps.refreshLocation();
+            cur_latitude = gps.getLatitude();
+            cur_longitude = gps.getLongitude();
+        }
+        detectAndPreselectUC(false);
         
         // Register for notification count updates
         if (notificationManager != null) {
@@ -1422,29 +1471,23 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case 1: {
+            case 1:
+            case 50: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    gps = new CurrentLocation(context);
-                    // Check if GPS enabled
+                    if (gps == null) {
+                        gps = new CurrentLocation(context);
+                    }
                     if (gps.canGetLocation()) {
-
                         cur_latitude = gps.getLatitude();
                         cur_longitude = gps.getLongitude();
-                        // latlangListener.onlatlang(cur_latitude, cur_longitude);
-
-                    } else {
-                        // Can't get location.
-                        // GPS or network is not enabled.
-                        // Ask user to enable GPS/network in settings.
-                        gps.showSettingsAlert();
                     }
+                    detectAndPreselectUC(true);
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(context, "You need to grant permission", Toast.LENGTH_SHORT).show();
+                    if (gps != null) {
+                        gps.showPermissionSettingsDialog();
+                    }
                 }
                 return;
-
             }
         }
     }
@@ -1661,6 +1704,103 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
         return TehsilList;
     }
 
+    private void detectAndPreselectUC() {
+        detectAndPreselectUC(false);
+    }
+
+    private void detectAndPreselectUC(final boolean forceRefresh) {
+        if (cur_latitude == 0.0 || cur_longitude == 0.0) return;
+
+        if (!forceRefresh && lastUCLatitude != 0.0 && lastUCLongitude != 0.0) {
+            float[] results = new float[1];
+            android.location.Location.distanceBetween(cur_latitude, cur_longitude, lastUCLatitude, lastUCLongitude, results);
+            if (results[0] < 200) {
+                // User moved less than 200 meters, keep existing detected UC
+                return;
+            }
+        }
+
+        new DownloadCurrentUC(context, cur_latitude, cur_longitude, new DownloadCurrentUC.OnUCDownloadedListener() {
+            @Override
+            public void onUCDetected(final CurrentUC currentUC) {
+                if (currentUC != null && currentUC.getDisplayName() != null && !currentUC.getDisplayName().isEmpty()) {
+                    lastUCLatitude = cur_latitude;
+                    lastUCLongitude = cur_longitude;
+                    detectedCurrentUC = currentUC;
+                    if (layout_current_uc != null) {
+                        layout_current_uc.setVisibility(View.VISIBLE);
+                        if (txt_current_uc_display != null) {
+                            txt_current_uc_display.setText(currentUC.getDisplayName());
+                        }
+                        layout_current_uc.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                preselectDropdowns(currentUC);
+                                Toast.makeText(context, "Applied detected location to filters", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    private void preselectDropdowns(CurrentUC currentUC) {
+        if (currentUC == null) return;
+
+        try {
+            // 1. Preselect District
+            String targetDistrict = currentUC.getDistrict_N();
+            if (targetDistrict != null && !targetDistrict.isEmpty() && district_spinner != null && district_spinner.getAdapter() != null) {
+                for (int i = 0; i < district_spinner.getAdapter().getCount(); i++) {
+                    String item = district_spinner.getAdapter().getItem(i).toString();
+                    if (item.equalsIgnoreCase(targetDistrict)) {
+                        district_spinner.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
+            // 2. Preselect Tehsil (Delayed slightly so tehsils load from selected district)
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    String targetTehsil = currentUC.getTehsil_N();
+                    if (targetTehsil != null && !targetTehsil.isEmpty() && tehsil_spinner != null && tehsil_spinner.getAdapter() != null) {
+                        for (int i = 0; i < tehsil_spinner.getAdapter().getCount(); i++) {
+                            String item = tehsil_spinner.getAdapter().getItem(i).toString();
+                            if (item.equalsIgnoreCase(targetTehsil)) {
+                                tehsil_spinner.setSelection(i);
+                                break;
+                            }
+                        }
+                    }
+
+                    // 3. Preselect UC (Delayed slightly so UCs load from selected tehsil)
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            String targetDisplayName = currentUC.getDisplayName();
+                            String targetUCName = currentUC.getUC_Name();
+                            if (uc_spinner != null && uc_spinner.getAdapter() != null) {
+                                for (int i = 0; i < uc_spinner.getAdapter().getCount(); i++) {
+                                    String item = uc_spinner.getAdapter().getItem(i).toString();
+                                    if ((targetDisplayName != null && item.equalsIgnoreCase(targetDisplayName)) ||
+                                        (targetUCName != null && item.contains(targetUCName))) {
+                                        uc_spinner.setSelection(i);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }, 300);
+                }
+            }, 300);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private ArrayList<String> getUC() {
         ucs = dataManager.getUCList(tehsilText);
         ArrayList<String> UCList = new ArrayList<String>();
@@ -1695,6 +1835,24 @@ public class FilterActivity extends AppCompatActivity implements NotificationRec
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        final ArrayList<String> finalUCList = UCList;
+        uc_spinner.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, android.view.MotionEvent event) {
+                if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                    com.phc.cimplus.Others.SearchableListDialog.show(context, "Select UC", finalUCList, new com.phc.cimplus.Others.SearchableListDialog.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(String item, int originalPosition) {
+                            uc_spinner.setSelection(originalPosition);
+                            ucText = item;
+                        }
+                    });
+                    return true;
+                }
+                return false;
             }
         });
         return UCList;

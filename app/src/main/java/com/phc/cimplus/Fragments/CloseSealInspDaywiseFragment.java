@@ -40,7 +40,7 @@ public class CloseSealInspDaywiseFragment extends Fragment {
         totaltext = (TextView) rootView.findViewById(R.id.totaltext);
         listView = (ListView) rootView.findViewById(R.id.list);
         final Bundle args = getArguments();
-        indtabresult= (ArrayList<HashMap<String, String>>) args.getSerializable("indtabresult");
+        indtabresult= com.phc.cimplus.Others.IntentDataHolder.getFragmentData();
         email= args.getString("email");
         password= args.getString("password");
         username= args.getString("username");

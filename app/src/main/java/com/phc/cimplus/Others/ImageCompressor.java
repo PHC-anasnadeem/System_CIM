@@ -42,18 +42,9 @@ public class ImageCompressor {
 
             // Create a temp file in cache directory
             compressedFile = File.createTempFile("comp_", extension, context.getCacheDir());
-            
-            // First decode with inJustDecodeBounds=true to check dimensions
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(filePath, options);
 
-            // Calculate inSampleSize to avoid OutOfMemoryError
-            options.inSampleSize = calculateInSampleSize(options, 2048, 2048); // max target size 2048x2048
-            options.inJustDecodeBounds = false;
-
-            // Decode bitmap with inSampleSize set
-            Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+            // Decode bitmap with inSampleSize set to downsample
+            Bitmap bitmap = decodeSampledBitmapFromFile(filePath, 2048, 2048);
             if (bitmap == null) {
                 Log.e(TAG, "Failed to decode bitmap from: " + filePath);
                 return originalFile; // fallback to original on failure
@@ -71,7 +62,7 @@ public class ImageCompressor {
                 // Double check if compressed size is still > 5MB, if so, compress even further
                 if (compressedFile.length() > MAX_SIZE) {
                     Log.d(TAG, "Compressed file still exceeds 5MB. Re-compressing with lower quality...");
-                    Bitmap bmp = BitmapFactory.decodeFile(compressedFile.getAbsolutePath());
+                    Bitmap bmp = decodeSampledBitmapFromFile(compressedFile.getAbsolutePath(), 1600, 1600);
                     if (bmp != null) {
                         FileOutputStream fos2 = new FileOutputStream(compressedFile);
                         bmp.compress(Bitmap.CompressFormat.JPEG, 60, fos2);
@@ -93,6 +84,21 @@ public class ImageCompressor {
             }
             return originalFile; // fallback
         }
+    }
+
+    public static Bitmap decodeSampledBitmapFromFile(String filePath, int reqWidth, int reqHeight) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565; // Efficient memory config
+        return BitmapFactory.decodeFile(filePath, options);
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {

@@ -2048,7 +2048,7 @@ else if(index==2){
             Glide.with(_context)
                     .load(_images.get(position))
                     .asBitmap()
-                    .into(new SimpleTarget<Bitmap>() {
+                    .into(new SimpleTarget<Bitmap>(1080, 1920) {
                         @Override
                         public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
                             imageView.setImage(ImageSource.bitmap(bitmap));

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -71,7 +74,16 @@ public class ReportQuackActivity extends AppCompatActivity {
     Spinner division_spinner;
     Spinner district_spinner;
     Spinner tehsil_spinner;
+    Spinner uc_spinner;
     Spinner quackloc_spinner;
+
+    LinearLayout layout_current_uc;
+    TextView txt_current_uc_display;
+    TextView txt_current_location_details;
+    ImageView btn_refresh_uc;
+    com.phc.cimplus.DataElements.CurrentUC detectedCurrentUC;
+    double lastUCLatitude = 0.0;
+    double lastUCLongitude = 0.0;
 
 
     static String hce_nameText = "";
@@ -87,6 +99,7 @@ public class ReportQuackActivity extends AppCompatActivity {
     String quackloctext;
     String divisionText = "";
     String tehsilText = "";
+    String ucText = "";
     static String email = "";
     static String password;
     static String isEdit;
@@ -128,6 +141,12 @@ public class ReportQuackActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         
         dataManager = new DataManager(context);
         gps = new CurrentLocation(this);
@@ -142,9 +161,32 @@ public class ReportQuackActivity extends AppCompatActivity {
         coments = (EditText) findViewById(R.id.comments);
         errortext = (TextView) findViewById(R.id.errortext);
         pDialog = new ProgressDialog(context);
+        layout_current_uc = (LinearLayout) findViewById(R.id.layout_current_uc);
+        txt_current_uc_display = (TextView) findViewById(R.id.txt_current_uc_display);
+        txt_current_location_details = (TextView) findViewById(R.id.txt_current_location_details);
+        btn_refresh_uc = (ImageView) findViewById(R.id.btn_refresh_uc);
+        if (btn_refresh_uc != null) {
+            btn_refresh_uc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (gps != null && !gps.hasLocationPermission()) {
+                        gps.showPermissionSettingsDialog();
+                        return;
+                    }
+                    Toast.makeText(context, "Refreshing location...", Toast.LENGTH_SHORT).show();
+                    if (gps != null) {
+                        gps.refreshLocation();
+                        cur_latitude = gps.getLatitude();
+                        cur_longitude = gps.getLongitude();
+                    }
+                    detectAndShowCurrentUC(true);
+                }
+            });
+        }
         division_spinner = (Spinner) findViewById(R.id.division_spinner);
         district_spinner = (Spinner) findViewById(R.id.district);
         tehsil_spinner = (Spinner) findViewById(R.id.Tehsil_spinner);
+        uc_spinner = (Spinner) findViewById(R.id.uc_spinner);
         quackloc_spinner = (Spinner) findViewById(R.id.quackloc_spinner);
         latitudeEditText = findViewById(R.id.lat);
         longitudeEditText = findViewById(R.id.lng);
@@ -195,6 +237,23 @@ public class ReportQuackActivity extends AppCompatActivity {
             accuracyTextView.setText("Location Accurate to " + loc_accuracy + " meters");
             accuracyTextView.setTextColor(Color.parseColor("#303F9F"));
 
+            gps.setOnLocationChangeListener(new CurrentLocation.OnLocationChangeListener() {
+                @Override
+                public void onLocationChanged(double lat, double lng, float accuracy) {
+                    cur_latitude = lat;
+                    cur_longitude = lng;
+                    loc_accuracy = accuracy;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            accuracyTextView.setText("Location Accurate to " + loc_accuracy + " meters");
+                        }
+                    });
+                    detectAndShowCurrentUC(false);
+                }
+            });
+
+            detectAndShowCurrentUC(false);
             // latlangListener.onlatlang(cur_latitude, cur_longitude);
             if (cur_latitude != 0.0 && cur_longitude != 0.0) {
 
@@ -422,6 +481,118 @@ public class ReportQuackActivity extends AppCompatActivity {
     }
 
     // int i=0;
+    private void detectAndShowCurrentUC() {
+        detectAndShowCurrentUC(false);
+    }
+
+    private void detectAndShowCurrentUC(final boolean forceRefresh) {
+        if (cur_latitude == 0.0 || cur_longitude == 0.0) return;
+
+        if (!forceRefresh && lastUCLatitude != 0.0 && lastUCLongitude != 0.0) {
+            float[] results = new float[1];
+            android.location.Location.distanceBetween(cur_latitude, cur_longitude, lastUCLatitude, lastUCLongitude, results);
+            if (results[0] < 200) {
+                // Moved less than 200 meters, keep existing
+                return;
+            }
+        }
+
+        new com.phc.cimplus.DownloadClases.DownloadCurrentUC(context, cur_latitude, cur_longitude, new com.phc.cimplus.DownloadClases.DownloadCurrentUC.OnUCDownloadedListener() {
+            @Override
+            public void onUCDetected(final com.phc.cimplus.DataElements.CurrentUC currentUC) {
+                if (currentUC != null && currentUC.getDisplayName() != null && !currentUC.getDisplayName().isEmpty()) {
+                    lastUCLatitude = cur_latitude;
+                    lastUCLongitude = cur_longitude;
+                    detectedCurrentUC = currentUC;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (layout_current_uc != null) {
+                                layout_current_uc.setVisibility(View.VISIBLE);
+                                if (txt_current_uc_display != null) {
+                                    txt_current_uc_display.setText(currentUC.getDisplayName());
+                                }
+                                if (txt_current_location_details != null) {
+                                    txt_current_location_details.setText("Division: " + currentUC.getDivision_N() + " | District: " + currentUC.getDistrict_N() + " | Tehsil: " + currentUC.getTehsil_N());
+                                }
+                            }
+                            preselectLocationDropdowns(currentUC);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void preselectLocationDropdowns(final com.phc.cimplus.DataElements.CurrentUC currentUC) {
+        if (currentUC == null) return;
+        try {
+            // 1. Division
+            String targetDivision = currentUC.getDivision_N();
+            if (targetDivision != null && !targetDivision.isEmpty() && division_spinner != null && division_spinner.getAdapter() != null) {
+                for (int i = 0; i < division_spinner.getAdapter().getCount(); i++) {
+                    if (division_spinner.getAdapter().getItem(i).toString().equalsIgnoreCase(targetDivision)) {
+                        division_spinner.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // 2. District
+                    String targetDistrict = currentUC.getDistrict_N();
+                    if (targetDistrict != null && !targetDistrict.isEmpty() && district_spinner != null && district_spinner.getAdapter() != null) {
+                        for (int i = 0; i < district_spinner.getAdapter().getCount(); i++) {
+                            if (district_spinner.getAdapter().getItem(i).toString().equalsIgnoreCase(targetDistrict)) {
+                                district_spinner.setSelection(i);
+                                break;
+                            }
+                        }
+                    }
+
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 3. Tehsil
+                            String targetTehsil = currentUC.getTehsil_N();
+                            if (targetTehsil != null && !targetTehsil.isEmpty() && tehsil_spinner != null && tehsil_spinner.getAdapter() != null) {
+                                for (int i = 0; i < tehsil_spinner.getAdapter().getCount(); i++) {
+                                    if (tehsil_spinner.getAdapter().getItem(i).toString().equalsIgnoreCase(targetTehsil)) {
+                                        tehsil_spinner.setSelection(i);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 4. UC
+                                    String targetDisplayName = currentUC.getDisplayName();
+                                    String targetUCName = currentUC.getUC_Name();
+                                    if (uc_spinner != null && uc_spinner.getAdapter() != null) {
+                                        for (int i = 0; i < uc_spinner.getAdapter().getCount(); i++) {
+                                            String item = uc_spinner.getAdapter().getItem(i).toString();
+                                            if ((targetDisplayName != null && item.equalsIgnoreCase(targetDisplayName)) ||
+                                                (targetUCName != null && item.contains(targetUCName))) {
+                                                uc_spinner.setSelection(i);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }, 300);
+                        }
+                    }, 300);
+                }
+            }, 300);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void runThread() {
         new Thread(new Runnable() {
             @Override
@@ -438,6 +609,9 @@ public class ReportQuackActivity extends AppCompatActivity {
                     cur_latitude = gps.getLatitude();
                     cur_longitude = gps.getLongitude();
                     loc_accuracy = gps.getAccuracy();
+                    if (cur_latitude != 0.0 && cur_longitude != 0.0) {
+                        detectAndShowCurrentUC(false);
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -952,6 +1126,7 @@ public class ReportQuackActivity extends AppCompatActivity {
                                        int position, long id) {
                 //  ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
                 tehsilText = parent.getItemAtPosition(position).toString();
+                getUC();
             }
 
             @Override
@@ -961,6 +1136,69 @@ public class ReportQuackActivity extends AppCompatActivity {
         });
 
         return TehsilList;
+    }
+
+    private ArrayList<String> getUC() {
+        // Filter by district only (not tehsil) so all UCs of detected district are shown
+        // If district also not set, show all UCs
+        ArrayList<com.phc.cimplus.DataElements.UC> ucs = dataManager.getUCList(districtText, "");
+        ArrayList<String> UCList = new ArrayList<String>();
+        if (ucs != null) {
+            for (com.phc.cimplus.DataElements.UC uc : ucs) {
+                String ucName = uc.getUcName();
+                if (ucName != null && !ucName.equals("null")) {
+                    UCList.add(ucName);
+                }
+            }
+        }
+
+        if (UCList.isEmpty() || !UCList.get(0).equals("Please Select")) {
+            UCList.add(0, "Please Select");
+        }
+
+        ArrayAdapter<String> ucadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, UCList) {
+            @Override
+            public boolean isEnabled(int position) {
+                return true;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                return super.getDropDownView(position, convertView, parent);
+            }
+        };
+        ucadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if (uc_spinner != null) {
+            uc_spinner.setAdapter(ucadapter);
+            uc_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ucText = parent.getItemAtPosition(position).toString();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+            final ArrayList<String> finalUCList = UCList;
+            uc_spinner.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, android.view.MotionEvent event) {
+                    if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                        com.phc.cimplus.Others.SearchableListDialog.show(context, "Select UC", finalUCList, new com.phc.cimplus.Others.SearchableListDialog.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(String item, int originalPosition) {
+                                uc_spinner.setSelection(originalPosition);
+                                ucText = item;
+                            }
+                        });
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+        return UCList;
     }
 
     class DownloadTask extends AsyncTask<String, Void, String> {
@@ -1010,7 +1248,7 @@ public class ReportQuackActivity extends AppCompatActivity {
             } catch (Exception ignored) {}
         }
 
-        String url = baseurl + "ReportQuack?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&Division=" + divisionText + "&District=" + districtText + "&Tehsil=" + tehsilText + "&SectorType=Private&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&lat=" + finalLat + "&lng=" + finalLng + "&emailAddress=" + email + "&Comments=" + comnt + "&Userlat=" + user_latitude + "&Userlng=" + user_longitude + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid + "&UCs=";
+        String url = baseurl + "ReportQuack?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&Division=" + divisionText + "&District=" + districtText + "&Tehsil=" + tehsilText + "&SectorType=Private&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&lat=" + finalLat + "&lng=" + finalLng + "&emailAddress=" + email + "&Comments=" + comnt + "&Userlat=" + user_latitude + "&Userlng=" + user_longitude + "&QuackCategory=&QuackSubCategory=&RoleID=" + roleid + "&UC=" + ucText;
         url = url.replaceAll(" ", "%20");
         url = url.replaceAll("#", "%23");
         url = url.replaceAll(",", "%2C");
@@ -1162,6 +1400,36 @@ public class ReportQuackActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (gps != null) {
+            gps.refreshLocation();
+            cur_latitude = gps.getLatitude();
+            cur_longitude = gps.getLongitude();
+        }
+        detectAndShowCurrentUC(false);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1 || requestCode == 50) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (gps != null) {
+                    gps.refreshLocation();
+                    cur_latitude = gps.getLatitude();
+                    cur_longitude = gps.getLongitude();
+                }
+                detectAndShowCurrentUC(true);
+            } else {
+                if (gps != null) {
+                    gps.showPermissionSettingsDialog();
+                }
+            }
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_LOCATION_PICKER && resultCode == RESULT_OK && data != null) {
@@ -1170,6 +1438,12 @@ public class ReportQuackActivity extends AppCompatActivity {
 
             latitudeEditText.setText(String.valueOf(pickedLat));
             longitudeEditText.setText(String.valueOf(pickedLng));
+
+            if (pickedLat != 0.0 && pickedLng != 0.0) {
+                cur_latitude = pickedLat;
+                cur_longitude = pickedLng;
+                detectAndShowCurrentUC(true);
+            }
 
             Toast.makeText(context, "Location updated from map", Toast.LENGTH_SHORT).show();
         }

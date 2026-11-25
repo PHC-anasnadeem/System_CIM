@@ -456,11 +456,20 @@ public class DatabaseManager {
     }
 
     public ArrayList<UC> getUCList(String tehsil) {
+        return getUCList(null, tehsil);
+    }
+
+    public ArrayList<UC> getUCList(String district, String tehsil) {
         String selectQuery = null;
-        if (tehsil == null || tehsil.equals("Please Select") || tehsil.equals("")) {
-            selectQuery = "SELECT * FROM " + UC_TABLE;
+        boolean hasTehsil = (tehsil != null && !tehsil.trim().isEmpty() && !tehsil.equals("Please Select"));
+        boolean hasDistrict = (district != null && !district.trim().isEmpty() && !district.equals("Please Select"));
+
+        if (hasTehsil) {
+            selectQuery = "SELECT * FROM " + UC_TABLE + " WHERE " + TAG_UC_TEHSIL + "='" + tehsil.trim() + "' UNION SELECT * FROM " + UC_TABLE + " WHERE " + TAG_UC_NAME + "='Please Select'";
+        } else if (hasDistrict) {
+            selectQuery = "SELECT * FROM " + UC_TABLE + " WHERE " + TAG_UC_DISTRICT + "='" + district.trim() + "' UNION SELECT * FROM " + UC_TABLE + " WHERE " + TAG_UC_NAME + "='Please Select'";
         } else {
-            selectQuery = "SELECT * FROM " + UC_TABLE + " WHERE " + TAG_UC_TEHSIL + "='" + tehsil + "' UNION SELECT * FROM " + UC_TABLE + " WHERE " + TAG_UC_NAME + "='Please Select'";
+            selectQuery = "SELECT * FROM " + UC_TABLE;
         }
 
         database = openHelper.getReadableDatabase();

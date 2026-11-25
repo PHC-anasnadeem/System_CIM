@@ -90,7 +90,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
     CurrentLocation gps;
     EditText hce_nameEdit;
     EditText AddressEdit;
-    EditText ucsEdit;
+    Spinner ucsSpinner;
     EditText HCSP_nameEdit;
     EditText HCSP_SOEdit;
     EditText CNIC_Edit;
@@ -116,6 +116,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
     String hce_nameText = "";
     String AddressText = "";
     String UCsText = "";
+    String TehsilText = "";
     String HCSP_nameText = "";
     String HCSP_SOText = "";
     String CNIC_Text = "";
@@ -227,7 +228,7 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         gps = new CurrentLocation(context);
         hce_nameEdit = (EditText) findViewById(R.id.hce_name);
         AddressEdit = (EditText) findViewById(R.id.Address);
-        ucsEdit = (EditText) findViewById(R.id.ucs);
+        ucsSpinner = (Spinner) findViewById(R.id.ucs);
         HCSP_nameEdit = (EditText) findViewById(R.id.HCSP_Name);
         HCSP_SOEdit = (EditText) findViewById(R.id.HCSP_SO);
         CNIC_Edit = (EditText) findViewById(R.id.CNIC);
@@ -265,7 +266,17 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         hce_nameText = (String) intent.getSerializableExtra("HCEName");
         AddressText = (String) intent.getSerializableExtra("HCEAddress");
         UCsText = (String) intent.getSerializableExtra("UCs");
-        if (UCsText == null) UCsText = "";
+        if (UCsText == null) {
+            UCsText = "";
+        } else {
+            UCsText = UCsText.trim();
+        }
+        TehsilText = (String) intent.getSerializableExtra("Tehsil");
+        if (TehsilText == null) {
+            TehsilText = "";
+        } else {
+            TehsilText = TehsilText.trim();
+        }
         districtText = (String) intent.getSerializableExtra("District");
         sectortypetext = (String) intent.getSerializableExtra("SectorType");
         hceTypetext = (String) intent.getSerializableExtra("OrgType");
@@ -345,7 +356,13 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         }
         hce_nameEdit.setText(hce_nameText);
         AddressEdit.setText(AddressText);
-        if (ucsEdit != null) ucsEdit.setText(UCsText);
+        ArrayList<String> UCList = getUC();
+        if (ucsSpinner != null && UCList != null && UCsText != null && !UCsText.isEmpty()) {
+            int position = UCList.indexOf(UCsText);
+            if (position >= 0) {
+                ucsSpinner.setSelection(position);
+            }
+        }
         HCSP_nameEdit.setText(HCSP_nameText);
         HCSP_SOEdit.setText(HCSP_SOText);
         CNIC_Edit.setText(CNIC_Text);
@@ -1592,12 +1609,73 @@ public class UpdateBasicInfoActivity extends AppCompatActivity {
         }
     }
 
+    private ArrayList<String> getUC() {
+        ArrayList<com.phc.cimplus.DataElements.UC> ucs = dataManager.getUCList(districtText, TehsilText);
+        ArrayList<String> UCList = new ArrayList<String>();
+        if (ucs != null) {
+            for (com.phc.cimplus.DataElements.UC uc : ucs) {
+                String ucName = uc.getUcName();
+                if (ucName != null && !ucName.equals("null")) {
+                    UCList.add(ucName);
+                }
+            }
+        }
+
+        if (UCList.isEmpty() || !UCList.get(0).equals("Please Select")) {
+            UCList.add(0, "Please Select");
+        }
+
+        ArrayAdapter<String> ucadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, UCList) {
+            @Override
+            public boolean isEnabled(int position) {
+                return true;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                return super.getDropDownView(position, convertView, parent);
+            }
+        };
+        ucadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if (ucsSpinner != null) {
+            ucsSpinner.setAdapter(ucadapter);
+            ucsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    UCsText = parent.getItemAtPosition(position).toString();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
+            final ArrayList<String> finalUCList = UCList;
+            ucsSpinner.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, android.view.MotionEvent event) {
+                    if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                        com.phc.cimplus.Others.SearchableListDialog.show(context, "Select UC", finalUCList, new com.phc.cimplus.Others.SearchableListDialog.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(String item, int originalPosition) {
+                                ucsSpinner.setSelection(originalPosition);
+                                UCsText = item;
+                            }
+                        });
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+        return UCList;
+    }
+
     private String getDirectionsUrl(Context context) {
 
         // Building the url to the web service
         String baseurl = context.getResources().getString(R.string.baseurl);
         String token = context.getResources().getString(R.string.token);
-        String url = baseurl + "UpdateHCEBasicInfo?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&District=" + districtText + "&SectorType=" + sectortypetext + "&OrgType=" + hceTypetext + "&HCSPType=" + HCSPTypeText + "&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&RegistrationNo=" + Reg_NoText + "&RegistrationStatus=" + RegstatusID + "&CouncilStatus=" + counStatusID + "&CouncilNo=" + coun_NoText + "&CouncilName=" + counciltypetext + "&UpdateStatus=&UpdateSubStatus=&lat=" + latitude + "&lng=" + longitude + "&emailAddress=" + email + "&Comments=" + comnt + "&final_id=" + final_id + "&NoticeIssued=0&NoticeNo=&UpdateStatusID=0&UpdateSubStatusID=0&ActionID=0&RoleID=" + RoleID + "&UserLat=" + cur_latitude + "&UserLng=" + cur_longitude + "&CorrectLoc=" + currloc_ID + "&CurrentLoc=" + quacklocID + "&DistanceDiff=" + distCurrPrevInMeters + "&Start_Time=" + startTimeText + "&End_Time=" + endTimeText;
+        String url = baseurl + "UpdateHCEBasicInfo?strToken=" + token + "&HCEName=" + hce_nameText + "&HCEAddress=" + AddressText + "&District=" + districtText + "&SectorType=" + sectortypetext + "&OrgType=" + hceTypetext + "&HCSPType=" + HCSPTypeText + "&HCSPName=" + HCSP_nameText + "&HCSP_SO=" + HCSP_SOText + "&HCSP_CNIC=" + CNIC_Text + "&HCSPContactNo=" + HCSP_ContactText + "&RegistrationNo=" + Reg_NoText + "&RegistrationStatus=" + RegstatusID + "&CouncilStatus=" + counStatusID + "&CouncilNo=" + coun_NoText + "&CouncilName=" + counciltypetext + "&UpdateStatus=&UpdateSubStatus=&lat=" + latitude + "&lng=" + longitude + "&emailAddress=" + email + "&Comments=" + comnt + "&final_id=" + final_id + "&NoticeIssued=0&NoticeNo=&UpdateStatusID=0&UpdateSubStatusID=0&ActionID=0&RoleID=" + RoleID + "&UserLat=" + cur_latitude + "&UserLng=" + cur_longitude + "&CorrectLoc=" + currloc_ID + "&CurrentLoc=" + quacklocID + "&DistanceDiff=" + distCurrPrevInMeters + "&Start_Time=" + startTimeText + "&End_Time=" + endTimeText + "&UC=" + UCsText;
 
 
         url = url.replaceAll(" ", "%20");

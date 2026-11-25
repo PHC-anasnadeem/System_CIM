@@ -36,4 +36,6 @@
     <dimen name="font_size_verysmall">10sp</dimen>
     <dimen name="font_size_small">12sp</dimen>
     <dimen name="font_size_medium">20sp</dimen>
+    <!-- Footer Button Text Size -->
+    <dimen name="btn_footer_text_size">13sp</dimen>
 </resources>

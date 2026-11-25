@@ -216,7 +216,7 @@ public class SealingSubTypesActivity extends AppCompatActivity {
         PlanTitle = (String) intent.getSerializableExtra("PlanTitle");
         ActionID = (String) intent.getSerializableExtra("ActionID");
         SubActionname = (String) intent.getSerializableExtra("SubActionname");
-        indtabresult = (ArrayList<HashMap<String, String>>)intent.getSerializableExtra("result");
+        indtabresult = com.phc.cimplus.Others.IntentDataHolder.getData();
         if(ActionID.equals("1")){
             ActionName="Functional Sealed";
         }else if(ActionID.equals("2")){

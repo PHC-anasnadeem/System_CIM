@@ -364,7 +364,7 @@ public class MapFragment extends Fragment {
                     QuackType = args.getString("QuackType");
                     Cnic= args.getString("Cnic");
                     Phone= args.getString("Phone");
-                    indtabresult = (ArrayList<HashMap<String, String>>) args.getSerializable("indtabresult");
+                    indtabresult = com.phc.cimplus.Others.IntentDataHolder.getFragmentData();
 
 
                     if (REGfilterstatus.equals("4")) {

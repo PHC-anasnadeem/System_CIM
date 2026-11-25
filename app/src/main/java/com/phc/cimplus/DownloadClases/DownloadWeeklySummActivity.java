@@ -244,7 +244,7 @@ public class DownloadWeeklySummActivity {
                 firstpage.putExtra("FunctionalSealed",FunctionalSealed);
                 firstpage.putExtra("CloseSealed",CloseSealed);
                 firstpage.putExtra("NotSealed",NotSealed);
-                firstpage.putExtra("result",result);
+                com.phc.cimplus.Others.IntentDataHolder.setData(result);
                 context.startActivity(firstpage);
             } else {
                 Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();

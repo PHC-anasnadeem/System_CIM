@@ -6,8 +6,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.phc.cimplus.Activities.Common.Login_Activity;
+import com.phc.cimplus.Extra.MyLocationService;
 import com.phc.cimplus.R;
-
 
 public class Logout extends AppCompatActivity {
 
@@ -46,8 +46,13 @@ public class Logout extends AppCompatActivity {
         // Clear session data
         prefs.edit().clear().commit();
 
-        // Go to MainActivity (Splash) so lookups are re-loaded before Login screen
-        Intent intent = new Intent(this, com.phc.cimplus.Activities.Common.MainActivity.class);
+        // Stop location tracking service
+        try {
+            stopService(new Intent(this, MyLocationService.class));
+        } catch (Exception ignored) {}
+
+        // Navigate directly to Login_Activity so endpoints/lookups loaded during initial splash are preserved
+        Intent intent = new Intent(this, Login_Activity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_CLEAR_TASK |
                 Intent.FLAG_ACTIVITY_NEW_TASK);

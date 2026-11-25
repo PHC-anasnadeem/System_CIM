@@ -40,7 +40,7 @@ public class FunSealDaywiseFragment extends Fragment {
         listView = (ListView) rootView.findViewById(R.id.list);
         totaltext = (TextView) rootView.findViewById(R.id.totaltext);
         final Bundle args = getArguments();
-        indtabresult= (ArrayList<HashMap<String, String>>) args.getSerializable("indtabresult");
+        indtabresult= com.phc.cimplus.Others.IntentDataHolder.getFragmentData();
         email= args.getString("email");
         password= args.getString("password");
         username= args.getString("username");

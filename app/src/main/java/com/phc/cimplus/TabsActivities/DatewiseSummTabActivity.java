@@ -20,6 +20,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.graphics.Insets;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -180,7 +183,8 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
         enddatemiles = (Long) intent.getSerializableExtra("timeInMillis2");
         TotalImages =(String) intent.getSerializableExtra("TotalImages");
         reportlevel=(String) intent.getSerializableExtra("reportlevel");
-        indtabresult = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("result");
+        // Use IntentDataHolder instead of Intent extras to avoid TransactionTooLargeException
+        indtabresult = com.phc.cimplus.Others.IntentDataHolder.getData();
 
 
         visiteddate.setText(startdat + " - " + enddat);
@@ -193,6 +197,30 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
         mHandler = new Handler();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final View footerView = findViewById(R.id.footer);
+        final ViewPager2 vp = findViewById(R.id.viewpager);
+        if (drawer != null && footerView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(drawer, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                footerView.setPadding(
+                        footerView.getPaddingLeft(),
+                        footerView.getPaddingTop(),
+                        footerView.getPaddingRight(),
+                        systemBars.bottom
+                );
+                footerView.post(() -> {
+                    if (vp != null) {
+                        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) vp.getLayoutParams();
+                        int neededMargin = footerView.getHeight();
+                        if (lp != null && lp.bottomMargin != neededMargin) {
+                            lp.bottomMargin = neededMargin;
+                            vp.setLayoutParams(lp);
+                        }
+                    }
+                });
+                return ViewCompat.onApplyWindowInsets(v, insets);
+            });
+        }
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         //fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -342,7 +370,8 @@ public class DatewiseSummTabActivity extends AppCompatActivity {
                 }
 
                 // Put relevant data into the bundle
-                bundle.putSerializable("indtabresult", indtabresult);
+                // Store large data in IntentDataHolder instead of Bundle to avoid TransactionTooLargeException
+                com.phc.cimplus.Others.IntentDataHolder.setFragmentData(indtabresult);
                 bundle.putString("email", email);
                 bundle.putString("password", password);
                 bundle.putString("username", username);

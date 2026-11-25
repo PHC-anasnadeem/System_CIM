@@ -57,7 +57,7 @@ public class WeeklyPlanSummFragment extends Fragment {
         FunctionalSealed = args.getString("FunctionalSealed");
         CloseSealed= args.getString("CloseSealed");
         NotSealed= args.getString("NotSealed");
-        indtabresult= (ArrayList<HashMap<String, String>>) args.getSerializable("indtabresult");
+        indtabresult= com.phc.cimplus.Others.IntentDataHolder.getFragmentData();
         date_spinner = (Spinner) rootView.findViewById(R.id.date_spinner);
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
 

@@ -104,8 +104,7 @@ public class Login_Activity extends AppCompatActivity {
         autocomplete = (AutoCompleteTextView)
                 findViewById(R.id.autoCompleteTextView1);
 
-
-      this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         role_spinner= (Spinner) findViewById(R.id.roleSpinner);

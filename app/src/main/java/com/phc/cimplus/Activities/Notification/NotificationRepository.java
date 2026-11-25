@@ -13,6 +13,7 @@ import com.phc.cimplus.DataElements.NotificationDao;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NotificationRepository {
@@ -98,8 +99,8 @@ public class NotificationRepository {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String json = prefs.getString("cached_notifications", null);
         if (json != null) {
-            Type type = new TypeToken<List<NotificationModel>>(){}.getType();
-            return new Gson().fromJson(json, type);
+            NotificationModel[] array = new Gson().fromJson(json, NotificationModel[].class);
+            return array != null ? new ArrayList<>(Arrays.asList(array)) : new ArrayList<>();
         }
         return new ArrayList<>();
     }

@@ -5,15 +5,20 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:openDrawer="start">
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar1"
@@ -166,9 +171,12 @@
                 android:layout_weight="1"
                 android:background="#18b464"
                 android:text="Detail View"
-                android:textSize="18sp"
+                android:textSize="@dimen/btn_footer_text_size"
                 android:textAllCaps="false"
-                android:textColor="#fff" />
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
             <View
                 android:layout_width="1dp"
@@ -184,9 +192,12 @@
                 android:layout_weight="1"
                 android:background="#18b464"
                 android:text="Generate Report"
-                android:textSize="18sp"
+                android:textSize="@dimen/btn_footer_text_size"
                 android:textAllCaps="false"
-                android:textColor="#fff" />
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <com.google.android.material.navigation.NavigationView

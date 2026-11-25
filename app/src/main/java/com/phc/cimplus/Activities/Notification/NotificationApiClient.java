@@ -21,6 +21,7 @@ import org.json.JSONArray;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +67,8 @@ public class NotificationApiClient {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            Type listType = new TypeToken<ArrayList<NotificationModel>>(){}.getType();
-                            List<NotificationModel> notifications = gson.fromJson(response.toString(), listType);
+                            NotificationModel[] array = gson.fromJson(response.toString(), NotificationModel[].class);
+                            List<NotificationModel> notifications = array != null ? new ArrayList<>(Arrays.asList(array)) : new ArrayList<>();
                             listener.onResponse(notifications);
                         } catch (Exception e) {
                             Log.e(TAG, "Error parsing notification response", e);

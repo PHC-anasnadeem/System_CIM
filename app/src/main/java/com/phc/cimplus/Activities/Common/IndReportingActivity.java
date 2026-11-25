@@ -800,8 +800,21 @@ public class IndReportingActivity extends AppCompatActivity {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
                     PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
+            String channelId = "Visit Plan";
+
+            // Create notification channel for Android 8.0+ (API 26+)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                android.app.NotificationChannel channel = new android.app.NotificationChannel(
+                        channelId, "Visit Plan Notifications", NotificationManager.IMPORTANCE_DEFAULT);
+                channel.setDescription("Notifications for visit plan updates");
+                NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if (nm != null) {
+                    nm.createNotificationChannel(channel);
+                }
+            }
+
             // Create the notification
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "Visit Plan")
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle(title)
                     .setContentText(message)

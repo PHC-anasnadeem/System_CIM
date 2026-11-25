@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Footer Button Text Size for tablets (600dp+) -->
+    <dimen name="btn_footer_text_size">16sp</dimen>
+</resources>

@@ -244,17 +244,44 @@ public class NotificationBackgroundService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0)
         );
         
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.phclogo1);
+        Bitmap largeIcon = null;
+        try {
+            int iconWidth = getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
+            int iconHeight = getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
+            if (iconWidth <= 0 || iconHeight <= 0) {
+                iconWidth = 128;
+                iconHeight = 128;
+            }
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            opts.inJustDecodeBounds = true;
+            BitmapFactory.decodeResource(getResources(), R.drawable.phclogo1, opts);
+            int inSampleSize = 1;
+            if (opts.outHeight > iconHeight || opts.outWidth > iconWidth) {
+                final int halfHeight = opts.outHeight / 2;
+                final int halfWidth = opts.outWidth / 2;
+                while ((halfHeight / inSampleSize) >= iconHeight && (halfWidth / inSampleSize) >= iconWidth) {
+                    inSampleSize *= 2;
+                }
+            }
+            opts.inSampleSize = inSampleSize;
+            opts.inJustDecodeBounds = false;
+            opts.inPreferredConfig = Bitmap.Config.RGB_565;
+            largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.phclogo1, opts);
+        } catch (Exception e) {
+            largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.phclogo1);
+        }
         
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.phclogo1)
-                .setLargeIcon(largeIcon)
                 .setContentTitle(notification.getOutletName())
                 .setContentText(notification.getMessage())
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notification.getMessage()))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
+        if (largeIcon != null) {
+            builder.setLargeIcon(largeIcon);
+        }
         
         notificationManager.notify(notification.getNotificationId(), builder.build());
     }

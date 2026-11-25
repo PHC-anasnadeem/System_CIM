@@ -139,10 +139,11 @@ public class HigherPlanSumTab extends AppCompatActivity {
         FunctionalSealed = (String) intent.getSerializableExtra("FunctionalSealed");
         CloseSealed= (String) intent.getSerializableExtra("CloseSealed");
         NotSealed= (String) intent.getSerializableExtra("NotSealed");
-        indtabresult = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("result");
+        indtabresult = com.phc.cimplus.Others.IntentDataHolder.getData();
 
         bundle = new Bundle();
-        bundle.putSerializable("indtabresult", indtabresult);
+        // Store large data in IntentDataHolder instead of Bundle to avoid TransactionTooLargeException
+        com.phc.cimplus.Others.IntentDataHolder.setFragmentData(indtabresult);
         bundle.putString("PlanEndDate", PlanEndDate);
         bundle.putString("PlanStartDate", PlanStartDate);
         bundle.putString("PlanTitle", PlanTitle);
